@@ -34,7 +34,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/controllayout.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -71,8 +70,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    DBG_NAME(AccessibleIconChoiceCtrlEntry)
-
     // -----------------------------------------------------------------------------
     // Ctor() and Dtor()
     // -----------------------------------------------------------------------------
@@ -95,8 +92,6 @@ namespace accessibility
                 xComp->addEventListener( this );
         }
         osl_decrementInterlockedCount( &m_refCount );
-
-        DBG_CTOR( AccessibleIconChoiceCtrlEntry, NULL );
     }
     // -----------------------------------------------------------------------------
     void AccessibleIconChoiceCtrlEntry::disposing( const EventObject& _rSource )
@@ -111,8 +106,6 @@ throw(RuntimeException)
     // -----------------------------------------------------------------------------
     AccessibleIconChoiceCtrlEntry::~AccessibleIconChoiceCtrlEntry()
     {
-        DBG_DTOR( AccessibleIconChoiceCtrlEntry, NULL );
-
         if ( IsAlive_Impl() )
         {
             // increment ref count to prevent double call of Dtor

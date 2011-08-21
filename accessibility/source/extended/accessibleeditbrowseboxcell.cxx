@@ -45,7 +45,6 @@ namespace accessibility
     using namespace ::comphelper;
     using namespace ::svt;
 
-    DBG_NAME( acc_EditBrowseBoxTableCell )
     // -----------------------------------------------------------------------------
     EditBrowseBoxTableCell::EditBrowseBoxTableCell(
                 const com::sun::star::uno::Reference< XAccessible >& _rxParent,
@@ -58,8 +57,6 @@ namespace accessibility
         :AccessibleBrowseBoxCell( _rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos )
         ,OAccessibleContextWrapperHelper( ::comphelper::getProcessServiceFactory(), rBHelper, _xControlChild, _rxOwningAccessible, _rxParent )
     {
-        DBG_CTOR( acc_EditBrowseBoxTableCell, NULL );
-
         aggregateProxy( m_refCount, *this );
     }
 
@@ -71,8 +68,6 @@ namespace accessibility
             acquire();  // to prevent duplicate dtor calls
             dispose();
         }
-
-        DBG_DTOR( acc_EditBrowseBoxTableCell, NULL );
     }
 
     // -----------------------------------------------------------------------------
@@ -206,8 +201,6 @@ namespace accessibility
     // =============================================================================
     // = EditBrowseBoxTableCell
     // =============================================================================
-    DBG_NAME( EditBrowseBoxTableCellAccess )
-    // -----------------------------------------------------------------------------
     EditBrowseBoxTableCellAccess::EditBrowseBoxTableCellAccess(
             const Reference< XAccessible >& _rxParent, const Reference< XAccessible > _rxControlAccessible,
             const Reference< XWindow >& _rxFocusWindow,
@@ -220,12 +213,10 @@ namespace accessibility
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )
     {
-        DBG_CTOR( EditBrowseBoxTableCellAccess, NULL );
     }
     // -----------------------------------------------------------------------------
     EditBrowseBoxTableCellAccess::~EditBrowseBoxTableCellAccess( )
     {
-        DBG_DTOR( EditBrowseBoxTableCellAccess, NULL );
     }
     //--------------------------------------------------------------------
     Reference< XAccessibleContext > SAL_CALL EditBrowseBoxTableCellAccess::getAccessibleContext(  ) throw (RuntimeException)

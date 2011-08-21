@@ -64,14 +64,11 @@ public:
 
 // Ctor/Dtor/disposing --------------------------------------------------------
 
-DBG_NAME( AccessibleBrowseBox )
-
 AccessibleBrowseBox::AccessibleBrowseBox(
             const Reference< XAccessible >& _rxParent, const Reference< XAccessible >& _rxCreator,
             IAccessibleTableProvider& _rBrowseBox )
     : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,NULL, BBTYPE_BROWSEBOX )
 {
-    DBG_CTOR( AccessibleBrowseBox, NULL );
     m_pImpl.reset( new AccessibleBrowseBoxImpl() );
     m_pImpl->m_aCreator = _rxCreator;
 
@@ -90,7 +87,6 @@ void AccessibleBrowseBox::setCreator( const Reference< XAccessible >& _rxCreator
 // -----------------------------------------------------------------------------
 AccessibleBrowseBox::~AccessibleBrowseBox()
 {
-    DBG_DTOR( AccessibleBrowseBox, NULL );
 }
 // -----------------------------------------------------------------------------
 
@@ -327,20 +323,16 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
 // ============================================================================
 // = AccessibleBrowseBoxAccess
 // ============================================================================
-DBG_NAME( AccessibleBrowseBoxAccess )
-// -----------------------------------------------------------------------------
 AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox )
         :m_xParent( _rxParent )
         ,m_rBrowseBox( _rBrowseBox )
         ,m_pContext( NULL )
 {
-    DBG_CTOR( AccessibleBrowseBoxAccess, NULL );
 }
 
 // -----------------------------------------------------------------------------
 AccessibleBrowseBoxAccess::~AccessibleBrowseBoxAccess()
 {
-    DBG_DTOR( AccessibleBrowseBoxAccess, NULL );
 }
 
 // -----------------------------------------------------------------------------

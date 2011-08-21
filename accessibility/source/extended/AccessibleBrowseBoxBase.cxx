@@ -57,8 +57,6 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 
 // Ctor/Dtor/disposing --------------------------------------------------------
 
-DBG_NAME( AccessibleBrowseBoxBase )
-
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
         const Reference< XAccessible >& rxParent,
         IAccessibleTableProvider&                      rBrowseBox,
@@ -73,7 +71,6 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
     meObjType( eObjType ),
     m_aClientId(0)
 {
-    DBG_CTOR( AccessibleBrowseBoxBase, NULL );
     if ( m_xFocusWindow.is() )
         m_xFocusWindow->addFocusListener( this );
 }
@@ -94,15 +91,12 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
     meObjType( eObjType ),
     m_aClientId(0)
 {
-    DBG_CTOR( AccessibleBrowseBoxBase, NULL );
     if ( m_xFocusWindow.is() )
         m_xFocusWindow->addFocusListener( this );
 }
 
 AccessibleBrowseBoxBase::~AccessibleBrowseBoxBase()
 {
-    DBG_DTOR( AccessibleBrowseBoxBase, NULL );
-
     if( isAlive() )
     {
         // increment ref count to prevent double call of Dtor
@@ -602,8 +596,6 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun:
 }
 
 // ============================================================================
-DBG_NAME( BrowseBoxAccessibleElement )
-
 // XInterface -----------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2( BrowseBoxAccessibleElement, AccessibleBrowseBoxBase, BrowseBoxAccessibleElement_Base )
 
@@ -623,7 +615,6 @@ BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccess
         const Reference< awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType )
     :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType )
 {
-    DBG_CTOR( BrowseBoxAccessibleElement, NULL );
 }
 
 // ----------------------------------------------------------------------------
@@ -632,13 +623,11 @@ BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccess
         const ::rtl::OUString& rName, const ::rtl::OUString& rDescription )
     :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType, rName, rDescription )
 {
-    DBG_CTOR( BrowseBoxAccessibleElement, NULL );
 }
 
 // ----------------------------------------------------------------------------
 BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement( )
 {
-    DBG_DTOR( BrowseBoxAccessibleElement, NULL );
 }
 
 // ============================================================================

@@ -52,8 +52,6 @@ namespace accessibility
     using namespace ::com::sun::star::accessibility;
     using namespace ::comphelper;
 
-    DBG_NAME( AccessibleTabBar )
-
     //  ----------------------------------------------------
     //  class AccessibleTabBar
     //  ----------------------------------------------------
@@ -61,8 +59,6 @@ namespace accessibility
     AccessibleTabBar::AccessibleTabBar( TabBar* pTabBar )
         :AccessibleTabBarBase( pTabBar )
     {
-        DBG_CTOR( AccessibleTabBar, NULL );
-
         if ( m_pTabBar )
             m_aAccessibleChildren.assign( m_pTabBar->GetAccessibleChildWindowCount() + 1, Reference< XAccessible >() );
     }
@@ -71,7 +67,6 @@ namespace accessibility
 
     AccessibleTabBar::~AccessibleTabBar()
     {
-        DBG_DTOR( AccessibleTabBar, NULL );
     }
 
     // -----------------------------------------------------------------------------

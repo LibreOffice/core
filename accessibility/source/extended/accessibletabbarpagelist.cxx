@@ -34,7 +34,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/convert.hxx>
 
@@ -50,8 +49,6 @@ namespace accessibility
     using namespace ::com::sun::star;
     using namespace ::comphelper;
 
-    DBG_NAME( AccessibleTabBarPageList )
-
     // -----------------------------------------------------------------------------
     // class AccessibleTabBarPageList
     // -----------------------------------------------------------------------------
@@ -60,7 +57,6 @@ namespace accessibility
         :AccessibleTabBarBase( pTabBar )
         ,m_nIndexInParent( nIndexInParent )
     {
-        DBG_CTOR( AccessibleTabBarPageList, NULL );
         if ( m_pTabBar )
             m_aAccessibleChildren.assign( m_pTabBar->GetPageCount(), Reference< XAccessible >() );
     }
@@ -69,7 +65,6 @@ namespace accessibility
 
     AccessibleTabBarPageList::~AccessibleTabBarPageList()
     {
-        DBG_DTOR( AccessibleTabBarPageList, NULL );
     }
 
     // -----------------------------------------------------------------------------

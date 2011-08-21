@@ -33,7 +33,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -49,8 +48,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    DBG_NAME(AccessibleIconChoiceCtrl)
-
     // -----------------------------------------------------------------------------
     // Ctor() and Dtor()
     // -----------------------------------------------------------------------------
@@ -59,12 +56,10 @@ namespace accessibility
         VCLXAccessibleComponent( _rIconCtrl.GetWindowPeer() ),
         m_xParent       ( _xParent )
     {
-        DBG_CTOR( AccessibleIconChoiceCtrl, NULL );
     }
     // -----------------------------------------------------------------------------
     AccessibleIconChoiceCtrl::~AccessibleIconChoiceCtrl()
     {
-        DBG_DTOR( AccessibleIconChoiceCtrl, NULL );
     }
     // -----------------------------------------------------------------------------
     IMPLEMENT_FORWARD_XINTERFACE2(AccessibleIconChoiceCtrl, VCLXAccessibleComponent, AccessibleIconChoiceCtrl_BASE)

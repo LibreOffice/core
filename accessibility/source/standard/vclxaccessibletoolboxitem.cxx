@@ -39,7 +39,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/unohelp2.hxx>
@@ -62,8 +61,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-DBG_NAME(VCLXAccessibleToolBoxItem)
-
 // -----------------------------------------------------------------------------
 // Ctor() and Dtor()
 // -----------------------------------------------------------------------------
@@ -80,8 +77,6 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     m_bIndeterminate( false )
 
 {
-    DBG_CTOR( VCLXAccessibleToolBoxItem, NULL );
-
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock( ) );
 
     OSL_ENSURE( m_pToolBox, "invalid toolbox" );
@@ -123,8 +118,6 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 // -----------------------------------------------------------------------------
 VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
 {
-    DBG_DTOR( VCLXAccessibleToolBoxItem, NULL );
-
     delete m_pExternalLock;
     m_pExternalLock = NULL;
 }

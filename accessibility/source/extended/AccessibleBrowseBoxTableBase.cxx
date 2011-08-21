@@ -52,20 +52,16 @@ namespace accessibility {
 
 // Ctor/Dtor/disposing --------------------------------------------------------
 
-DBG_NAME( AccessibleBrowseBoxTableBase )
-
 AccessibleBrowseBoxTableBase::AccessibleBrowseBoxTableBase(
         const Reference< XAccessible >& rxParent,
         IAccessibleTableProvider&                      rBrowseBox,
         AccessibleBrowseBoxObjType      eObjType ) :
     BrowseBoxAccessibleElement( rxParent, rBrowseBox,NULL, eObjType )
 {
-    DBG_CTOR( AccessibleBrowseBoxTableBase, NULL );
 }
 
 AccessibleBrowseBoxTableBase::~AccessibleBrowseBoxTableBase()
 {
-    DBG_DTOR( AccessibleBrowseBoxTableBase, NULL );
 }
 
 // XAccessibleContext ---------------------------------------------------------

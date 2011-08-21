@@ -44,8 +44,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    DBG_NAME(AccessibleTabListBox)
-
     // -----------------------------------------------------------------------------
     // Ctor() and Dtor()
     // -----------------------------------------------------------------------------
@@ -54,8 +52,6 @@ namespace accessibility
         ,m_pTabListBox( &rBox )
 
     {
-        DBG_CTOR( AccessibleTabListBox, NULL );
-
         osl_incrementInterlockedCount( &m_refCount );
         {
             setCreator( this );
@@ -66,8 +62,6 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     AccessibleTabListBox::~AccessibleTabListBox()
     {
-        DBG_DTOR( AccessibleTabListBox, NULL );
-
         if ( isAlive() )
         {
             // increment ref count to prevent double call of Dtor

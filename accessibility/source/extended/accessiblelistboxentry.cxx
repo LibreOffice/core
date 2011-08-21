@@ -36,7 +36,6 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/controllayout.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -70,8 +69,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    DBG_NAME(AccessibleListBoxEntry)
-
     // -----------------------------------------------------------------------------
     // Ctor() and Dtor()
     // -----------------------------------------------------------------------------
@@ -86,15 +83,11 @@ namespace accessibility
         m_aParent       ( _xParent )
 
     {
-        DBG_CTOR( AccessibleListBoxEntry, NULL );
-
         _rListBox.FillEntryPath( _pEntry, m_aEntryPath );
     }
     // -----------------------------------------------------------------------------
     AccessibleListBoxEntry::~AccessibleListBoxEntry()
     {
-        DBG_DTOR( AccessibleListBoxEntry, NULL );
-
         if ( IsAlive_Impl() )
         {
             // increment ref count to prevent double call of Dtor

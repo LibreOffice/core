@@ -26,7 +26,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -44,8 +43,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    DBG_NAME(AccessibleListBox)
-
     // -----------------------------------------------------------------------------
     // Ctor() and Dtor()
     // -----------------------------------------------------------------------------
@@ -54,12 +51,10 @@ namespace accessibility
         VCLXAccessibleComponent( _rListBox.GetWindowPeer() ),
         m_xParent( _xParent )
     {
-        DBG_CTOR( AccessibleListBox, NULL );
     }
     // -----------------------------------------------------------------------------
     AccessibleListBox::~AccessibleListBox()
     {
-        DBG_DTOR( AccessibleListBox, NULL );
         if ( isAlive() )
         {
             // increment ref count to prevent double call of Dtor

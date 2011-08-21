@@ -45,8 +45,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    DBG_NAME(AccessibleTabListBoxTable)
-
     // -----------------------------------------------------------------------------
     // Ctor() and Dtor()
     // -----------------------------------------------------------------------------
@@ -57,15 +55,11 @@ namespace accessibility
         m_pTabListBox   ( &rBox )
 
     {
-        DBG_CTOR( AccessibleTabListBoxTable, NULL );
-
         m_pTabListBox->AddEventListener( LINK( this, AccessibleTabListBoxTable, WindowEventListener ) );
     }
     // -----------------------------------------------------------------------------
     AccessibleTabListBoxTable::~AccessibleTabListBoxTable()
     {
-        DBG_DTOR( AccessibleTabListBoxTable, NULL );
-
         if ( isAlive() )
         {
             m_pTabListBox = NULL;

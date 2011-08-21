@@ -50,23 +50,18 @@ namespace accessibility {
 
 // Ctor/Dtor/disposing --------------------------------------------------------
 
-DBG_NAME( AccessibleBrowseBoxHeaderBar )
-
 AccessibleBrowseBoxHeaderBar::AccessibleBrowseBoxHeaderBar(
         const Reference< XAccessible >& rxParent,
         IAccessibleTableProvider&                      rBrowseBox,
         AccessibleBrowseBoxObjType      eObjType ) :
     AccessibleBrowseBoxTableBase( rxParent, rBrowseBox,eObjType )
 {
-    DBG_CTOR( AccessibleBrowseBoxHeaderBar, NULL );
-
     OSL_ENSURE( isRowBar() || isColumnBar(),
         "accessibility/extended/AccessibleBrowseBoxHeaderBar - invalid object type" );
 }
 
 AccessibleBrowseBoxHeaderBar::~AccessibleBrowseBoxHeaderBar()
 {
-    DBG_DTOR( AccessibleBrowseBoxHeaderBar, NULL );
 }
 
 // XAccessibleContext ---------------------------------------------------------

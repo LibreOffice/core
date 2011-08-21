@@ -33,8 +33,6 @@ namespace accessibility
     // =============================================================================
     // = AccessibleBrowseBoxCell
     // =============================================================================
-    DBG_NAME( svt_AccessibleBrowseBoxCell )
-    // -----------------------------------------------------------------------------
     AccessibleBrowseBoxCell::AccessibleBrowseBoxCell(
             const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox,
             const Reference< XWindow >& _xFocusWindow,
@@ -43,7 +41,6 @@ namespace accessibility
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )
     {
-        DBG_CTOR( svt_AccessibleBrowseBoxCell, NULL );
         // set accessible name here, because for that we need the position of the cell
         // and so the base class isn't capable of doing this
         sal_Int32 nPos = _nRowPos * _rBrowseBox.GetColumnCount() + _nColPos;
@@ -54,7 +51,6 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     AccessibleBrowseBoxCell::~AccessibleBrowseBoxCell()
     {
-        DBG_DTOR( svt_AccessibleBrowseBoxCell, NULL );
     }
 
     // -----------------------------------------------------------------------------

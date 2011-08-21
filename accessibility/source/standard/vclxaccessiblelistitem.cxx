@@ -38,7 +38,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/unohelp2.hxx>
@@ -66,8 +65,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
-DBG_NAME(VCLXAccessibleListItem)
-
 // -----------------------------------------------------------------------------
 // Ctor() and Dtor()
 // -----------------------------------------------------------------------------
@@ -83,8 +80,6 @@ VCLXAccessibleListItem::VCLXAccessibleListItem( ::accessibility::IComboListBoxHe
     m_xParent       ( _xParent )
 
 {
-    DBG_CTOR( VCLXAccessibleListItem, NULL );
-
     if ( m_xParent.is() )
         m_xParentContext = m_xParent->getAccessibleContext();
 
@@ -94,7 +89,6 @@ VCLXAccessibleListItem::VCLXAccessibleListItem( ::accessibility::IComboListBoxHe
 // -----------------------------------------------------------------------------
 VCLXAccessibleListItem::~VCLXAccessibleListItem()
 {
-    DBG_DTOR( VCLXAccessibleListItem, NULL );
 }
 // -----------------------------------------------------------------------------
 void VCLXAccessibleListItem::SetSelected( sal_Bool _bSelected )
