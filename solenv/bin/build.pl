@@ -1143,8 +1143,8 @@ sub check_deps_hash {
 
 		    if ( $source_config->is_gbuild($module) )
 		    {
-			$log_path = correct_path("$workdir/Logs/$module.log");
-			$long_log_path = correct_path("$workdir/Logs/$module.log");
+			$log_path = correct_path("$workdir/Logs/${module}_${log_name}");
+			$long_log_path = correct_path("$workdir/Logs/${module}_${log_name}");
 		    }
 		    else
 		    {
