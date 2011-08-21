@@ -529,22 +529,10 @@ void SfxDispatcher::Pop
 
     if ( !pSfxApp->IsDowning() && pImp->aToDoStack.Count() )
     {
-        //! if (SFX_APP()->AnyInput(INPUT_KEYBOARD | INPUT_MOUSE) )
-        //! AnyInput does not work, here a criterion has yet to found.
-        //! As long as time after time with a timer.
-        if (sal_True)
-        {
-            // No immediate update is requested
-            pImp->aTimer.SetTimeout(SFX_FLUSH_TIMEOUT);
-            pImp->aTimer.SetTimeoutHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
-            pImp->aTimer.Start();
-        }
-        else
-        {
-            // Upgrade as quickly as possible(should be the normal case)
-            pImp->aTimer.Stop();
-            GetpApp()->PostUserEvent(pImp->nEventId, (void*)0);
-        }
+        // No immediate update is requested
+        pImp->aTimer.SetTimeout(SFX_FLUSH_TIMEOUT);
+        pImp->aTimer.SetTimeoutHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
+        pImp->aTimer.Start();
     }
     else
     {
@@ -796,19 +784,10 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
 
     if ( pImp->aToDoStack.Count() )
     {
-        if (sal_True)
-        {
-            // No immediate update is requested
-            pImp->aTimer.SetTimeout(SFX_FLUSH_TIMEOUT);
-            pImp->aTimer.SetTimeoutHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
-            pImp->aTimer.Start();
-        }
-        else
-        {
-            // Upgrade as quickly as possible(should be the normal case)
-            pImp->aTimer.Stop();
-            GetpApp()->PostUserEvent(pImp->nEventId, (void*)0);
-        }
+        // No immediate update is requested
+        pImp->aTimer.SetTimeout(SFX_FLUSH_TIMEOUT);
+        pImp->aTimer.SetTimeoutHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
+        pImp->aTimer.Start();
     }
 }
 
