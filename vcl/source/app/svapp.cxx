@@ -1021,17 +1021,6 @@ sal_Bool Application::IsProcessedMouseOrKeyEvent( sal_uLong nEventId )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
-
-sal_uLong Application::PostUserEvent( sal_uLong nEvent, void* pEventData )
-{
-    sal_uLong nEventId;
-    PostUserEvent( nEventId, nEvent, pEventData );
-    return nEventId;
-}
-
-// -----------------------------------------------------------------------
-
 sal_uLong Application::PostUserEvent( const Link& rLink, void* pCaller )
 {
     sal_uLong nEventId;

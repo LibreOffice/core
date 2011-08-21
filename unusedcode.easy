@@ -1,11 +1,6 @@
 (anonymous namespace)::getState(std::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
-Application::PostUserEvent(unsigned long, void*)
 BasicIDEDLL::~BasicIDEDLL()
-BasicLibs::Last()
-BasicLibs::Prev()
-BasicManager::BasicManager()
-BasicManager::ClearErrors()
 BitSet::BitSet(Range const&)
 BitSet::BitSet(unsigned short*, unsigned short)
 BitmapEx::Draw(OutputDevice*, Point const&, Size const&, Point const&, Size const&) const

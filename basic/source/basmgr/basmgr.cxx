@@ -541,8 +541,6 @@ public:
     String          aBasicLibPath; // TODO: Should be member of manager, but currently not incompatible
     BasicLibInfo*   GetObject( size_t i );
     BasicLibInfo*   First();
-    BasicLibInfo*   Last();
-    BasicLibInfo*   Prev();
     BasicLibInfo*   Next();
     size_t          GetPos( BasicLibInfo* LibInfo );
     size_t          Count() const { return aList.size(); };
@@ -572,24 +570,6 @@ BasicLibInfo* BasicLibs::First()
     if ( aList.empty() )
         return NULL;
     CurrentLib = 0;
-    return aList[ CurrentLib ];
-}
-
-BasicLibInfo* BasicLibs::Last()
-{
-    if ( aList.empty() )
-        return NULL;
-    CurrentLib = aList.size() - 1;
-    return aList[ CurrentLib ];
-}
-
-BasicLibInfo* BasicLibs::Prev()
-{
-    if (  aList.empty()
-       || CurrentLib == 0
-       )
-        return NULL;
-    --CurrentLib;
     return aList[ CurrentLib ];
 }
 
@@ -912,14 +892,6 @@ BasicManager::BasicManager( StarBASIC* pSLib, String* pLibPath, sal_Bool bDocMgr
     // Save is only necessary if basic has changed
     xStdLib->SetModified( sal_False );
     bBasMgrModified = sal_False;
-}
-
-BasicManager::BasicManager()
-{
-    DBG_CTOR( BasicManager, 0 );
-    // This ctor may only be used to adapt relative paths for 'Save As'.
-    // There is no AppBasic so libs must not be loaded...
-    Init();
 }
 
 void BasicManager::ImpMgrNotLoaded( const String& rStorageName )
@@ -1743,12 +1715,6 @@ sal_Bool BasicManager::HasErrors()
 {
     DBG_CHKTHIS( BasicManager, 0 );
     return pErrorMgr->HasErrors();
-}
-
-void BasicManager::ClearErrors()
-{
-    DBG_CHKTHIS( BasicManager, 0 );
-    pErrorMgr->Reset();
 }
 
 BasicError* BasicManager::GetFirstError()
