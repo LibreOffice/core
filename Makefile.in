@@ -8,20 +8,21 @@ else
 GBUILD_OPT:=--gmake
 endif
 
-all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded cross-build-toolset.built
+ifeq (@CROSS_COMPILING@,YES)
+CROSS_TOOLSET_RULE:=cross-build-toolset
+else
+CROSS_TOOLSET_RULE:=
+endif
+
+all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
 	@. ./Env.Host.sh && \
         cd instsetoo_native && \
         build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
-cross-build-toolset.built:
-ifeq (@CROSS_COMPILING@,YES)
+cross-build-toolset:
 	@. ./Env.Build.sh && \
 	cd cross_toolset && \
-	build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && \
-	touch $@
-else
-	touch $@
-endif
+	build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
 install:
 	@. ./Env.Host.sh && \
@@ -80,7 +81,6 @@ endif
 
 dmake/dmake@EXEEXT_FOR_BUILD@:
 	./bootstrap
-	-rm -f cross-build-toolset.built
 
 src.downloaded: ooo.lst download
 ifeq (@DO_FETCH_TARBALLS@,YES)
