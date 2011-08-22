@@ -245,9 +245,6 @@ Graphic::GetGraphicsCompressMode(SvStream&)
 Graphic::StartAnimation(OutputDevice*, Point const&, long, OutputDevice*)
 Graphic::WriteEmbedded(SvStream&)
 GraphicConverter::ImplConvert(unsigned long, void*, unsigned long, void**, unsigned long)
-GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Point const&) const
-GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Size const&) const
-GraphicHelper::getDeviceInfo() const
 GraphicReader::IsPreviewModeEnabled() const
 GroupTable::SkipCurrentGroup()
 HTMLControls::Insert(HTMLControl const*&, unsigned short&)

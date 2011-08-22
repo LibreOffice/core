@@ -105,11 +105,6 @@ public:
     /** Converts the passed size from 1/100 mm to screen pixels. */
     ::com::sun::star::awt::Size convertHmmToScreenPixel( const ::com::sun::star::awt::Size& rHmm ) const;
 
-    /** Converts the passed point from AppFont units to 1/100 mm. */
-    ::com::sun::star::awt::Point convertAppFontToHmm( const ::com::sun::star::awt::Point& rAppFont ) const;
-    /** Converts the passed point from AppFont units to 1/100 mm. */
-    ::com::sun::star::awt::Size convertAppFontToHmm( const ::com::sun::star::awt::Size& rAppFont ) const;
-
     /** Converts the passed point from 1/100 mm to AppFont units. */
     ::com::sun::star::awt::Point convertHmmToAppFont( const ::com::sun::star::awt::Point& rHmm ) const;
     /** Converts the passed size from 1/100 mm to AppFont units. */
