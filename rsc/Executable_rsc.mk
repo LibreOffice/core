@@ -33,7 +33,7 @@ $(eval $(call gb_Executable_set_include,rsc,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/rsc/inc \
 	-I$(SRCDIR)/rsc/inc/pch \
-	-I$(WORKDIR)/GenCxxObject/rsc/source/parser \
+	-I$(WORKDIR)/rsc/source/parser \
 ))
 
 $(eval $(call gb_Executable_add_api,rsc,\
@@ -54,11 +54,7 @@ $(eval $(call gb_Executable_add_linked_libs,rsc,\
 ))
 
 $(eval $(call gb_Executable_add_grammars,rsc,\
-	rsc/source/parser/rscyacc, \
-	rsc/source/parser/rscibas \
-	rsc/source/parser/rscicpx \
-	rsc/source/parser/rscinit \
-	rsc/source/parser/rsclex \
+	rsc/source/parser/rscyacc \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,rsc,\

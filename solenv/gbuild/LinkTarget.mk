@@ -224,7 +224,22 @@ endif
 gb_GenCxxObject_GenCxxObject =
 
 # YaccObject class
-gb_YaccObject_get_grammar = $(1)/$(2).y
+gb_YaccObject_get_source = $(1)/$(2).y
+
+.PHONY : $(call gb_YaccObject_get_clean_target,%)
+$(call gb_YaccObject_get_clean_target,%) :
+	$(call gb_Output_announce,$(2),$(false),YAC,3)
+	$(call gb_Helper_abbreviate_dirs,\
+	    rm -f $(call gb_YaccObject_get_header_target,$*) $(call gb_YaccObject__get_generated_source,$*))
+
+gb_YaccObject__get_generated_source = $(WORKDIR)/$(1).cxx
+
+define gb_YaccObject_YaccObject
+$(call gb_YaccObject_get_target,$(1)) : $(call gb_YaccObject__get_generated_source,$(1)) $(call gb_YaccObject_get_header_target,$(1))
+$(call gb_YaccObject_get_header_target,$(1)) :| $(call gb_YaccObject__get_generated_source,$(1))
+$(call gb_YaccObject__get_generated_source,$(1)) : $(call gb_YaccObject_get_source,$(gb_REPOS),$(1))
+	$$(call gb_YaccObject__command,$(call gb_YaccObject_get_source,$(gb_REPOS),$(1)),$(1),$(call gb_YaccObject__get_generated_source,$(1)),$(call gb_YaccObject_get_header_target,$(1)))
+endef
 
 gb_YACC := bison
 
@@ -871,28 +886,31 @@ endif
 endef
 
 define gb_LinkTarget_yacc_add_cpp_dep
-$(call gb_CxxObject_get_target,$(2)) : $(call gb_YaccObject_get_target_source,$(1))
+$(call gb_CxxObject_get_target,$(2)) : $(call gb_YaccObject_get_target,$(1))
 endef
 
-###
-# Add a bison grammars to the build.
-# gb_LinkTarget_add_grammar(<component>,<grammar file>,<YYFLAGS>,<additional CXXFLAGS>,<list of objects that depend on the generated header>
-#
+# Add a bison grammar to the build.
+# gb_LinkTarget_add_grammar(<component>,<grammar file>)
 define gb_LinkTarget_add_grammar
-
+$(call gb_YaccObject_YaccObject,$(2))
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_YaccObject_get_target,$(2))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_YaccObject_get_clean_target,$(2))
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
-$(foreach obj,$(3),
-$(call gb_LinkTarget_yacc_add_cpp_dep,$(2),$(obj)))
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_YaccObject_get_dep_target,$(2))
+endif
 
-$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_YaccObject_get_target_source,$(2))
-	$$(call gb_CxxObject__command,$$@,$(2),$$<,$$(call gb_GenCxxObject_get_dep_target,$(2)))
+$(call gb_LinkTarget__add_internal_headers,$(1),$(gb_YaccObject_get_header_target,$(2)))
 
-$(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
-$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_YaccObject_get_target_source,$(2)) $(call gb_YaccObject_get_target_include,$(2))
-$(call gb_YaccObject_get_target_source,$(2)) $(call gb_YaccObject_get_target_include,$(2)) : $(call gb_YaccObject_get_grammar,$(gb_REPOS),$(2))
-	$$(call gb_YaccObject__command,$(call gb_YaccObject_get_grammar,$(gb_REPOS),$(2)),$(2),$(call gb_YaccObject_get_target_source,$(2)),$(call gb_YaccObject_get_target_include,$(2)))
+endef
+
+# Add bison grammars to the build.
+# gb_LinkTarget_add_grammars(<component>,<grammar file> [<grammar file>*])
+define gb_LinkTarget_add_grammars
+$(foreach grammar,$(2),$(call gb_LinkTarget_add_grammar,$(1),$(grammar)))
 endef
 
 define gb_LinkTarget_add_noexception_object
@@ -965,14 +983,6 @@ endef
 
 define gb_LinkTarget_add_generated_exception_objects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj)))
-endef
-
-###
-# Add a bison grammars to the build.
-# gb_LinkTarget_add_grammar(<component>,<list of grammar files>,<list of objects that depend on the generated header>
-#
-define gb_LinkTarget_add_grammars
-$(foreach obj,$(2),$(call gb_LinkTarget_add_grammar,$(1),$(obj),$(3)))
 endef
 
 define gb_LinkTarget_set_targettype

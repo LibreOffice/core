@@ -120,6 +120,8 @@ $(eval $(foreach method,\
 	add_generated_cobjects \
 	add_generated_cxxobjects \
 	add_generated_exception_objects \
+	add_grammar \
+	add_grammars \
 	add_cflags \
 	set_cflags \
 	add_cxxflags \
