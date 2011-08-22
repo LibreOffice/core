@@ -6,13 +6,7 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
-#ifdef _DEBUG
-#undef _DEBUG
 #include <Python.h>
-#define _DEBUG
-#else
-#include <Python.h>
-#endif // #ifdef _DEBUG
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
