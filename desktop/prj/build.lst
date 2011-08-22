@@ -17,8 +17,6 @@ dt	desktop\win32\source\applauncher		nmake	-	w	dt_applauncher dt_inc NULL
 dt	desktop\win32\source\applauncher\ooo	nmake	-	w	dt_applauncher_ooo dt_applauncher.w dt_inc NULL
 dt	desktop\win32\source\QuickStart		nmake	-	w	dt_win32_quickstart NULL
 dt	desktop\win32\source\QuickStart\so	nmake	-	w	dt_win32_quickstart_so dt_win32_quickstart.w NULL
-
-dt	desktop\os2\source\applauncher			nmake	-	p	dt_applauncher dt_inc NULL
 dt	desktop\unx\source\officeloader		nmake	-	u	dt_officeloader_unx dt_inc NULL
 dt     desktop\unx\source                      nmake   -       u       dt_uwrapper dt_pagein.u dt_inc NULL
 dt	desktop\source\pagein					nmake	-	u	dt_pagein dt_inc NULL

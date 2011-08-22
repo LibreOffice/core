@@ -6,7 +6,6 @@ br	bridges\source\cpp_uno\mingw_intel	nmake	-	w	br_gcc3i br_cppuno_shared br_uno
 br	bridges\source\cpp_uno\msvc_win32_intel	nmake	-	w	br_msci br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\msvc_win32_x86-64	nmake	-	w	br_mscx br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_linux_intel	nmake	-	u	br_gcc3li br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_os2_intel	nmake	-	p	br_gcc3os br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_linux_x86-64	nmake	-	u	br_gcc3lx br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_linux_powerpc	nmake	-	u	br_gcc3lp br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_aix_powerpc	nmake	-	u	br_gcc3ap br_cppuno_shared br_unotypes br_inc NULL
