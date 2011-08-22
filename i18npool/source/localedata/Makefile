@@ -43,8 +43,8 @@ ifeq ($(OS_FOR_BUILD),WNT)
 		-env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)`cygpath -m $(OUTDIR)/bin`
 else
 	$(gb_Helper_execute)saxparser $* $< $@ \
-		$(my_file)$(WORKDIR)/CustomTarget/i18npool/source/localedata/saxparser.rdb $(OUTDIR)/bin/types.rdb \
-		-env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(OUTDIR)/lib
+		$(my_file)$(WORKDIR_FOR_BUILD)/CustomTarget/i18npool/source/localedata/saxparser.rdb $(OUTDIR_FOR_BUILD)/bin/types.rdb \
+		-env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(OUTDIR_FOR_BUILD)/lib
 endif
 
 saxparser.rdb : saxparser.input
