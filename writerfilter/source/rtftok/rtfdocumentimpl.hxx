@@ -421,8 +421,10 @@ namespace writerfilter {
                 RTFReferenceTable::Entries_t m_aStyleTableEntries;
                 int m_nCurrentStyleIndex;
                 bool m_bEq;
-                /// If we are in a frame.
+                /// If we were in a frame.
                 bool m_bWasInFrame;
+                /// If a shape is already started (nesting them is not OK).
+                bool m_bIsInShape;
 
         };
     } // namespace rtftok

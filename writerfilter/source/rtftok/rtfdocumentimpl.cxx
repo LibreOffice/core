@@ -296,7 +296,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aStyleTableEntries(),
     m_nCurrentStyleIndex(0),
     m_bEq(false),
-    m_bWasInFrame(false)
+    m_bWasInFrame(false),
+    m_bIsInShape(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
@@ -723,6 +724,8 @@ void RTFDocumentImpl::checkChangedFrame()
     // Check if this is a frame.
     if (inFrame() && !m_bWasInFrame)
     {
+        if (m_bIsInShape)
+            return;
         OSL_TRACE("%s starting frame", OSL_THIS_FUNC);
         uno::Reference<text::XTextFrame> xTextFrame;
         xTextFrame.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))), uno::UNO_QUERY);
@@ -749,16 +752,20 @@ void RTFDocumentImpl::checkChangedFrame()
 
         Mapper().startShape(xShape);
         Mapper().startParagraphGroup();
+        m_bIsInShape = true;
     }
     else if (!inFrame() && m_bWasInFrame)
     {
+        if (!m_bIsInShape)
+            return;
         OSL_TRACE("%s ending frame", OSL_THIS_FUNC);
         finishSubstream();
         Mapper().endParagraphGroup();
         Mapper().endShape();
         Mapper().endParagraphGroup();
         Mapper().startParagraphGroup();
-        m_bWasInFrame = false;
+        m_bWasInFrame = false; // this is needed by invalid nested flies where the result is separate frames
+        m_bIsInShape = false;
     }
 }
 
