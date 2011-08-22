@@ -736,12 +736,14 @@ void SvFileStream::Close()
 {
     InternalStreamLock::UnlockFile( 0, 0, this );
 
-  if ( IsOpen() )
+    if ( IsOpen() )
     {
 #ifdef DBG_UTIL
-        ByteString aTraceStr( "SvFileStream::Close(): " );
-        aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
-        OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+        rtl::OStringBuffer aTraceStr(
+            RTL_CONSTASCII_STRINGPARAM("SvFileStream::Close(): "));
+        aTraceStr.append(rtl::OUStringToOString(aFilename,
+            osl_getThreadTextEncoding()));
+        OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
         Flush();

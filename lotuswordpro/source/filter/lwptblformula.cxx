@@ -68,7 +68,7 @@
 #include    "lwptblformula.hxx"
 
 #include "lwptablelayout.hxx"
-
+#include <rtl/ustrbuf.hxx>
 #include <boost/scoped_array.hpp>
 
 //////////////////////////////////////////////////////////////////
@@ -442,16 +442,9 @@ LwpFormulaConst::LwpFormulaConst(double dVal)
     m_dVal = dVal;
 }
 
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
-*/
-String LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
+rtl::OUString LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
 {
-    return String::CreateFromDouble(m_dVal);
+    return rtl::OUString::valueOf(m_dVal);
 }
 
 /**
@@ -486,14 +479,8 @@ LwpFormulaCellAddr::LwpFormulaCellAddr(sal_Int16 aCol, sal_Int16 aRow)
 *   @param
 *   @return String
 */
-String LwpFormulaCellAddr::ToString(LwpTableLayout* pCellsMap)
+rtl::OUString LwpFormulaCellAddr::ToString(LwpTableLayout* pCellsMap)
 {
-//  String aCellAddr;
-//  aCellAddr.AppendAscii("<");//&lt;
-//  aCellAddr+=m_aCol;
-//  aCellAddr+=m_aRow;
-//  aCellAddr.AppendAscii(">");//&gt;
-
     String aCellAddr;
     aCellAddr.AppendAscii("<");//&lt;
 
@@ -528,17 +515,8 @@ LwpFormulaCellRangeAddr::LwpFormulaCellRangeAddr(sal_Int16 aStartCol,
 *   @param
 *   @return String.
 */
-String LwpFormulaCellRangeAddr::ToString(LwpTableLayout* pCellsMap)
+rtl::OUString LwpFormulaCellRangeAddr::ToString(LwpTableLayout* pCellsMap)
 {
-//  String aCellAddr;
-//  aCellAddr.AppendAscii("<");//&lt;
-//  aCellAddr+=m_aStartCol;
-//  aCellAddr+=m_aStartRow;
-//  aCellAddr.AppendAscii(":");
-//  aCellAddr+=m_aEndCol;
-//  aCellAddr+=m_aEndRow;
-//  aCellAddr.AppendAscii(">");//&gt;
-
     String aCellAddr;
     aCellAddr.AppendAscii("<");//&lt;
 
@@ -605,11 +583,11 @@ void LwpFormulaFunc::AddArg(LwpFormulaArg* pArg)
 */
 String LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
 {
-    String aFormula;
-    aFormula.AppendAscii("(");
-    aFormula+=ToString(pCellsMap);
-    aFormula.AppendAscii(")");
-    return aFormula;
+    rtl::OUStringBuffer aFormula;
+    aFormula.append(static_cast<sal_Unicode>('('));
+    aFormula.append(ToString(pCellsMap));
+    aFormula.append(static_cast<sal_Unicode>(')'));
+    return aFormula.makeStringAndClear();
 }
 /**
 *   Convert the function to a formula string.
@@ -618,7 +596,7 @@ String LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
 *   @param
 *   @return sal_Bool.
 */
-String LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
+rtl::OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 {
     String aFormula;
 
@@ -654,7 +632,7 @@ String LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 *   @param
 *   @return sal_Bool.
 */
-String LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
+rtl::OUString LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
 {
     String aFormula;
     if (2==m_aArgs.size())
@@ -687,7 +665,7 @@ String LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
 *   @param
 *   @return sal_Bool.
 */
-String LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
+rtl::OUString LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
 {
     String aFormula;
     if (1==m_aArgs.size())

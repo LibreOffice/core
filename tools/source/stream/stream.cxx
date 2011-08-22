@@ -896,8 +896,8 @@ sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding 
         return WriteUnicodeText( rStr );
     else
     {
-        ByteString aStr( rStr, eDestCharSet );
-        Write( aStr.GetBuffer(), aStr.Len() );
+        rtl::OString aStr(rtl::OUStringToOString(rStr, eDestCharSet));
+        Write(aStr.getStr(), aStr.getLength());
         return nError == SVSTREAM_OK;
     }
 }
@@ -910,7 +910,7 @@ sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding 
 
 sal_Bool SvStream::WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet )
 {
-    return WriteLine( ByteString( rStr, eDestCharSet ) );
+    return WriteLine(rtl::OUStringToOString(rStr, eDestCharSet));
 }
 
 sal_Bool SvStream::WriteLine( const ByteString& rStr )
@@ -947,8 +947,8 @@ sal_Bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCha
         *this << ch;
     else
     {
-        ByteString aStr( ch, eDestCharSet );
-        Write( aStr.GetBuffer(), aStr.Len() );
+        rtl::OString aStr(&ch, 1, eDestCharSet);
+        Write(aStr.getStr(), aStr.getLength());
     }
     return nError == SVSTREAM_OK;
 }
@@ -1583,7 +1583,7 @@ SvStream& SvStream::WriteByteString( const UniString& rStr, rtl_TextEncoding eDe
         return *this;
     }
 
-    return WriteByteString(ByteString( rStr, eDestCharSet ));
+    return WriteByteString(rtl::OUStringToOString(rStr, eDestCharSet));
 }
 
 // -----------------------------------------------------------------------

@@ -1609,13 +1609,13 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                 if (pMsg->GetMultipartBoundary().Len() == 0)
                 {
                     // Determine boundary.
-                    ByteString aType (
-                        pMsg->GetContentType(), RTL_TEXTENCODING_ASCII_US);
-                    ByteString aLowerType (aType);
+                    rtl::OString aType(rtl::OUStringToOString(
+                        pMsg->GetContentType(), RTL_TEXTENCODING_ASCII_US));
+                    ByteString aLowerType(aType);
                     aLowerType.ToLowerAscii();
 
                     sal_uInt16 nPos = aLowerType.Search ("boundary=");
-                    ByteString aBoundary (aType.Copy (nPos + 9));
+                    ByteString aBoundary(aType.copy(nPos + 9));
 
                     aBoundary.EraseLeadingAndTrailingChars (' ');
                     aBoundary.EraseLeadingAndTrailingChars ('"');

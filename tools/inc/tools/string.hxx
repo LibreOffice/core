@@ -199,8 +199,6 @@ public:
         return rtl::OString (reinterpret_cast<rtl_String*>(mpData));
     }
 
-    sal_Int32           ToInt32() const;
-
     ByteString&         Assign( const ByteString& rStr );
     ByteString&         Assign( const rtl::OString& rStr );
     ByteString&         Assign( const sal_Char* pCharStr );
@@ -446,8 +444,6 @@ public:
 
     static UniString    CreateFromInt32( sal_Int32 n, sal_Int16 nRadix = 10 );
     static UniString    CreateFromInt64( sal_Int64 n, sal_Int16 nRadix = 10 );
-    static UniString    CreateFromFloat( float f );
-    static UniString    CreateFromDouble( double d );
     static const UniString& EmptyString();
     sal_Int32           ToInt32() const;
     sal_Int64           ToInt64() const;

@@ -1947,7 +1947,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
                 mpCBDuration->SelectEntryPos( nPos );
             else
-                mpCBDuration->SetText( String::CreateFromDouble( fDuration ) );
+                mpCBDuration->SetText(rtl::OUString::valueOf(fDuration));
         }
     }
 
@@ -1978,7 +1978,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
                 mpCBRepeat->SelectEntryPos( nPos );
             else
-                mpCBRepeat->SetText( String::CreateFromDouble( fRepeat ) );
+                mpCBRepeat->SetText(rtl::OUString::valueOf(fRepeat));
         }
         else if( aRepeatCount.getValueType() == ::getCppuType((const Timing*)0) )
         {

@@ -90,15 +90,6 @@ xub_StrLen ImplStringLen( const sal_Unicode* pStr )
 
 // -----------------------------------------------------------------------
 
-sal_Int32 ByteString::ToInt32() const
-{
-    DBG_CHKTHIS( ByteString, DbgCheckByteString );
-
-    return atoi( mpData->maStr );
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool ByteString::IsLowerAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
