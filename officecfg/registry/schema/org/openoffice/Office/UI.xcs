@@ -283,16 +283,6 @@
 					</info>
 				</prop>
 			</group>
-			<group oor:name="WriterPageBreaks">
-				<info>
-					<desc>Specifies the settings for the page break mark in Writer.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the page break mark.</desc>
-					</info>
-				</prop>
-			</group>
 			<group oor:name="WriterHeaderFooterMark">
 				<info>
 					<desc>Specifies the settings for the header/footer mark in Writer.</desc>
@@ -300,6 +290,16 @@
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
 						<desc>Specifies the color used for the header/footer mark.</desc>
+					</info>
+				</prop>
+			</group>
+			<group oor:name="WriterPageBreaks">
+				<info>
+					<desc>Specifies the settings for the page break mark in Writer.</desc>
+				</info>
+				<prop oor:name="Color" oor:type="xs:int">
+					<info>
+						<desc>Specifies the color used for the page break mark.</desc>
 					</info>
 				</prop>
 			</group>

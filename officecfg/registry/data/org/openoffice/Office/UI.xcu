@@ -403,12 +403,12 @@
                         <value xsi:nil="true"/>
                     </prop>
                 </node>
-                <node oor:name="WriterPageBreaks">
+                <node oor:name="WriterHeaderFooterMark">
                     <prop oor:name="Color">
                         <value xsi:nil="true"/>
                     </prop>
                 </node>
-                <node oor:name="WriterHeaderFooterMark">
+                <node oor:name="WriterPageBreaks">
                     <prop oor:name="Color">
                         <value xsi:nil="true"/>
                     </prop>
