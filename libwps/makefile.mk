@@ -51,6 +51,8 @@ INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd-stream
 
 TARFILE_NAME=libwps-0.2.2
 TARFILE_MD5=29721a16f25967d59969d5f0ae485b4a
+
+PATCH_FILES=libwps-mingw.patch
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src/lib
 
