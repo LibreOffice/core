@@ -80,7 +80,7 @@ endif
 
 dmake/dmake@EXEEXT_FOR_BUILD@:
 	./bootstrap
-	-rm cross-build-toolset.built
+	-rm -f cross-build-toolset.built
 
 src.downloaded: ooo.lst download
 ifeq (@DO_FETCH_TARBALLS@,YES)
