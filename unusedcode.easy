@@ -431,27 +431,6 @@ OpenStormBento::CUtList::GetCount()
 OpenStormBento::CUtList::GetIndex(OpenStormBento::CUtListElmt*)
 OpenStormBento::CUtList::GetIndex(int)
 OpenStormBento::CUtList::GetPrevOrNULL(OpenStormBento::CUtListElmt*)
-Outliner::Draw(OutputDevice*, Rectangle const&, Point const&)
-Outliner::EndSpelling()
-Outliner::GetAsianCompressionMode() const
-Outliner::GetBeginDropHdl() const
-Outliner::GetBigTextObjectStart() const
-Outliner::GetDefTab() const
-Outliner::GetDocPos(Paragraph*)
-Outliner::GetEndDropHdl() const
-Outliner::GetFirstLineOffset(unsigned long)
-Outliner::GetForbiddenCharsTable() const
-Outliner::GetHyphenator() const
-Outliner::GetNotifyHdl() const
-Outliner::GetPolygon()
-Outliner::HasOnlineSpellErrors() const
-Outliner::IsAddExtLeading() const
-Outliner::IsAutoColorEnabled() const
-Outliner::IsFixedCellHeight() const
-Outliner::IsKernAsianPunctuation() const
-Outliner::RemoveParaFlag(Paragraph*, unsigned short)
-Outliner::SetBigTextObjectStart(unsigned short)
-Outliner::SetVisible(Paragraph*, unsigned char)
 OutlinerView::AdjustDepth(Paragraph*, short, unsigned char)
 OutlinerView::AdjustHeight(Paragraph*, long, unsigned char)
 OutlinerView::Collapse(Paragraph*)

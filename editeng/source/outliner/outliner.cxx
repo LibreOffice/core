@@ -704,19 +704,6 @@ void Outliner::SetStyleSheet( sal_uLong nPara, SfxStyleSheet* pStyle )
         }
 }
 
-void Outliner::SetVisible( Paragraph* pPara, sal_Bool bVisible )
-{
-    DBG_CHKTHIS(Outliner,0);
-    DBG_ASSERT( pPara, "SetVisible: pPara = NULL" );
-
-        if (pPara)
-        {
-            pPara->bVisible = bVisible;
-            sal_uLong nPara = pParaList->GetAbsPos( pPara );
-            pEditEngine->ShowParagraph( (sal_uInt16)nPara, bVisible );
-        }
-}
-
 void Outliner::ImplCheckNumBulletItem( sal_uInt16 nPara )
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
@@ -2101,20 +2088,10 @@ void Outliner::SetBeginDropHdl( const Link& rLink )
     pEditEngine->SetBeginDropHdl( rLink );
 }
 
-Link Outliner::GetBeginDropHdl() const
-{
-    return pEditEngine->GetBeginDropHdl();
-}
-
 /** sets a link that is called at the end of a drag operation at an edit view */
 void Outliner::SetEndDropHdl( const Link& rLink )
 {
     pEditEngine->SetEndDropHdl( rLink );
-}
-
-Link Outliner::GetEndDropHdl() const
-{
-    return pEditEngine->GetEndDropHdl();
 }
 
 /** sets a link that is called before a drop or paste operation. */
@@ -2137,17 +2114,6 @@ void Outliner::SetParaFlag( Paragraph* pPara,  sal_uInt16 nFlag )
             InsertUndo( new OutlinerUndoChangeParaFlags( this, (sal_uInt16)GetAbsPos( pPara ), pPara->nFlags, pPara->nFlags|nFlag ) );
 
         pPara->SetFlag( nFlag );
-    }
-}
-
-void Outliner::RemoveParaFlag( Paragraph* pPara, sal_uInt16 nFlag )
-{
-    if( pPara && pPara->HasFlag( nFlag ) )
-    {
-        if( IsUndoEnabled() && !IsInUndo() )
-            InsertUndo( new OutlinerUndoChangeParaFlags( this, (sal_uInt16)GetAbsPos( pPara ), pPara->nFlags, pPara->nFlags & ~nFlag ) );
-
-        pPara->RemoveFlag( nFlag );
     }
 }
 
