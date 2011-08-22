@@ -1,0 +1,11 @@
+--- misc/build/libwpd-0.9.2/src/lib/makefile.mk.orig	2011-08-22 07:21:59.000000000 +0200
++++ misc/build/libwpd-0.9.2/src/lib/makefile.mk	2011-08-22 07:22:08.000000000 +0200
+@@ -9,7 +9,7 @@ LIBTARGET=NO
+ 
+ .INCLUDE :  settings.mk
+ 
+-.IF "$(GUI)"=="WNT"
++.IF "$(GUI)$(COM)"=="WNTMSC"
+ CFLAGS+=-GR
+ .ENDIF
+ .IF "$(COM)"=="GCC"
