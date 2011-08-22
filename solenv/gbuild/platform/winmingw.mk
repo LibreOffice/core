@@ -33,7 +33,7 @@ COM := GCC
 ifeq ($(OS_FOR_BUILD),WNT)
 gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
 else
-gb_TMPDIR:=/tmp
+gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 endif
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
