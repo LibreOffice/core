@@ -1457,6 +1457,7 @@ dnl These values may be checked and reset later.
 dnl ===================================================================
 #defaults unless the os test overrides this:
 test_randr=yes
+test_cups=yes
 test_fontconfig=yes
 
 case "$host_os" in
@@ -1526,6 +1527,7 @@ cygwin*|interix*|mingw32*)
     # is "mingw32" (because in that case it is the MinGW
     # tool-chain that is used).
 
+    test_cups=no
     test_randr=no
     test_freetype=no
     test_fontconfig=no
@@ -1628,6 +1630,7 @@ dragonfly*)
 
 androideabi*)
     build_gstreamer=no
+    test_cups=no
     test_fontconfig=no
     test_freetype=no
     test_gtk=no
@@ -2271,10 +2274,12 @@ AC_SUBST(DISABLE_STRIP)
 dnl check for cups support
 dnl ===================================================================
 AC_MSG_CHECKING([whether cups support is present])
-AC_CHECK_LIB(cups, cupsPrintFiles)
-AC_CHECK_HEADER(cups/cups.h, AC_DEFINE(HAVE_CUPS_H))
-if test "$ac_cv_lib_cups_cupsPrintFiles" != "yes" -a "$ac_cv_header_cups_cups_h" != "yes"; then
-    AC_MSG_ERROR([Could not find CUPS. Install libcupsys2-dev or cups???-devel.])
+if test "$test_cups" = "yes"; then
+    AC_CHECK_LIB(cups, cupsPrintFiles)
+    AC_CHECK_HEADER(cups/cups.h, AC_DEFINE(HAVE_CUPS_H))
+    if test "$ac_cv_lib_cups_cupsPrintFiles" != "yes" -a "$ac_cv_header_cups_cups_h" != "yes"; then
+        AC_MSG_ERROR([Could not find CUPS. Install libcupsys2-dev or cups???-devel.])
+    fi
 fi
 
 
