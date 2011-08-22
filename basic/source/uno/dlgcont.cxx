@@ -55,7 +55,7 @@
 #include <cppuhelper/factory.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
-
+#include <svtools/grfmgr.hxx>
 
 namespace basic
 {
@@ -229,35 +229,6 @@ void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
     xInput->closeInput();
 }
 
-void lcl_deepInspectForEmbeddedImages( const Reference< XInterface >& xIf,  std::vector< rtl::OUString >& rvEmbedImgUrls )
-{
-    static rtl::OUString sImageURL= OUString(RTL_CONSTASCII_USTRINGPARAM( "ImageURL" ) );
-    Reference< beans::XPropertySet > xProps( xIf, UNO_QUERY );
-    if ( xProps.is() )
-    {
-
-        if ( xProps->getPropertySetInfo()->hasPropertyByName( sImageURL ) )
-        {
-            rtl::OUString sURL;
-            xProps->getPropertyValue( sImageURL ) >>= sURL;
-            if ( sURL.getLength() && sURL.compareToAscii( GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( GRAPHOBJ_URLPREFIX ) ) == 0 )
-                rvEmbedImgUrls.push_back( sURL );
-        }
-    }
-    Reference< XNameContainer > xContainer( xIf, UNO_QUERY );
-    if ( xContainer.is() )
-    {
-        Sequence< rtl::OUString > sNames = xContainer->getElementNames();
-        sal_Int32 nContainees = sNames.getLength();
-        for ( sal_Int32 index = 0; index < nContainees; ++index )
-        {
-            Reference< XInterface > xCtrl;
-            xContainer->getByName( sNames[ index ] ) >>= xCtrl;
-            lcl_deepInspectForEmbeddedImages( xCtrl, rvEmbedImgUrls );
-        }
-    }
-}
-
 void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< embed::XStorage >& xStorage ) throw ( RuntimeException )
 {
     LibraryContainerMethodGuard aGuard( *this );
@@ -315,7 +286,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                     OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
                     ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, mxOwnerDocument );
                     std::vector< rtl::OUString > vEmbeddedImageURLs;
-                    lcl_deepInspectForEmbeddedImages( Reference< XInterface >( xDialogModel, UNO_QUERY ),  vEmbeddedImageURLs );
+                    GraphicObject::InspectForGraphicObjectImageURL( Reference< XInterface >( xDialogModel, UNO_QUERY ),  vEmbeddedImageURLs );
                     if ( !vEmbeddedImageURLs.empty() )
                     {
                         // Export the images to the storage

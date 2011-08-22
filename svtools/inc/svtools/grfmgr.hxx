@@ -536,6 +536,11 @@ public:
     friend SvStream&        operator>>( SvStream& rIStm, GraphicObject& rGraphicObj );
 
     static GraphicObject    CreateGraphicObjectFromURL( const ::rtl::OUString &rURL );
+    // will inspect an object ( e.g. a control ) for any 'ImageURL'
+    // properties and return these in a vector. Note: this implementation
+    // will cater for XNameContainer objects and deepinspect any containees
+    // if they exist
+    static void InspectForGraphicObjectImageURL( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIf, std::vector< rtl::OUString >& rvEmbedImgUrls );
 };
 
 // ------------------

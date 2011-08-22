@@ -47,8 +47,18 @@
 
 #include <vcl/pdfextoutdevdata.hxx>
 
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #define WATERMARK_LUM_OFFSET                50
 #define WATERMARK_CON_OFFSET                -70
+
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::XInterface;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::Sequence;
+using com::sun::star::container::XNameContainer;
+using com::sun::star::beans::XPropertySet;
 
 GraphicManager* GraphicObject::mpGlobalMgr = NULL;
 
@@ -1180,6 +1190,36 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const ::rtl::OUString &
         }
 
         return GraphicObject( aGraphic );
+    }
+}
+
+void
+GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< rtl::OUString >& rvEmbedImgUrls )
+{
+    static rtl::OUString sImageURL(RTL_CONSTASCII_USTRINGPARAM( "ImageURL" ) );
+    Reference< XPropertySet > xProps( xIf, UNO_QUERY );
+    if ( xProps.is() )
+    {
+
+        if ( xProps->getPropertySetInfo()->hasPropertyByName( sImageURL ) )
+        {
+            rtl::OUString sURL;
+            xProps->getPropertyValue( sImageURL ) >>= sURL;
+            if ( sURL.getLength() && sURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 )
+                rvEmbedImgUrls.push_back( sURL );
+        }
+    }
+    Reference< XNameContainer > xContainer( xIf, UNO_QUERY );
+    if ( xContainer.is() )
+    {
+        Sequence< rtl::OUString > sNames = xContainer->getElementNames();
+        sal_Int32 nContainees = sNames.getLength();
+        for ( sal_Int32 index = 0; index < nContainees; ++index )
+        {
+            Reference< XInterface > xCtrl;
+            xContainer->getByName( sNames[ index ] ) >>= xCtrl;
+            InspectForGraphicObjectImageURL( xCtrl, rvEmbedImgUrls );
+        }
     }
 }
 
