@@ -148,7 +148,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/draw/shapeexport3 \
     xmloff/source/draw/shapeexport4 \
     xmloff/source/draw/shapeimport \
-    xmloff/source/draw/viewcontext \
     xmloff/source/draw/xexptran \
     xmloff/source/draw/ximp3dobject \
     xmloff/source/draw/ximp3dscene \
