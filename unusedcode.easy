@@ -3369,15 +3369,7 @@ sdr::table::TableLayouter::getColumnStart(int) const
 sdr::table::TableLayouter::getRowStart(int) const
 sdr::table::TableLayouter::setColumnWidth(int, int)
 sdr::table::TableLayouter::setRowHeight(int, int)
-sfx2::IFrameWindow_Impl::SetBorder(unsigned char)
-sfx2::LinkManager::InsertFileLink(sfx2::SvBaseLink&)
-sfx2::ModuleTaskPane::ModuleHasToolPanels(rtl::OUString const&)
-sfx2::SvBaseLink::GetName() const
-sfx2::TaskPaneController::SetDefaultTitle(String const&)
 sfx2::TaskPaneWrapper::GetChildWindowId()
-sfx2::TitledDockingWindow::GetTitle() const
-sfx::EditWrapper::EditWrapper(Edit&)
-sfx::ItemConnectionBase::Activate(bool)
 slideshow::internal::AnimatedSprite::getPixelOffset() const
 slideshow::internal::AnimatedSprite::setPriority(double)
 slideshow::internal::DrawShapeSubsetting::DrawShapeSubsetting(boost::shared_ptr<GDIMetaFile> const&)

@@ -245,13 +245,6 @@ void SvBaseLink::SetName( const String & rNm )
 
 //--------------------------------------------------------------------------
 
-String SvBaseLink::GetName() const
-{
-    return aLinkName;
-}
-
-//--------------------------------------------------------------------------
-
 void SvBaseLink::SetObj( SvLinkSource * pObj )
 {
     DBG_ASSERT( (nObjType & OBJECT_CLIENT_SO &&

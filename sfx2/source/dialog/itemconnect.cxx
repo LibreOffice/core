@@ -146,35 +146,6 @@ void CheckBoxWrapper::SetControlValue( sal_Bool bValue )
 
 // ----------------------------------------------------------------------------
 
-EditWrapper::EditWrapper( Edit& rEdit ) :
-        SingleControlWrapperType( rEdit )
-{
-}
-
-bool EditWrapper::IsControlDontKnow() const
-{
-    // no "don't know" state - empty string is a valid value of an Edit
-    return false;
-}
-
-void EditWrapper::SetControlDontKnow( bool bSet )
-{
-    if( bSet )
-        GetControl().SetText( String() );
-}
-
-String EditWrapper::GetControlValue() const
-{
-    return GetControl().GetText();
-}
-
-void EditWrapper::SetControlValue( String aValue )
-{
-    GetControl().SetText( aValue );
-}
-
-// ----------------------------------------------------------------------------
-
 ColorListBoxWrapper::ColorListBoxWrapper(ColorListBox & rListBox):
     SingleControlWrapper< ColorListBox, Color >(rListBox)
 {}
@@ -260,11 +231,6 @@ ItemConnectionBase::ItemConnectionBase( ItemConnFlags nFlags ) :
 
 ItemConnectionBase::~ItemConnectionBase()
 {
-}
-
-void ItemConnectionBase::Activate( bool bActive )
-{
-    if( bActive ) mnFlags &= ~ITEMCONN_INACTIVE; else mnFlags |= ITEMCONN_INACTIVE;
 }
 
 bool ItemConnectionBase::IsActive() const

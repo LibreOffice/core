@@ -164,7 +164,6 @@ const ItemConnFlags ITEMCONN_DEFAULT            = ITEMCONN_NONE;
      +- ItemControlConnection< ItemWrpT, ControlWrpT >
      |   |
      |   +- CheckBoxConnection   [1]
-     |   +- EditConnection   [1]
      |   |
      |   +- NumericConnection< ItemWrpT >   [1]
      |   |   |
@@ -196,10 +195,6 @@ public:
     /** Returns the flags passed in the constructor. */
     inline ItemConnFlags GetFlags() const { return mnFlags; }
 
-    /** Activates or deactivates this connection.
-        @descr  Deactivated connections do not execute the virtual functions
-        ApplyFlags(), Reset(), and FillItemSet(). */
-    void                Activate( bool bActive = true );
     /** Returns true if this connection is active. */
     bool                IsActive() const;
 
@@ -314,9 +309,6 @@ private:
 
 /** Connection between an SfxBoolItem and a VCL CheckBox. */
 typedef ItemControlConnection< BoolItemWrapper, CheckBoxWrapper > CheckBoxConnection;
-
-/** Connection between an SfxStringItem and a VCL Edit. */
-typedef ItemControlConnection< StringItemWrapper, EditWrapper > EditConnection;
 
 // ============================================================================
 

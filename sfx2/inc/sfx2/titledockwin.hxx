@@ -59,12 +59,6 @@ namespace sfx2
         /** sets a title to be displayed in the docking window
         */
         void        SetTitle( const String& i_rTitle );
-        /** returns the current title displayed in the docking window
-
-            Note that if you never called SetTitle before, then this method will not return an empty string,
-            but the window text (Window::GetText), since this is what is displayed as title then.
-        */
-        String      GetTitle() const;
 
         /** adds a drop down item to the toolbox. Usually, this is used to add some kind of menu to the toolbox.
 
