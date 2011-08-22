@@ -362,10 +362,6 @@ my_components += evoab
 my_components += avmediagstreamer
 .END
 
-.IF "$(OS)" != "WNT" && "$(SOLAR_JAVA)" == "TRUE"
-my_components += avmedia.jar
-.END
-
 my_ooo_components = mailmerge
 
 .INCLUDE: target.mk

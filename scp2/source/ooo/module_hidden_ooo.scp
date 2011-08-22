@@ -150,7 +150,6 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Xml_Apis,
 	gid_File_Jar_Bsh,
 	gid_File_Jar_Classes,
-	gid_File_Jar_AVmedia,
 	gid_File_Jar_Xsltfilter,
 	gid_File_Jar_Xsltvalidate,
 	gid_File_Jar_Docbook,
