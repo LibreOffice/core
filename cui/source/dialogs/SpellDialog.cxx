@@ -769,7 +769,8 @@ void SpellDialog::Impl_Restore()
     //get a new sentence
     aSentenceED.SetText(rtl::OUString());
     aSentenceED.ResetModified();
-    SpellContinue_Impl();
+    //Resolves: fdo#39348 refill the dialog with the currently spelled sentence
+    SpellContinue_Impl(true);
     aIgnorePB.SetText(aIgnoreOnceST);
 }
 
