@@ -83,7 +83,7 @@ include $(GBUILDDIR)/Helper.mk
 ifeq ($(OS),LINUX)
 include $(GBUILDDIR)/platform/linux.mk
 else ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
+ifeq ($(COM),GCC)
 include $(GBUILDDIR)/platform/winmingw.mk
 else
 include $(GBUILDDIR)/platform/windows.mk
