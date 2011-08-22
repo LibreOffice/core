@@ -44,15 +44,6 @@ gb_AWK := awk
 gb_CLASSPATHSEP := :
 gb_YACC := bison
 gb_RC := $(WINDRES)
-ifeq ($(USE_MINGW),cygwin)
-gb_MINGWLIBDIR := $(COMPATH)/lib/mingw
-else
-ifeq ($(USE_MINGW),cygwin-w64-mingw32)
-gb_MINGWLIBDIR := $(COMPATH)/usr/i686-w64-mingw32/sys-root/mingw/lib
-else
-gb_MINGWLIBDIR := $(COMPATH)/lib
-endif
-endif
 ifeq ($(MINGW_SHARED_GXXLIB),YES)
 gb_MINGW_LIBSTDCPP := $(subst -l,,$(MINGW_SHARED_LIBSTDCPP))
 else
