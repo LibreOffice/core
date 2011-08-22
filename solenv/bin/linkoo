@@ -79,7 +79,7 @@ $dllre = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
 
 my %replaceable = (
     $program_dir => "($dllre|\.rdb)",
-    $ure_lib_dir => "$dllre",
+    $ure_lib_dir => "($dllre|\\.so\\.3\$)",
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
     'basis-link/share/config' => '\.zip$',
