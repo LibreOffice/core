@@ -307,23 +307,6 @@ ContextMenuHelper::completeAndExecute(
     }
 }
 
-uno::Reference< awt::XPopupMenu >
-ContextMenuHelper::create(
-    const ::rtl::OUString& /*aPopupMenuResourceId*/ )
-{
-    // NOT IMPLEMENTED YET!
-    return uno::Reference< awt::XPopupMenu >();
-}
-
-bool
-ContextMenuHelper::createAndExecute(
-    const Point& /*aPos*/,
-    const ::rtl::OUString& /*aPopupMenuResourceId*/ )
-{
-    // NOT IMPLEMENTED YET!
-    return false;
-}
-
 // private member
 
 void

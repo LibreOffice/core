@@ -60,18 +60,6 @@ FrameStatusListener::~FrameStatusListener()
 {
 }
 
-Reference< XFrame > FrameStatusListener::getFrameInterface() const
-{
-    SolarMutexGuard aSolarMutexGuard;
-    return m_xFrame;
-}
-
-Reference< XMultiServiceFactory > FrameStatusListener::getServiceManager() const
-{
-    SolarMutexGuard aSolarMutexGuard;
-    return m_xServiceManager;
-}
-
 // XInterface
 Any SAL_CALL FrameStatusListener::queryInterface( const Type& rType )
 throw ( RuntimeException )
@@ -170,13 +158,6 @@ throw ( RuntimeException )
     Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
     if ( xIfac == xSource )
         m_xFrame.clear();
-}
-
-// XStatusListener
-void SAL_CALL FrameStatusListener::statusChanged( const FeatureStateEvent& )
-throw ( RuntimeException )
-{
-    // must be implemented by sub class
 }
 
 void FrameStatusListener::frameAction( const FrameActionEvent& Action )

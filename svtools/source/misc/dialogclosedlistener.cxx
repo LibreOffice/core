@@ -46,13 +46,6 @@ namespace svt
     {
     }
 
-    DialogClosedListener::DialogClosedListener( const Link& rLink ) :
-
-        m_aDialogClosedLink( rLink )
-
-    {
-    }
-
     // XDialogClosedListener methods
     void SAL_CALL DialogClosedListener::dialogClosed( const DialogClosedEvent& aEvent ) throw (RuntimeException)
     {

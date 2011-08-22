@@ -50,14 +50,6 @@ namespace svt
 {
     // class svt::SelectableFixedText ----------------------------------------
 
-    SelectableFixedText::SelectableFixedText( Window* pParent, WinBits nWinStyle ) :
-        Edit( pParent, nWinStyle )
-    {
-        Init();
-    }
-
-    // -----------------------------------------------------------------------
-
     SelectableFixedText::SelectableFixedText( Window* pParent, const ResId& rResId ) :
         Edit( pParent, rResId )
     {

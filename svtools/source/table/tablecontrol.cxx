@@ -151,19 +151,6 @@ namespace svt { namespace table
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    RowPos TableControl::GetTopRow() const
-    {
-        return m_pImpl->getTopRow();
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    void TableControl::SetTopRow( RowPos _nRow )
-    {
-        OSL_ENSURE( false, "TableControl::SetTopRow: not implemented!" );
-        OSL_UNUSED( _nRow );
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
     sal_Int32 TableControl::GetCurrentRow() const
     {
         return m_pImpl->getCurrentRow();
@@ -594,19 +581,7 @@ namespace svt { namespace table
     {
         ImplCallEventListenersAndHandler( VCLEVENT_TABLEROW_SELECT, m_pImpl->getSelectHandler(), this );
     }
-//........................................................................
 
-    //------------------------------------------------------------------------------------------------------------------
-    void TableControl::SetSelectHdl( const Link& i_selectHandler )
-    {
-        m_pImpl->setSelectHandler( i_selectHandler );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    const Link& TableControl::GetSelectHdl() const
-    {
-        return m_pImpl->getSelectHandler();
-    }
 }} // namespace svt::table
 
 //......................................................................................................................

@@ -127,13 +127,6 @@ Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  ) throw(RuntimeException)
 }
 
 //-------------------------------------------------------------------------
-Sequence<sal_Int8> SAL_CALL OGenericUnoDialog::getImplementationId(  ) throw(RuntimeException)
-{
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
-}
-
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL OGenericUnoDialog::supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());

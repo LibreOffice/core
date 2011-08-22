@@ -192,32 +192,12 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2 )
-    {
-        PDialogController pController( new RadioDependentEnabler( _rRadio ) );
-        pController->addDependentWindow( _rDependentWindow1 );
-        pController->addDependentWindow( _rDependentWindow2 );
-        m_pImpl->aControllers.push_back( pController );
-    }
-
-    //---------------------------------------------------------------------
     void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3 )
     {
         PDialogController pController( new RadioDependentEnabler( _rRadio ) );
         pController->addDependentWindow( _rDependentWindow1 );
         pController->addDependentWindow( _rDependentWindow2 );
         pController->addDependentWindow( _rDependentWindow3 );
-        m_pImpl->aControllers.push_back( pController );
-    }
-
-    //---------------------------------------------------------------------
-    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3, Window& _rDependentWindow4 )
-    {
-        PDialogController pController( new RadioDependentEnabler( _rRadio ) );
-        pController->addDependentWindow( _rDependentWindow1 );
-        pController->addDependentWindow( _rDependentWindow2 );
-        pController->addDependentWindow( _rDependentWindow3 );
-        pController->addDependentWindow( _rDependentWindow4 );
         m_pImpl->aControllers.push_back( pController );
     }
 
@@ -230,19 +210,6 @@ namespace svt
         pController->addDependentWindow( _rDependentWindow3 );
         pController->addDependentWindow( _rDependentWindow4 );
         pController->addDependentWindow( _rDependentWindow5 );
-        m_pImpl->aControllers.push_back( pController );
-    }
-
-    //---------------------------------------------------------------------
-    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3, Window& _rDependentWindow4, Window& _rDependentWindow5, Window& _rDependentWindow6 )
-    {
-        PDialogController pController( new RadioDependentEnabler( _rRadio ) );
-        pController->addDependentWindow( _rDependentWindow1 );
-        pController->addDependentWindow( _rDependentWindow2 );
-        pController->addDependentWindow( _rDependentWindow3 );
-        pController->addDependentWindow( _rDependentWindow4 );
-        pController->addDependentWindow( _rDependentWindow5 );
-        pController->addDependentWindow( _rDependentWindow6 );
         m_pImpl->aControllers.push_back( pController );
     }
 
@@ -264,16 +231,6 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3 )
-    {
-        PDialogController pController( new RadioDependentEnabler( _rBox ) );
-        pController->addDependentWindow( _rDependentWindow1 );
-        pController->addDependentWindow( _rDependentWindow2 );
-        pController->addDependentWindow( _rDependentWindow3 );
-        m_pImpl->aControllers.push_back( pController );
-    }
-
-    //---------------------------------------------------------------------
     void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3, Window& _rDependentWindow4 )
     {
         PDialogController pController( new RadioDependentEnabler( _rBox ) );
@@ -281,31 +238,6 @@ namespace svt
         pController->addDependentWindow( _rDependentWindow2 );
         pController->addDependentWindow( _rDependentWindow3 );
         pController->addDependentWindow( _rDependentWindow4 );
-        m_pImpl->aControllers.push_back( pController );
-    }
-
-    //---------------------------------------------------------------------
-    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3, Window& _rDependentWindow4, Window& _rDependentWindow5 )
-    {
-        PDialogController pController( new RadioDependentEnabler( _rBox ) );
-        pController->addDependentWindow( _rDependentWindow1 );
-        pController->addDependentWindow( _rDependentWindow2 );
-        pController->addDependentWindow( _rDependentWindow3 );
-        pController->addDependentWindow( _rDependentWindow4 );
-        pController->addDependentWindow( _rDependentWindow5 );
-        m_pImpl->aControllers.push_back( pController );
-    }
-
-    //---------------------------------------------------------------------
-    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3, Window& _rDependentWindow4, Window& _rDependentWindow5, Window& _rDependentWindow6 )
-    {
-        PDialogController pController( new RadioDependentEnabler( _rBox ) );
-        pController->addDependentWindow( _rDependentWindow1 );
-        pController->addDependentWindow( _rDependentWindow2 );
-        pController->addDependentWindow( _rDependentWindow3 );
-        pController->addDependentWindow( _rDependentWindow4 );
-        pController->addDependentWindow( _rDependentWindow5 );
-        pController->addDependentWindow( _rDependentWindow6 );
         m_pImpl->aControllers.push_back( pController );
     }
 

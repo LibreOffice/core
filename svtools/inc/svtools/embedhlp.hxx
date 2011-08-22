@@ -76,8 +76,6 @@ namespace svt
                                             const ::rtl::OUString& aName,
                                             const ::rtl::OUString& aMediaType );
 
-        static sal_Bool ObjectIsModified( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& )
-                                throw( NS_UNO::Exception );
         static NS_UNO::Reference< NS_IO::XInputStream > GetGraphicReplacementStream(
                                             sal_Int64 nViewAspect,
                                             const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >&,
@@ -95,13 +93,11 @@ namespace svt
 
         ~EmbeddedObjectRef();
         EmbeddedObjectRef( const EmbeddedObjectRef& );
-        sal_Bool TryRunningState();
 
         // assigning to a container enables the object to exchange graphical representations with a storage
         void            AssignToContainer( comphelper::EmbeddedObjectContainer* pContainer, const ::rtl::OUString& rPersistName );
         comphelper::EmbeddedObjectContainer* GetContainer() const;
 
-        ::rtl::OUString GetPersistName() const;
         sal_Int64       GetViewAspect() const;
         void            SetViewAspect( sal_Int64 nAspect );
         Graphic*        GetGraphic( ::rtl::OUString* pMediaType=0 ) const;
@@ -117,7 +113,6 @@ namespace svt
 
         void            UpdateReplacement() { GetReplacement( sal_True ); }
         void            UpdateReplacementOnDemand();
-        MapUnit         GetMapUnit() const;
         void            Lock( sal_Bool bLock = sal_True );
         sal_Bool            IsLocked() const;
         void            Clear();

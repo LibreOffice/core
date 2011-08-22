@@ -59,7 +59,6 @@ namespace svt
 
     public:
         DialogClosedListener();
-        DialogClosedListener( const Link& rLink );
 
         inline void SetDialogClosedLink( const Link& rLink ) { m_aDialogClosedLink = rLink; }
 

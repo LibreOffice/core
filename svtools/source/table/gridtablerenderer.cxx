@@ -198,12 +198,6 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    RowPos GridTableRenderer::getCurrentRow() const
-    {
-        return m_pImpl->nCurrentRow;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     bool GridTableRenderer::useGridLines() const
     {
         return m_pImpl->bUseGridLines;

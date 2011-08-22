@@ -78,7 +78,6 @@ namespace svt { namespace table
         virtual void        RequestHelp( const HelpEvent& rHEvt );
 
         void                SetBackground(const Wallpaper& rColor);
-        void                SetBackground();
 
     private:
         void    impl_hideTipWindow();

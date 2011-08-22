@@ -41,13 +41,6 @@ namespace svt
     //= OFileURLControl
     //=====================================================================
     //---------------------------------------------------------------------
-    OFileURLControl::OFileURLControl(Window* _pParent)
-        :SvtURLBox(_pParent, INET_PROT_FILE)
-    {
-        DisableHistory();
-    }
-
-    //---------------------------------------------------------------------
     OFileURLControl::OFileURLControl(Window* _pParent, const ResId& _rId)
         :SvtURLBox(_pParent, _rId, INET_PROT_FILE)
     {

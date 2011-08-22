@@ -79,27 +79,12 @@ namespace svt
     {
     }
 
-    HyperLabel::HyperLabel( Window* _pParent, const ResId& _rId )
-        :FixedText( _pParent, _rId )
-        ,m_pImpl( new HyperLabelImpl )
-    {
-        implInit();
-    }
-
     HyperLabel::HyperLabel( Window* _pParent, WinBits _nWinStyle )
         :FixedText( _pParent, _nWinStyle )
         ,m_pImpl( new HyperLabelImpl )
     {
         implInit();
     }
-
-
-    sal_Int32 HyperLabel::GetLogicWidth()
-    {
-        Size rLogicLocSize = PixelToLogic( m_pImpl->m_aMinSize, MAP_APPFONT );
-        return rLogicLocSize.Width();
-    }
-
 
     Size HyperLabel::CalcMinimumSize( long nMaxWidth ) const
     {
@@ -227,11 +212,6 @@ namespace svt
     void HyperLabel::SetIndex( sal_Int32 _Index )
     {
         m_pImpl->Index = _Index;
-    }
-
-    ::rtl::OUString HyperLabel::GetLabel( )
-    {
-        return GetText();
     }
 
     void HyperLabel::SetLabel( const ::rtl::OUString& _rText )

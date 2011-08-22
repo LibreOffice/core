@@ -63,17 +63,6 @@ namespace svt { namespace table
         GridTableRenderer( ITableModel& _rModel );
         ~GridTableRenderer();
 
-        /** returns the index of the row currently being painted
-
-            According to the ->ITableRenderer interface, one call is made
-            to the renderer with a row to prepare (->PrepareRow()), and subsequent
-            calls do not carry the row index anymore, but are relative to the
-            row which has previously been prepared.
-
-            This method returns the index of the last row which has been prepared
-        */
-        RowPos  getCurrentRow() const;
-
         /** determines whether or not to paint grid lines
         */
         bool    useGridLines() const;

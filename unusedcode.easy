@@ -3393,58 +3393,6 @@ slideshow::internal::getNodeType(short&, com::sun::star::uno::Sequence<com::sun:
 slideshow::internal::removeTextActions(GDIMetaFile&)
 svgi::(anonymous namespace)::appendChar(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)
 svgi::getTokenName(int)
-svt::ContextMenuHelper::create(rtl::OUString const&)
-svt::ContextMenuHelper::createAndExecute(Point const&, rtl::OUString const&)
-svt::ControlDependencyManager::enableOnCheckMark(CheckBox&, Window&, Window&, Window&)
-svt::ControlDependencyManager::enableOnCheckMark(CheckBox&, Window&, Window&, Window&, Window&, Window&)
-svt::ControlDependencyManager::enableOnCheckMark(CheckBox&, Window&, Window&, Window&, Window&, Window&, Window&)
-svt::ControlDependencyManager::enableOnRadioCheck(RadioButton&, Window&, Window&)
-svt::ControlDependencyManager::enableOnRadioCheck(RadioButton&, Window&, Window&, Window&, Window&)
-svt::ControlDependencyManager::enableOnRadioCheck(RadioButton&, Window&, Window&, Window&, Window&, Window&, Window&)
-svt::DialogClosedListener::DialogClosedListener(Link const&)
-svt::EditCellController::EditCellController(svt::MultiLineTextCell*)
-svt::EmbeddedObjectRef::GetMapUnit() const
-svt::EmbeddedObjectRef::GetPersistName() const
-svt::EmbeddedObjectRef::ObjectIsModified(com::sun::star::uno::Reference<com::sun::star::embed::XEmbeddedObject> const&)
-svt::EmbeddedObjectRef::TryRunningState()
-svt::FileURLBox::FileURLBox(Window*)
-svt::FileURLBox::FileURLBox(Window*, ResId const&)
-svt::FrameStatusListener::getFrameInterface() const
-svt::FrameStatusListener::getServiceManager() const
-svt::FrameStatusListener::statusChanged(com::sun::star::frame::FeatureStateEvent const&)
-svt::HyperLabel::GetLabel()
-svt::HyperLabel::GetLogicWidth()
-svt::HyperLabel::HyperLabel(Window*, ResId const&)
-svt::OFileURLControl::OFileURLControl(Window*)
-svt::OGenericUnoDialog::getImplementationId()
-svt::ORoadmap::ORoadmap(Window*, ResId const&)
-svt::OWizardMachine::calcRightHelpOffset(unsigned int)
-svt::OWizardMachine::getTitleBase() const
-svt::OWizardPage::OWizardPage(Window*, long)
-svt::RoadmapItem::GetClickHdl() const
-svt::RoadmapItem::SetLabel(rtl::OUString const&)
-svt::RoadmapItem::SetZOrder(svt::RoadmapItem*, unsigned short)
-svt::SelectableFixedText::SelectableFixedText(Window*, long)
-svt::StatusbarController::getLayoutManager() const
-svt::StatusbarController::getServiceManager() const
-svt::StatusbarController::isBound() const
-svt::StatusbarController::removeStatusListener(rtl::OUString const&)
-svt::StatusbarController::unbindListener()
-svt::StatusbarController::updateStatus()
-svt::StatusbarController::updateStatus(rtl::OUString)
-svt::TabDeckLayouter::FocusPanelItem(unsigned long)
-svt::TabDeckLayouter::GetFocusedPanelItem() const
-svt::TabDeckLayouter::GetItemScreenRect(unsigned long) const
-svt::TabDeckLayouter::IsPanelSelectorEnabled() const
-svt::TabDeckLayouter::IsPanelSelectorVisible() const
-svt::TemplateContent::TemplateContent()
-svt::TemplateContent::TemplateContent(INetURLObject const&, com::sun::star::util::DateTime const&)
-svt::table::GridTableRenderer::getCurrentRow() const
-svt::table::TableControl::GetSelectHdl() const
-svt::table::TableControl::GetTopRow() const
-svt::table::TableControl::SetSelectHdl(Link const&)
-svt::table::TableControl::SetTopRow(int)
-svt::table::TableDataWindow::SetBackground()
 svx::ControllerFeatures::ControllerFeatures(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::form::XForm> const&, svx::IControllerFeatureInvalidation*)
 svx::DialControl::DialControl(Window*, Size const&, Font const&, long)
 svx::DialControl::DialControl(Window*, Size const&, long)

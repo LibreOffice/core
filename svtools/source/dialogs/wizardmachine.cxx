@@ -54,14 +54,6 @@ namespace svt
     //=====================================================================
     //= OWizardPage
     //=====================================================================
-    //---------------------------------------------------------------------
-    OWizardPage::OWizardPage( Window* _pParent, WinBits _nStyle )
-        :TabPage( _pParent, _nStyle )
-        ,m_pImpl( new WizardPageImplData )
-    {
-    }
-
-    //---------------------------------------------------------------------
     OWizardPage::OWizardPage( Window* _pParent, const ResId& _rResId )
         :TabPage( _pParent, _rResId )
         ,m_pImpl( new WizardPageImplData )
@@ -129,24 +121,6 @@ namespace svt
         {
         }
     };
-
-    long OWizardMachine::calcRightHelpOffset(sal_uInt32 _nButtonFlags)
-    {
-        sal_Int32 nMask = 1;
-        sal_Int32 nRightAlignedButtonCount = -1;
-        for (unsigned int i = 0; i < 8*sizeof(_nButtonFlags); i++ )
-        {
-            if( ( _nButtonFlags & nMask ) != 0 )
-                nRightAlignedButtonCount++;
-            nMask <<= 1;
-        }
-        Size aSize = GetPageSizePixel();
-        sal_Int32 nTotButtonWidth = nRightAlignedButtonCount * LogicalCoordinateToPixel(50);
-        sal_Int32 nTotRightButtonSpaceOffset = (nRightAlignedButtonCount) * WIZARDDIALOG_BUTTON_STDOFFSET_X;
-        if ((_nButtonFlags & WZB_NEXT) && (_nButtonFlags & WZB_NEXT))
-            nTotRightButtonSpaceOffset = (nTotRightButtonSpaceOffset - WIZARDDIALOG_BUTTON_STDOFFSET_X) + WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X;
-        return aSize.Width() - nTotButtonWidth - nTotRightButtonSpaceOffset;
-    }
 
     //=====================================================================
     //= OWizardMachine
@@ -275,12 +249,6 @@ namespace svt
         }
 
         SetText(sCompleteTitle);
-    }
-
-    //---------------------------------------------------------------------
-    const String& OWizardMachine::getTitleBase() const
-    {
-        return m_pImpl->sTitleBase;
     }
 
     //---------------------------------------------------------------------

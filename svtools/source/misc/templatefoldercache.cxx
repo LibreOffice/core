@@ -143,9 +143,7 @@ namespace svt
         ~TemplateContent();
 
     public:
-        TemplateContent();
         TemplateContent( const INetURLObject& _rURL );
-        TemplateContent( const INetURLObject& _rURL, const util::DateTime& _rLastModified );
 
         // attribute access
         inline String                   getName( ) const                            { return m_sLocalName; }
@@ -169,13 +167,6 @@ namespace svt
     DBG_NAME( TemplateContent )
 
     //---------------------------------------------------------------------
-    TemplateContent::TemplateContent()
-    {
-        DBG_CTOR( TemplateContent, NULL );
-        implResetDate();
-    }
-
-    //---------------------------------------------------------------------
     TemplateContent::TemplateContent( const INetURLObject& _rURL )
         :m_aURL( _rURL )
     {
@@ -183,16 +174,6 @@ namespace svt
         DBG_ASSERT( INET_PROT_NOT_VALID != m_aURL.GetProtocol(), "TemplateContent::TemplateContent: invalid URL!" );
         m_sLocalName = m_aURL.getName();
         implResetDate();
-    }
-
-    //---------------------------------------------------------------------
-    TemplateContent::TemplateContent( const INetURLObject& _rURL, const util::DateTime& _rLastModified )
-        :m_aURL( _rURL )
-        ,m_aLastModified( _rLastModified )
-    {
-        DBG_CTOR( TemplateContent, NULL );
-        DBG_ASSERT( INET_PROT_NOT_VALID != m_aURL.GetProtocol(), "TemplateContent::TemplateContent: invalid URL!" );
-        m_sLocalName = m_aURL.getName();
     }
 
     //---------------------------------------------------------------------

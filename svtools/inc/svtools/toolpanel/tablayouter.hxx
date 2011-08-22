@@ -80,14 +80,6 @@ namespace svt
         void            SetTabItemContent( const TabItemContent& i_eItemContent );
         TabAlignment    GetTabAlignment() const;
 
-        // helpers for the A11Y implementation
-        ::boost::optional< size_t >
-                        GetFocusedPanelItem() const;
-        void            FocusPanelItem( const size_t i_nItemPos );
-        bool            IsPanelSelectorEnabled() const;
-        bool            IsPanelSelectorVisible() const;
-        Rectangle       GetItemScreenRect( const size_t i_nItemPos ) const;
-
         // IDeckLayouter
         virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );
         virtual void        Destroy();

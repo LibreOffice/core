@@ -128,46 +128,6 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    ::boost::optional< size_t > TabDeckLayouter::GetFocusedPanelItem() const
-    {
-        if ( lcl_checkDisposed( *m_pData ) )
-            return ::boost::optional< size_t >();
-        return m_pData->pTabBar->GetFocusedPanelItem();
-    }
-
-    //--------------------------------------------------------------------
-    void TabDeckLayouter::FocusPanelItem( const size_t i_nItemPos )
-    {
-        if ( lcl_checkDisposed( *m_pData ) )
-            return;
-        m_pData->pTabBar->FocusPanelItem( i_nItemPos );
-    }
-
-    //--------------------------------------------------------------------
-    bool TabDeckLayouter::IsPanelSelectorEnabled() const
-    {
-        if ( lcl_checkDisposed( *m_pData ) )
-            return false;
-        return m_pData->pTabBar->IsEnabled();
-    }
-
-    //--------------------------------------------------------------------
-    bool TabDeckLayouter::IsPanelSelectorVisible() const
-    {
-        if ( lcl_checkDisposed( *m_pData ) )
-            return false;
-        return m_pData->pTabBar->IsVisible();
-    }
-
-    //--------------------------------------------------------------------
-    Rectangle TabDeckLayouter::GetItemScreenRect( const size_t i_nItemPos ) const
-    {
-        if ( lcl_checkDisposed( *m_pData ) )
-            return Rectangle();
-        return m_pData->pTabBar->GetItemScreenRect( i_nItemPos );
-    }
-
-    //--------------------------------------------------------------------
     Rectangle TabDeckLayouter::Layout( const Rectangle& i_rDeckPlayground )
     {
         if ( lcl_checkDisposed( *m_pData ) )

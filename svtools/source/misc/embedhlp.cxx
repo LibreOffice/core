@@ -380,20 +380,6 @@ comphelper::EmbeddedObjectContainer* EmbeddedObjectRef::GetContainer() const
     return mpImp->pContainer;
 }
 
-::rtl::OUString EmbeddedObjectRef::GetPersistName() const
-{
-    return mpImp->aPersistName;
-}
-
-MapUnit EmbeddedObjectRef::GetMapUnit() const
-{
-    if ( mpImp->nViewAspect == embed::Aspects::MSOLE_CONTENT )
-        return VCLUnoHelper::UnoEmbed2VCLMapUnit( mxObj->getMapUnit( mpImp->nViewAspect ) );
-    else
-        // TODO/LATER: currently only CONTENT aspect requires communication with the object
-        return MAP_100TH_MM;
-}
-
 sal_Int64 EmbeddedObjectRef::GetViewAspect() const
 {
     return mpImp->nViewAspect;
@@ -718,11 +704,6 @@ void EmbeddedObjectRef::DrawShading( const Rectangle &rRect, OutputDevice *pOut 
 
 }
 
-sal_Bool EmbeddedObjectRef::TryRunningState()
-{
-    return TryRunningState( mxObj );
-}
-
 sal_Bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbeddedObject >& xEmbObj )
 {
     if ( !xEmbObj.is() )
@@ -757,24 +738,6 @@ void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
     }
     else
         OSL_FAIL( "Export of graphic is failed!\n" );
-}
-
-sal_Bool EmbeddedObjectRef::ObjectIsModified( const uno::Reference< embed::XEmbeddedObject >& xObj )
-    throw( uno::Exception )
-{
-    sal_Bool bResult = sal_False;
-
-    sal_Int32 nState = xObj->getCurrentState();
-    if ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING )
-    {
-        // the object is active so if the model is modified the replacement
-        // should be retrieved from the object
-        uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
-        if ( xModifiable.is() )
-            bResult = xModifiable->isModified();
-    }
-
-    return bResult;
 }
 
 uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStream(
