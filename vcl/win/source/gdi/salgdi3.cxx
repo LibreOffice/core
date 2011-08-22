@@ -1329,7 +1329,6 @@ const gr_face* ImplWinFontData::GraphiteFace() const
     fprintf(grLog(), "ImplWinFontData::GraphiteFace %lx has face %lx\n",
         (unsigned long)this, mpGraphiteData? mpGraphiteData->getFace(): 0);
 #endif
-    assert((mpGraphiteData == NULL) || (mpGraphiteData->getFontData() == this));
     return (mpGraphiteData)? mpGraphiteData->getFace() : NULL;
 }
 #endif
