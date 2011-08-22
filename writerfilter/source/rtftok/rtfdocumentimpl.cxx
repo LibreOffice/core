@@ -753,6 +753,7 @@ void RTFDocumentImpl::checkChangedFrame()
     else if (!inFrame() && m_bWasInFrame)
     {
         OSL_TRACE("%s ending frame", OSL_THIS_FUNC);
+        finishSubstream();
         Mapper().endParagraphGroup();
         Mapper().endShape();
         Mapper().endParagraphGroup();
