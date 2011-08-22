@@ -248,12 +248,6 @@ GraphicConverter::ImplConvert(unsigned long, void*, unsigned long, void**, unsig
 GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Point const&) const
 GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Size const&) const
 GraphicHelper::getDeviceInfo() const
-GraphicObject::GetChecksum() const
-GraphicObject::GetSwapStreamHdl() const
-GraphicObject::GraphicObject(Graphic const&, String const&, GraphicManager const*)
-GraphicObject::ResetAnimationLoopCount()
-GraphicObject::SetAnimationNotifyHdl(Link const&)
-GraphicObject::SetGraphicManager(GraphicManager const&)
 GraphicReader::IsPreviewModeEnabled() const
 GroupTable::SkipCurrentGroup()
 HTMLControls::Insert(HTMLControl const*&, unsigned short&)

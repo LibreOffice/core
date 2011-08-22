@@ -82,16 +82,6 @@ GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMg
     ImplSetGraphicManager( pMgr );
 }
 
-GraphicObject::GraphicObject( const Graphic& rGraphic, const String& rLink, const GraphicManager* pMgr ) :
-    maGraphic   ( rGraphic ),
-    mpLink      ( rLink.Len() ? ( new String( rLink ) ) : NULL ),
-    mpUserData  ( NULL )
-{
-    ImplConstruct();
-    ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr );
-}
-
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
     SvDataCopyStream(),
     maGraphic   ( rGraphicObj.GetGraphic() ),
@@ -393,11 +383,6 @@ ByteString GraphicObject::GetUniqueID() const
     return aRet;
 }
 
-sal_uLong GraphicObject::GetChecksum() const
-{
-    return( ( maGraphic.IsSupportedGraphic() && !maGraphic.IsSwapOut() ) ? maGraphic.GetChecksum() : 0 );
-}
-
 SvStream* GraphicObject::GetSwapStream() const
 {
     return( HasSwapStreamHdl() ? (SvStream*) mpSwapStreamHdl->Call( (void*) this ) : GRFMGR_AUTOSWAPSTREAM_NONE );
@@ -483,14 +468,6 @@ void GraphicObject::SetSwapStreamHdl( const Link& rHdl, const sal_uLong nSwapOut
         delete mpSwapOutTimer, mpSwapOutTimer = NULL;
 }
 
-Link GraphicObject::GetSwapStreamHdl() const
-{
-    if( mpSwapStreamHdl )
-        return *mpSwapStreamHdl;
-    else
-        return Link();
-}
-
 void GraphicObject::FireSwapInRequest()
 {
     ImplAutoSwapIn();
@@ -506,11 +483,6 @@ void GraphicObject::GraphicManagerDestroyed()
     // we're alive, but our manager doesn't live anymore ==> connect to default manager
     mpMgr = NULL;
     ImplSetGraphicManager( NULL );
-}
-
-void GraphicObject::SetGraphicManager( const GraphicManager& rMgr )
-{
-    ImplSetGraphicManager( &rMgr );
 }
 
 sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
@@ -540,11 +512,6 @@ void GraphicObject::ReleaseFromCache()
 {
 
     mpMgr->ReleaseFromCache( *this );
-}
-
-void GraphicObject::SetAnimationNotifyHdl( const Link& rLink )
-{
-    maGraphic.SetAnimationNotifyHdl( rLink );
 }
 
 sal_Bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
@@ -1036,17 +1003,6 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const /
     }
 
     return aGraphic;
-}
-
-void GraphicObject::ResetAnimationLoopCount()
-{
-    if( IsAnimated() && !IsSwappedOut() )
-    {
-        maGraphic.ResetAnimationLoopCount();
-
-        if( mpSimpleCache )
-            mpSimpleCache->maGraphic.ResetAnimationLoopCount();
-    }
 }
 
 sal_Bool GraphicObject::SwapOut()
