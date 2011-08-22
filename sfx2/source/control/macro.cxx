@@ -443,7 +443,6 @@ void SfxMacro::Record
 
     <SfxMacro::Replace(SfxMacroStatement*)>
     <SfxMacro::Remove()>
-    <SfxMacro::GetLastStatement()const>
 */
 
 {
@@ -482,7 +481,6 @@ void SfxMacro::Replace
 
     <SfxMacro::Record(SfxMacroStatement*)>
     <SfxMacro::Remove()>
-    <SfxMacro::GetLastStatement()const>
 */
 
 {
@@ -519,40 +517,12 @@ void SfxMacro::Remove()
 
     <SfxMacro::Replace(SfxMacroStatement*)>
     <SfxMacro::Record(SfxMacroStatement*)>
-    <SfxMacro::GetLastStatement()const>
 */
 
 {
     DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
     DBG_ASSERT( pImp->aList.Count(), "no replaceable statement available" );
     pImp->aList.Remove( pImp->aList.Count() - 1 );
-}
-
-//--------------------------------------------------------------------
-
-const SfxMacroStatement* SfxMacro::GetLastStatement() const
-
-/*  [Description]
-
-    This method enables read access to the last recorded statement.
-    Together with the method <SfxMacro::Replace(SfxMacroStatement*)> this opens
-    for the possibility to summarize statements.
-
-    The call is only valid if it is about a SfxMacro, which was constructed
-    with SFX_MACRO_RECORDINGRELATIVE or SFX_MACRO_RECORDINGABSOLUTE and is
-    available as an already recorded statement.
-
-    [Cross-reference]
-
-    <SfxMacro::Record(SfxMacroStatement*)>
-    <SfxMacro::Replace(SfxMacroStatement*)>
-*/
-
-{
-    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
-    if ( pImp->aList.Count() )
-        return pImp->aList.GetObject( pImp->aList.Count() - 1 );
-    return 0;
 }
 
 //--------------------------------------------------------------------

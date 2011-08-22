@@ -455,7 +455,6 @@ public:
     void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, sal_Bool bReload = sal_True );
     sal_Bool                    IsAutoLoadLocked() const;
     void                        NotifyReloadAvailable();
-    sal_Bool                    IsSecure();
 
     // Misc
     sal_Bool                    IsPreview() const;

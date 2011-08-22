@@ -80,8 +80,6 @@ public:
 
     void Read(LwpObjectStream* pStrm);
 
-    void Override(LwpCharacterBorderOverride* pOther);
-
     inline LwpBorderStuff* GetBorderStuff();
     inline LwpMargins* GetMargins();
     inline sal_Int32 GetAboveWidth() const;

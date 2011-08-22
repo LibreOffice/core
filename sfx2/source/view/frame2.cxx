@@ -88,7 +88,6 @@ public:
     virtual void        Resize();
     virtual void        GetFocus();
     void                DoResize();
-    DECL_LINK(          CloserHdl, void* );
 };
 
 SfxFrameWindow_Impl::SfxFrameWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow )
@@ -392,16 +391,6 @@ sal_Bool SfxFrame::Close()
 void SfxFrame::LockResize_Impl( sal_Bool bLock )
 {
     pImp->bLockResize = bLock;
-}
-
-IMPL_LINK( SfxFrameWindow_Impl, CloserHdl, void*, EMPTYARG )
-{
-    if ( pFrame && !pFrame->PrepareClose_Impl( sal_True ) )
-        return 0L;
-
-    if ( pFrame )
-        pFrame->GetCurrentViewFrame()->GetBindings().Execute( SID_CLOSEWIN, 0, 0, SFX_CALLMODE_ASYNCHRON );
-    return 0L;
 }
 
 void SfxFrame::SetMenuBarOn_Impl( sal_Bool bOn )

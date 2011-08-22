@@ -103,18 +103,14 @@ public:
     LwpTableLayout * GetTableLayout();
     virtual void SetCellMap(void);
     double GetActualWidth();
-    sal_uInt8 GetLeaderChar();
     OUString GetNumfmtName(){return m_NumfmtName;}
 protected:
     void Read();
-//  LwpTableLayout * GetTableLayout();
     LwpTable * GetTable();
     void ApplyPadding(XFCellStyle* pCellStyle);
     void ApplyBorders(XFCellStyle* pCellStyle);
-    // add by , 06/03/2005
     void ApplyPatternFill(XFCellStyle* pCellStyle);
     void ApplyBackGround(XFCellStyle* pCellStyle);
-    // end add
     void ApplyBackColor(XFCellStyle* pCellStyle);
     void ApplyWatermark(XFCellStyle* pCellStyle);
     void ApplyProtect(XFCell * pCell, LwpObjectID aTableID);

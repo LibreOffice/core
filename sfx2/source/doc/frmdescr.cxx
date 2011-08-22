@@ -183,21 +183,6 @@ long SfxFrameDescriptor::GetSize() const
     return nWidth;
 }
 
-void SfxFrameDescriptor::TakeProperties( const SfxFrameProperties& rProp )
-{
-    aURL = aActualURL = INetURLObject(rProp.aURL);
-    aName = rProp.aName;
-    aMargin.Width() = rProp.lMarginWidth;
-    aMargin.Height() = rProp.lMarginHeight;
-    nWidth = rProp.lSize;
-    eScroll = rProp.eScroll;
-    eSizeSelector = rProp.eSizeSelector;
-    nHasBorder = rProp.bHasBorder ? BORDER_YES : BORDER_NO;
-    if ( rProp.bBorderSet )
-        nHasBorder |= BORDER_SET;
-    bResizeHorizontal = bResizeVertical = rProp.bResizable;
-}
-
 void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
 {
     DELETEZ( pImp->pWallpaper );

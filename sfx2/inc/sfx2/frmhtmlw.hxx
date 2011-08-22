@@ -75,9 +75,6 @@ public:
         SvStream&, const String& rBaseURL, const com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet >& xSet,
         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
         String *pNonConvertableChars = 0 );
-
-    String CreateURL( SfxFrame* pFrame );
-
 };
 
 inline void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,

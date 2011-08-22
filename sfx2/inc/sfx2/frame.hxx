@@ -195,7 +195,6 @@ public:
     SAL_DLLPRIVATE void SetIsClosing_Impl();
 
     // Methods for accessing the current set
-    SAL_DLLPRIVATE void SetDescriptor( SfxFrameDescriptor* );
     SAL_DLLPRIVATE SfxFrameDescriptor* GetDescriptor() const;
 
     SAL_DLLPRIVATE void Lock_Impl( sal_Bool bLock );
@@ -213,7 +212,6 @@ public:
     SAL_DLLPRIVATE void SetToolSpaceBorderPixel_Impl( const SvBorder& );
     SAL_DLLPRIVATE Rectangle GetTopOuterRectPixel_Impl() const;
     SAL_DLLPRIVATE void CreateWorkWindow_Impl();
-    SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* pWorkwin );
     SAL_DLLPRIVATE void GrabFocusOnComponent_Impl();
     SAL_DLLPRIVATE void SetInPlace_Impl( sal_Bool );
 

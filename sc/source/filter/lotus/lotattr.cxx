@@ -234,7 +234,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 }
 
 
-void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const sal_Bool /*bClear*/ )
+void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum )
 {
     ScDocument*     pDoc = pLotusRoot->pDoc;
 
@@ -244,12 +244,6 @@ void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const sal_Bool
         pDoc->ApplyPatternAreaTab(nColNum,iter->nFirstRow,nColNum,iter->nLastRow,
                                   nTabNum, *(iter->pPattAttr));
     }
-}
-
-
-void LotAttrCol::Clear ()
-{
-    aEntries.clear();
 }
 
 void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,

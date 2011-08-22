@@ -1813,49 +1813,6 @@ sal_Bool SfxObjectShell::IsPreview() const
     return bPreview;
 }
 
-sal_Bool SfxObjectShell::IsSecure()
-{
-    // When global warning is on, go to Secure-Referer-Liste
-    String aReferer = GetMedium()->GetName();
-    if ( !aReferer.Len() )
-    {
-        // for new documents use the template  as reference
-        ::rtl::OUString aTempl( getDocProperties()->getTemplateURL() );
-        if ( aTempl.getLength() )
-            aReferer = INetURLObject( aTempl ).GetMainURL( INetURLObject::NO_DECODE );
-    }
-
-    INetURLObject aURL( "macro:" );
-    if ( !aReferer.Len() )
-        // empty new or embedded document
-        return sal_True;
-
-        SvtSecurityOptions aOpt;
-
-    if( aOpt.GetBasicMode() == eALWAYS_EXECUTE )
-        return sal_True;
-
-    if( aOpt.GetBasicMode() == eNEVER_EXECUTE )
-        return sal_False;
-
-    if ( aOpt.IsSecureURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aReferer ) )
-    {
-        if ( GetMedium()->GetContent().is() )
-        {
-            Any aAny( ::utl::UCBContentHelper::GetProperty( aURL.GetMainURL( INetURLObject::NO_DECODE ), String( RTL_CONSTASCII_USTRINGPARAM("IsProtected")) ) );
-            sal_Bool bIsProtected = sal_False;
-            if ( ( aAny >>= bIsProtected ) && bIsProtected )
-                return sal_False;
-            else
-                return sal_True;
-        }
-        else
-            return sal_True;
-    }
-    else
-        return sal_False;
-}
-
 void SfxObjectShell::SetWaitCursor( sal_Bool bSet ) const
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, this ) )

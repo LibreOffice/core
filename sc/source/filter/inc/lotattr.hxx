@@ -123,10 +123,7 @@ public:
 
     void SetAttr (const SCROW nRow, const ScPatternAttr&);
 
-    void Apply (const SCCOL nCol, const SCTAB nTab, const sal_Bool bClear = true);
-
-    void Clear ();
-
+    void Apply (const SCCOL nCol, const SCTAB nTab );
 private:
 
     struct ENTRY

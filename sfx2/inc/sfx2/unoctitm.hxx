@@ -160,7 +160,6 @@ public:
     void                    SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 
     void                    SetMasterUnoCommand( sal_Bool bSet );
-    sal_Bool                IsMasterUnoCommand() const;
 
     SfxDispatcher*          GetDispatcher_Impl();
 };

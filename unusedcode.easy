@@ -339,13 +339,6 @@ LongCurrencyFormatter::IsValueModified() const
 LongCurrencyFormatter::Normalize(BigInt) const
 LongCurrencyFormatter::SetEmptyValue()
 LotAttrCache::ENTRY::ENTRY(ScPatternAttr const&)
-LotAttrCol::Clear()
-LwpBulletStyleMgr::GetSectionName(LwpPara*)
-LwpCellLayout::GetLeaderChar()
-LwpCharacterBorderOverride::Override(LwpCharacterBorderOverride*)
-LwpDLList::LwpDLList(LwpDLList*, LwpDLList*)
-LwpDocData::SkipAtomHandler(LwpSvStream*)
-LwpDocData::SkipExtra(LwpSvStream*)
 MSDffImportRecords::Insert(MSDffImportRecords const*, unsigned short, unsigned short)
 MSDffImportRecords::Insert(SvxMSDffImportRec* const&, unsigned short&)
 MSDffImportRecords::Insert(SvxMSDffImportRec* const*, unsigned short)
@@ -879,18 +872,13 @@ SfxFoundCacheArr_Impl::Remove(SfxFoundCache_Impl const*&, unsigned short)
 SfxFoundCacheArr_Impl::Remove(unsigned short, unsigned short)
 SfxFrame::GetBroadcaster() const
 SfxFrame::IsTop() const
-SfxFrame::SetDescriptor(SfxFrameDescriptor*)
-SfxFrame::SetWorkWindow_Impl(SfxWorkWindow*)
 SfxFrameDescriptor::CheckContent() const
 SfxFrameDescriptor::GetItemPos() const
 SfxFrameDescriptor::GetSize() const
 SfxFrameDescriptor::GetWallpaper() const
 SfxFrameDescriptor::GetWinBits() const
 SfxFrameDescriptor::SetURL(INetURLObject const&)
-SfxFrameDescriptor::TakeProperties(SfxFrameProperties const&)
-SfxFrameHTMLWriter::CreateURL(SfxFrame*)
 SfxFrameProperties::SfxFrameProperties(SfxFrameDescriptor const*)
-SfxFrameWindow_Impl::LinkStubCloserHdl(void*, void*)
 SfxHintPoster::SfxHintPoster()
 SfxImageItem::GetURL() const
 SfxImageItem::SfxImageItem(unsigned short, String const&)
@@ -903,7 +891,6 @@ SfxItemSetHint::SfxItemSetHint(SfxItemSet*)
 SfxListener::EndListening(unsigned short)
 SfxLockBytesItem::SfxLockBytesItem(unsigned short, SvLockBytes*)
 SfxMacro::GenerateSource() const
-SfxMacro::GetLastStatement() const
 SfxMacro::GetMode() const
 SfxMacro::Record(SfxMacroStatement*)
 SfxMacro::Remove()
@@ -913,7 +900,6 @@ SfxMacroStatement::SfxMacroStatement(SfxShell const&, String const&, unsigned ch
 SfxMacroStatement::SfxMacroStatement(String const&)
 SfxMacroStatement::SfxMacroStatement(String const&, SfxSlot const&, unsigned char, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&)
 SfxMailModel::GetCount() const
-SfxMedium::GetDoneLink() const
 SfxMedium::GetHdl()
 SfxMedium::GetReferer() const
 SfxMenuControl::CreateControl(String const&, unsigned short, Menu&, SfxBindings&, SfxVirtualMenu*)
@@ -927,17 +913,14 @@ SfxNavigatorWrapper::GetChildWindowId()
 SfxObjectShell::Count()
 SfxObjectShell::CreateAndLoadObject(SfxItemSet const&, SfxFrame*)
 SfxObjectShell::DisconnectFromShared()
-SfxObjectShell::IsSecure()
 SfxObjectShell::SetFlags(unsigned int)
 SfxObjectShell::SetTemplate(unsigned char)
 SfxObjectVerbsControl::RegisterControl(unsigned short, SfxModule*)
-SfxOfficeDispatch::IsMasterUnoCommand() const
 SfxOleDateProperty::SfxOleDateProperty(int, com::sun::star::util::Date const&)
 SfxOleString16Property::SfxOleString16Property(int, String const&)
 SfxOrganizeDlg_Impl::OkHdl(Button*)
 SfxPartChildWnd_Impl::GetChildWindowId()
 SfxPasswordDialog::SetMaxLen(unsigned short)
-SfxPickList::GetMenuEntryTitle(unsigned int)
 SfxPopupMenuManager::AddClipboardFunctions()
 SfxPopupMenuManager::CheckItem(unsigned short, unsigned char)
 SfxPopupMenuManager::EndInsert()
@@ -969,8 +952,6 @@ SfxSizeItem::SfxSizeItem(unsigned short, SvStream&)
 SfxSlotPool::NextInterface()
 SfxStringListItem::Sort(unsigned char)
 SfxStyleSheet::SfxStyleSheet()
-SfxStyleSheetBasePool::GetStreamName()
-SfxStyleSheetBasePool::Load1_Impl(SvStream&)
 SfxStyleSheetHintExtended::SfxStyleSheetHintExtended(unsigned short, String const&)
 SfxTabDialog::FillOutputItemSet()
 SfxTabDialog::GetApplyButton()
@@ -2130,7 +2111,6 @@ binfilter::DbgName_SfxFrameSetDescriptor()
 binfilter::DbgName_SfxStringListItem()
 binfilter::DbgName_SvxMacroItem()
 binfilter::Dictionary::~Dictionary()
-binfilter::E3dLight::E3dLight(binfilter::Vector3D const&, Color const&, double)
 binfilter::EECharAttribArray::Insert(binfilter::EECharAttrib const&, unsigned short)
 binfilter::EECharAttribArray::Insert(binfilter::EECharAttribArray const*, unsigned short, unsigned short, unsigned short)
 binfilter::EECharAttribArray::Remove(unsigned short, unsigned short)

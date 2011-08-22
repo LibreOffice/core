@@ -103,9 +103,6 @@ public:
                             SfxFrameDescriptor();
                             ~SfxFrameDescriptor();
 
-                            // Properties
-    void                    TakeProperties( const SfxFrameProperties& rProp );
-
                             // FileName/URL
     SfxItemSet*             GetArgs();
     const INetURLObject&    GetURL() const

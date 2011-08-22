@@ -69,24 +69,7 @@ LwpDocData::LwpDocData(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
 LwpDocData::~LwpDocData()
 {
 }
-void LwpDocData::SkipExtra(LwpSvStream* pStream)
-{
-    sal_uInt16 extra;
-    pStream->Read(&extra,2);
-    while(extra != 0)
-    {
-        pStream->SeekRel(extra);
-        pStream->Read(&extra,2);
-    }
-}
-void LwpDocData::SkipAtomHandler(LwpSvStream* pStream)
-{
-    sal_uInt16 disksize;
-    sal_uInt16 len;
-    pStream->Read(&disksize,2);
-    pStream->Read(&len,2);
-    if(len)pStream->SeekRel(disksize-2);
-}
+
 void LwpDocData::Read()
 {
     //XFDateTime

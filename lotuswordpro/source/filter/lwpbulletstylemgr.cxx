@@ -313,21 +313,4 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
     return InnerItem;
 }
 
-rtl::OUString LwpBulletStyleMgr::GetSectionName(LwpPara* pPara)
-{
-    LwpObjectID* pStoryID = pPara->GetStoryID();
-    if (pStoryID->IsNull())
-    {
-        return rtl::OUString();
-    }
-
-    LwpStory* pStory = dynamic_cast<LwpStory*>(pStoryID->obj(VO_STORY));
-    if (!pStory)
-    {
-        return rtl::OUString();
-    }
-
-    return pStory->GetSectionName();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -214,7 +214,6 @@ friend class SfxStyleSheetBase;
     SfxStyleSheetBasePool_Impl *pImp;
 
 private:
-    SVL_DLLPRIVATE sal_Bool                         Load1_Impl( SvStream& );
     SVL_DLLPRIVATE SfxStyleSheetIterator&      GetIterator_Impl();
 protected:
     String                      aAppName;
@@ -233,8 +232,6 @@ protected:
 public:
                                 SfxStyleSheetBasePool( SfxItemPool& );
                                 SfxStyleSheetBasePool( const SfxStyleSheetBasePool& );
-
-    static String               GetStreamName();
 
     const String&               GetAppName() const { return aAppName;   }
 

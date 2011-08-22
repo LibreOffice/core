@@ -431,13 +431,6 @@ void SfxOfficeDispatch::SetMasterUnoCommand( sal_Bool bSet )
         pControllerItem->setMasterSlaveCommand( bSet );
 }
 
-sal_Bool SfxOfficeDispatch::IsMasterUnoCommand() const
-{
-    if ( pControllerItem )
-        return pControllerItem->isMasterSlaveCommand();
-    return sal_False;
-}
-
 // Determine if URL contains a master/slave command which must be handled a little bit different
 sal_Bool SfxOfficeDispatch::IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
 {

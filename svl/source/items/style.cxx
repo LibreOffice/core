@@ -52,9 +52,6 @@
 #include <algorithm>
 #include <comphelper/servicehelper.hxx>
 
-#define STYLESTREAM             "SfxStyleSheets"
-#define STYLESTREAM_VERSION     sal_uInt16(50)
-
 #ifdef DBG_UTIL
 class DbgStyleSheetReferences
 {
@@ -659,14 +656,6 @@ sal_uInt16 SfxStyleSheetBasePool::GetSearchMask() const
     return nMask;
 }
 
-
-// Der Name des Streams
-
-String SfxStyleSheetBasePool::GetStreamName()
-{
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STYLESTREAM));
-}
-
 /////////////////////////////////// Factory ////////////////////////////////
 
 
@@ -892,101 +881,6 @@ void SfxStyleSheetBase::Load( SvStream&, sal_uInt16 )
 
 void SfxStyleSheetBase::Store( SvStream& )
 {
-}
-
-sal_Bool SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
-{
-    aAppName = rPool.GetName();
-    sal_uInt16 nVersion;
-    short nCharSet;
-    rStream >> nVersion;
-
-    if(nVersion!=STYLESTREAM_VERSION)
-        nCharSet=nVersion;
-    else
-        rStream >> nCharSet;
-
-    rtl_TextEncoding eEnc = GetSOLoadTextEncoding(
-        (rtl_TextEncoding)nCharSet,
-        sal::static_int_cast< sal_uInt16 >(rStream.GetVersion()) );
-    rtl_TextEncoding eOldEnc = rStream.GetStreamCharSet();
-    rStream.SetStreamCharSet( eEnc );
-
-    sal_uInt16 nStyles;
-    rStream >> nStyles;
-    sal_uInt16 i;
-    for ( i = 0; i < nStyles; i++ )
-    {
-        // kann nicht mehr weiterlesen?
-        if ( rStream.GetError() )
-        {
-            nStyles = i;
-            break;
-        }
-
-        // Globale Teile
-        XubString aName, aParent, aFollow;
-        String aHelpFile;
-        sal_uInt16 nFamily, nStyleMask,nCount;
-        sal_uInt32 nHelpId;
-        rStream.ReadByteString(aName, eEnc );
-        rStream.ReadByteString(aParent, eEnc );
-        rStream.ReadByteString(aFollow, eEnc );
-        rStream >> nFamily >> nStyleMask;
-        SfxPoolItem::readByteString(rStream, aHelpFile);
-        if(nVersion!=STYLESTREAM_VERSION)
-        {
-            sal_uInt16 nTmpHelpId;
-            rStream >> nTmpHelpId;
-            nHelpId=nTmpHelpId;
-        }
-        else
-            rStream >> nHelpId;
-
-        SfxStyleSheetBase& rSheet = Make( aName, (SfxStyleFamily)nFamily , nStyleMask);
-        rSheet.SetHelpId( aHelpFile, nHelpId );
-        // Hier erst einmal Parent und Follow zwischenspeichern
-        rSheet.aParent = aParent;
-        rSheet.aFollow = aFollow;
-        sal_uInt32 nPos = rStream.Tell();
-        rStream >> nCount;
-        if(nCount) {
-            rStream.Seek( nPos );
-            // Das Laden des ItemSets bedient sich der Methode GetItemSet(),
-            // damit eigene ItemSets untergeschoben werden koennen
-            SfxItemSet& rSet = rSheet.GetItemSet();
-            rSet.ClearItem();
-//!         SfxItemSet aTmpSet( *pTmpPool );
-            /*!aTmpSet*/ rSet.Load( rStream );
-            //! rSet.Put( aTmpSet );
-        }
-        // Lokale Teile
-        sal_uInt32 nSize;
-        sal_uInt16 nVer;
-        rStream >> nVer >> nSize;
-        nPos = rStream.Tell() + nSize;
-        rSheet.Load( rStream, nVer );
-        rStream.Seek( nPos );
-    }
-
-    //! delete pTmpPool;
-    // Jetzt Parent und Follow setzen. Alle Sheets sind geladen.
-    // Mit Setxxx() noch einmal den String eintragen, da diese
-    // virtuellen Methoden evtl. ueberlagert sind.
-    for ( i = 0; i < nStyles; i++ )
-    {
-        SfxStyleSheetBase* p = aStyles[ i ].get();
-        XubString aText = p->aParent;
-        p->aParent.Erase();
-        p->SetParent( aText );
-        aText = p->aFollow;
-        p->aFollow.Erase();
-        p->SetFollow( aText );
-    }
-
-    rStream.SetStreamCharSet( eOldEnc );
-
-    return sal_Bool( rStream.GetError() == SVSTREAM_OK );
 }
 
 SfxItemPool& SfxStyleSheetBasePool::GetPool()
