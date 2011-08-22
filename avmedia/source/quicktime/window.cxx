@@ -106,7 +106,7 @@ Window::~Window()
     }
 }
 
-bool Window::create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+bool Window::create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
 {
     return true;
 }
@@ -122,7 +122,7 @@ void SAL_CALL Window::update(  )
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
+sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel )
     throw (uno::RuntimeException)
 {
         return false;
@@ -147,7 +147,7 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 // XWindow
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
+void SAL_CALL Window::setPosSize( sal_Int32 , sal_Int32 , sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
     throw (uno::RuntimeException)
 {
     if( mpParentView && mpMovieView )
@@ -177,7 +177,7 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setVisible( sal_Bool bVisible )
+void SAL_CALL Window::setVisible( sal_Bool )
     throw (uno::RuntimeException)
 {
     OSL_TRACE ("Window::setVisible");
@@ -186,7 +186,7 @@ void SAL_CALL Window::setVisible( sal_Bool bVisible )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setEnable( sal_Bool bEnable )
+void SAL_CALL Window::setEnable( sal_Bool )
     throw (uno::RuntimeException)
 {
     ;

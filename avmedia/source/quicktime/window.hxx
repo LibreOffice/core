@@ -53,21 +53,21 @@ public:
                     );
             ~Window();
 
-    bool    create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+    bool    create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& );
     void    processGraphEvent();
     void    updatePointer();
 
     // XPlayerWindow
     virtual void SAL_CALL update(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL setZoomLevel( ::com::sun::star::media::ZoomLevel ZoomLevel ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL setZoomLevel( ::com::sun::star::media::ZoomLevel ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::media::ZoomLevel SAL_CALL getZoomLevel(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPointerType( sal_Int32 nPointerType ) throw (::com::sun::star::uno::RuntimeException);
 
     // XWindow
-    virtual void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPosSize( sal_Int32 , sal_Int32 , sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getPosSize(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( sal_Bool Visible ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setEnable( sal_Bool Enable ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setVisible( sal_Bool ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setEnable( sal_Bool ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setFocus(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
