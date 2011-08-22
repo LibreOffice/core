@@ -61,11 +61,10 @@ class SfxItemSet;
 sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex );
 
 
-// Bedeutung von bToBeKilled:
-// Wenn in Reschedule-Schleife, darf ich das Fenster nicht zerstoeren.
-// Es muss erst aus der Reschedule-Schleife Fallen, um sich dann
-// selbst zu zerstoeren.
-// Geht so leider nicht: Destroying Window with living Child!
+// Meaning of bToBeKilled:
+// While being in a reschedule-loop, I may not destroy the window.
+// It must first break from the reschedule-loop to self-destroy then.
+// Does unfortunately not work that way: Destroying Window with living Child!
 
 
 struct BasicStatus

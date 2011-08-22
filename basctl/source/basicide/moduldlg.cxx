@@ -146,7 +146,7 @@ sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rN
     SetCurEntry( pEntry );
     SetCurEntry( pEntry );
     Select( pEntry, sal_False );
-    Select( pEntry );       // damit Handler gerufen wird => Edit updaten
+    Select( pEntry );       // so that handler is called => update edit
 
     return sal_True;
 }
@@ -269,7 +269,7 @@ sal_Bool ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* p
 sal_Bool ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
-//  return sal_False;   // Wie kopiere ich ein SBX ?!
+//  return sal_False;   // how do I copy an SBX?!
     return NotifyCopyingMoving( pTarget, pEntry,
                                     rpNewParent, rNewChildPos, sal_False );
 }
@@ -335,19 +335,19 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove )
 {
     (void)pEntry;
-    DBG_ASSERT( pEntry, "Kein Eintrag?" );  // Hier ASS ok, sollte nicht mit
-    DBG_ASSERT( pTarget, "Kein Ziel?" );    // NULL (ganz vorne) erreicht werden
+    DBG_ASSERT( pEntry, "Kein Eintrag?" );  // ASS is ok here, should not be reached
+    DBG_ASSERT( pTarget, "Kein Ziel?" );    // with NULL (right at the beginning)
     sal_uInt16 nDepth = GetModel()->GetDepth( pTarget );
     DBG_ASSERT( nDepth, "Tiefe?" );
     if ( nDepth == 1 )
     {
-        // Target = Basic => Modul/Dialog unter das Basic haengen...
+        // Target = Basic => put module/dialog under the Basic
         rpNewParent = pTarget;
         rNewChildPos = 0;
     }
     else if ( nDepth >= 2 )
     {
-        // Target = Modul/Dialog => Modul/Dialog unter das uebergeordnete Basic haengen...
+        // Target = module/dialog => put module/dialog under the superordinate Basic
         rpNewParent = GetParent( pTarget );
         rNewChildPos = GetModel()->GetRelPos( pTarget ) + 1;
     }
@@ -474,7 +474,7 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
         }
     }
 
-    return 2;   // Aufklappen...
+    return 2;   // open...
 }
 
 OrganizeDialog::OrganizeDialog( Window* pParent, sal_Int16 tabId, BasicEntryDescriptor& rDesc )
@@ -527,7 +527,7 @@ short OrganizeDialog::Execute()
 IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
     sal_uInt16 nId = pTabCtrl->GetCurPageId();
-    // Wenn TabPage noch nicht erzeugt wurde, dann erzeugen
+
     if ( !pTabCtrl->GetTabPage( nId ) )
     {
         TabPage* pNewTabPage = 0;

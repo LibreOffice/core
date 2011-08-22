@@ -36,11 +36,10 @@
 class CommunicationManagerClientViaSocket;
 class CommunicationLink;
 
-class CommunicationWrapper : public SbxObject   // Einer f�r Manager und Links
+class CommunicationWrapper : public SbxObject   // one for manager(s) and links
 {
-    // Definition eines Tabelleneintrags. Dies wird hier gemacht,
-    // da dadurch die Methoden und Properties als private deklariert
-    // werden koennen.
+    // definition of a table entry. That's done here because the
+    // methods and properties can be declared private that way.
 #if defined ( ICC ) || defined ( C50 )
 public:
 #endif
@@ -51,17 +50,17 @@ private:
 #endif
 
     struct Methods {
-        const char* pName;      // Name des Eintrags
-        SbxDataType eType;      // Datentyp
-        pMeth pFunc;            // Function Pointer
-        short nArgs;            // Argumente und Flags
+        const char* pName;
+        SbxDataType eType;
+        pMeth pFunc;
+        short nArgs;
     };
-    static Methods aManagerMethods[];   // Methodentabelle
-    static Methods aLinkMethods[];      // Methodentabelle
-    Methods *m_pMethods;    // Aktuelle Methodentabelle
+    static Methods aManagerMethods[];   // method table
+    static Methods aLinkMethods[];      // method table
+    Methods *m_pMethods;    // current method table
 
-    // Methoden
-    //      Manager
+    // methods
+    //      manager
     void MStartCommunication( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
     void MStopAllCommunication( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
     void MIsCommunicationRunning( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
@@ -69,19 +68,18 @@ private:
     void MIsLinkValid( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
     void MSetCommunicationEventHandler( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
 
-    //      Link
+    //      link
     void LStopCommunication( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
     void LGetMyName( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
     void LGetHostName( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
     void LSend( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
     void LGetString( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
 
-    // Interne Member und Methoden
+    // internal members and methods
     CommunicationManagerClientViaSocket *m_pManager;
     CommunicationLink *m_pLink;
-    sal_Bool m_bIsManager;  // Ist es kein Manager, so ist es ein Link
+    sal_Bool m_bIsManager;
 
-    // Kram f�r Manager
     DECL_LINK( Open, CommunicationLink* );
     DECL_LINK( Close, CommunicationLink* );
     DECL_LINK( Data, CommunicationLink* );
@@ -91,7 +89,6 @@ private:
     String m_aEventHandlerName;
 
     using SbxVariable::GetInfo;
-    // Infoblock auffuellen
     SbxInfo* GetInfo( short nIdx );
 
     // Broadcaster Notification
@@ -101,14 +98,13 @@ public:
     CommunicationWrapper( const String& );
     CommunicationWrapper( CommunicationLink *pThisLink );
     ~CommunicationWrapper();
-    // Suchen eines Elements
+
     virtual SbxVariable* Find( const String&, SbxClassType );
 
     CommunicationLink* GetCommunicationLink() { return m_pLink; }
 };
 
 
-// Die dazugehoerige Factory:
 
 class CommunicationFactory : public SbxFactory
 {

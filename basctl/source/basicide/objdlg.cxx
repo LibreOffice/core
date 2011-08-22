@@ -113,7 +113,7 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
     Size aSize = IDE_DLL()->GetExtraData()->GetObjectCatalogSize();
     if ( aPos.X() == INVPOSITION )
     {
-        // Zentriert nach AppWin:
+        // centered after AppWin:
         Window* pWin = GetParent();
         aPos = pWin->OutputToScreenPixel( Point( 0, 0 ) );
         Size aAppWinSz = pWin->GetSizePixel();
@@ -127,7 +127,7 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
     if ( aSize.Width() )
         SetOutputSizePixel( aSize );
 
-    Resize();   // damit der Resize-Handler die Controls anordnet
+    Resize();   // so that the resize-handler arranges the controls
 
     // make object catalog keyboard accessible
     pParent->GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
@@ -176,7 +176,7 @@ void ObjectCatalog::Resize()
         aMacroDescr.SetText(aDesc);
     }
 
-    // Die Buttons oben bleiben immer unveraendert stehen...
+    // the buttons above always stay unmodified
 }
 
 IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )

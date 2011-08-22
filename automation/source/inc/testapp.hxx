@@ -77,13 +77,13 @@ class TestToolObj: public SbxObject
     friend class TTBasic;
     friend class Controls;
 public:
-    TestToolObj( String aName, MyBasic* pBas ); // Pfade aus INI, IPC benutzen
+    TestToolObj( String aName, MyBasic* pBas ); // use paths from INI, IPC
     ~TestToolObj();
-    void LoadIniFile();             // Laden der IniEinstellungen, die durch den ConfigDialog geändert werden können
+    void LoadIniFile();             // IniSetup can be changed with the ConfigDialog
     void DebugFindNoErrors( sal_Bool bDebugFindNoErrors );
 
 private:
-    sal_Bool bWasPrecompilerError;  // True wenn beim letzten Precompile ein Fehler auftrat
+    sal_Bool bWasPrecompilerError;
     sal_Bool CError( sal_uLong, const String&, xub_StrLen, xub_StrLen, xub_StrLen );
     void CalcPosition( String const &aSource, xub_StrLen nPos, xub_StrLen &l, xub_StrLen &c );
     xub_StrLen ImplSearch( const String &aSource, const xub_StrLen nStart, const xub_StrLen nEnd, const String &aSearch, const xub_StrLen nSearchStart = 0 );
@@ -92,12 +92,12 @@ private:
 public:
     String GetRevision(String const &aSourceIn);    // find Revision in the sourcecode
     String PreCompile(String const &aSourceIn); // try catch; testcase endcase ..
-    sal_Bool WasPrecompilerError(); // True wenn beim letzten Precompile ein Fehler auftrat
+    sal_Bool WasPrecompilerError();
     void            SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
     virtual SbxVariable* Find( const String&, SbxClassType );
-//  String aKeyPlusClasses;     // Pfad für keycodes & classes & res_type (Aus Configdatei)
+//  String aKeyPlusClasses;     // path for keycodes & classes & res_type (from Configfile)
     DECL_LINK( ReturnResultsLink, CommunicationLink* );
-    sal_Bool            ReturnResults( SvStream *pIn ); // Rücklieferung des Antwortstreams über IPC oder TCP/IP oder direkt
+    sal_Bool            ReturnResults( SvStream *pIn ); // return of the reply stream over IPC or TCP/IP or directly
 
     void            SetLogHdl( const Link& rLink ) { aLogHdl = rLink; }
     const Link&     GetLogHdl() const { return aLogHdl; }
@@ -117,41 +117,41 @@ public:
     SfxBroadcaster& GetTTBroadcaster();
 
 private:
-    ImplTestToolObj *pImpl;     // Alles was von der Implementation abhängt
+    ImplTestToolObj *pImpl;
     static const CErrors* GetFehlerListe() { return pFehlerListe; }
     sal_Bool bUseIPC;
-    Link aLogHdl;               // Zum Logen der Fehlermeldungen im Testtool
-    Link aWinInfoHdl;           // Anzeigen der Windows/Controls der zu testenden App
-    Link aModuleWinExistsHdl;   // Prüft ob das Modul schon im Editor geladen ist
-    Link aCErrorHdl;            // Melden von Compilererror
-    Link aWriteStringHdl;       // Schreiben von text (e.g. MakroRecorder)
-    sal_Bool bReturnOK;             // Bricht WaitForAnswer ab
-    CRevNames *pShortNames;     // Aktuell verwendete Controls, zur gewinnung des Namens aus Fehlermeldung
-    sal_uLong nSequence;            // Sequence um Antwort und Anfrage zu syncronisieren
-    rtl::OString aNextReturnId; // Id des Returnwertes i.e. UId
-    void ReplaceNumbers(String &aText); // Zahlen im String mit speziellem Format in Namen umwandeln
+    Link aLogHdl;
+    Link aWinInfoHdl;
+    Link aModuleWinExistsHdl;
+    Link aCErrorHdl;
+    Link aWriteStringHdl;
+    sal_Bool bReturnOK;
+    CRevNames *pShortNames;
+    sal_uLong nSequence;
+    rtl::OString aNextReturnId;
+    void ReplaceNumbers(String &aText);
 
-    String aLastRecordedKontext;//  Keeps the last kontext recorded by the Macro Recorder
+    String aLastRecordedKontext;
 
 #define FLAT sal_True
-    String ProgPath;            // Dateiname der zu Testenden APP; Gesetzt über Start
-    String aLogFileName;        // Momentaner Logfilename (Wie Programmdatei aber mit .res)
-    sal_Bool IsBlock;               // Innerhalb Begin/EndBlock
-    sal_Bool SingleCommandBlock;    // Implizit um jedes kommando ein Begin/EndBlock
+    String ProgPath;
+    String aLogFileName;
+    sal_Bool IsBlock;
+    sal_Bool SingleCommandBlock;
     CmdStream *In;
 
-    void AddName(String &aBisher, String &aNeu );   // Name eventuell mit / anhängen
-    void AddToListByNr( CNames *&pControls, ControlItemUId *&pNewItem );    //
+    void AddName(String &aBisher, String &aNeu );   // maybe add name with /
+    void AddToListByNr( CNames *&pControls, ControlItemUId *&pNewItem );
     CNames *m_pControls;
-    CNames *m_pNameKontext;     // Zeigt auf den aktuellen Namenskontext, der über 'Kontext' gesetzt wurde
+    CNames *m_pNameKontext;
     CNames *m_pSIds;
-    CNames *m_pReverseSlots;        // Slots mit Kurznamen nach Nummer
-    CNames *m_pReverseControls; // Controls mit Kurznamen nach Nummer
-    CNames *m_pReverseControlsSon;// Controls mit Kurznamen nach Nummer nach Fenstern (Son)
-    CNames *m_pReverseUIds;     // Langnamen nach Nummer
+    CNames *m_pReverseSlots;
+    CNames *m_pReverseControls;
+    CNames *m_pReverseControlsSon;
+    CNames *m_pReverseUIds;
 
 
-    sal_uInt16 nMyVar;              // Wievielte Var aus Pool ist dran
+    sal_uInt16 nMyVar;
 
     void InitTestToolObj();
     CommunicationManagerClientViaSocketTT *pCommunicationManager;
@@ -176,9 +176,9 @@ private:
     sal_uInt16 nWindowHandlerCallLevel;
 
     sal_uInt16 nIdleCount;
-    // wenn DialogHandler gesetzt wird er im IdleHandler inkrementiert und
-    // in WaitForAnswer rückgesetzt. Übersteigt er einen gewissen wert, gehe ich davon aus,
-    // daß WaitForAnswer still ligt und rufe die DialogHander Sub im BASIC auf.
+    // If DialogHandler has been reset it is incremented in the IdleHandler and
+    // is reset in WaitForAnswer. If it exceed a certain value, I expect WaitFor Answer to
+    // stand still and call the DialogHander Sub in BASIC.
 
     void BeginBlock();
     void EndBlock();
@@ -187,7 +187,7 @@ private:
     static ControlDefLoad const arR_Cmds[];
     static CNames *pRCommands;
 
-    static CErrors *pFehlerListe;       // Hier werden die Fehler des Testtools gespeichert
+    static CErrors *pFehlerListe;       // the errors from the testtool are stored here
 
 };
 

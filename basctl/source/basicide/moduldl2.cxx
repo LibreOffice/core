@@ -168,8 +168,8 @@ BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId )
     ,m_aDocument( ScriptDocument::getApplicationScriptDocument() )
 {
     nMode = LIBMODE_MANAGER;
-    long aTabs_[] = { 1, 12 };  // Mindestens einen braucht die TabPos...
-                                // 12 wegen der Checkbox
+    long aTabs_[] = { 1, 12 };  // TabPos needs at least one...
+                                // 12 because of the CheckBox
     SetTabs( aTabs_ );
     Init();
 }

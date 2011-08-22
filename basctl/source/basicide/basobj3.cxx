@@ -107,7 +107,7 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
             {
                 aMacroName = aStdMacroText;
                 aMacroName += String::CreateFromInt32( nMacro );
-                // Pruefen, ob vorhanden...
+                // test whether existing...
                 bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) ? sal_False : sal_True;
                 nMacro++;
             }
@@ -116,7 +116,7 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
 
     ::rtl::OUString aOUSource( pModule->GetSource32() );
 
-    // Nicht zu viele Leerzeilen erzeugen...
+    // don't produce too many empty lines...
     sal_Int32 nSourceLen = aOUSource.getLength();
     if ( nSourceLen > 2 )
     {
@@ -294,7 +294,7 @@ BasicManager* FindBasicManager( StarBASIC* pLib )
 
 void MarkDocumentModified( const ScriptDocument& rDocument )
 {
-    // Muss ja nicht aus einem Document kommen...
+    // does not have to come from a document...
     if ( rDocument.isApplication() )
     {
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
@@ -314,7 +314,7 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
         pBindings->Update( SID_SAVEDOC );
     }
 
-    // Objectcatalog updaten...
+
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     ObjectCatalog* pObjCatalog = pIDEShell ? pIDEShell->GetObjectCatalog() : 0;
     if ( pObjCatalog )
@@ -342,8 +342,8 @@ void StopBasic()
         IDEBaseWindow* pWin = rWindows.First();
         while ( pWin )
         {
-            // BasicStopped von Hand rufen, da das Stop-Notify ggf. sonst nicht
-            // durchkommen kann.
+            // call BasicStopped manually because the Stop-Notify
+            // might not get through otherwise
             pWin->BasicStopped();
             pWin = rWindows.Next();
         }
@@ -357,8 +357,8 @@ void BasicStopped( sal_Bool* pbAppWindowDisabled,
         sal_Bool* pbDispatcherLocked, sal_uInt16* pnWaitCount,
         SfxUInt16Item** ppSWActionCount, SfxUInt16Item** ppSWLockViewCount )
 {
-    // Nach einem Error oder dem expliziten abbrechen des Basics muessen
-    // ggf. einige Locks entfernt werden...
+    // maybe there are some locks to be removed after an error
+    // or an explicit cancelling of the basic...
 
     if ( pbAppWindowDisabled )
         *pbAppWindowDisabled = sal_False;

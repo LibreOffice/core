@@ -36,29 +36,29 @@
 
 struct SysdepProfileSnapshot
 {
-    // Hier stehen alle Felder zum Speichern eines Snapshot
+    // fields for saving a snapshot
 };
 
 
 struct SysdepStaticData
 {
-    // Hier steht alles, was während des Profiles ständig gebraucht wird
+    // everything that is always needed during profiling
 };
 
 
 void TTProfiler::InitSysdepProfiler()
 {
-    if ( !pSysDepStatic )   // Sollte immer so sein!!
+    if ( !pSysDepStatic )   // Should always be like this!!
         pSysDepStatic = new SysdepStaticData;
-    // Hier initialisieren
+    // initialize here
 
 };
 
 void TTProfiler::DeinitSysdepProfiler()
 {
-    if ( pSysDepStatic )    // Sollte immer so sein!!
+    if ( pSysDepStatic )    // Should always be like this!!
     {
-        // Hier aufräumen und eventuell Speicher freigeben
+        // tidy up here and free storage if applicable
 
         delete pSysDepStatic;
     }
@@ -75,19 +75,16 @@ void TTProfiler::DeleteSysdepSnapshotData( SysdepProfileSnapshot *pSysdepProfile
 };
 
 
-// Titelzeile für Logdatei
 String TTProfiler::GetSysdepProfileHeader()
 {
     return String(CUniString("(noch) keine weiteren Daten Implementiert"));
 };
 
 
-// Zustand merken
 void TTProfiler::GetSysdepProfileSnapshot( SysdepProfileSnapshot *, sal_uInt16 )
 {};
 
 
-// Informationszeile zusammenbauen
 String TTProfiler::GetSysdepProfileLine( SysdepProfileSnapshot *, SysdepProfileSnapshot * )
 {
     return String();

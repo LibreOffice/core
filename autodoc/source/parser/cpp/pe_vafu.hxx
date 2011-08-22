@@ -223,12 +223,12 @@ PE_VarFunc::Result_CeType() const
 #endif
 
 
-/*  // Overview of Stati
+/*  // Overview of statuses
 
 Undecided
 ---------
 
-start           // vor und während storage class specifiern
+start           // before and inside storage class specifiers
     any         ->stay
     operaator   ->goto Function
 
@@ -246,17 +246,17 @@ afterName       ->goto Variable or Function
 Variable
 --------
 
-start           // vor und während storage class specifiern
+start           // before and inside storage class specifiers
 
 ->Typ
 
-expectName      // Typ ist da  -> im Falle von '(': notyetimplemented
+expectName      // type is there  -> in case of '(': notyetimplemented
 afterName
 
 expectSize      // after [
 expectFinish
-                // vor ; oder ,
-expectNextVarName  // anders als bei expectName kann hier auch * oder & kommen
+                // before ; or ,
+expectNextVarName  // in contrast to expectName here can also be a * or &
 
 
 
@@ -265,21 +265,21 @@ expectNextVarName  // anders als bei expectName kann hier auch * oder & kommen
 Function
 --------
 
-start               // vor und während storage class specifiern
+start               // before and inside storage class specifiers
 
 ->Typ
 
-expectName          // Typ ist da
-expectBracket       // Nach Name
-expectParameter     // nach ( oder ,
+expectName          // type is there
+expectBracket       // after name
+expectParameter     // after ( or ,
 -> Parameter
 after Parameters    // before const, volatile throw or = 0.
 after throw         // expect (
 expectException     // after (
-after exceptions    // = 0 oder ; oder ,
+after exceptions    // = 0 or ; or ,
 
 
-expectNextVarName  // anders als bei expectName kann hier auch * oder & kommen
+expectNextVarName  // in contrast to expectName here can also be a * or &
 
 
 

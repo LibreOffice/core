@@ -197,7 +197,7 @@ BasicTreeListBox::BasicTreeListBox( Window* pParent, const ResId& rRes ) :
 {
     SetNodeDefaultImages();
     SetSelectionMode( SINGLE_SELECTION );
-    nMode = 0xFF;   // Alles
+    nMode = 0xFF;   // everything
 }
 
 
@@ -206,7 +206,7 @@ BasicTreeListBox::~BasicTreeListBox()
 {
     m_aNotifier.dispose();
 
-    // UserDaten zerstoeren
+    // destroy user data
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
     {
@@ -223,7 +223,7 @@ void BasicTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocati
 
     // can be called multiple times for updating!
 
-    // eigentlich prueffen, ob Basic bereits im Baum ?!
+    // actually test if basic's in the tree already?!
     SetUpdateMode( sal_False );
 
     // level 1: BasicManager (application, document, ...)
@@ -584,7 +584,7 @@ void BasicTreeListBox::UpdateEntries()
 {
     BasicEntryDescriptor aCurDesc( GetEntryDescriptor( FirstSelected() ) );
 
-    // Erstmal die vorhandenen Eintraege auf existens pruefen:
+
     SvLBoxEntry* pLastValid = 0;
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
@@ -599,7 +599,7 @@ void BasicTreeListBox::UpdateEntries()
         pEntry = pLastValid ? Next( pLastValid ) : First();
     }
 
-    // Jetzt ueber die Basics rennen und in die Zweige eintragen
+
     ScanAllEntries();
 
     SetCurrentEntry( aCurDesc );
@@ -636,7 +636,7 @@ SvLBoxEntry* BasicTreeListBox::FindEntry( SvLBoxEntry* pParent, const String& rT
 
 long BasicTreeListBox::ExpandingHdl()
 {
-    // Expanding oder Collaps?
+    // expanding or collapsing?
     sal_Bool bOK = sal_True;
     if ( GetModel()->GetDepth( GetHdlEntry() ) == 1 )
     {

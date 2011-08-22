@@ -248,7 +248,7 @@ class DT_SeeAlsoAtTag : public DT_AtTag
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    const String  &     LinkText() const        { return sTitle; }  // Missbrauch von sTitle
+    const String  &     LinkText() const        { return sTitle; }  // abuse of sTitle
 };
 
 class DT_ParameterAtTag : public DT_AtTag

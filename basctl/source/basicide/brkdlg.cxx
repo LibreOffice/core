@@ -194,7 +194,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
     }
     else if ( pButton == &aNewButton )
     {
-        // Checkbox beruecksichtigen!
+        // keep checkbox in mind!
         String aText( aComboBox.GetText() );
         size_t nLine;
         bool bValid = lcl_ParseText( aText, nLine );

@@ -57,11 +57,11 @@ public:
 
     SvMemoryStream* GetStream();
 
-    static CNames *pKeyCodes;           // Namen der Sondertasten  MOD1, F1, LEFT ...
+    static CNames *pKeyCodes;           // names of special keys  MOD1, F1, LEFT ...
     static ControlDefLoad const arKeyCodes [];
 
 private:
-    String WandleKeyEventString( String aKeys );    // Nutzt pKeyCodes.  <RETURN> <SHIFT LEFT LEFT>
+    String WandleKeyEventString( String aKeys );    // uses pKeyCodes.  <RETURN> <SHIFT LEFT LEFT>
 
     using CmdBaseStream::Write;
     void Write( comm_UINT16 nNr ){CmdBaseStream::Write( nNr );}

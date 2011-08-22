@@ -80,7 +80,7 @@ BasicIDEDLL::BasicIDEDLL()
     pShell = 0;
     pExtraData = 0;
 
-    GetExtraData(); // damit GlobalErrorHdl gesetzt wird.
+    GetExtraData(); // to cause GlobalErrorHdl to be set
 }
 
 BasicIDEDLL::~BasicIDEDLL()
@@ -136,10 +136,10 @@ BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
 
 BasicIDEData::~BasicIDEData()
 {
-    // ErrorHdl zuruecksetzen ist zwar sauberer, aber diese Instanz wird
-    // sowieso sehr spaet, nach dem letzten Basic, zerstoert.
-    // Durch den Aufruf werden dann aber wieder AppDaten erzeugt und nicht
-    // mehr zerstoert => MLK's beim Purify
+    // Resetting ErrorHdl is cleaner indeed but this instance is destroyed
+    // pretty late, after the last Basic, anyway.
+    // Due to the call there is AppData created then though and not
+    // destroyed anymore => MLK's at Purify
 //  StarBASIC::SetGlobalErrorHdl( Link() );
 //  StarBASIC::SetGlobalBreakHdl( Link() );
 //  StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
@@ -168,10 +168,10 @@ IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
         BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
         if ( pBasMgr )
         {
-            // Hier lande ich zweimal, wenn Step into protected Basic
-            // => schlecht, wenn Passwortabfrage 2x, ausserdem sieht man in
-            // dem PasswordDlg nicht, fuer welche Lib...
-            // => An dieser Stelle keine Passwort-Abfrage starten
+            // I do get here twice if Step into protected Basic
+            // => bad, if password query twice, also you don't see
+            // the lib in the PasswordDlg...
+            // => start no password query at this point
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
             OSL_ENSURE( aDocument.isValid(), "BasicIDEData::GlobalBasicBreakHdl: no document for the basic manager!" );
             if ( aDocument.isValid() )
@@ -183,7 +183,7 @@ IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                     {
-                           // Ein Step-Out muesste mich aus den geschuetzten Bereich befoerdern...
+                           // a step-out should get me out of the protected area...
                         nRet = SbDEBUG_STEPOUT;
                     }
                     else

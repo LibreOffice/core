@@ -40,7 +40,7 @@
 #define UID_ACTIVE          "UID_ACTIVE"
 
 #define SI_IPCCommandBlock  1
-#define SI_SocketCommandBlock   SI_IPCCommandBlock  // Zumindest erstmal
+#define SI_SocketCommandBlock   SI_IPCCommandBlock
 #define SI_DirectCommandBlock   2
 #define SIControl           3   // remove after numeric HelpIDs are completely removed and no legacy testtool is used anymore
 #define SISlot              4
@@ -61,9 +61,9 @@
 #define BinSbxValue         15
 
 // Classes
-// !!!Diese Defines duerfen niemals geaendert werden!!!
+// !!!These defines may never be changed!!!
 #define C_NoType            -1
-// Maximale 32 einfache Controls
+// maximum of 32 easy controls
 #define C_TabControl        0
 #define C_RadioButton       1
 #define C_CheckBox          2
@@ -94,7 +94,7 @@
 #define C_MenuButton        24
 #define C_MoreButton        25
 
-// Maximale 7 Container
+// maximum of 7 containers
 #define C_TabPage           32
 #define C_ModalDlg          33
 #define C_FloatWin          34
@@ -102,7 +102,7 @@
 #define C_WorkWin           36
 #define C_DockingWin        37
 
-// Diese Defines koennen geaendert werden
+// These defines may be changed
 #define C_MessBox           40
 #define C_InfoBox           41
 #define C_WarningBox        42
@@ -126,8 +126,8 @@
 
 #define C_Dialog            68
 
-#define M_WITH_RETURN       0x0200  // Die Variable wird zum Aufnehmen des Wertes gespeichert
-#define M_KEY_STRING        0x0400  // Key Befehle werden umgewandelt i.e. "<return><up>"
+#define M_WITH_RETURN       0x0200  // the variable is saved until it gets its value
+#define M_KEY_STRING        0x0400  // key orders are converted i.e. "<return><up>"
 #define M_SOFFICE           0x0800  // Command valid for Star/Open Office
 #define M_MOZILLA           0x1000  // Command valid for Mozilla
 // for MacroRecorder
@@ -147,7 +147,7 @@
 #define M_SetPage           31
 #define M_Click             32
 
-#define M_Close             33      // Push Buttons on Dialog (Auch More Button)
+#define M_Close             33      // Push Buttons on Dialog (also More Button)
 #define M_Cancel            34
 #define M_OK                35
 #define M_Help              36
@@ -202,7 +202,7 @@
 
 #define M_Restore           85      // Window Control together with M_Maximize and M_Minimize
 
-#define M_DisplayPercent    200     // Zum Anzeigen der Prozente des Windows
+#define M_DisplayPercent    200
 
 #define M_LAST_NO_RETURN    200
 
@@ -259,7 +259,7 @@
 #define M_HasScrollBar      ( M_WITH_RETURN | 38 )
 #define M_IsScrollBarEnabled ( M_WITH_RETURN | 39 )
 
-// Dieser befehl wird nur intern im Controller (sts library) verwendet. Sie tauchen nicht im Testtool auf!
+// This command is only used in the internal controller (sts library). They don't appear in the testtool!
 #define _M_IsEnabled        ( M_WITH_RETURN | 50 )
 
 #define M_GetFixedTextCount ( M_WITH_RETURN | 51 )
@@ -318,7 +318,7 @@
 #error "Bereich �berschritten"
 #endif
 
-// Befehle mit Returnwert
+// commands with return value
 #define RC_GetClipboard     ( M_SOFFICE | M_MOZILLA | M_WITH_RETURN | 1 )
 #define RC_WinTree          ( M_SOFFICE | M_MOZILLA | M_WITH_RETURN | 2 )
 #define RC_ResetApplication ( M_SOFFICE | M_MOZILLA | M_WITH_RETURN | 3 )
@@ -374,30 +374,30 @@
 #define RC_WaitSlot         ( M_SOFFICE             | M_WITH_RETURN | 44 )
 
 // Flow Control
-#define F_EndCommandBlock   101         // Initiiert R�ckmeldung des Status
-#define F_Sequence          102         // �bergibt Sequence Nummer (1. in jedem Stream)
+#define F_EndCommandBlock   101         // initializes the reply of the status
+#define F_Sequence          102         // commits Sequence number (first in each stream)
 
 // Return codes
-#define RET_Sequence        132         // �bergibt Sequence Nummer (1. in jedem Stream)
-#define RET_Value           133         // �bergibt Return-wert
-#define RET_WinInfo         134         // Information �ber aktuelles Fenster/Control
-#define RET_ProfileInfo     135         // Profile Information
-#define RET_DirectLoging    136         // Direktes �bertragen von Informationen in das Log
-#define RET_MacroRecorder   137         // MakroRecorder Befehl �bertragen
+#define RET_Sequence        132
+#define RET_Value           133
+#define RET_WinInfo         134
+#define RET_ProfileInfo     135
+#define RET_DirectLoging    136
+#define RET_MacroRecorder   137
 
-// Subcodes die in nUId geliefert werden
-// f�r F_ProfileInfo
-#define S_ProfileReset      201         // nNr1 = Anzahl Borders
-    // Achtung!! Diese Defines m�ssen aufeinanderfolgende Nummern haben!!
+// Subcodes which are delivered to nUId
+// for F_ProfileInfo
+#define S_ProfileReset      201         // nNr1 = number of Borders
+    // Attention!! These defines must have numbers in a row!!
 #define S_ProfileBorder1    202         // nNr1 = Border1 in ms
 #define S_ProfileBorder2    203         // nNr1 = Border2 in ms
 #define S_ProfileBorder3    204         // nNr1 = Border3 in ms
 #define S_ProfileBorder4    205         // nNr1 = Border4 in ms
-    // Achtung Ende
-#define S_ProfileTime       210         // nNr1 = remote Zeit des Befehls
-#define S_ProfileDump       211         // Gibt die daten aus.
+    // Attention end
+#define S_ProfileTime       210         // nNr1 = remote time of the command
+#define S_ProfileDump       211         // outputs the data
 
-// f�r F_DirectLoging
+// for F_DirectLoging
 #define S_AssertError       220
 #define S_AssertWarning     221
 #define S_AssertTrace       222
@@ -413,7 +413,7 @@
 #define CONST_CTTableControl    106
 #define CONST_CTUnknown         199
 
-// Konstanten f�r das ALignment des gesuchten Splitters
+// constants for the ALignment of the requested splitter
 #define CONST_ALIGN_LEFT        120
 #define CONST_ALIGN_TOP         121
 #define CONST_ALIGN_RIGHT       122
@@ -440,31 +440,31 @@
 #define CONST_WSAborted             702
 #define CONST_WSFinished            703
 
-// Beschreibt die Parametertypen als Bitfeld  Reihenfolge immer!
-// wie hier Aufgelistet
+// describes the parameter types as bitfield - always sequence!
+// as listed here
 #define PARAM_NONE              0x0000
 #define PARAM_UINT16_1          0x0001
 #define PARAM_UINT16_2          0x0002
-#define PARAM_UINT16_3          0x0100      // Nicht in der Reihe!!
-#define PARAM_UINT16_4          0x0200      // Nicht in der Reihe!!
+#define PARAM_UINT16_3          0x0100      // not in the row!!
+#define PARAM_UINT16_4          0x0200      // not in the row!!
 #define PARAM_UINT32_1          0x0004
 #define PARAM_UINT32_2          0x0008
 #define PARAM_STR_1             0x0010
 #define PARAM_STR_2             0x0020
 #define PARAM_BOOL_1            0x0040
 #define PARAM_BOOL_2            0x0080
-#define PARAM_SBXVALUE_1        0x0400      // hier mit 0x0400 Weiter!!! Siehe Oben!
+#define PARAM_SBXVALUE_1        0x0400      // going on with 0x0400 here!!! see above!
 
-// Zus�tzliche Beschreibung!! wird auch mit dem Rest verodert
-//#define PARAM_STR_RAW           0x8000        // Der Zeichensatz der Strings wird nicht konvertiert(f�r Fareastern)
+
+//#define PARAM_STR_RAW           0x8000        // the character set of the strings is not being converted (for Fareastern)
 
 #define ERR_SEND_TIMEOUT        100
 #define ERR_EXEC_TIMEOUT        101
 #define ERR_RESTART_FAIL        102
 #define ERR_RESTART             103
-#define ERR_NO_WIN              104     // Keine *.Win Dateien gefunden
-#define ERR_NO_SID              105     // Keine *.Sid Dateien gefunden
-#define ERR_NO_FILE             106     // Datei nicht gefunden
+#define ERR_NO_WIN              104
+#define ERR_NO_SID              105
+#define ERR_NO_FILE             106
 
 #endif
 

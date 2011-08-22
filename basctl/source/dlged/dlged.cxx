@@ -1213,7 +1213,7 @@ void lcl_PrintHeader( Printer* pPrinter, const String& rTitle ) // not working y
 
     long nFontHeight = pPrinter->GetTextHeight();
 
-    // 1.Border => Strich, 2+3 Border = Freiraum.
+    // 1st border => line, 2+3 border = free space
     long nYTop = TMARGPRN-3*nBorder-nFontHeight;
 
     long nXLeft = nLeftMargin-nBorder;

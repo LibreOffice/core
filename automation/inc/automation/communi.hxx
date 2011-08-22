@@ -58,8 +58,8 @@ protected:
     virtual void CallConnectionOpened( CommunicationLink* pCL );
     virtual void CallConnectionClosed( CommunicationLink* pCL );
     CommunicationLinkList *ActiveLinks;
-    CommunicationLinkList *InactiveLinks;       /// Hier sind die CommunicationLinks drin, die sich noch nicht selbst abgemeldet haben.
-                                                /// allerdings schon ein StopCommunication gekriegt haben, bzw ein ConnectionTerminated
+    CommunicationLinkList *InactiveLinks;       /// CommunicationLinks that have not yet logged off themselves but already have received
+                                                /// a StopCommunication or a ConnectionTerminated
     virtual void DestroyingLink( CommunicationLink *pCL );
 
     sal_Bool bGracefullShutdown;
@@ -86,7 +86,7 @@ public:
     virtual sal_Bool IsCommunicationError();
     virtual sal_Bool DoTransferDataStream( SvStream *pDataStream, CMProtocol nProtocol = CM_PROTOCOL_OLDSTYLE );
 
-    // Diese sind Virtuelle Links!!!!
+    // These are virtual links!
     virtual long ConnectionClosed( void* = NULL );
     virtual long DataReceived( void* = NULL );
 
@@ -102,8 +102,8 @@ protected:
     virtual sal_Bool ShutdownCommunication();
     sal_uLong nConnectionClosedEventId;
     sal_uLong nDataReceivedEventId;
-    osl::Mutex aMConnectionClosed;  // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
-    osl::Mutex aMDataReceived;      // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMConnectionClosed;  // necessary because no event can be managed before the variable is set
+    osl::Mutex aMDataReceived;      // necessary because no event can be managed before the variable is set
     virtual void WaitForShutdown();
 
     DECL_LINK( ShutdownLink, void* );
@@ -150,11 +150,11 @@ private:
     sal_uLong nPortToListen;
     sal_uInt16 nMaxConnections;
     sal_uLong nAddConnectionEventId;
-    osl::Mutex aMAddConnection; // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMAddConnection; // necessary because no event can be managed before the variable is set
     void CallInfoMsg( InfoString aMsg ){ pMyServer->CallInfoMsg( aMsg ); }
     CM_InfoType GetInfoType(){ return pMyServer->GetInfoType(); }
 
-    // Diese beiden werden zum Transport der Connection vom Thread zum Mainthread verwendet.
+    // these are used for the connection's transport from the thread to the mainthread
     CommunicationLinkRef xmNewConnection;
     DECL_LINK( AddConnection, void* );
 };

@@ -87,15 +87,14 @@ MacroChooser::MacroChooser( Window* pParnt, sal_Bool bCreateEntries ) :
     nMode = MACROCHOOSER_ALL;
     bNewDelIsDel = sal_True;
 
-    // Der Sfx fragt den BasicManager nicht, ob modified
-    // => Speichern anschmeissen, wenn Aenderung, aber kein Sprung in
-    // die BasicIDE.
+    // the Sfx doesn't aske the BasicManger whether modified or not
+    // => start saving in case of a change without a into the BasicIDE.
     bForceStoreBasic = sal_False;
 
     aMacrosInTxtBaseStr = aMacrosInTxt.GetText();
 
     aMacroBox.SetSelectionMode( SINGLE_SELECTION );
-    aMacroBox.SetHighlightRange(); // ueber ganze Breite selektieren
+    aMacroBox.SetHighlightRange(); // select over the whole width
 
     aRunButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aCloseButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
@@ -255,7 +254,7 @@ short MacroChooser::Execute()
     Window* pPrevDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
     short nRet = ModalDialog::Execute();
-    // #57314# Wenn die BasicIDE aktiviert wurde, dann nicht den DefModalDialogParent auf das inaktive Dokument zuruecksetzen.
+    // #57314# If the BasicIDE has been activated, don't reset the DefModalDialogParent to the inactive document.
     if ( Application::GetDefDialogParent() == this )
         Application::SetDefDialogParent( pPrevDlgParent );
     return nRet;
@@ -268,7 +267,6 @@ void MacroChooser::EnableButton( Button& rButton, sal_Bool bEnable )
     {
         if ( nMode == MACROCHOOSER_CHOOSEONLY || nMode == MACROCHOOSER_RECORDING )
         {
-            // Nur der RunButton kann enabled werden
             if ( &rButton == &aRunButton )
                 rButton.Enable();
             else
@@ -316,13 +314,13 @@ void MacroChooser::DeleteMacro()
             pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
         }
 
-        // Aktuelles Doc als geaendert markieren:
+        // mark current doc as modified:
         StarBASIC* pBasic = BasicIDE::FindBasic( pMethod );
         DBG_ASSERT( pBasic, "Basic?!" );
         BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
         DBG_ASSERT( pBasMgr, "BasMgr?" );
         ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-        if ( aDocument.isDocument() )    // Muss ja nicht aus einem Document kommen...
+        if ( aDocument.isDocument() )
         {
             aDocument.setDocumentModified();
             SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
@@ -411,7 +409,7 @@ SbMethod* MacroChooser::CreateMacro()
 
 void MacroChooser::SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry )
 {
-    // Durch das Highlight wird das Edit sonst platt gemacht:
+    // the edit would be killed by the highlight otherwise:
 
     String aSaveText( aMacroNameEdit.GetText() );
     Selection aCurSel( aMacroNameEdit.GetSelection() );
@@ -453,7 +451,7 @@ void MacroChooser::CheckButtons()
         EnableButton( aRunButton, bEnable );
     }
 
-    // Organisieren immer moeglich ?
+    // organising still possible?
 
     // Assign...
     EnableButton( aAssignButton, pMethod ? sal_True : sal_False );
@@ -518,10 +516,10 @@ IMPL_LINK_INLINE_END( MacroChooser, MacroDoubleClickHdl, SvTreeListBox *, EMPTYA
 
 IMPL_LINK( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox )
 {
-    // Wird auch gerufen, wenn Deselektiert!
-    // 2 Funktionsaufrufe in jedem SelectHdl, nur weil Olli
-    // keinen separatren DeselctHdl einfuehren wollte:
-    // Also: Feststellen, ob Select oder Deselect:
+    // Is also called if deselected!
+    // Two function calls in every SelectHdl because
+    // there's no separate DeselectHDL.
+    // So find out if select or deselect:
     if ( pBox->IsSelected( pBox->GetHdlEntry() ) )
     {
         UpdateFields();
@@ -534,10 +532,10 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 {
     static String aSpaceStr = String::CreateFromAscii(" ");
 
-    // Wird auch gerufen, wenn Deselektiert!
-    // 2 Funktionsaufrufe in jedem SelectHdl, nur weil Olli
-    // keinen separatren DeselctHdl einfuehren wollte:
-    // Also: Feststellen, ob Select oder Deselect:
+    // Is also called if deselected!
+    // Two function calls in every SelectHdl because
+    // there's no separate DeselectHDL.
+    // So find out if select or deselect:
     if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )
         return 0;
 
@@ -552,8 +550,8 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 
         aMacrosInTxt.SetText( aStr );
 
-        // Die Macros sollen in der Reihenfolge angezeigt werden,
-        // wie sie im Modul stehen.
+        // The macros should be called in the same order that they
+        // are written down in the module.
 
         map< sal_uInt16, SbMethod* > aMacros;
         size_t nMacroCount = pModule->GetMethods()->Count();
@@ -563,7 +561,6 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
             if( pMethod->IsHidden() )
                 continue;
             DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
-            // Eventuell weiter vorne ?
             sal_uInt16 nStart, nEnd;
             pMethod->GetLineRange( nStart, nEnd );
             aMacros.insert( map< sal_uInt16, SbMethod*>::value_type( nStart, pMethod ) );
@@ -593,15 +590,15 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
 {
     (void)pEdit;
 
-    // Das Modul, in dem bei Neu das Macro landet, selektieren,
-    // wenn BasicManager oder Lib selektiert.
+    // select the module in which the macro is put at Neu (new),
+    // if BasicManager or Lib is selecting
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     if ( pCurEntry )
     {
         sal_uInt16 nDepth = aBasicBox.GetModel()->GetDepth( pCurEntry );
         if ( ( nDepth == 1 ) && ( aBasicBox.IsEntryProtected( pCurEntry ) ) )
         {
-            // Dann auf die entsprechende Std-Lib stellen...
+            // then put to the respective Std-Lib...
             SvLBoxEntry* pManagerEntry = aBasicBox.GetModel()->GetParent( pCurEntry );
             pCurEntry = aBasicBox.GetModel()->FirstChild( pManagerEntry );
         }
@@ -637,7 +634,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
             if ( !bFound )
             {
                 SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
-                // Wenn es den Eintrag gibt ->Select ->Desription...
+                // if the entry exists ->Select ->Desription...
                 if ( pEntry )
                     aMacroBox.Select( pEntry, sal_False );
             }
@@ -652,7 +649,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
 
 IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 {
-    // ausser bei New/Record wird die Description durch LoseFocus uebernommen.
+    // apart from New/Record the Description is done by LoseFocus
     if ( pButton == &aRunButton )
     {
         StoreMacroDescription();
@@ -831,7 +828,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         sal_uInt16 nRet = pDlg->Execute();
         delete pDlg;
 
-        if ( nRet ) // Nicht einfach nur geschlossen
+        if ( nRet ) // not only closed
         {
             EndDialog( MACRO_EDIT );
             return 0;

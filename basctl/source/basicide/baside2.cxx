@@ -116,7 +116,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
 
     long nFontHeight = pPrinter->GetTextHeight();
 
-    // 1.Border => Strich, 2+3 Border = Freiraum.
+    // 1st Border => line, 2+3 Border = free space
     long nYTop = TMARGPRN-3*nBorder-nFontHeight;
 
     long nXLeft = nLeftMargin-nBorder;
@@ -167,14 +167,14 @@ void lcl_ConvertTabsToSpaces( String& rLine )
         {
             if ( rLine.GetChar( nPos ) == '\t' )
             {
-                // Nicht 4 Blanks, sondern an 4er TabPos:
+                // not 4 Blanks, but at 4 TabPos:
                 String aBlanker;
                 aBlanker.Fill( ( 4 - ( nPos % 4 ) ), ' ' );
                 rLine.Erase( nPos, 1 );
                 rLine.Insert( aBlanker, nPos );
                 nMax = rLine.Len();
             }
-            nPos++; // Nicht optimal, falls Tab, aber auch nicht verkehrt...
+            nPos++;
         }
     }
 }
@@ -235,13 +235,13 @@ void ModulWindow::GetFocus()
         return;
     DBG_CHKTHIS( ModulWindow, 0 );
     aXEditorWindow.GetEdtWindow().GrabFocus();
-    // Basisklasse nicht rufen, weil Focus jetzt woanders...
+    // don't call basic calls because focus is somewhere else...
 }
 
 void ModulWindow::DoInit()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    // Wird beim Umschalten der Fenster gerufen...
+
     if ( GetVScrollBar() )
         GetVScrollBar()->Hide();
     GetHScrollBar()->Show();
@@ -269,7 +269,7 @@ void ModulWindow::CheckCompileBasic()
 
     if ( XModule().Is() )
     {
-        // Zur Laufzeit wird niemals compiliert!
+        // never compile while running!
         sal_Bool bRunning = StarBASIC::IsRunning();
         sal_Bool bModified = ( !xModule->IsCompiled() ||
             ( GetEditEngine() && GetEditEngine()->IsModified() ) );
@@ -337,7 +337,7 @@ sal_Bool ModulWindow::BasicExecute()
             // Init cursor to top
             nCurMethodStart = ( aSel.GetStart().GetPara() + 1 );
             SbMethod* pMethod = 0;
-            // erstes Macro, sonst blind "Main" (ExtSearch?)
+            // first Macro, else blind "Main" (ExtSearch?)
             for ( sal_uInt16 nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
             {
                 SbMethod* pM = (SbMethod*)xModule->GetMethods()->Get( nMacro );
@@ -361,13 +361,13 @@ sal_Bool ModulWindow::BasicExecute()
                 BasicDLL::SetDebugMode( sal_True );
                 BasicIDE::RunMethod( pMethod );
                 BasicDLL::SetDebugMode( sal_False );
-                // Falls waehrend Interactive=sal_False abgebrochen
+                // if cancelled during Interactive=sal_False
                 BasicDLL::EnableBreak( sal_True );
             }
             ClearStatus( BASWIN_RUNNINGBASIC );
         }
         else
-            aStatus.bIsRunning = sal_False; // Abbruch von Reschedule()
+            aStatus.bIsRunning = sal_False; // cancel of Reschedule()
     }
 
     sal_Bool bDone = !aStatus.bError;
@@ -471,7 +471,7 @@ sal_Bool ModulWindow::LoadBasic()
             GetEditEngine()->SetUpdateMode( sal_False );
             GetEditView()->Read( *pStream );
             GetEditEngine()->SetUpdateMode( sal_True );
-            GetEditorWindow().Update(); // Es wurde bei UpdateMode = sal_True nur Invalidiert
+            GetEditorWindow().Update();
             GetEditorWindow().ForceSyntaxTimeout();
             GetEditorWindow().DestroyProgress();
             sal_uLong nError = aMedium.GetError();
@@ -568,12 +568,12 @@ sal_Bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
         }
 
         BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nLine );
-        if ( pBrk ) // entfernen
+        if ( pBrk ) // remove
         {
             xModule->ClearBP( (sal_uInt16)nLine );
             delete GetBreakPoints().remove( pBrk );
         }
-        else // einen erzeugen
+        else // create one
         {
             if ( xModule->SetBP( (sal_uInt16)nLine) )
             {
@@ -620,7 +620,7 @@ sal_Bool ModulWindow::BasicToggleBreakPoint()
     AssertValidEditEngine();
 
     TextSelection aSel = GetEditView()->GetSelection();
-    aSel.GetStart().GetPara()++;    // Basic-Zeilen beginnen bei 1!
+    aSel.GetStart().GetPara()++;    // Basic lines start at 1!
     aSel.GetEnd().GetPara()++;
 
     sal_Bool bNewBreakPoint = sal_False;
@@ -677,8 +677,8 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
     GoOnTop();
 
     // ReturnWert: BOOL
-    //  FALSE:  Abbrechen
-    //  TRUE:   Weiter....
+    //  FALSE:  cancel
+    //  TRUE:   go on....
     String aErrorText( pBasic->GetErrorText() );
     sal_uInt16 nErrorLine = pBasic->GetLine() - 1;
     sal_uInt16 nErrCol1 = pBasic->GetCol1();
@@ -701,8 +701,7 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
         aErrorTextPrefix += ' ';
         pLayout->GetStackWindow().UpdateCalls();
     }
-    // Wenn anderes Basic, dan sollte die IDE versuchen, da richtige
-    // Modul anzuzeigen...
+    // if other basic, the IDE should try to display the correct module
     sal_Bool bMarkError = ( pBasic == GetBasic() ) ? sal_True : sal_False;
     if ( bMarkError )
         aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine, sal_True );
@@ -729,20 +728,20 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     // #i69280 Required in Window despite normal usage in next command!
     (void)pBasic;
 
-    // ReturnWert: sal_uInt16 => siehe SB-Debug-Flags
+    // Return value: sal_uInt16 => see SB-Debug-Flags
     sal_uInt16 nErrorLine = pBasic->GetLine();
 
-    // Gibt es hier einen BreakPoint?
+
     BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nErrorLine );
     if ( pBrk )
     {
         pBrk->nHitCount++;
         if ( pBrk->nHitCount < pBrk->nStopAfter && GetBasic()->IsBreak() )
-            return aStatus.nBasicFlags; // weiterlaufen...
+            return aStatus.nBasicFlags; // go on...
     }
 
-    nErrorLine--;   // EditEngine begint bei 0, Basic bei 1
-    // Alleine schon damit gescrollt wird...
+    nErrorLine--;   // EditEngine starts at 0, Basic at 1
+
     AssertValidEditEngine();
     GetEditView()->SetSelection( TextSelection( TextPaM( nErrorLine, 0 ), TextPaM( nErrorLine, 0 ) ) );
     aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine );
@@ -834,14 +833,13 @@ void ModulWindow::EditMacro( const String& rMacroName )
                 pMethod->GetLineRange( nStart, nEnd );
                 if ( nStart )
                 {
-                    // Basic beginnt bei 1
                     nStart--;
                     nEnd--;
                 }
                 TextSelection aSel( TextPaM( nStart, 0 ), TextPaM( nStart, 0 ) );
                 AssertValidEditEngine();
                 TextView * pView = GetEditView();
-                // ggf. hinscrollen, so dass erste Zeile oben...
+                // scroll if applicabel so that first line is at the top
                 long nVisHeight = GetOutputSizePixel().Height();
                 if ( (long)pView->GetTextEngine()->GetTextHeight() > nVisHeight )
                 {
@@ -865,10 +863,9 @@ void ModulWindow::EditMacro( const String& rMacroName )
 void ModulWindow::StoreData()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    // StoreData wird gerufen, wenn der BasicManager zerstoert oder
-    // dieses Fenster beendet wird.
-    // => Keine Unterbrechungen erwuenscht!
-    // Und bei SAVE, wenn AppBasic...
+    // StoreData is called when the BasicManager is destroyed or
+    // this window is closed.
+    // => interrupts undesired!
     GetEditorWindow().SetSourceInBasic( sal_True );
 }
 
@@ -889,9 +886,8 @@ void ModulWindow::UpdateData()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     DBG_ASSERT( XModule().Is(), "Kein Modul!" );
-    // UpdateData wird gerufen, wenn sich der Source von aussen
-    // geaendert hat.
-    // => Keine Unterbrechungen erwuenscht!
+    // UpdateData is called when the source has changed from outside
+    // => interrupts undesired!
 
     if ( XModule().Is() )
     {
@@ -949,7 +945,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     aPaperSz.Width() -= (LMARGPRN+RMARGPRN);
     aPaperSz.Height() -= (TMARGPRN+BMARGPRN);
 
-    // nLinepPage stimmt nicht, wenn Zeilen umgebrochen werden muessen...
+    // nLinepPage is not correct if there's a line break
     sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height()/nLineHeight);
     sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width() / pPrinter->GetTextWidth( 'X' ) );
     sal_uLong nParas = GetEditEngine()->GetParagraphCount();
@@ -957,7 +953,6 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     sal_uInt16 nPages = (sal_uInt16) (nParas/nLinespPage+1 );
     sal_uInt16 nCurPage = 1;
 
-    // Header drucken...
     lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle, nPrintPage == 0 );
     Point aPos( LMARGPRN, TMARGPRN );
     for ( sal_uLong nPara = 0; nPara < nParas; nPara++ )
@@ -1120,7 +1115,6 @@ void ModulWindow::GetState( SfxItemSet &rSet )
     {
         switch ( nWh )
         {
-            // allgemeine Items:
             case SID_CUT:
             {
                 if ( !GetEditView() || !GetEditView()->HasSelection() )
@@ -1183,8 +1177,7 @@ void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
     DBG_CHKTHIS( ModulWindow, 0 );
     if ( ( pCurScrollBar == GetHScrollBar() ) && GetEditView() )
     {
-        // Nicht mit dem Wert Scrollen, sondern lieber die Thumb-Pos fuer die
-        // VisArea verwenden:
+        // don't scroll with the value but rather use the Thumb-Pos for the VisArea:
         long nDiff = GetEditView()->GetStartDocPos().X() - pCurScrollBar->GetThumbPos();
         GetEditView()->Scroll( nDiff, 0 );
         GetEditView()->ShowCursor( sal_False, sal_True );
@@ -1264,8 +1257,7 @@ void ModulWindow::Deactivating()
 
 sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, sal_Bool bFromStart )
 {
-    // Mann koennte fuer das blinde Alle-Ersetzen auch auf
-    // Syntaxhighlighting/Formatierung verzichten...
+    // one could also relinquish syntaxhighlighting/formatting instead of the stupid replace-everything...
     AssertValidEditEngine();
     ExtTextView* pView = GetEditView();
     TextSelection aSel;
@@ -1493,7 +1485,7 @@ ModulWindowLayout::~ModulWindowLayout()
 
 void ModulWindowLayout::Resize()
 {
-    // ScrollBars, etc. passiert in BasicIDEShell:Adjust...
+    // ScrollBars, etc. happens in BasicIDEShell:Adjust...
     ArrangeWindows();
 }
 
@@ -1507,7 +1499,7 @@ void ModulWindowLayout::ArrangeWindows()
 {
     Size aSz = GetOutputSizePixel();
 
-    // prueffen, ob der Splitter in einem gueltigen Bereich liegt...
+    // test whether the splitter is in a valid area...
     long nMinPos = SPLIT_MARGIN;
     long nMaxPos = aSz.Height() - SPLIT_MARGIN;
 
@@ -1515,13 +1507,11 @@ void ModulWindowLayout::ArrangeWindows()
     long nHSplitPos = aHSplitter.GetSplitPosPixel();
     if ( !bVSplitted )
     {
-        // Wenn noch nie gesplitted wurde, Verhaeltniss = 3 : 4
         nVSplitPos = aSz.Height() * 3 / 4;
         aVSplitter.SetSplitPosPixel( nVSplitPos );
     }
     if ( !bHSplitted )
     {
-        // Wenn noch nie gesplitted wurde, Verhaeltniss = 2 : 3
         nHSplitPos = aSz.Width() * 2 / 3;
         aHSplitter.SetSplitPosPixel( nHSplitPos );
     }
@@ -1587,7 +1577,7 @@ IMPL_LINK( ModulWindowLayout, SplitHdl, Splitter *, pSplitter )
 
 sal_Bool ModulWindowLayout::IsToBeDocked( DockingWindow* pDockingWindow, const Point& rPos, Rectangle& rRect )
 {
-    // prueffen, ob als Dock oder als Child:
+    // test whether dock or child:
     // TRUE:    Floating
     // FALSE:   Child
     Point aPosInMe = ScreenToOutputPixel( rPos );
@@ -1623,12 +1613,10 @@ void ModulWindowLayout::DockaWindow( DockingWindow* pDockingWindow )
 {
     if ( pDockingWindow == &aWatchWindow )
     {
-        // evtl. Sonderbehandlung...
         ArrangeWindows();
     }
     else if ( pDockingWindow == &aStackWindow )
     {
-        // evtl. Sonderbehandlung...
         ArrangeWindows();
     }
 #if OSL_DEBUG_LEVEL > 0

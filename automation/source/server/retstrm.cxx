@@ -80,7 +80,7 @@ void RetStream::GenReturn ( sal_uInt16 nRet, sal_uInt16 nMethod, SbxValue &aValu
     Write(sal_uInt16(SIReturn));
     Write(nRet);
     Write((comm_UINT32)nMethod); //HELPID BACKWARD (no sal_uLong needed)
-    Write(sal_uInt16(PARAM_SBXVALUE_1));        // Typ der folgenden Parameter
+    Write(sal_uInt16(PARAM_SBXVALUE_1));        // type of the following parameters
     Write(aValue);
 }
 

@@ -250,16 +250,16 @@ Context_AdocStd::PerformStatusFunction( uintt               i_nStatusSignal,
 void
 Context_AdocStd::SetupStateMachine()
 {
-    // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-//  const INT16 bas = 0;        // Base-Status
-    const INT16 wht = 1;        // Whitespace-Status
-    const INT16 awd = 2;        // Any-Word-Read-Status
+    // special array statuses (no tokenfinish or change of context):
+//  const INT16 bas = 0;        // base-status
+    const INT16 wht = 1;        // whitespace-status
+    const INT16 awd = 2;        // any-word-read-status
 
-    // Kontextwechsel-Stati:
+    // change of context statuses
     const INT16 goto_CheckStar = 3;
     const INT16 goto_AtTag = 4;
 
-    // Tokenfinish-Stati:
+    // tokenfinish statuses:
     const INT16 finError = 5;
 //  const INT16 finIgnore = 6;
     const INT16 finEol = 7;
@@ -267,7 +267,7 @@ Context_AdocStd::SetupStateMachine()
     const INT16 finAnyWord = 9;
     const INT16 finWhitespace = 10;
 
-    // Konstanten zur Benutzung in der Tabelle:
+    // constants for use in the table:
     const INT16 fof = finEof;
     const INT16 err = finError;
     const INT16 faw = finAnyWord;
@@ -361,7 +361,7 @@ Context_AdocStd::SetupStateMachine()
     DYN StmBoundsStatus *   dpBst_finWhitespace
             = new StmBoundsStatus( *this, *this, nF_fin_Whitespace, true);
 
-    // dpMain aufbauen:
+    // construct dpMain:
     aStateMachine.AddStatus(dpStatusTop);
     aStateMachine.AddStatus(dpStatusWhite);
     aStateMachine.AddStatus(dpStatusWord);

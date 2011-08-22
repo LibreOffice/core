@@ -280,15 +280,15 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                         SbxVariable* pVar = (SbxVariable*)pSBX;
                         SbxDataType eType = pVar->GetType();
                         if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
-                            // Kann zu Absturz, z.B. bei Selections-Objekt fuehren
-                            // Type == Object heisst nicht, dass pVar == Object!
+                            // might cause a crash e. g. at the selections-object
+                            // Type == Object does not mean pVar == Object!
                             ; // aHelpText = ((SbxObject*)pVar)->GetClassName();
                         else if ( eType & SbxARRAY )
                             ; // aHelpText = "{...}";
                         else if ( (sal_uInt8)eType != (sal_uInt8)SbxEMPTY )
                         {
                             aHelpText = pVar->GetName();
-                            if ( !aHelpText.Len() )     // Bei Uebergabeparametern wird der Name nicht kopiert
+                            if ( !aHelpText.Len() )     // name is not copied with the passed parameters
                                 aHelpText = aWord;
                             aHelpText += '=';
                             aHelpText += pVar->GetString();
@@ -419,7 +419,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
         if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
-            bDone = sal_True; // CTRL-Y schlucken, damit kein Vorlagenkatalog
+            bDone = sal_True;
         else
         {
             if ( ( rKEvt.GetKeyCode().GetCode() == KEY_TAB ) && !rKEvt.GetKeyCode().IsMod1() &&
@@ -554,7 +554,7 @@ void EditorWindow::CreateEditEngine()
     aHighlighter.initialize( HIGHLIGHT_BASIC );
 
     sal_Bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
-    bDoSyntaxHighlight = sal_False; // Bei grossen Texten zu langsam...
+    bDoSyntaxHighlight = sal_False; // too slow for large texts...
     ::rtl::OUString aOUSource( pModulWindow->GetModule() );
     sal_Int32 nLines = 0;
     sal_Int32 nIndex = -1;
@@ -566,8 +566,8 @@ void EditorWindow::CreateEditEngine()
     while ( nIndex >= 0 );
 
     // nLines*4: SetText+Formatting+DoHighlight+Formatting
-    // 1 Formatting koennte eingespart werden, aber dann wartet man
-    // bei einem langen Sourcecode noch laenger auf den Text...
+    // it could be cut down on one formatting but you would wait even longer
+    // for the text then if the source code is long...
     pProgress = new ProgressInfo( IDE_DLL()->GetShell()->GetViewFrame()->GetObjectShell(), String( IDEResId( RID_STR_GENERATESOURCE ) ), nLines*4 );
     setTextEngineText( pEditEngine, aOUSource );
 
@@ -575,9 +575,8 @@ void EditorWindow::CreateEditEngine()
     pEditView->SetSelection( TextSelection() );
     pModulWindow->GetBreakPointWindow().GetCurYOffset() = 0;
     pEditEngine->SetUpdateMode( sal_True );
-    Update();   // Es wurde bei UpdateMode = sal_True nur Invalidiert
+    Update();   // has only been invalidated at UpdateMode = sal_True
 
-    // Die anderen Fenster auch, damit keine halben Sachen auf dem Bildschirm!
     pModulWindow->GetLayout()->GetWatchWindow().Update();
     pModulWindow->GetLayout()->GetStackWindow().Update();
     pModulWindow->GetBreakPointWindow().Update();
@@ -586,7 +585,6 @@ void EditorWindow::CreateEditEngine()
 
     StartListening( *pEditEngine );
 
-    // Das Syntax-Highlightning legt ein rel. groesse VDev an.
     aSyntaxIdleTimer.Stop();
     bDoSyntaxHighlight = bWasDoSyntaxHighlight;
 
@@ -715,7 +713,7 @@ void EditorWindow::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uIn
 
 void EditorWindow::SetScrollBarRanges()
 {
-    // Extra-Methode, nicht InitScrollBars, da auch fuer EditEngine-Events.
+    // extra method, not InitScrollBars, because for EditEngine events too
     if ( !pEditEngine )
         return;
 
@@ -773,7 +771,6 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
             pEditEngine->SetAttrib( TextAttribFontColor( rColor ), nLine, r.nBegin, r.nEnd, sal_True );
         }
 
-        // Das Highlighten soll kein Modify setzen
         pEditEngine->SetModified( bWasModified );
     }
 }
@@ -808,11 +805,11 @@ void EditorWindow::ImplSetFont()
 
 void EditorWindow::DoSyntaxHighlight( sal_uLong nPara )
 {
-    // Durch das DelayedSyntaxHighlight kann es passieren,
-    // dass die Zeile nicht mehr existiert!
+    // because of the DelayedSyntaxHighlight it's possible
+    // that this line does not exist anymore!
     if ( nPara < pEditEngine->GetParagraphCount() )
     {
-        // leider weis ich nicht, ob genau diese Zeile Modified() ...
+        // unfortunately I'm not sure that excactly this line does Modified() ...
         if ( pProgress )
             pProgress->StepProgress();
         ImpDoHighlight( nPara );
@@ -821,8 +818,8 @@ void EditorWindow::DoSyntaxHighlight( sal_uLong nPara )
 
 void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
 {
-    // Zeile wird nur in 'Liste' aufgenommen, im TimerHdl abgearbeitet.
-    // => Nicht Absaetze manipulieren, waehrend EditEngine formatiert.
+    // line is only added to 'Liste' (list), processed in TimerHdl
+    // => don't manipulate breaks while EditEngine is formatting
     if ( pProgress )
         pProgress->StepProgress();
 
@@ -880,13 +877,8 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, sal_Bool bInserted
     }
     else
     {
-        // Brechpunkte Aktualisieren...
-        // keine Sonderbehandlung fuer EditEngine-CTOR ( Erste-Zeile-Problem ),
-        // da in diesem Moment noch keine BreakPoints.
-        // +1: Basic-Zeilen beginnen bei 1!
         pModulWindow->GetBreakPoints().AdjustBreakPoints( (sal_uInt16)nPara+1, bInserted );
 
-        // Im BreakPointWindow invalidieren...
         long nLineHeight = GetTextHeight();
         Size aSz = pModulWindow->GetBreakPointWindow().GetOutputSize();
         Rectangle aInvRec( Point( 0, 0 ), aSz );
@@ -929,9 +921,7 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
     setBackgroundColor(GetSettings().GetStyleSettings().GetFieldColor());
     nMarkerPos = MARKER_NOMARKER;
 
-    // nCurYOffset merken und nicht von EditEngine holen.
-    // Falls in EditEngine autom. gescrollt wurde, wuesste ich sonst nicht,
-    // wo ich gerade stehe.
+    // memorize nCurYOffset and not take it from EditEngine
 
     SetHelpId( HID_BASICIDE_BREAKPOINTWINDOW );
 }
@@ -994,10 +984,10 @@ void BreakPointWindow::SetMarkerPos( sal_uInt16 nLine, sal_Bool bError )
     if ( SyncYOffset() )
         Update();
 
-    ShowMarker( sal_False );    // Alten wegzeichen...
+    ShowMarker( sal_False );
     nMarkerPos = nLine;
     bErrorMarker = bError;
-    ShowMarker( sal_True );     // Neuen zeichnen...
+    ShowMarker( sal_True );
 }
 
 void BreakPointWindow::ShowMarker( sal_Bool bShow )
@@ -1055,7 +1045,6 @@ void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
         long nYPos = aMousePos.Y() + nCurYOffset;
         long nLine = nYPos / nLineHeight + 1;
         pModulWindow->ToggleBreakPoint( (sal_uLong)nLine );
-        // vielleicht mal etwas genauer...
         Invalidate();
     }
 }
@@ -1071,7 +1060,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
         BreakPoint* pBrk = rCEvt.IsMouseEvent() ? FindBreakPoint( aEventPos ) : 0;
         if ( pBrk )
         {
-            // prueffen, ob Brechpunkt enabled....
+            // test if break point is enabled...
             PopupMenu aBrkPropMenu( IDEResId( RID_POPUP_BRKPROPS ) );
             aBrkPropMenu.CheckItem( RID_ACTIV, pBrk->bEnabled );
             switch ( aBrkPropMenu.Execute( this, aPos ) )
@@ -1246,7 +1235,7 @@ void WatchWindow::Resize()
     Size aSz = GetOutputSizePixel();
     Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
 
-    if ( aBoxSz.Width() < 4 )   // < 4, weil noch Border...
+    if ( aBoxSz.Width() < 4 )
         aBoxSz.Width() = 0;
     if ( aBoxSz.Height() < 4 )
         aBoxSz.Height() = 0;
@@ -1258,7 +1247,7 @@ void WatchWindow::Resize()
     aBoxSz.Height() = nHeaderBarHeight;
     aHeaderBar.SetSizePixel( aBoxSz );
 
-    Invalidate();   //Wegen DrawLine im Paint...
+    Invalidate();
 }
 
 struct MemberList
@@ -1537,14 +1526,14 @@ void StackWindow::Resize()
     Size aSz = GetOutputSizePixel();
     Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
 
-    if ( aBoxSz.Width() < 4 )   // < 4, weil noch Border...
+    if ( aBoxSz.Width() < 4 )
         aBoxSz.Width() = 0;
     if ( aBoxSz.Height() < 4 )
         aBoxSz.Height() = 0;
 
     aTreeListBox.SetSizePixel( aBoxSz );
 
-    Invalidate();   //Wegen DrawLine im Paint...
+    Invalidate();
 }
 
 
@@ -1581,7 +1570,7 @@ void StackWindow::UpdateCalls()
             if ( pParams )
             {
                 aEntry += '(';
-                // 0 ist der Name der Sub...
+                // 0 is the sub's name...
                 for ( sal_uInt16 nParam = 1; nParam < pParams->Count(); nParam++ )
                 {
                     SbxVariable* pVar = pParams->Get( nParam );
@@ -1973,16 +1962,14 @@ sal_Bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const Stri
     {
         if ( pToBeChanged->ISA( SbxVariable ) )
         {
-            // Wenn der Typ variabel ist, macht die Konvertierung des SBX nichts,
-            // bei festem Typ wird der String konvertiert.
+            // If the type is variable, the conversion of the SBX does not matter,
+            // else the string is converted.
             ((SbxVariable*)pToBeChanged)->PutStringExt( aResult );
         }
         else
             bError = sal_True;
     }
 
-    // Wenn jemand z.B. einen zu grossen Wert fuer ein Int eingegeben hat,
-    // folgt beim naechsten Step() ein Runtime-Error.
     if ( SbxBase::IsError() )
     {
         bError = sal_True;
@@ -2100,7 +2087,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 SbxDataType eType = pVar->GetType();
                 if ( eType & SbxARRAY )
                 {
-                    // Mehrdimensionale Arrays beruecksichtigen!
+                    // consider multidimensinal arrays!
                     SbxBase* pBase = pVar->GetObject();
                     if ( pBase && pBase->ISA( SbxDimArray ) )
                     {

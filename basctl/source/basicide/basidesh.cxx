@@ -44,7 +44,7 @@
 
 #define ITEMID_SIZE 0
 
-// Falls ohne PCH's:
+// if without PCH's:
 #include <ide_pch.hxx>
 
 
@@ -256,18 +256,17 @@ BasicIDEShell::~BasicIDEShell()
     if ( IDE_DLL() && IDE_DLL()->pShell == this )
         IDE_DLL()->pShell = NULL;
 
-    // Damit bei einem Basic-Fehler beim Speichern die Shell nicht sofort
-    // wieder hoch kommt:
+
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_True;
 
     SetWindow( 0 );
     SetCurWindow( 0 );
 
-    // Alle Fenster zerstoeren:
+
     IDEBaseWindow* pWin = aIDEWindowTable.First();
     while ( pWin )
     {
-        // Kein Store, passiert bereits, wenn die BasicManager zerstoert werden.
+        // no store; does already happen when the BasicManagers are destroyed
         delete pWin;
         pWin = aIDEWindowTable.Next();
     }
@@ -410,7 +409,7 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     (void)bForBrowsing;
 
-    // da es nach Drucken etc. (DocInfo) modifiziert ist, hier resetten
+    // reset here because it's modified after printing etc. (DocInfo)
     GetViewFrame()->GetObjectShell()->SetModified(sal_False);
 
     if ( StarBASIC::IsRunning() )
@@ -439,7 +438,7 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
         }
 
         if ( bCanClose )
-            StoreAllWindowData( sal_False );    // Nicht auf Platte schreiben, das passiert am Ende automatisch
+            StoreAllWindowData( sal_False );    // don't write on the disk, that will be done later automatically
 
         return bCanClose;
     }
@@ -477,7 +476,6 @@ Size BasicIDEShell::GetOptimalSizePixel() const
 
 void BasicIDEShell::OuterResizePixel( const Point &rPos, const Size &rSize )
 {
-    // Adjust fliegt irgendwann raus...
     AdjustPosSizePixel( rPos, rSize );
 }
 
@@ -564,7 +562,7 @@ void BasicIDEShell::ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy 
         if ( !pObjectCatalog && bCreateOrDestroy )
         {
             pObjectCatalog = new ObjectCatalog( &GetViewFrame()->GetWindow() );
-            // Position wird in BasicIDEData gemerkt und vom Dlg eingestellt
+            // position is memorized in BasicIDEData and adjusted by the Dlg
             if ( pObjectCatalog )
             {
                 pObjectCatalog->SetCancelHdl( LINK( this, BasicIDEShell, ObjectDialogCancelHdl ) );
@@ -576,7 +574,7 @@ void BasicIDEShell::ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy 
             }
         }
 
-        // Die allerletzten Aenderungen...
+        // the very last changes...
         if ( pCurWin )
             pCurWin->StoreData();
 
@@ -591,7 +589,7 @@ void BasicIDEShell::ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy 
         pObjectCatalog->Hide();
         if ( bCreateOrDestroy )
         {
-            // Wegen OS/2-Focus-Problem pObjectCatalog vorm delete auf NULL
+            // pObjectCatalog to NULL before the delete because of OS/2-focus-problem
             ObjectCatalog* pTemp = pObjectCatalog;
             pObjectCatalog = 0;
             delete pTemp;
@@ -612,7 +610,7 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
             {
                 case SFX_HINT_DYING:
                 {
-                    EndListening( rBC, sal_True /* Alle abmelden */ );
+                    EndListening( rBC, sal_True /* log off all */ );
                     if ( pObjectCatalog )
                         pObjectCatalog->UpdateEntries();
                 }
@@ -653,10 +651,10 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 
                     if ( nHintId == SBX_HINT_BASICSTOP )
                     {
-                        // Nicht nur bei Error/Break oder explizitem anhalten,
-                        // falls durch einen Programmierfehler das Update abgeschaltet ist.
+                        // not only at error/break or explicit stoppage,
+                        // if the update is turned off due to a programming bug
                         BasicIDE::BasicStopped();
-                        UpdateModulWindowLayout( true );    // Leer machen...
+                        UpdateModulWindowLayout( true );    // clear...
                         if( m_pCurLocalizationMgr )
                             m_pCurLocalizationMgr->handleBasicStopped();
                     }
@@ -726,7 +724,7 @@ void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const String
 
 void BasicIDEShell::UpdateWindows()
 {
-    // Alle Fenster, die nicht angezeigt werden duerfen, entfernen
+    // remove all windows that may not be displayed
     sal_Bool bChangeCurWindow = pCurWin ? sal_False : sal_True;
     if ( m_aCurLibName.Len() )
     {
@@ -738,10 +736,9 @@ void BasicIDEShell::UpdateWindows()
                 if ( pWin == pCurWin )
                     bChangeCurWindow = sal_True;
                 pWin->StoreData();
-                // Die Abfrage auf RUNNING verhindert den Absturz, wenn in Reschedule.
-                // Fenster bleibt erstmal stehen, spaeter sowieso mal umstellen,
-                // dass Fenster nur als Hidden markiert werden und nicht
-                // geloescht.
+                // The request of RUNNING prevents the crash when in reschedule.
+                // Window is frozen at first, later the windows should be changed
+                // anyway to be marked as hidden instead of being deleted.
                 if ( !(pWin->GetStatus() & ( BASWIN_TOBEKILLED | BASWIN_RUNNINGBASIC | BASWIN_SUSPENDED ) ) )
                 {
                     RemoveWindow( pWin, sal_False, sal_False );
@@ -756,14 +753,14 @@ void BasicIDEShell::UpdateWindows()
 
     IDEBaseWindow* pNextActiveWindow = 0;
 
-    // Alle anzuzeigenden Fenster anzeigen
+    // show all windows that are to be shown
     ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::AllWithApplication ) );
     for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
             doc != aDocuments.end();
             ++doc
         )
     {
-        StartListening( *doc->getBasicManager(), sal_True /* Nur einmal anmelden */ );
+        StartListening( *doc->getBasicManager(), sal_True /* log on only once */ );
 
         // libraries
         Sequence< ::rtl::OUString > aLibNames( doc->getLibraryNames() );
@@ -906,10 +903,10 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sa
             if ( bStop )
             {
                 StarBASIC::Stop();
-                // Es kommt kein Notify...
+                // there will be no notify...
                 pWindow_->BasicStopped();
             }
-            aIDEWindowTable.Insert( nKey, pWindow_ );   // wieder einhaegen
+            aIDEWindowTable.Insert( nKey, pWindow_ );   // jump in again
         }
     }
     else
@@ -917,7 +914,7 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sa
         pWindow_->Hide();
         pWindow_->AddStatus( BASWIN_SUSPENDED );
         pWindow_->Deactivating();
-        aIDEWindowTable.Insert( nKey, pWindow_ );   // wieder einhaegen
+        aIDEWindowTable.Insert( nKey, pWindow_ );   // jump in again
     }
 
 }
@@ -926,7 +923,6 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sa
 
 sal_uInt16 BasicIDEShell::InsertWindowInTable( IDEBaseWindow* pNewWin )
 {
-    // Eigentlich prueffen,
     nCurKey++;
     aIDEWindowTable.Insert( nCurKey, pNewWin );
     return nCurKey;
@@ -936,7 +932,7 @@ sal_uInt16 BasicIDEShell::InsertWindowInTable( IDEBaseWindow* pNewWin )
 
 void BasicIDEShell::InvalidateBasicIDESlots()
 {
-    // Nur die, die eine optische Auswirkung haben...
+    // only those that have an optic effect...
 
     if ( IDE_DLL()->GetShell() )
     {
@@ -1047,7 +1043,7 @@ void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, S
 
 void BasicIDEShell::ImplStartListening( StarBASIC* pBasic )
 {
-    StartListening( pBasic->GetBroadcaster(), sal_True /* Nur einmal anmelden */ );
+    StartListening( pBasic->GetBroadcaster(), sal_True /* log on only once */ );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

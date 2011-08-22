@@ -108,7 +108,6 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
     pEditor->SetWindow( this );
     pEditor->SetDialog( xDialogModel );
 
-    // Undo einrichten
     pUndoMgr = new SfxUndoManager;
 
     Link aDummyLink;
@@ -326,10 +325,9 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             }
             break;
 
-            // Nur Dialogfenster:
             case SID_DIALOG_TESTMODE:
             {
-                // ist die IDE noch aktiv?
+                // is the IDE still active?
                 if( IDE_DLL()->GetShell()->GetFrame() )
                 {
                     rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,

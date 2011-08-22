@@ -239,12 +239,12 @@ Context_CppStd::PerformStatusFunction( uintt                    i_nStatusSignal,
 void
 Context_CppStd::SetupStateMachine()
 {
-    // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-//  const INT16 top = 0;        // Top-Status
-    const INT16 wht = 1;        // Whitespace-überlese-Status
-    const INT16 bez = 2;        // Bezeichner-lese-Status
+    // special array statuses (no tokenfinish or change of context):
+//  const INT16 top = 0;        // top status
+    const INT16 wht = 1;        // skip whitespace status
+    const INT16 bez = 2;        // read identifier status
 
-    // Tokenfinish-Stati:
+    // tokenfinish statuses:
     const INT16 finError = 3;
     const INT16 finIgnore = 4;
     const INT16 finBezeichner = 5;
@@ -255,7 +255,7 @@ Context_CppStd::SetupStateMachine()
     const INT16 finEOL = 10;
     const INT16 finEOF = 11;
 
-    // Kontextwechsel-Stati:
+    // change of context statuses:
     const INT16 gotoComment = 12;
     const INT16 gotoDocu = 13;
     const INT16 gotoPreprocessor = 14;
@@ -264,7 +264,7 @@ Context_CppStd::SetupStateMachine()
     const INT16 gotoConstNumeric = 17;
     const INT16 gotoUnblockMacro = 18;
 
-    // Abbreviations to be used in status tables:
+    // abbreviations to be used in status tables:
     const INT16 err = finError;
     const INT16 fig = finIgnore;
     const INT16 fbz = finBezeichner;
@@ -378,7 +378,7 @@ Context_CppStd::SetupStateMachine()
     DYN StmBoundsStatus *   dpBst_gotoUnblockMacro
             = new StmBoundsStatus( *this, *pContext_UnblockMacro, nF_goto_UnblockMacro, false );
 
-    // dpMain aufbauen:
+    // construct dpMain:
     aStateMachine.AddStatus(dpStatusTop);
 
     aStateMachine.AddStatus(dpStatusWhite);

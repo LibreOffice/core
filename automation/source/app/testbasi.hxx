@@ -48,13 +48,13 @@ public:
     sal_Bool Compile( SbModule* );
     static MyBasic* CreateMyBasic();
 
-    // nicht mit #ifdefs klammern, da diese Headerdatei für testtool und basic
-    // gleichermaßen verwendet wird.
+    // don't surround with #ifdefs because this header file is
+    // used for testtool and basic as well
     DECL_LINK( CErrorImpl, ErrorEntry* );
-//  SbxObject *pTestObject;         // für das Testtool; ansonsten NULL
+//  SbxObject *pTestObject;         // for testtool; NULL otherwise
 
     void LoadIniFile();
-    SbTextType GetSymbolType( const String &Symbol, sal_Bool bWasTTControl );   // Besimmt den erweiterten Symboltyp für das Syntaxhighlighting
+    SbTextType GetSymbolType( const String &Symbol, sal_Bool bWasTTControl );
     virtual const String GetSpechialErrorText();
     virtual void ReportRuntimeError( AppBasEd *pEditWin );
     virtual void DebugFindNoErrors( sal_Bool bDebugFindNoErrors );

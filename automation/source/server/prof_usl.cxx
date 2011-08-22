@@ -45,23 +45,23 @@ struct SysdepProfileSnapshot
 
 struct SysdepStaticData
 {
-    // Hier steht alles, was während des Profiles ständig gebraucht wird
+    // everything that is always needed during the profile
 };
 
 
 void TTProfiler::InitSysdepProfiler()
 {
-    if ( !pSysDepStatic )   // Sollte immer so sein!!
+    if ( !pSysDepStatic )   // Should always be like this!!
         pSysDepStatic = new SysdepStaticData;
-    // Hier initialisieren
+    // initialize here
 
 };
 
 void TTProfiler::DeinitSysdepProfiler()
 {
-    if ( pSysDepStatic )    // Sollte immer so sein!!
+    if ( pSysDepStatic )    // Should always be like this!!
     {
-        // Hier aufräumen und eventuell Speicher freigeben
+        // tidy up here and free storage if applicable
 
         delete pSysDepStatic;
     }
@@ -78,29 +78,28 @@ void TTProfiler::DeleteSysdepSnapshotData( SysdepProfileSnapshot *pSysdepProfile
 };
 
 
-// Titelzeile für Logdatei
 String TTProfiler::GetSysdepProfileHeader()
 {
     return String::CreateFromAscii(" Size(Kb) ResidentSZ  rtime  ktime  utime  total");
 };
 
 
-// Zustand merken
+
 void TTProfiler::GetSysdepProfileSnapshot( SysdepProfileSnapshot *pSysdepProfileSnapshot, sal_uInt16 )
 {
-    SvFileStream aStream( String::CreateFromAscii("/proc/self/psinfo"), STREAM_READ );      // Das ist ein expliziter Pfad für UNXSOL!
+    SvFileStream aStream( String::CreateFromAscii("/proc/self/psinfo"), STREAM_READ );      // explicit path for UNXSOL!
     if ( aStream.IsOpen() )
     {
         aStream.Read( &(pSysdepProfileSnapshot->mpsinfo), sizeof( psinfo ) );
         aStream.Close();
     }
-    SvFileStream anotherStream( String::CreateFromAscii("/proc/self/status"), STREAM_READ );        // Das ist ein expliziter Pfad für UNXSOL!
+    SvFileStream anotherStream( String::CreateFromAscii("/proc/self/status"), STREAM_READ );        // explicit path for UNXSOL!
     if ( anotherStream.IsOpen() )
     {
         anotherStream.Read( &(pSysdepProfileSnapshot->mpstatus), sizeof( pstatus ) );
         anotherStream.Close();
     }
-    SvFileStream YetAnotherStream( String::CreateFromAscii("/proc/self/usage"), STREAM_READ );      // Das ist ein expliziter Pfad für UNXSOL!
+    SvFileStream YetAnotherStream( String::CreateFromAscii("/proc/self/usage"), STREAM_READ );      // explicit path for UNXSOL!
     if ( YetAnotherStream.IsOpen() )
     {
         YetAnotherStream.Read( &(pSysdepProfileSnapshot->mprusage), sizeof( prusage ) );
@@ -111,7 +110,7 @@ void TTProfiler::GetSysdepProfileSnapshot( SysdepProfileSnapshot *pSysdepProfile
 #define DIFF2( aFirst, aSecond, Membername ) ( aSecond.Membername - aFirst.Membername )
 #define CALC_MS( nSec, nNSec ) ( nSec * 1000 + (nNSec+500000) / 1000000 )
 #define DIFF_MS( pStart, pEnd, Member ) ( CALC_MS( pEnd->Member.tv_sec, pEnd->Member.tv_nsec ) - CALC_MS( pStart->Member.tv_sec, pStart->Member.tv_nsec ) )
-// Informationszeile zusammenbauen
+
 String TTProfiler::GetSysdepProfileLine( SysdepProfileSnapshot *pStart, SysdepProfileSnapshot *pStop )
 {
     String aProfile;

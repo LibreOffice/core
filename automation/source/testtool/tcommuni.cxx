@@ -71,7 +71,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
 {
     if ( !bApplicationStarted )
     {
-        // Die App ist wohl nicht da. Starten wir sie mal.
+
         if ( aAppPath.Len() )
         {
             delete pProcess;
@@ -84,7 +84,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
 
             if ( bSucc )
             {
-                aFirstRetryCall = Time() + Time( 0, 1 );    // Max eine Minute Zeit
+                aFirstRetryCall = Time() + Time( 0, 1 );
                 for ( int i = 10 ; i-- ; )
                     GetpApp()->Reschedule();
             }
@@ -97,7 +97,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
         if ( aFirstRetryCall > Time() )
         {
             Timer aWait;
-            aWait.SetTimeout( 500 );         // Max 500 mSec
+            aWait.SetTimeout( 500 );
             aWait.Start();
             while ( aWait.IsActive() )
                 GetpApp()->Yield();

@@ -72,7 +72,6 @@ StateMachin2::AddToken( const char *        in_sToken,
     if (csv::no_str(in_sToken))
         return;
 
-    // Durch existierende Stati durchhangeln:
     nCurrentStatus = 0;
     nPeekedStatus = 0;
 

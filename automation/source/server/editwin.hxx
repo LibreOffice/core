@@ -49,7 +49,7 @@ protected:
     String      aMemPreWinText;
     sal_Bool        bShowWin;
 
-    xub_StrLen      nTextLen;   // aus Performanzgründen eigene Länge mitführen
+    xub_StrLen      nTextLen;
 
 public:
     EditWindow( WorkWindow *pParent, const UniString &rName = UniString( RTL_CONSTASCII_USTRINGPARAM ( "Debug" ) ), WinBits iWstyle = WB_HSCROLL | WB_VSCROLL );
