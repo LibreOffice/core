@@ -120,6 +120,7 @@ Dim gDlgState as Integer
 
 Sub SetGlobalDoc
     gOutputDoc = ThisComponent
+    oBinFilterComp = createUnoService( &quot;com.sun.star.comp.office.BF_MigrateFilter&quot; )
 end Sub
 
 Sub ClearStatus
@@ -146,8 +147,6 @@ Sub Main
 
     gCurrentDocTest = frmTestClosure
     gCurrentTestCase = cLogfileFailed
-
-    oBinFilterComp = createUnoService( &quot;com.sun.star.comp.office.BF_MigrateFilter&quot; )
 
     DeleteAllSavedFiles()
     DeleteAllLogFiles()
@@ -536,7 +535,7 @@ Sub SetGlobalOptionsDialog ()
     REM create dialog control
     gOptionsDialog = CreateUnoDialog( oInputStreamProvider )
 
-    if not isNull(oBinFilterComp) then
+    if isNull(oBinFilterComp) then
         oControl = gOptionsDialog.getControl(&quot;cbOpen50Test&quot;)
         oControl.Model.setPropertyValue(&quot;Enabled&quot;, FALSE)
     end If
