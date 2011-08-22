@@ -132,8 +132,6 @@ public:
 
     const rtl::OUString&            GetLoadedScheme() const {return m_sLoadedScheme;}
 
-    uno::Sequence< ::rtl::OUString> GetSchemeNames();
-
     sal_Bool                        AddScheme(const rtl::OUString& rNode);
     sal_Bool                        RemoveScheme(const rtl::OUString& rNode);
     void                            SetModified(){ConfigItem::SetModified();}
@@ -510,11 +508,6 @@ void ExtendedColorConfig_Impl::SetColorConfigValue(const ::rtl::OUString& _sName
             aFind2->second = rValue;
         SetModified();
     }
-}
-
-uno::Sequence< ::rtl::OUString> ExtendedColorConfig_Impl::GetSchemeNames()
-{
-    return GetNodeNames(C2U("ExtendedColorScheme/ColorSchemes"));
 }
 
 sal_Bool ExtendedColorConfig_Impl::AddScheme(const rtl::OUString& rScheme)

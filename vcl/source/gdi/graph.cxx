@@ -655,13 +655,6 @@ sal_uLong Graphic::GetAnimationLoopCount() const
 
 // ------------------------------------------------------------------------
 
-void Graphic::ResetAnimationLoopCount()
-{
-    mpImpGraphic->ImplResetAnimationLoopCount();
-}
-
-// ------------------------------------------------------------------------
-
 GraphicReader* Graphic::GetContext()
 {
     return mpImpGraphic->ImplGetContext();

@@ -105,17 +105,6 @@ ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Stri
 
 // --------------------------------------------------------------------
 
-ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, MenuItemBits nBits )
-: mrMenu( rMenu )
-{
-    init( nEntryId, nBits );
-
-    maImage = rImage;
-    mbHasImage = true;
-}
-
-// --------------------------------------------------------------------
-
 ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, const String& rText, MenuItemBits nBits )
 : mrMenu( rMenu )
 {

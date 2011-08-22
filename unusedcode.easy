@@ -240,6 +240,9 @@ Graphic::GetGraphicsCompressMode(SvStream&)
 Graphic::StartAnimation(OutputDevice*, Point const&, long, OutputDevice*)
 Graphic::WriteEmbedded(SvStream&)
 GraphicConverter::ImplConvert(unsigned long, void*, unsigned long, void**, unsigned long)
+GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Point const&) const
+GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Size const&) const
+GraphicHelper::getDeviceInfo() const
 GraphicReader::IsPreviewModeEnabled() const
 GroupTable::SkipCurrentGroup()
 HTMLControls::Insert(HTMLControl const*&, unsigned short&)
@@ -3036,8 +3039,7 @@ oox::AttributeList::getHyperHex(int, long) const
 oox::AttributeList::getUnsignedHex(int, unsigned int) const
 oox::BinaryInputStream::readNulCharArrayUC(unsigned short)
 oox::ContainerHelper::insertByIndex(com::sun::star::uno::Reference<com::sun::star::container::XIndexContainer> const&, int, com::sun::star::uno::Any const&)
-oox::GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Point const&) const
-oox::GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Size const&) const
+oox::GraphicHelper::convertScreenPixelToHmm(com::sun::star::awt::Point const&) const
 oox::ObjectContainer::getObject(rtl::OUString const&) const
 oox::PropertyMap::dump()
 oox::PropertyMap::dumpCode()
