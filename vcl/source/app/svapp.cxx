@@ -1030,28 +1030,6 @@ sal_uLong Application::PostUserEvent( const Link& rLink, void* pCaller )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Application::PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData )
-{
-    ImplSVEvent* pSVEvent = new ImplSVEvent;
-    pSVEvent->mnEvent   = nEvent;
-    pSVEvent->mpData    = pEventData;
-    pSVEvent->mpLink    = NULL;
-    pSVEvent->mpWindow  = NULL;
-    pSVEvent->mbCall    = sal_True;
-    rEventId = (sal_uLong)pSVEvent;
-    Window* pDefWindow = ImplGetDefaultWindow();
-    if ( pDefWindow && pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
-        return sal_True;
-    else
-    {
-        rEventId = 0;
-        delete pSVEvent;
-        return sal_False;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Application::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;

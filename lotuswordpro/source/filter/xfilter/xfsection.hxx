@@ -82,8 +82,6 @@ public:
      */
     void    SetSectionName(rtl::OUString name);
 
-    void    SetSourceLink(rtl::OUString link);
-
     /**
      * @descr   Set protected.
      */

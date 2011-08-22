@@ -141,7 +141,6 @@ protected:
     void RegisterLinenumberStyles();
     void RegisterFootnoteStyles();
     void RegisterDefaultParaStyles();
-    void ParseMasterDoc(IXFStream* pOutputStream);
 
 public:
     void Parse(IXFStream* pOutputStream);
@@ -178,7 +177,6 @@ public:
     LwpDocument* GetFirstDivision();
     LwpVirtualLayout* GetEnSuperTableLayout();
     sal_Bool GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount);
-    sal_uInt16 GetMaxNumberOfPages();
 
     sal_uInt16 GetNumberOfPagesBefore();
     void ParseFrameInPage(IXFStream* pOutputStream);

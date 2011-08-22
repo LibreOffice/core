@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/optionsdlg \
     unotools/source/config/pathoptions \
     unotools/source/config/printwarningoptions \
-    unotools/source/config/regoptions \
     unotools/source/config/saveopt \
     unotools/source/config/searchopt \
     unotools/source/config/securityoptions \

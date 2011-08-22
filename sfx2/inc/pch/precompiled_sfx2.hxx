@@ -548,7 +548,6 @@
 #include "svtools/printoptions.hxx"
 #include "unotools/printwarningoptions.hxx"
 #include "svl/rectitem.hxx"
-#include "unotools/regoptions.hxx"
 #include "unotools/saveopt.hxx"
 #include "unotools/searchopt.hxx"
 #include "unotools/securityoptions.hxx"

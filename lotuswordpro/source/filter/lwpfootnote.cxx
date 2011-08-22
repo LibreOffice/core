@@ -382,30 +382,6 @@ LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
 }
 
 /**
- * @descr  Find footnote table, not used now
- */
-LwpTable* LwpFootnote::FindFootnoteTable()
-{
-    LwpEnSuperTableLayout* pLayout = FindFootnoteTableLayout();
-    //if (!ShouldBeInTable(Footnote)) return NULL;
-    return GetFootnoteTable(pLayout);
-}
-
-/**
- * @descr  Find footnote table, not used now
- */
-LwpTable* LwpFootnote::GetFootnoteTable(LwpEnSuperTableLayout * pLayout)
-{
-    if(pLayout)
-    {
-        LwpEndnoteLayout* pEndnoteLayout = static_cast<LwpEndnoteLayout*>(pLayout->GetMainTableLayout());
-        if(pEndnoteLayout)
-            return dynamic_cast<LwpTable*>(pEndnoteLayout->GetContent()->obj());
-    }
-    return NULL;
-}
-
-/**
  * @descr  Find footnote contents
  */
 LwpContent* LwpFootnote::FindFootnoteContent()

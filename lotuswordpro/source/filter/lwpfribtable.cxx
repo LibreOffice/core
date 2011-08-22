@@ -94,11 +94,6 @@ void LwpFribTable::RegisterNewStyle()
     }
 }
 
-void LwpFribTable::Parse(IXFStream* pOutputStream)
-{
-    GetSuperTable()->Parse(pOutputStream);
-}
-
 void LwpFribTable::XFConvert(XFContentContainer* pCont)
 {
     XFContentContainer* pXFContentContainer = pCont;

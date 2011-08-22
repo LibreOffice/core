@@ -406,32 +406,13 @@ void LwpDocument::ParseDocContent(IXFStream* pOutputStream)
     LwpObject* pLayoutObj = pDivInfo->GetInitialLayoutID()->obj();
     if(pLayoutObj==NULL)
     {
-        //Cause crash when parsing master document, master document not supported now.
-        //ParseMasterDoc(pOutputStream);
+        //master document not supported now.
         return;
     }
     pLayoutObj->SetFoundry(m_pFoundry);
     pLayoutObj->Parse(pOutputStream);
 }
-/**
- * @descr  Parse master doc in this division to IXFStream
- *
- */
-void LwpDocument::ParseMasterDoc(IXFStream* pOutputStream)
-{
-    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj());
-    if(pDivInfo==NULL) return;
-    LwpAtomHolder* pExternal = pDivInfo->GetExternalName();
-    if(pExternal && pExternal->HasValue())
-    {
-        OUString linkedfilepath = pExternal->str();
-        OUString fileURL = LwpTools::convertToFileUrl(OUStringToOString(linkedfilepath, osl_getThreadTextEncoding()));
-        XFSection* pSection  = new XFSection();
-        pSection->SetSourceLink( fileURL);
-        pSection->ToXml(pOutputStream);
-        delete pSection;
-    }
-}
+
 /**
  * @descr    Get the footnoteoptions from the root document
  */
@@ -712,15 +693,7 @@ sal_uInt16 LwpDocument::GetNumberOfPagesBefore()
         pRoot->GetNumberOfPages(this,nPageNumber);
     return nPageNumber;
 }
- /**
- * @descr    Get the numbers of page before this division
- */
- sal_uInt16 LwpDocument::GetMaxNumberOfPages()
-{
-    sal_uInt16 nPageNumber = 0;
-    MaxNumberOfPages(nPageNumber);
-    return nPageNumber;
-}
+
  /**
  * @descr    Get Max number of pages
  */

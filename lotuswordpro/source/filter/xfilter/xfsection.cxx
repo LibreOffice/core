@@ -75,11 +75,6 @@ void    XFSection::SetSectionName(rtl::OUString name)
     m_strSectionName = name;
 }
 
-void XFSection::SetSourceLink( rtl::OUString link)
-{
-    m_strSourceLink = link;
-}
-
 void    XFSection::SetProtected(sal_Bool bProtected)
 {
     m_bProtected = bProtected;

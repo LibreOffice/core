@@ -152,7 +152,6 @@
 #include <svtools/apearcfg.hxx>
 #include <unotools/misccfg.hxx>
 #include <svtools/filter.hxx>
-#include <unotools/regoptions.hxx>
 
 #include "langselect.hxx"
 
