@@ -577,41 +577,54 @@ GraphicCache::GraphicCache( GraphicManager& rMgr, sal_uLong nDisplayCacheSize, s
 
 GraphicCache::~GraphicCache()
 {
-    DBG_ASSERT( !maGraphicCache.Count(), "GraphicCache::~GraphicCache(): there are some GraphicObjects in cache" );
+    DBG_ASSERT( !maGraphicCache.size(), "GraphicCache::~GraphicCache(): there are some GraphicObjects in cache" );
     DBG_ASSERT( !maDisplayCache.Count(), "GraphicCache::~GraphicCache(): there are some GraphicObjects in display cache" );
 }
 
 // -----------------------------------------------------------------------------
 
-void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute,
-                                     const ByteString* pID, const GraphicObject* pCopyObj )
+void GraphicCache::AddGraphicObject(
+    const GraphicObject& rObj,
+    Graphic& rSubstitute,
+    const ByteString* pID,
+    const GraphicObject* pCopyObj
+)
 {
     sal_Bool bInserted = sal_False;
 
-    if( !rObj.IsSwappedOut() &&
-        ( pID || ( pCopyObj && ( pCopyObj->GetType() != GRAPHIC_NONE ) ) || ( rObj.GetType() != GRAPHIC_NONE ) ) )
+    if(  !rObj.IsSwappedOut()
+      && (  pID
+         || (    pCopyObj
+            && ( pCopyObj->GetType() != GRAPHIC_NONE )
+            )
+         || ( rObj.GetType() != GRAPHIC_NONE )
+         )
+      )
     {
-        if( pCopyObj )
+        if( pCopyObj
+          && !maGraphicCache.empty()
+        )
         {
-            GraphicCacheEntry* pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.First() );
-
-            while( !bInserted && pEntry )
+            GraphicCacheEntryList::iterator it = maGraphicCache.begin();
+            while(  !bInserted
+                 && ( it != maGraphicCache.end() )
+                 )
             {
-                if( pEntry->HasGraphicObjectReference( *pCopyObj ) )
+                if( (*it)->HasGraphicObjectReference( *pCopyObj ) )
                 {
-                    pEntry->AddGraphicObjectReference( rObj, rSubstitute );
+                    (*it)->AddGraphicObjectReference( rObj, rSubstitute );
                     bInserted = sal_True;
                 }
                 else
                 {
-                    pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.Next() );
+                    ++it;
                 }
             }
         }
 
         if( !bInserted )
         {
-            GraphicCacheEntry* pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.First() );
+            GraphicCacheEntryList::iterator it = maGraphicCache.begin();
             ::std::auto_ptr< GraphicID > apID;
 
             if( !pID )
@@ -619,35 +632,38 @@ void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubsti
                 apID.reset( new GraphicID( rObj ) );
             }
 
-            while( !bInserted && pEntry )
+            while(  !bInserted
+                 && ( it != maGraphicCache.end() )
+                 )
             {
-                const GraphicID& rEntryID = pEntry->GetID();
+                const GraphicID& rEntryID = (*it)->GetID();
 
                 if( pID )
                 {
                     if( rEntryID.GetIDString() == *pID )
                     {
-                        pEntry->TryToSwapIn();
+                        (*it)->TryToSwapIn();
 
                         // since pEntry->TryToSwapIn can modify our current list, we have to
                         // iterate from beginning to add a reference to the appropriate
                         // CacheEntry object; after this, quickly jump out of the outer iteration
-                        for( pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.First() );
-                             !bInserted && pEntry;
-                             pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.Next() ) )
+                        for( GraphicCacheEntryList::iterator jt = maGraphicCache.begin();
+                             !bInserted && jt != maGraphicCache.end();
+                             ++jt
+                        )
                         {
-                            const GraphicID& rID = pEntry->GetID();
+                            const GraphicID& rID = (*jt)->GetID();
 
                             if( rID.GetIDString() == *pID )
                             {
-                                pEntry->AddGraphicObjectReference( rObj, rSubstitute );
+                                (*jt)->AddGraphicObjectReference( rObj, rSubstitute );
                                 bInserted = sal_True;
                             }
                         }
 
                         if( !bInserted )
                         {
-                            maGraphicCache.Insert( new GraphicCacheEntry( rObj ), LIST_APPEND );
+                            maGraphicCache.push_back( new GraphicCacheEntry( rObj ) );
                             bInserted = sal_True;
                         }
                     }
@@ -656,19 +672,19 @@ void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubsti
                 {
                     if( rEntryID == *apID )
                     {
-                        pEntry->AddGraphicObjectReference( rObj, rSubstitute );
+                        (*it)->AddGraphicObjectReference( rObj, rSubstitute );
                         bInserted = sal_True;
                     }
                 }
 
                 if( !bInserted )
-                    pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.Next() );
+                    ++it;
             }
         }
     }
 
     if( !bInserted )
-        maGraphicCache.Insert( new GraphicCacheEntry( rObj ), LIST_APPEND );
+        maGraphicCache.push_back( new GraphicCacheEntry( rObj ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -676,16 +692,18 @@ void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubsti
 void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
 {
     // Release cached object
-    GraphicCacheEntry*  pEntry = (GraphicCacheEntry*) maGraphicCache.First();
-    bool                bRemoved = false;
+    bool    bRemoved = false;
 
-    while( !bRemoved && pEntry )
-    {
-        bRemoved = pEntry->ReleaseGraphicObjectReference( rObj );
+    for(
+        GraphicCacheEntryList::iterator it = maGraphicCache.begin();
+        !bRemoved && it != maGraphicCache.end();
+        ++it
+    ) {
+        bRemoved = (*it)->ReleaseGraphicObjectReference( rObj );
 
         if( bRemoved )
         {
-            if( 0 == pEntry->GetGraphicObjectReferenceCount() )
+            if( 0 == (*it)->GetGraphicObjectReferenceCount() )
             {
                 // if graphic cache entry has no more references,
                 // the corresponding display cache object can be removed
@@ -693,7 +711,7 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
 
                 while( pDisplayEntry )
                 {
-                    if( pDisplayEntry->GetReferencedCacheEntry() == pEntry )
+                    if( pDisplayEntry->GetReferencedCacheEntry() == *it )
                     {
                         mnUsedDisplaySize -= pDisplayEntry->GetCacheSize();
                         maDisplayCache.Remove( pDisplayEntry );
@@ -705,12 +723,10 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
                 }
 
                 // delete graphic cache entry
-                maGraphicCache.Remove( (void*) pEntry );
-                delete pEntry;
+                delete *it;
+                it = maGraphicCache.erase( it );
             }
         }
-        else
-            pEntry = (GraphicCacheEntry*) maGraphicCache.Next();
     }
 
     DBG_ASSERT( bRemoved, "GraphicCache::ReleaseGraphicObject(...): GraphicObject not found in cache" );
@@ -1013,9 +1029,15 @@ GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
 {
     GraphicCacheEntry* pRet = NULL;
 
-    for( void* pObj = maGraphicCache.First(); !pRet && pObj; pObj = maGraphicCache.Next() )
-        if( ( (GraphicCacheEntry*) pObj )->HasGraphicObjectReference( rObj ) )
-            pRet = (GraphicCacheEntry*) pObj;
+    for(
+        GraphicCacheEntryList::iterator it = maGraphicCache.begin();
+        !pRet && it != maGraphicCache.end();
+        ++it
+    ) {
+        if( (*it)->HasGraphicObjectReference( rObj ) ) {
+            pRet = *it;
+        }
+    }
 
     return pRet;
 }
