@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace basebmp
 
     template< class Iterator, class Accessor >
     inline vigra::triple<Iterator,Iterator,Accessor>
-    destIterRange(Iterator const&          begin,
+    destIterRange(Iterator const&          begin, 
                   Accessor const&          accessor,
                   const basegfx::B2IRange& rRange)
     {
@@ -56,7 +56,7 @@ namespace basebmp
 
     template< class Iterator, class Accessor >
     inline vigra::triple<Iterator,Iterator,Accessor>
-    srcIterRange(Iterator const&          begin,
+    srcIterRange(Iterator const&          begin, 
                  Accessor const&          accessor,
                  const basegfx::B2IRange& rRange)
     {
@@ -68,7 +68,7 @@ namespace basebmp
 
     template< class Iterator, class Accessor >
     inline vigra::pair<Iterator,Accessor>
-    srcIter(Iterator const&          begin,
+    srcIter(Iterator const&          begin, 
             Accessor const&          accessor,
             const basegfx::B2IPoint& rPt)
     {
@@ -79,7 +79,7 @@ namespace basebmp
 
     template< class Iterator, class Accessor >
     inline vigra::pair<Iterator,Accessor>
-    destIter(Iterator const&          begin,
+    destIter(Iterator const&          begin, 
              Accessor const&          accessor,
              const basegfx::B2IPoint& rPt)
     {

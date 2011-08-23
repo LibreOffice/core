@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -592,7 +592,7 @@ struct RulerBorder
     long    nWidth;
     USHORT  nStyle;
     //minimum/maximum position, supported for table borders/rows
-    long    nMinPos;
+    long    nMinPos; 
     long    nMaxPos;
 };
 
@@ -736,9 +736,9 @@ private:
     SVT_DLLPRIVATE void                ImplDrawExtra( BOOL bPaint = FALSE );
     SVT_DLLPRIVATE void                ImplUpdate( BOOL bMustCalc = FALSE );
     using Window::ImplHitTest;
-    SVT_DLLPRIVATE BOOL                ImplHitTest( const Point& rPos,
-                                     ImplRulerHitTest* pHitTest,
-                                     BOOL bRequiredStyle = FALSE,
+    SVT_DLLPRIVATE BOOL                ImplHitTest( const Point& rPos, 
+                                     ImplRulerHitTest* pHitTest, 
+                                     BOOL bRequiredStyle = FALSE, 
                                      USHORT nRequiredStyle = 0 ) const;
     SVT_DLLPRIVATE BOOL                ImplDocHitTest( const Point& rPos, RulerType eDragType, ImplRulerHitTest* pHitTest ) const;
     SVT_DLLPRIVATE BOOL                ImplStartDrag( ImplRulerHitTest* pHitTest, USHORT nModifier );

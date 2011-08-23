@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@ LayoutXMLFile::LayoutXMLFile( bool mergeMode )
     , mMergeMode( mergeMode )
 {
 }
-
+    
 void
 LayoutXMLFile::SearchL10NElements( XMLParentNode* pCur, int )
 {
     if ( !pCur )
         pCur = this;
-
+            
     /* Recurse int children, SearchL10NElements does not do that for us.  */
     if ( XMLChildNodeList* lst = pCur->GetChildList() )
         for ( ULONG i = 0; i < lst->Count(); i++ )
@@ -69,7 +69,7 @@ void
 LayoutXMLFile::HandleElement( XMLElement* element )
 {
     std::vector<XMLAttribute*> interesting = interestingAttributes( element->GetAttributeList() );
-
+    
     if ( interesting.size() )
     {
         std::vector<XMLAttribute*>::iterator i = interesting.begin();
@@ -122,7 +122,7 @@ BOOL LayoutXMLFile::Write( ByteString &aFilename )
 
     if ( aFilename.Len() )
     {
-        ofstream aFStream( aFilename.GetBuffer() , ios::out | ios::trunc );
+        ofstream aFStream( aFilename.GetBuffer() , ios::out | ios::trunc ); 
         if ( !aFStream )
             fprintf( stderr, "ERROR: cannot open file:%s\n", aFilename.GetBuffer() );
         else

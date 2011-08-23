@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ using namespace ::com::sun::star;
 extern "C" {
 
 /*
- *  Instances of this dummy object class are returned whenever we have to
+ *  Instances of this dummy object class are returned whenever we have to 
  *  create an AtkObject, but can't touch the OOo object anymore since it
  *  is already disposed.
  */
-
+ 
 static AtkStateSet *
 noop_wrapper_ref_state_set( AtkObject * )
 {
@@ -80,12 +80,12 @@ atk_noop_object_wrapper_get_type(void)
             (GInstanceInitFunc) NULL,
             NULL
         } ;
-
+        
         type = g_type_register_static (ATK_TYPE_OBJECT, "OOoAtkNoOpObj", &typeInfo, (GTypeFlags)0) ;
   }
   return type;
 }
-
+    
 AtkObject*
 atk_noop_object_wrapper_new()
 {
@@ -114,22 +114,22 @@ static AtkObject*
 wrapper_factory_create_accessible( GObject *obj )
 {
     GtkWidget* parent_widget = gtk_widget_get_parent( GTK_WIDGET( obj ) );
-
+    
     // gail_container_real_remove_gtk tries to re-instanciate an accessible
     // for a widget that is about to vanish ..
     if( ! parent_widget )
         return atk_noop_object_wrapper_new();
-
+    
     GtkSalFrame* pFrame = GtkSalFrame::getFromWindow( GTK_WINDOW( parent_widget ) );
     g_return_val_if_fail( pFrame != NULL, NULL );
-
+       
     Window* pFrameWindow = pFrame->GetWindow();
     if( pFrameWindow )
     {
         Window* pWindow = pFrameWindow;
 
         // skip accessible objects already exposed by the frame objects
-        if( WINDOW_BORDERWINDOW == pWindow->GetType() )
+        if( WINDOW_BORDERWINDOW == pWindow->GetType() ) 
             pWindow = pFrameWindow->GetAccessibleChildWindow(0);
 
         if( pWindow )
@@ -148,7 +148,7 @@ wrapper_factory_create_accessible( GObject *obj )
             }
         }
     }
-
+    
     return NULL;
 }
 
@@ -175,9 +175,9 @@ wrapper_factory_get_type (void)
     t = g_type_register_static (
         ATK_TYPE_OBJECT_FACTORY, "OOoAtkObjectWrapperFactory",
         &tinfo, (GTypeFlags) 0);
-  }
-
-  return t;
+  }                                     
+                                        
+  return t;                                 
 }
 
 } // extern C

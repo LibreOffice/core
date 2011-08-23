@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace basebmp
     when blitting through a mask) - there really isn't no other
     sensible default behaviour for these methods.
  */
-template< class    WrappedAccessor,
+template< class    WrappedAccessor, 
           typename AlphaType,
           bool     polarity > class ConstantColorBlendSetterAccessorAdapter
 {
@@ -54,7 +54,7 @@ public:
     typedef typename WrappedAccessor::value_type color_type;
 
 private:
-    typename ColorTraits< color_type >::
+    typename ColorTraits< color_type >:: 
              template blend_functor<alpha_type,polarity>::type   maFunctor;
     WrappedAccessor                                              maWrappee;
     color_type                                                   maBlendColor;
@@ -107,14 +107,14 @@ public:
     // -------------------------------------------------------
 
     /// @return constant value, regardless of iterator content
-    template< typename IteratorType > value_type operator()(IteratorType const& ) const
-    {
+    template< typename IteratorType > value_type operator()(IteratorType const& ) const 
+    { 
         return maGetterValue;
     }
     /// @return constant value, regardless of iterator content
     template< typename IteratorType, class Difference >
     value_type operator()(IteratorType const& , Difference const& ) const
-    {
+    { 
         return maGetterValue;
     }
 
@@ -122,7 +122,7 @@ public:
 
     template< typename V, typename IteratorType >
     void set(V const& value, IteratorType const& i) const
-    {
+    { 
         maWrappee.set(
             maFunctor(
                 vigra::detail::RequiresExplicitCast<alpha_type>::cast(value),
@@ -143,7 +143,7 @@ public:
             diff );
     }
 };
-
+   
 } // namespace basebmp
 
 #endif /* INCLUDED_BASEBMP_COLORBLENDACCESSORADAPTER_HXX */

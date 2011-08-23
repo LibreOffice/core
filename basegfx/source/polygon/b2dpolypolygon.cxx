@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@
 
 class ImplB2DPolyPolygon
 {
-    typedef ::std::vector< basegfx::B2DPolygon >    PolygonVector;
+    typedef ::std::vector< basegfx::B2DPolygon >	PolygonVector;
 
-    PolygonVector                                   maPolygons;
+    PolygonVector									maPolygons;
 
 public:
     ImplB2DPolyPolygon() : maPolygons()
@@ -202,7 +202,7 @@ public:
 
 namespace basegfx
 {
-    namespace { struct DefaultPolyPolygon: public rtl::Static<B2DPolyPolygon::ImplType,
+    namespace { struct DefaultPolyPolygon: public rtl::Static<B2DPolyPolygon::ImplType, 
                                                               DefaultPolyPolygon> {}; }
 
     B2DPolyPolygon::B2DPolyPolygon() :
@@ -257,7 +257,7 @@ namespace basegfx
     B2DPolygon B2DPolyPolygon::getB2DPolygon(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolyPolygon->count(), "B2DPolyPolygon access outside range (!)");
-
+        
         return mpPolyPolygon->getB2DPolygon(nIndex);
     }
 
@@ -287,7 +287,7 @@ namespace basegfx
     void B2DPolyPolygon::insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount)
     {
         OSL_ENSURE(nIndex <= mpPolyPolygon->count(), "B2DPolyPolygon Insert outside range (!)");
-
+        
         if(nCount)
             mpPolyPolygon->insert(nIndex, rPolygon, nCount);
     }
@@ -325,7 +325,7 @@ namespace basegfx
     void B2DPolyPolygon::insert(sal_uInt32 nIndex, const B2DPolyPolygon& rPolyPolygon)
     {
         OSL_ENSURE(nIndex <= mpPolyPolygon->count(), "B2DPolyPolygon Insert outside range (!)");
-
+        
         if(rPolyPolygon.count())
             mpPolyPolygon->insert(nIndex, rPolyPolygon);
     }
@@ -339,11 +339,11 @@ namespace basegfx
     void B2DPolyPolygon::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
         OSL_ENSURE(nIndex + nCount <= mpPolyPolygon->count(), "B2DPolyPolygon Remove outside range (!)");
-
+        
         if(nCount)
             mpPolyPolygon->remove(nIndex, nCount);
     }
-
+    
     void B2DPolyPolygon::clear()
     {
         mpPolyPolygon = DefaultPolyPolygon::get();

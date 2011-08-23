@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <vcl/cvtgrf.hxx>
 
 // --------------
-// - Callback   -
+// - Callback	-
 // --------------
 
 // --------------------
@@ -65,8 +65,8 @@ ULONG GraphicConverter::ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nIn
     {
         if( ( nInFormat == CVT_SVM ) || ( nInFormat == CVT_BMP ) )
         {
-            SvMemoryStream  aIStm;
-            Graphic         aGraphic;
+            SvMemoryStream	aIStm;
+            Graphic			aGraphic;
 
             aIStm.SetBuffer( (char*) pInBuffer, nInBufSize, FALSE, nInBufSize );
             aIStm >> aGraphic;
@@ -76,7 +76,7 @@ ULONG GraphicConverter::ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nIn
                 SvMemoryStream aOStm( 64535, 64535 );
 
                 mpConvertData = new ConvertData( aGraphic, aOStm, nOutFormat );
-
+                
                 if( maFilterHdl.IsSet() && maFilterHdl.Call( mpConvertData ) )
                 {
                     nRetBufSize = aOStm.Seek( STREAM_SEEK_TO_END );
@@ -90,15 +90,15 @@ ULONG GraphicConverter::ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nIn
         }
         else if( ( nOutFormat == CVT_SVM ) || ( nOutFormat == CVT_BMP ) )
         {
-            SvMemoryStream  aIStm;
+            SvMemoryStream	aIStm;
 
             aIStm.SetBuffer( (char*) pInBuffer, nInBufSize, FALSE, nInBufSize );
             mpConvertData = new ConvertData( Graphic(), aIStm, nInFormat );
-
+                
             if( maFilterHdl.IsSet() && maFilterHdl.Call( mpConvertData ) )
             {
-                SvMemoryStream  aOStm( 645535, 64535 );
-                Graphic&        rGraphic = mpConvertData->maGraphic;
+                SvMemoryStream	aOStm( 645535, 64535 );
+                Graphic&		rGraphic = mpConvertData->maGraphic;
 
                 if( ( rGraphic.GetType() == GRAPHIC_BITMAP ) && ( CVT_SVM == nOutFormat ) )
                 {
@@ -134,13 +134,13 @@ ULONG GraphicConverter::ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nIn
 
 ULONG GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ULONG nFormat )
 {
-    GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
-    ULONG               nRet = ERRCODE_IO_GENERAL;
+    GraphicConverter*	pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
+    ULONG				nRet = ERRCODE_IO_GENERAL;
 
     if( pCvt && pCvt->GetFilterHdl().IsSet() )
     {
-        ConvertData aData( rGraphic, rIStm, nFormat );
-
+        ConvertData	aData( rGraphic, rIStm, nFormat );
+        
         if( pCvt->GetFilterHdl().Call( &aData ) )
         {
             rGraphic = aData.maGraphic;
@@ -149,7 +149,7 @@ ULONG GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ULONG nForma
         else if( rIStm.GetError() )
             nRet = rIStm.GetError();
     }
-
+    
     return nRet;
 }
 
@@ -157,19 +157,19 @@ ULONG GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ULONG nForma
 
 ULONG GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, ULONG nFormat )
 {
-    GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
-    ULONG               nRet = ERRCODE_IO_GENERAL;
+    GraphicConverter*	pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
+    ULONG				nRet = ERRCODE_IO_GENERAL;
 
     if( pCvt && pCvt->GetFilterHdl().IsSet() )
     {
-        ConvertData aData( rGraphic, rOStm, nFormat );
-
+        ConvertData	aData( rGraphic, rOStm, nFormat );
+        
         if( pCvt->GetFilterHdl().Call( &aData ) )
             nRet = ERRCODE_NONE;
         else if( rOStm.GetError() )
             nRet = rOStm.GetError();
     }
-
+    
     return nRet;
 }
 

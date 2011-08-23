@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,8 +76,8 @@ int CalcBuffSizeForTextConversion( UINT code_page, LPCWSTR lpWideCharString, int
 // the buffer
 //------------------------------------------------------------------
 
-int MultiByteToWideCharEx( UINT cp_src,
-                           LPCSTR lpMultiByteString,
+int MultiByteToWideCharEx( UINT cp_src, 
+                           LPCSTR lpMultiByteString, 
                            sal_uInt32 lenStr,
                            CStgTransferHelper& refDTransHelper,
                            BOOL bEnsureTrailingZero )
@@ -85,9 +85,9 @@ int MultiByteToWideCharEx( UINT cp_src,
     OSL_ASSERT( IsValidCodePage( cp_src ) );
     OSL_ASSERT( NULL != lpMultiByteString );
 
-    // calculate the required buff size
+    // calculate the required buff size 
     int reqSize = CalcBuffSizeForTextConversion( cp_src, lpMultiByteString, lenStr );
-
+    
     if ( bEnsureTrailingZero )
         reqSize += sizeof( sal_Unicode );
 
@@ -97,9 +97,9 @@ int MultiByteToWideCharEx( UINT cp_src,
     // setup a global memory pointer
     CRawHGlobalPtr ptrHGlob( refDTransHelper );
 
-    // do the converssion an return
-    return MultiByteToWideChar( cp_src,
-                                0,
+    // do the converssion an return 
+    return MultiByteToWideChar( cp_src, 
+                                0, 
                                 lpMultiByteString,
                                 lenStr,
                                 static_cast< LPWSTR >( ptrHGlob.GetMemPtr( ) ),
@@ -112,8 +112,8 @@ int MultiByteToWideCharEx( UINT cp_src,
 // the buffer
 //------------------------------------------------------------------
 
-int WideCharToMultiByteEx( UINT cp_dest,
-                           LPCWSTR lpWideCharString,
+int WideCharToMultiByteEx( UINT cp_dest, 
+                           LPCWSTR lpWideCharString, 
                            sal_uInt32 lenStr,
                            CStgTransferHelper& refDTransHelper,
                            BOOL bEnsureTrailingZero )
@@ -121,7 +121,7 @@ int WideCharToMultiByteEx( UINT cp_dest,
     OSL_ASSERT( IsValidCodePage( cp_dest ) );
     OSL_ASSERT( NULL != lpWideCharString );
 
-    // calculate the required buff size
+    // calculate the required buff size 
     int reqSize = CalcBuffSizeForTextConversion( cp_dest, lpWideCharString, lenStr );
 
     if ( bEnsureTrailingZero )
@@ -133,7 +133,7 @@ int WideCharToMultiByteEx( UINT cp_dest,
     // setup a global memory pointer
     CRawHGlobalPtr ptrHGlob( refDTransHelper );
 
-    // do the converssion an return
+    // do the converssion an return 
     return WideCharToMultiByte( cp_dest,
                                 0,
                                 lpWideCharString,

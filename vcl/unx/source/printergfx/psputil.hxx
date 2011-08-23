@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@
 
 namespace psp {
 
-/*
+/* 
  *  string convenience routines
- *  sizeof(pBuffer) must be at least 2 Bytes, 0x00 <= nValue <= 0xFF,
- *  effective buffer of get*ValueOf() is NOT NULL-terminated
+ *  sizeof(pBuffer) must be at least 2 Bytes, 0x00 <= nValue <= 0xFF, 
+ *  effective buffer of get*ValueOf() is NOT NULL-terminated 
  */
 sal_Int32   getHexValueOf (sal_Int32 nValue, sal_Char* pBuffer);
 sal_Int32   getAlignedHexValueOf (sal_Int32 nValue, sal_Char* pBuffer);
@@ -56,7 +56,7 @@ sal_Bool    WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLe
 sal_Bool    WritePS (osl::File* pFile, const rtl::OString &rString);
 sal_Bool    WritePS (osl::File* pFile, const rtl::OUString &rString);
 
-class ConverterFactory
+class ConverterFactory 
 {
 
 public:
@@ -64,11 +64,11 @@ public:
     ~ConverterFactory();
     rtl_UnicodeToTextConverter  Get (rtl_TextEncoding nEncoding);
     sal_Size                    Convert (const sal_Unicode *pText, int nTextLen,
-                                         sal_uChar *pBuffer, sal_Size nBufferSize,
+                                         sal_uChar *pBuffer, sal_Size nBufferSize, 
                                          rtl_TextEncoding nEncoding);
 private:
 
-    std::map< rtl_TextEncoding, rtl_UnicodeToTextConverter >        m_aConverters;
+    std::map< rtl_TextEncoding, rtl_UnicodeToTextConverter >		m_aConverters;
 };
 
 ConverterFactory* GetConverterFactory ();

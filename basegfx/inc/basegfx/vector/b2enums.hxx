@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,43 +33,43 @@
 
 namespace basegfx
 {
-    /** Descriptor for the mathematical orientations of two 2D Vectors
+    /**	Descriptor for the mathematical orientations of two 2D Vectors
     */
     enum B2VectorOrientation
     {
         /// mathematically positive oriented
         ORIENTATION_POSITIVE = 0,
-
+        
         /// mathematically negative oriented
         ORIENTATION_NEGATIVE,
-
+        
         /// mathematically neutral, thus parallel
         ORIENTATION_NEUTRAL
     };
 
-    /** Descriptor for the mathematical continuity of two 2D Vectors
+    /**	Descriptor for the mathematical continuity of two 2D Vectors
     */
     enum B2VectorContinuity
     {
         /// none
         CONTINUITY_NONE = 0,
-
+        
         /// mathematically negative oriented
         CONTINUITY_C1,
-
+        
         /// mathematically neutral, thus parallel
         CONTINUITY_C2
     };
 
-    /** Descriptor for possible line joins between two line segments
+    /**	Descriptor for possible line joins between two line segments
     */
     enum B2DLineJoin
     {
-        B2DLINEJOIN_NONE,       // no rounding
-        B2DLINEJOIN_MIDDLE,     // calc middle value between joints
-        B2DLINEJOIN_BEVEL,      // join edges with line
-        B2DLINEJOIN_MITER,      // extend till cut
-        B2DLINEJOIN_ROUND       // create arc
+        B2DLINEJOIN_NONE,		// no rounding
+        B2DLINEJOIN_MIDDLE,		// calc middle value between joints
+        B2DLINEJOIN_BEVEL,		// join edges with line
+        B2DLINEJOIN_MITER,		// extend till cut
+        B2DLINEJOIN_ROUND		// create arc
     };
 
 } // end of namespace basegfx

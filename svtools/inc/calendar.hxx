@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,20 +67,20 @@ zwischen den Monaten wechseln.
 
 WinBits
 
-WB_BORDER                   Um das Fenster wird ein Border gezeichnet.
-WB_TABSTOP                  Tastatursteuerung ist moeglich. Der Focus wird
+WB_BORDER					Um das Fenster wird ein Border gezeichnet.
+WB_TABSTOP					Tastatursteuerung ist moeglich. Der Focus wird
                             sich geholt, wenn mit der Maus in das
                             Control geklickt wird.
-WB_QUICKHELPSHOWSDATEINFO   DateInfo auch bei QuickInfo als BalloonHelp zeigen
-WB_BOLDTEXT                 Formatiert wird nach fetten Texten und
+WB_QUICKHELPSHOWSDATEINFO	DateInfo auch bei QuickInfo als BalloonHelp zeigen
+WB_BOLDTEXT 				Formatiert wird nach fetten Texten und
                             DIB_BOLD wird bei AddDateInfo() ausgewertet
-WB_FRAMEINFO                Formatiert wird so, das Frame-Info angezeigt
+WB_FRAMEINFO				Formatiert wird so, das Frame-Info angezeigt
                             werden kann und die FrameColor bei AddDateInfo()
                             ausgewertet wird
-WB_RANGESELECT              Es koennen mehrere Tage selektiert werden, die
+WB_RANGESELECT				Es koennen mehrere Tage selektiert werden, die
                             jedoch alle zusammenhaengend sein muessen
-WB_MULTISELECT              Es koennen mehrere Tage selektiert werden
-WB_WEEKNUMBER               Es werden die Wochentage mit angezeigt
+WB_MULTISELECT				Es koennen mehrere Tage selektiert werden
+WB_WEEKNUMBER				Es werden die Wochentage mit angezeigt
 
 --------------------------------------------------------------------------
 
@@ -151,20 +151,20 @@ oder durch Beendigung einer Selektion ausgeloest.
 // - Calendar-Types -
 // ------------------
 
-#define WB_QUICKHELPSHOWSDATEINFO   ((WinBits)0x00004000)
-#define WB_BOLDTEXT                 ((WinBits)0x00008000)
-#define WB_FRAMEINFO                ((WinBits)0x00010000)
-#define WB_WEEKNUMBER               ((WinBits)0x00020000)
+#define WB_QUICKHELPSHOWSDATEINFO	((WinBits)0x00004000)
+#define WB_BOLDTEXT 				((WinBits)0x00008000)
+#define WB_FRAMEINFO				((WinBits)0x00010000)
+#define WB_WEEKNUMBER				((WinBits)0x00020000)
 // Muss mit den WinBits beim TabBar uebereinstimmen oder mal
 // nach \vcl\inc\wintypes.hxx verlagert werden
 #ifndef WB_RANGESELECT
-#define WB_RANGESELECT              ((WinBits)0x00200000)
+#define WB_RANGESELECT				((WinBits)0x00200000)
 #endif
 #ifndef WB_MULTISELECT
-#define WB_MULTISELECT              ((WinBits)0x00400000)
+#define WB_MULTISELECT				((WinBits)0x00400000)
 #endif
 
-#define DIB_BOLD                    ((USHORT)0x0001)
+#define DIB_BOLD					((USHORT)0x0001)
 
 // ------------
 // - Calendar -
@@ -173,50 +173,50 @@ oder durch Beendigung einer Selektion ausgeloest.
 class SVT_DLLPUBLIC Calendar : public Control
 {
 private:
-    ImplDateTable*  mpDateTable;
-    Table*          mpSelectTable;
-    Table*          mpOldSelectTable;
-    Table*          mpRestoreSelectTable;
-    XubString*      mpDayText[31];
-    XubString       maDayText;
-    XubString       maWeekText;
+    ImplDateTable*	mpDateTable;
+    Table*			mpSelectTable;
+    Table*			mpOldSelectTable;
+    Table*			mpRestoreSelectTable;
+    XubString*		mpDayText[31];
+    XubString		maDayText;
+    XubString		maWeekText;
     CalendarWrapper maCalendarWrapper;
-    Rectangle       maPrevRect;
-    Rectangle       maNextRect;
-    String          maDayOfWeekText;
-    sal_Int32       mnDayOfWeekAry[7];
-    Date            maOldFormatFirstDate;
-    Date            maOldFormatLastDate;
-    Date            maFirstDate;
-    Date            maOldFirstDate;
-    Date            maCurDate;
-    Date            maOldCurDate;
-    Date            maAnchorDate;
-    Date            maDropDate;
-    Color           maSelColor;
-    Color           maOtherColor;
-    Color*          mpStandardColor;
-    Color*          mpSaturdayColor;
-    Color*          mpSundayColor;
-    ULONG           mnDayCount;
-    long            mnDaysOffX;
-    long            mnWeekDayOffY;
-    long            mnDaysOffY;
-    long            mnMonthHeight;
-    long            mnMonthWidth;
-    long            mnMonthPerLine;
-    long            mnLines;
-    long            mnDayWidth;
-    long            mnDayHeight;
-    long            mnWeekWidth;
-    long            mnDummy2;
-    long            mnDummy3;
-    long            mnDummy4;
-    WinBits         mnWinStyle;
-    USHORT          mnFirstYear;
-    USHORT          mnLastYear;
-    USHORT          mnRequestYear;
-    BOOL            mbCalc:1,
+    Rectangle		maPrevRect;
+    Rectangle		maNextRect;
+    String			maDayOfWeekText;
+    sal_Int32		mnDayOfWeekAry[7];
+    Date			maOldFormatFirstDate;
+    Date			maOldFormatLastDate;
+    Date			maFirstDate;
+    Date			maOldFirstDate;
+    Date			maCurDate;
+    Date			maOldCurDate;
+    Date			maAnchorDate;
+    Date			maDropDate;
+    Color			maSelColor;
+    Color			maOtherColor;
+    Color*			mpStandardColor;
+    Color*			mpSaturdayColor;
+    Color*			mpSundayColor;
+    ULONG			mnDayCount;
+    long			mnDaysOffX;
+    long			mnWeekDayOffY;
+    long			mnDaysOffY;
+    long			mnMonthHeight;
+    long			mnMonthWidth;
+    long			mnMonthPerLine;
+    long			mnLines;
+    long			mnDayWidth;
+    long			mnDayHeight;
+    long			mnWeekWidth;
+    long			mnDummy2;
+    long			mnDummy3;
+    long			mnDummy4;
+    WinBits 		mnWinStyle;
+    USHORT			mnFirstYear;
+    USHORT			mnLastYear;
+    USHORT			mnRequestYear;
+    BOOL			mbCalc:1,
                     mbFormat:1,
                     mbDrag:1,
                     mbSelection:1,
@@ -234,47 +234,47 @@ private:
                     mbSelLeft:1,
                     mbAllSel:1,
                     mbDropPos:1;
-    Link            maSelectionChangingHdl;
-    Link            maDateRangeChangedHdl;
-    Link            maRequestDateInfoHdl;
-    Link            maDoubleClickHdl;
-    Link            maSelectHdl;
-    Timer           maDragScrollTimer;
-    USHORT          mnDragScrollHitTest;
+    Link			maSelectionChangingHdl;
+    Link			maDateRangeChangedHdl;
+    Link			maRequestDateInfoHdl;
+    Link			maDoubleClickHdl;
+    Link			maSelectHdl;
+    Timer			maDragScrollTimer;
+    USHORT			mnDragScrollHitTest;
 
 #ifdef _SV_CALENDAR_CXX
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    SVT_DLLPRIVATE void         ImplInit( WinBits nWinStyle );
-    SVT_DLLPRIVATE void         ImplInitSettings();
-    SVT_DLLPRIVATE void         ImplGetWeekFont( Font& rFont ) const;
-    SVT_DLLPRIVATE void         ImplFormat();
+    SVT_DLLPRIVATE void			ImplInit( WinBits nWinStyle );
+    SVT_DLLPRIVATE void			ImplInitSettings();
+    SVT_DLLPRIVATE void			ImplGetWeekFont( Font& rFont ) const;
+    SVT_DLLPRIVATE void			ImplFormat();
     using Window::ImplHitTest;
-    SVT_DLLPRIVATE USHORT           ImplHitTest( const Point& rPos, Date& rDate ) const;
-    SVT_DLLPRIVATE void         ImplDrawSpin( BOOL bDrawPrev = TRUE, BOOL bDrawNext = TRUE );
-    SVT_DLLPRIVATE void         ImplDrawDate( long nX, long nY,
+    SVT_DLLPRIVATE USHORT			ImplHitTest( const Point& rPos, Date& rDate ) const;
+    SVT_DLLPRIVATE void			ImplDrawSpin( BOOL bDrawPrev = TRUE, BOOL bDrawNext = TRUE );
+    SVT_DLLPRIVATE void			ImplDrawDate( long nX, long nY,
                                   USHORT nDay, USHORT nMonth, USHORT nYear,
                                   DayOfWeek eDayOfWeek,
                                   BOOL bBack = TRUE, BOOL bOther = FALSE,
                                   ULONG nToday = 0 );
-    SVT_DLLPRIVATE void         ImplDraw( BOOL bPaint = FALSE );
-    SVT_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
-    SVT_DLLPRIVATE void         ImplUpdateSelection( Table* pOld );
-    SVT_DLLPRIVATE void         ImplMouseSelect( const Date& rDate, USHORT nHitTest,
+    SVT_DLLPRIVATE void			ImplDraw( BOOL bPaint = FALSE );
+    SVT_DLLPRIVATE void			ImplUpdateDate( const Date& rDate );
+    SVT_DLLPRIVATE void			ImplUpdateSelection( Table* pOld );
+    SVT_DLLPRIVATE void			ImplMouseSelect( const Date& rDate, USHORT nHitTest,
                                      BOOL bMove, BOOL bExpand, BOOL bExtended );
-    SVT_DLLPRIVATE void         ImplUpdate( BOOL bCalcNew = FALSE );
+    SVT_DLLPRIVATE void			ImplUpdate( BOOL bCalcNew = FALSE );
     using Window::ImplScroll;
-    SVT_DLLPRIVATE void         ImplScroll( BOOL bPrev );
-    SVT_DLLPRIVATE void         ImplInvertDropPos();
-    SVT_DLLPRIVATE void         ImplShowMenu( const Point& rPos, const Date& rDate );
-    SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, BOOL bRepeat );
-    SVT_DLLPRIVATE void         ImplEndTracking( BOOL bCancel );
+    SVT_DLLPRIVATE void			ImplScroll( BOOL bPrev );
+    SVT_DLLPRIVATE void			ImplInvertDropPos();
+    SVT_DLLPRIVATE void			ImplShowMenu( const Point& rPos, const Date& rDate );
+    SVT_DLLPRIVATE void			ImplTracking( const Point& rPos, BOOL bRepeat );
+    SVT_DLLPRIVATE void			ImplEndTracking( BOOL bCancel );
     SVT_DLLPRIVATE DayOfWeek    ImplGetWeekStart() const;
 #endif
 
 protected:
-    BOOL            ShowDropPos( const Point& rPos, Date& rDate );
-    void            HideDropPos();
+    BOOL			ShowDropPos( const Point& rPos, Date& rDate );
+    void			HideDropPos();
 
     DECL_STATIC_LINK( Calendar, ScrollHdl, Timer *);
 
@@ -283,25 +283,25 @@ public:
                     Calendar( Window* pParent, const ResId& rResId );
                     ~Calendar();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    Tracking( const TrackingEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Resize();
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	Tracking( const TrackingEvent& rMEvt );
+    virtual void	KeyInput( const KeyEvent& rKEvt );
+    virtual void	Paint( const Rectangle& rRect );
+    virtual void	Resize();
+    virtual void	GetFocus();
+    virtual void	LoseFocus();
+    virtual void	RequestHelp( const HelpEvent& rHEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
+    virtual void	StateChanged( StateChangedType nStateChange );
+    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual void    SelectionChanging();
-    virtual void    DateRangeChanged();
-    virtual void    RequestDateInfo();
-    virtual void    DoubleClick();
-    virtual void    Select();
+    virtual void	SelectionChanging();
+    virtual void	DateRangeChanged();
+    virtual void	RequestDateInfo();
+    virtual void	DoubleClick();
+    virtual void	Select();
 
     const CalendarWrapper& GetCalendarWrapper() const { return maCalendarWrapper; }
 
@@ -311,68 +311,68 @@ public:
     /// Set how many days of a week must reside in the first week of a year.
     void            SetMinimumNumberOfDaysInWeek( sal_Int16 nDays );
 
-    void            SelectDate( const Date& rDate, BOOL bSelect = TRUE );
-    void            SelectDateRange( const Date& rStartDate, const Date& rEndDate,
+    void			SelectDate( const Date& rDate, BOOL bSelect = TRUE );
+    void			SelectDateRange( const Date& rStartDate, const Date& rEndDate,
                                      BOOL bSelect = TRUE );
-    void            SetNoSelection();
-    BOOL            IsDateSelected( const Date& rDate ) const;
-    ULONG           GetSelectDateCount() const;
-    Date            GetSelectDate( ULONG nIndex = 0 ) const;
-    void            EnableCallEverySelect( BOOL bEvery = TRUE ) { mbAllSel = bEvery; }
-    BOOL            IsCallEverySelectEnabled() const { return mbAllSel; }
+    void			SetNoSelection();
+    BOOL			IsDateSelected( const Date& rDate ) const;
+    ULONG			GetSelectDateCount() const;
+    Date			GetSelectDate( ULONG nIndex = 0 ) const;
+    void			EnableCallEverySelect( BOOL bEvery = TRUE ) { mbAllSel = bEvery; }
+    BOOL			IsCallEverySelectEnabled() const { return mbAllSel; }
 
-    USHORT          GetRequestYear() const { return mnRequestYear; }
-    void            SetCurDate( const Date& rNewDate );
-    Date            GetCurDate() const { return maCurDate; }
-    void            SetFirstDate( const Date& rNewFirstDate );
-    Date            GetFirstDate() const { return maFirstDate; }
-    Date            GetLastDate() const { return GetFirstDate() + mnDayCount; }
-    ULONG           GetDayCount() const { return mnDayCount; }
-    Date            GetFirstMonth() const;
-    Date            GetLastMonth() const;
-    USHORT          GetMonthCount() const;
-    BOOL            GetDate( const Point& rPos, Date& rDate ) const;
-    Rectangle       GetDateRect( const Date& rDate ) const;
-    BOOL            GetDropDate( Date& rDate ) const;
+    USHORT			GetRequestYear() const { return mnRequestYear; }
+    void			SetCurDate( const Date& rNewDate );
+    Date			GetCurDate() const { return maCurDate; }
+    void			SetFirstDate( const Date& rNewFirstDate );
+    Date			GetFirstDate() const { return maFirstDate; }
+    Date			GetLastDate() const { return GetFirstDate() + mnDayCount; }
+    ULONG			GetDayCount() const { return mnDayCount; }
+    Date			GetFirstMonth() const;
+    Date			GetLastMonth() const;
+    USHORT			GetMonthCount() const;
+    BOOL			GetDate( const Point& rPos, Date& rDate ) const;
+    Rectangle		GetDateRect( const Date& rDate ) const;
+    BOOL			GetDropDate( Date& rDate ) const;
 
-    long            GetCurMonthPerLine() const { return mnMonthPerLine; }
-    long            GetCurLines() const { return mnLines; }
+    long			GetCurMonthPerLine() const { return mnMonthPerLine; }
+    long			GetCurLines() const { return mnLines; }
 
-    void            SetStandardColor( const Color& rColor );
-    const Color&    GetStandardColor() const;
-    void            SetSaturdayColor( const Color& rColor );
-    const Color&    GetSaturdayColor() const;
-    void            SetSundayColor( const Color& rColor );
-    const Color&    GetSundayColor() const;
+    void			SetStandardColor( const Color& rColor );
+    const Color&	GetStandardColor() const;
+    void			SetSaturdayColor( const Color& rColor );
+    const Color&	GetSaturdayColor() const;
+    void			SetSundayColor( const Color& rColor );
+    const Color&	GetSundayColor() const;
 
-    void            AddDateInfo( const Date& rDate, const XubString& rText,
+    void			AddDateInfo( const Date& rDate, const XubString& rText,
                                  const Color* pTextColor = NULL,
                                  const Color* pFrameColor = NULL,
                                  USHORT nFlags = 0 );
-    void            RemoveDateInfo( const Date& rDate );
-    void            ClearDateInfo();
-    XubString       GetDateInfoText( const Date& rDate );
+    void			RemoveDateInfo( const Date& rDate );
+    void			ClearDateInfo();
+    XubString		GetDateInfoText( const Date& rDate );
 
-    void            StartSelection();
-    void            EndSelection();
+    void			StartSelection();
+    void			EndSelection();
 
-    BOOL            IsTravelSelect() const { return mbTravelSelect; }
-    BOOL            IsScrollDateRangeChanged() const { return mbScrollDateRange; }
-    BOOL            IsSelectLeft() const { return mbSelLeft; }
+    BOOL			IsTravelSelect() const { return mbTravelSelect; }
+    BOOL			IsScrollDateRangeChanged() const { return mbScrollDateRange; }
+    BOOL			IsSelectLeft() const { return mbSelLeft; }
 
-    Size            CalcWindowSizePixel( long nCalcMonthPerLine = 1,
+    Size			CalcWindowSizePixel( long nCalcMonthPerLine = 1,
                                          long nCalcLines = 1 ) const;
 
-    void            SetSelectionChangingHdl( const Link& rLink ) { maSelectionChangingHdl = rLink; }
-    const Link&     GetSelectionChangingHdl() const { return maSelectionChangingHdl; }
-    void            SetDateRangeChangedHdl( const Link& rLink ) { maDateRangeChangedHdl = rLink; }
-    const Link&     GetDateRangeChangedHdl() const { return maDateRangeChangedHdl; }
-    void            SetRequestDateInfoHdl( const Link& rLink ) { maRequestDateInfoHdl = rLink; }
-    const Link&     GetRequestDateInfoHdl() const { return maRequestDateInfoHdl; }
-    void            SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
-    const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
+    void			SetSelectionChangingHdl( const Link& rLink ) { maSelectionChangingHdl = rLink; }
+    const Link& 	GetSelectionChangingHdl() const { return maSelectionChangingHdl; }
+    void			SetDateRangeChangedHdl( const Link& rLink ) { maDateRangeChangedHdl = rLink; }
+    const Link& 	GetDateRangeChangedHdl() const { return maDateRangeChangedHdl; }
+    void			SetRequestDateInfoHdl( const Link& rLink ) { maRequestDateInfoHdl = rLink; }
+    const Link& 	GetRequestDateInfoHdl() const { return maRequestDateInfoHdl; }
+    void			SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
+    const Link& 	GetDoubleClickHdl() const { return maDoubleClickHdl; }
+    void			SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
+    const Link& 	GetSelectHdl() const { return maSelectHdl; }
 };
 
 inline const Color& Calendar::GetStandardColor() const
@@ -449,14 +449,14 @@ class SVT_DLLPUBLIC CalendarField : public DateField
 {
 private:
     ImplCFieldFloatWin* mpFloatWin;
-    Calendar*           mpCalendar;
-    WinBits             mnCalendarStyle;
-    PushButton*         mpTodayBtn;
-    PushButton*         mpNoneBtn;
-    Date                maDefaultDate;
-    BOOL                mbToday;
-    BOOL                mbNone;
-    Link                maSelectHdl;
+    Calendar*			mpCalendar;
+    WinBits 			mnCalendarStyle;
+    PushButton* 		mpTodayBtn;
+    PushButton* 		mpNoneBtn;
+    Date				maDefaultDate;
+    BOOL				mbToday;
+    BOOL				mbNone;
+    Link				maSelectHdl;
 
 #ifdef _SV_CALENDAR_CXX
                         DECL_DLLPRIVATE_LINK( ImplSelectHdl, Calendar* );
@@ -469,30 +469,30 @@ public:
                         CalendarField( Window* pParent, const ResId& rResId );
                         ~CalendarField();
 
-    virtual void        Select();
+    virtual void		Select();
 
-    virtual BOOL        ShowDropDown( BOOL bShow );
-    virtual Calendar*   CreateCalendar( Window* pParent );
-    Calendar*           GetCalendar();
+    virtual BOOL		ShowDropDown( BOOL bShow );
+    virtual Calendar*	CreateCalendar( Window* pParent );
+    Calendar*			GetCalendar();
 
-    void                SetDefaultDate( const Date& rDate ) { maDefaultDate = rDate; }
-    Date                GetDefaultDate() const { return maDefaultDate; }
+    void				SetDefaultDate( const Date& rDate ) { maDefaultDate = rDate; }
+    Date				GetDefaultDate() const { return maDefaultDate; }
 
-    void                EnableToday( BOOL bToday = TRUE ) { mbToday = bToday; }
-    BOOL                IsTodayEnabled() const { return mbToday; }
-    void                EnableNone( BOOL bNone = TRUE ) { mbNone = bNone; }
-    BOOL                IsNoneEnabled() const { return mbNone; }
+    void				EnableToday( BOOL bToday = TRUE ) { mbToday = bToday; }
+    BOOL				IsTodayEnabled() const { return mbToday; }
+    void				EnableNone( BOOL bNone = TRUE ) { mbNone = bNone; }
+    BOOL				IsNoneEnabled() const { return mbNone; }
 
-    void                SetCalendarStyle( WinBits nStyle ) { mnCalendarStyle = nStyle; }
-    WinBits             GetCalendarStyle() const { return mnCalendarStyle; }
+    void				SetCalendarStyle( WinBits nStyle ) { mnCalendarStyle = nStyle; }
+    WinBits 			GetCalendarStyle() const { return mnCalendarStyle; }
 
-    void                SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&         GetSelectHdl() const { return maSelectHdl; }
+    void				SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
+    const Link& 		GetSelectHdl() const { return maSelectHdl; }
 
 protected:
-    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual void	StateChanged( StateChangedType nStateChange );
 };
 
-#endif  // _CALENDAR_HXX
+#endif	// _CALENDAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

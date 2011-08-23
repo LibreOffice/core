@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ typedef std::hash_map
 #pragma warning( disable: 4786 )
 #endif
 
-//#define   CHECK_DIRTY 1
-//#define   READ_AFTER_WRITE 1
+//#define	CHECK_DIRTY 1
+//#define	READ_AFTER_WRITE 1
 
 ////////////////////////////// class StgPage /////////////////////////////
 // This class implements buffer functionality. The cache will always return

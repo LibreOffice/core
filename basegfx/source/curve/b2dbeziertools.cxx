@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 namespace basegfx
 {
     B2DCubicBezierHelper::B2DCubicBezierHelper(const B2DCubicBezier& rBase, sal_uInt32 nDivisions)
-    :   maLengthArray(),
+    :	maLengthArray(),
         mnEdgeCount(0)
     {
         const bool bIsBezier(rBase.isBezier());
@@ -115,7 +115,7 @@ namespace basegfx
             // not a bezier, linear edge
             return fDistance / fLength;
         }
-
+        
         // it is a bezier
         ::std::vector< double >::const_iterator aIter = ::std::lower_bound(maLengthArray.begin(), maLengthArray.end(), fDistance);
         const sal_uInt32 nIndex(aIter - maLengthArray.begin());

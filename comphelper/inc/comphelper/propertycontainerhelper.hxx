@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,19 +84,19 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
 */
 class COMPHELPER_DLLPUBLIC OPropertyContainerHelper
 {
-    typedef ::std::vector< ::com::sun::star::uno::Any > PropertyContainer;
-    typedef PropertyContainer::iterator                 PropertyContainerIterator;
-    typedef PropertyContainer::const_iterator           ConstPropertyContainerIterator;
-    PropertyContainer   m_aHoldProperties;
+    typedef ::std::vector< ::com::sun::star::uno::Any >	PropertyContainer;
+    typedef PropertyContainer::iterator					PropertyContainerIterator;
+    typedef PropertyContainer::const_iterator			ConstPropertyContainerIterator;
+    PropertyContainer	m_aHoldProperties;
         // the properties which are hold by this class' instance, not the derived one's
 
 private:
-    typedef ::std::vector< PropertyDescription >    Properties;
-    typedef Properties::iterator                    PropertiesIterator;
-    typedef Properties::const_iterator              ConstPropertiesIterator;
-    Properties      m_aProperties;
+    typedef ::std::vector< PropertyDescription >	Properties;
+    typedef Properties::iterator					PropertiesIterator;
+    typedef Properties::const_iterator				ConstPropertiesIterator;
+    Properties		m_aProperties;
 
-    sal_Bool        m_bUnused;
+    sal_Bool		m_bUnused;
 
 protected:
     OPropertyContainerHelper();
@@ -104,42 +104,42 @@ protected:
 
     /** register a property. The property is represented through a member of the derived class which calls
         this methdod.
-        @param      _rName              the name of the property
-        @param      _nHandle            the handle of the property
-        @param      _nAttributes        the attributes of the property
-        @param      _pPointerToMember   the pointer to the member representing the property
+        @param		_rName				the name of the property
+        @param		_nHandle			the handle of the property
+        @param		_nAttributes		the attributes of the property
+        @param		_pPointerToMember	the pointer to the member representing the property
                                         within the derived class.
-        @param      _rMemberType        the cppu type of the property represented by the object
+        @param		_rMemberType		the cppu type of the property represented by the object
                                         to which _pPointerToMember points.
     */
-    void    registerProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
+    void	registerProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         void* _pPointerToMember, const ::com::sun::star::uno::Type& _rMemberType);
 
 
     /** register a property. The property is represented through a ::com::sun::star::uno::Any member of the
         derived class which calls this methdod.
-        @param      _rName              the name of the property
-        @param      _nHandle            the handle of the property
-        @param      _nAttributes        the attributes of the property
-        @param      _pPointerToMember   the pointer to the member representing the property
+        @param		_rName				the name of the property
+        @param		_nHandle			the handle of the property
+        @param		_nAttributes		the attributes of the property
+        @param		_pPointerToMember	the pointer to the member representing the property
                                         within the derived class, which has to be a ::com::sun::star::uno::Any.
-        @param      _rExpectedType      the expected type of the property. NOT the type of the object to which
+        @param		_rExpectedType		the expected type of the property. NOT the type of the object to which
                                         _pPointerToMember points (this is always an Any).
     */
-    void    registerMayBeVoidProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
+    void	registerMayBeVoidProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         ::com::sun::star::uno::Any* _pPointerToMember, const ::com::sun::star::uno::Type& _rExpectedType);
 
     /** register a property. The repository will create an own object holding this property, so there is no
         need to declare an extra member in your derived class
-        @param      _rName              the name of the property
-        @param      _nHandle            the handle of the property
-        @param      _nAttributes        the attributes of the property
-        @param      _rType              the type of the property
-        @param      _pInitialValue      the initial value of the property. May be null if _nAttributes includes
+        @param		_rName				the name of the property
+        @param		_nHandle			the handle of the property
+        @param		_nAttributes		the attributes of the property
+        @param		_rType				the type of the property
+        @param		_pInitialValue		the initial value of the property. May be null if _nAttributes includes
                                         the ::com::sun::star::beans::PropertyAttribute::MAYBEVOID flag.
                                         Else it must be a pointer to an object of the type described by _rType.
     */
-    void    registerPropertyNoMember(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
+    void	registerPropertyNoMember(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         const ::com::sun::star::uno::Type& _rType, const void* _pInitialValue);
 
     /** revokes a previously registered property
@@ -184,14 +184,14 @@ protected:
         @param  _rProps
             initial property sequence which is to be extended
     */
-    void    describeProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps) const;
+    void	describeProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps) const;
 
     /** modify the attributes of an already registered property.
 
         You may want to use this if you're a derived from OPropertyContainer indirectly and want to override
         some settings your base class did.
     */
-    void    modifyAttributes(sal_Int32 _nHandle, sal_Int32 _nAddAttrib, sal_Int32 _nRemoveAttrib);
+    void	modifyAttributes(sal_Int32 _nHandle, sal_Int32 _nAddAttrib, sal_Int32 _nRemoveAttrib);
 
     /** retrieves the description for a registered property
         @throw  com::sun::star::beans::UnknownPropertyException
@@ -202,10 +202,10 @@ protected:
 
 private:
     /// insertion of _rProp into m_aProperties, keeping the sort order
-    COMPHELPER_DLLPRIVATE void  implPushBackProperty(const PropertyDescription& _rProp);
+    COMPHELPER_DLLPRIVATE void	implPushBackProperty(const PropertyDescription& _rProp);
 
     /// search the PropertyDescription for the given handle (within m_aProperties)
-    COMPHELPER_DLLPRIVATE PropertiesIterator    searchHandle(sal_Int32 _nHandle);
+    COMPHELPER_DLLPRIVATE PropertiesIterator	searchHandle(sal_Int32 _nHandle);
 
 private:
     COMPHELPER_DLLPRIVATE OPropertyContainerHelper( const OPropertyContainerHelper& );            // never implemented
@@ -213,7 +213,7 @@ private:
 };
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // COMPHELPER_PROPERTYCONTAINERHELPER_HXX

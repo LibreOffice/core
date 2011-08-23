@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace vclcanvas
         void disposing();
 
         ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
-        void        destroyBuffers(  );
+        void 		destroyBuffers(  );
         ::sal_Bool  showBuffer( bool bWindowVisible, ::sal_Bool bUpdateAll );
         ::sal_Bool  switchBuffer( bool bWindowVisible, ::sal_Bool bUpdateAll );
 

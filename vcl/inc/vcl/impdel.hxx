@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,14 +28,14 @@
 
  #ifndef _VCL_IMPDEL_HXX
  #define _VCL_IMPDEL_HXX
-
+ 
  #include <list>
-
+ 
  namespace vcl
  {
-
+ 
  class DeletionListener;
-
+ 
  class DeletionNotifier
  {
      std::list< DeletionListener* > m_aListeners;
@@ -44,23 +44,23 @@
 
      ~DeletionNotifier()
      { notifyDelete(); }
-
+     
      inline void notifyDelete();
 
-     public:
+     public:	 
      void addDel( DeletionListener* pListener )
      { m_aListeners.push_back( pListener ); }
-
+     
      void removeDel( DeletionListener* pListener )
      { m_aListeners.remove( pListener ); }
  };
-
+ 
  class DeletionListener
  {
-     DeletionNotifier*  m_pNotifier;
+     DeletionNotifier*	m_pNotifier;
      public:
      DeletionListener( DeletionNotifier* pNotifier )
-     :  m_pNotifier( pNotifier )
+     : 	m_pNotifier( pNotifier )
         {
             if( m_pNotifier )
                 m_pNotifier->addDel( this );
@@ -79,12 +79,12 @@
      for( std::list< DeletionListener* >::const_iterator it =
              m_aListeners.begin(); it != m_aListeners.end(); ++it )
         (*it)->deleted();
-
+            
      m_aListeners.clear();
  }
-
+ 
  } // namespace vcl
-
+ 
  #endif // _VCL_IMPDEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

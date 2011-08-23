@@ -45,7 +45,7 @@
         </vbox>
         <hbox cnt:expand="false">
             <vbox><fixedline /><fixedline /><fixedline /><fixedline /></vbox>
-<!--            <pushbutton id="import-button" label="Import..." cnt:expand="false"/>-->
+<!--			<pushbutton id="import-button" label="Import..." cnt:expand="false"/>-->
             <pushbutton id="export-button" label="Export (stdout)" cnt:expand="false"/>
         </hbox>
     </vbox>

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,15 +57,15 @@ class CFormatEtc;
 class CDataFormatTranslator
 {
 public:
-    CDataFormatTranslator( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&  aServiceManager );
+    CDataFormatTranslator( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&	aServiceManager );
 
     CFormatEtc getFormatEtcFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aDataFlavor ) const;
-    com::sun::star::datatransfer::DataFlavor getDataFlavorFromFormatEtc(
+    com::sun::star::datatransfer::DataFlavor getDataFlavorFromFormatEtc( 
         const FORMATETC& aFormatEtc, LCID lcid = GetThreadLocale( ) ) const;
 
     CFormatEtc    SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf ) const;
     CFormatEtc    SAL_CALL getFormatEtcForClipformatName( const rtl::OUString& aClipFmtName ) const;
-    rtl::OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat ) const;
+    rtl::OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat ) const;	
 
     sal_Bool SAL_CALL isHTMLFormat( CLIPFORMAT cf ) const;
     sal_Bool SAL_CALL isTextHtmlFormat( CLIPFORMAT cf ) const;
@@ -73,12 +73,12 @@ public:
     sal_Bool SAL_CALL isUnicodeTextFormat( CLIPFORMAT cf ) const;
     sal_Bool SAL_CALL isTextFormat( CLIPFORMAT cf ) const;
 
-private:
+private:	
     rtl::OUString SAL_CALL getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat ) const;
 
 private:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
-    com::sun::star::uno::Reference< com::sun::star::datatransfer::XDataFormatTranslator >   m_XDataFormatTranslator;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_SrvMgr;	
+    com::sun::star::uno::Reference< com::sun::star::datatransfer::XDataFormatTranslator >	m_XDataFormatTranslator;	
 };
 
 #endif

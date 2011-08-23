@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,14 +53,14 @@ class DlgExportEPNG : public ModalDialog, FilterConfigItem
 
         FltCallDialogParameter& rFltCallPara;
 
-        FixedLine           aGrpCompression;
-        FixedInfo           aFiCompression;
-        NumericField        aNumCompression;
-        CheckBox            aCbxInterlaced;
-        OKButton            aBtnOK;
-        CancelButton        aBtnCancel;
-        HelpButton          aBtnHelp;
-        ResMgr*             pMgr;
+        FixedLine			aGrpCompression;
+        FixedInfo			aFiCompression;
+        NumericField		aNumCompression;
+        CheckBox			aCbxInterlaced;
+        OKButton			aBtnOK;
+        CancelButton		aBtnCancel;
+        HelpButton			aBtnHelp;
+        ResMgr*				pMgr;
 
         DECL_LINK( OK, void * );
 

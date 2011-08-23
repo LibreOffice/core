@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -216,10 +216,10 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
         return false;
 
     // all scalable fonts on this platform are subsettable
-    rDFA.mbSubsettable  = true;
-    rDFA.mbEmbeddable   = false;
+    rDFA.mbSubsettable	= true;
+    rDFA.mbEmbeddable	= false;
 
-    // prepare iterating over all name strings of the font
+    // prepare iterating over all name strings of the font	
     ItemCount nFontNameCount = 0;
     rc = ATSUCountFontNames( nFontID, &nFontNameCount );
     if( rc != noErr )
@@ -236,9 +236,9 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     {
         ByteCount nNameLength = 0;
 
-        FontNameCode     eFontNameCode;
-        FontPlatformCode eFontNamePlatform;
-        FontScriptCode   eFontNameScript;
+        FontNameCode     eFontNameCode; 
+        FontPlatformCode eFontNamePlatform; 
+        FontScriptCode   eFontNameScript; 
         FontLanguageCode eFontNameLanguage;
         rc = ATSUGetIndFontName( nFontID, nNameIndex, 0, NULL,
             &nNameLength, &eFontNameCode, &eFontNamePlatform, &eFontNameScript, &eFontNameLanguage );
@@ -267,13 +267,13 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             case 0x30A: nNameValue += 0;            // Win-UCS-4
                         eEncoding = RTL_TEXTENCODING_UCS4;
                         break;
-            case 0x100: nNameValue += 21;           // Mac Roman
+            case 0x100: nNameValue += 21; 	        // Mac Roman
                         eEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
                         break;
             case 0x300: nNameValue =  0;            // Win Symbol encoded name!
                         rDFA.mbSymbolFlag = true;   // (often seen for symbol fonts)
                         break;
-            default:    nNameValue = 0;             // ignore other encodings
+            default:    nNameValue = 0;	            // ignore other encodings
             break;
         }
 

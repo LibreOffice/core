@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,54 +43,54 @@
 
 struct ImplHeadItem
 {
-    USHORT              mnId;
-    HeaderBarItemBits   mnBits;
-    long                mnSize;
-    ULONG               mnHelpId;
-    Image               maImage;
-    XubString           maOutText;
-    XubString           maText;
-    XubString           maHelpText;
-    void*               mpUserData;
+    USHORT				mnId;
+    HeaderBarItemBits	mnBits;
+    long				mnSize;
+    ULONG				mnHelpId;
+    Image				maImage;
+    XubString			maOutText;
+    XubString			maText;
+    XubString			maHelpText;
+    void*				mpUserData;
 };
 
 DECLARE_LIST( ImplHeadItemList, ImplHeadItem* )
 
 // =======================================================================
 
-#define HEAD_ARROWSIZE1             4
-#define HEAD_ARROWSIZE2             7
+#define HEAD_ARROWSIZE1 			4
+#define HEAD_ARROWSIZE2 			7
 
-#define HEADERBAR_TEXTOFF           2
-#define HEADERBAR_ARROWOFF          5
-#define HEADERBAR_SPLITOFF          3
+#define HEADERBAR_TEXTOFF			2
+#define HEADERBAR_ARROWOFF			5
+#define HEADERBAR_SPLITOFF			3
 
-#define HEADERBAR_DRAGOFF           4
-#define HEADERBAR_DRAGOUTOFF        15
+#define HEADERBAR_DRAGOFF			4
+#define HEADERBAR_DRAGOUTOFF		15
 
-#define HEAD_HITTEST_ITEM           ((USHORT)0x0001)
-#define HEAD_HITTEST_DIVIDER        ((USHORT)0x0002)
+#define HEAD_HITTEST_ITEM			((USHORT)0x0001)
+#define HEAD_HITTEST_DIVIDER		((USHORT)0x0002)
 
 // =======================================================================
 
 void HeaderBar::ImplInit( WinBits nWinStyle )
 {
-    mpItemList      = new ImplHeadItemList;
-    mnBorderOff1    = 0;
-    mnBorderOff2    = 0;
-    mnOffset        = 0;
-    mnDX            = 0;
-    mnDY            = 0;
-    mnDragSize      = 0;
-    mnStartPos      = 0;
-    mnDragPos       = 0;
-    mnMouseOff      = 0;
-    mnCurItemId     = 0;
-    mnItemDragPos   = HEADERBAR_ITEM_NOTFOUND;
-    mbDrag          = FALSE;
-    mbItemDrag      = FALSE;
-    mbOutDrag       = FALSE;
-    mbItemMode      = FALSE;
+    mpItemList		= new ImplHeadItemList;
+    mnBorderOff1	= 0;
+    mnBorderOff2	= 0;
+    mnOffset		= 0;
+    mnDX			= 0;
+    mnDY			= 0;
+    mnDragSize		= 0;
+    mnStartPos		= 0;
+    mnDragPos		= 0;
+    mnMouseOff		= 0;
+    mnCurItemId 	= 0;
+    mnItemDragPos	= HEADERBAR_ITEM_NOTFOUND;
+    mbDrag			= FALSE;
+    mbItemDrag		= FALSE;
+    mbOutDrag		= FALSE;
+    mbItemMode		= FALSE;
 
     // StyleBits auswerten
     if ( nWinStyle & WB_DRAG )
@@ -212,10 +212,10 @@ Rectangle HeaderBar::ImplGetItemRect( USHORT nPos ) const
 USHORT HeaderBar::ImplHitTest( const Point& rPos,
                                long& nMouseOff, USHORT& nPos ) const
 {
-    ImplHeadItem*   pItem;
-    USHORT          nCount = (USHORT)mpItemList->Count();
-    BOOL            bLastFixed = TRUE;
-    long            nX = -mnOffset;
+    ImplHeadItem*	pItem;
+    USHORT			nCount = (USHORT)mpItemList->Count();
+    BOOL			bLastFixed = TRUE;
+    long			nX = -mnOffset;
 
     for ( USHORT i = 0; i < nCount; i++ )
     {
@@ -278,8 +278,8 @@ void HeaderBar::ImplInvertDrag( USHORT nStartPos, USHORT nEndPos )
 {
     Rectangle aRect1 = ImplGetItemRect( nStartPos );
     Rectangle aRect2 = ImplGetItemRect( nEndPos );
-    Point     aStartPos = aRect1.Center();
-    Point     aEndPos = aStartPos;
+    Point	  aStartPos = aRect1.Center();
+    Point	  aEndPos = aStartPos;
     Rectangle aStartRect( aStartPos.X()-2, aStartPos.Y()-2,
                           aStartPos.X()+2, aStartPos.Y()+2 );
 
@@ -350,13 +350,13 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             return;
     }
 
-    ImplHeadItem*           pItem  = mpItemList->GetObject( nPos );
-    HeaderBarItemBits       nBits = pItem->mnBits;
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+    ImplHeadItem*			pItem  = mpItemList->GetObject( nPos );
+    HeaderBarItemBits		nBits = pItem->mnBits;
+    const StyleSettings&	rStyleSettings = GetSettings().GetStyleSettings();
 
     // Border muss nicht gemalt werden
-    aRect.Top()     += mnBorderOff1;
-    aRect.Bottom()  -= mnBorderOff2;
+    aRect.Top() 	+= mnBorderOff1;
+    aRect.Bottom()	-= mnBorderOff2;
 
     // Hintergrund loeschen
     if ( !pRect || bDrag )
@@ -651,8 +651,8 @@ void HeaderBar::ImplUpdate( USHORT nPos, BOOL bEnd, BOOL bDirect )
     {
         if ( !bDirect )
         {
-            Rectangle   aRect;
-            USHORT      nItemCount = (USHORT)(mpItemList->Count());
+            Rectangle	aRect;
+            USHORT		nItemCount = (USHORT)(mpItemList->Count());
             if ( nPos < nItemCount )
                 aRect = ImplGetItemRect( nPos );
             else
@@ -663,8 +663,8 @@ void HeaderBar::ImplUpdate( USHORT nPos, BOOL bEnd, BOOL bDirect )
             }
             if ( bEnd )
                 aRect.Right() = mnDX-1;
-            aRect.Top()     += mnBorderOff1;
-            aRect.Bottom()  -= mnBorderOff2;
+            aRect.Top() 	+= mnBorderOff1;
+            aRect.Bottom()	-= mnBorderOff2;
             Invalidate( aRect );
         }
         else
@@ -678,8 +678,8 @@ void HeaderBar::ImplUpdate( USHORT nPos, BOOL bEnd, BOOL bDirect )
                 aRect.Right() = mnDX-1;
                 if ( aRect.Left() < aRect.Right() )
                 {
-                    aRect.Top()     += mnBorderOff1;
-                    aRect.Bottom()  -= mnBorderOff2;
+                    aRect.Top() 	+= mnBorderOff1;
+                    aRect.Bottom()	-= mnBorderOff2;
                     Erase( aRect );
                 }
             }
@@ -691,8 +691,8 @@ void HeaderBar::ImplUpdate( USHORT nPos, BOOL bEnd, BOOL bDirect )
 
 void HeaderBar::ImplStartDrag( const Point& rMousePos, BOOL bCommand )
 {
-    USHORT  nPos;
-    USHORT  nHitTest = ImplHitTest( rMousePos, mnMouseOff, nPos );
+    USHORT	nPos;
+    USHORT	nHitTest = ImplHitTest( rMousePos, mnMouseOff, nPos );
     if ( nHitTest )
     {
         mbDrag = FALSE;
@@ -754,8 +754,8 @@ void HeaderBar::ImplStartDrag( const Point& rMousePos, BOOL bCommand )
 
 void HeaderBar::ImplDrag( const Point& rMousePos )
 {
-    BOOL    bNewOutDrag;
-    USHORT  nPos = GetItemPos( mnCurItemId );
+    BOOL	bNewOutDrag;
+    USHORT	nPos = GetItemPos( mnCurItemId );
 
     mnDragPos = rMousePos.X()-mnMouseOff;
     if ( mbItemMode )
@@ -909,13 +909,13 @@ void HeaderBar::ImplEndDrag( BOOL bCancel )
         }
     }
 
-    mbDrag          = FALSE;
+    mbDrag			= FALSE;
     EndDrag();
-    mnCurItemId     = 0;
-    mnItemDragPos   = HEADERBAR_ITEM_NOTFOUND;
-    mbOutDrag       = FALSE;
-    mbItemMode      = FALSE;
-    mbItemDrag      = FALSE;
+    mnCurItemId 	= 0;
+    mnItemDragPos	= HEADERBAR_ITEM_NOTFOUND;
+    mbOutDrag		= FALSE;
+    mbItemMode		= FALSE;
+    mbItemDrag		= FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -926,9 +926,9 @@ void HeaderBar::MouseButtonDown( const MouseEvent& rMEvt )
     {
         if ( rMEvt.GetClicks() == 2 )
         {
-            long    nTemp;
-            USHORT  nPos;
-            USHORT  nHitTest = ImplHitTest( rMEvt.GetPosPixel(), nTemp, nPos );
+            long	nTemp;
+            USHORT	nPos;
+            USHORT	nHitTest = ImplHitTest( rMEvt.GetPosPixel(), nTemp, nPos );
             if ( nHitTest )
             {
                 ImplHeadItem* pItem = mpItemList->GetObject( nPos );
@@ -951,10 +951,10 @@ void HeaderBar::MouseButtonDown( const MouseEvent& rMEvt )
 
 void HeaderBar::MouseMove( const MouseEvent& rMEvt )
 {
-    long            nTemp1;
-    USHORT          nTemp2;
-    PointerStyle    eStyle = POINTER_ARROW;
-    USHORT          nHitTest = ImplHitTest( rMEvt.GetPosPixel(), nTemp1, nTemp2 );
+    long			nTemp1;
+    USHORT			nTemp2;
+    PointerStyle	eStyle = POINTER_ARROW;
+    USHORT			nHitTest = ImplHitTest( rMEvt.GetPosPixel(), nTemp1, nTemp2 );
 
     if ( nHitTest & HEAD_HITTEST_DIVIDER )
         eStyle = POINTER_HSIZEBAR;
@@ -1008,10 +1008,10 @@ void HeaderBar::Paint( const Rectangle& rRect )
 void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                       ULONG nFlags )
 {
-    Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
-    Rectangle   aRect( aPos, aSize );
-    Font        aFont = GetDrawPixelFont( pDev );
+    Point		aPos  = pDev->LogicToPixel( rPos );
+    Size		aSize = pDev->LogicToPixel( rSize );
+    Rectangle	aRect( aPos, aSize );
+    Font		aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -1036,13 +1036,13 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
             if ( mnBorderOff1 && mnBorderOff2 )
             {
                 pDev->DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom() ) );
-                pDev->DrawLine( Point( aRect.Right(), aRect.Top() ), Point( aRect.Right(), aRect.Bottom() ) );
+                pDev->DrawLine( Point( aRect.Right(), aRect.Top() ), Point( aRect.Right(), aRect.Bottom() ) );                
             }
         }
     }
 
     Rectangle aItemRect( aRect );
-//    aItemRect.Bottom()--;
+//	  aItemRect.Bottom()--;
     USHORT nItemCount = (USHORT)mpItemList->Count();
     for ( USHORT i = 0; i < nItemCount; i++ )
     {
@@ -1234,11 +1234,11 @@ void HeaderBar::InsertItem( USHORT nItemId, const Image& rImage,
 
     // Item anlegen und in die Liste einfuegen
     ImplHeadItem* pItem = new ImplHeadItem;
-    pItem->mnId         = nItemId;
-    pItem->mnBits       = nBits;
-    pItem->mnSize       = nSize;
-    pItem->maImage      = rImage;
-    pItem->mpUserData   = 0;
+    pItem->mnId 		= nItemId;
+    pItem->mnBits		= nBits;
+    pItem->mnSize		= nSize;
+    pItem->maImage		= rImage;
+    pItem->mpUserData	= 0;
     mpItemList->Insert( pItem, nPos );
 
     // Ausgabe updaten
@@ -1256,12 +1256,12 @@ void HeaderBar::InsertItem( USHORT nItemId, const XubString& rText,
 
     // Item anlegen und in die Liste einfuegen
     ImplHeadItem* pItem = new ImplHeadItem;
-    pItem->mnId         = nItemId;
-    pItem->mnBits       = nBits;
-    pItem->mnSize       = nSize;
-    pItem->mnHelpId     = 0;
-    pItem->maText       = rText;
-    pItem->mpUserData   = 0;
+    pItem->mnId 		= nItemId;
+    pItem->mnBits		= nBits;
+    pItem->mnSize		= nSize;
+    pItem->mnHelpId 	= 0;
+    pItem->maText		= rText;
+    pItem->mpUserData	= 0;
     mpItemList->Insert( pItem, nPos );
 
     // Ausgabe updaten
@@ -1281,13 +1281,13 @@ void HeaderBar::InsertItem( USHORT nItemId,
 
     // Item anlegen und in die Liste einfuegen
     ImplHeadItem* pItem = new ImplHeadItem;
-    pItem->mnId         = nItemId;
-    pItem->mnBits       = nBits;
-    pItem->mnSize       = nSize;
-    pItem->mnHelpId     = 0;
-    pItem->maImage      = rImage;
-    pItem->maText       = rText;
-    pItem->mpUserData   = 0;
+    pItem->mnId 		= nItemId;
+    pItem->mnBits		= nBits;
+    pItem->mnSize		= nSize;
+    pItem->mnHelpId 	= 0;
+    pItem->maImage		= rImage;
+    pItem->maText		= rText;
+    pItem->mpUserData	= 0;
     mpItemList->Insert( pItem, nPos );
 
     // Ausgabe updaten

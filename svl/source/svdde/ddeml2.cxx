@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,9 +73,9 @@ PSZ ImpDdeMgr::AllocAtomName( ATOM hString, ULONG& rBufLen )
 PDDESTRUCT ImpDdeMgr::MakeDDEObject( HWND hwnd, ATOM hItemName,
     USHORT fsStatus, USHORT usFormat, PVOID pabData, ULONG usDataLen )
 {
-    PDDESTRUCT  pddes = 0;
-    ULONG       usItemLen;
-    PULONG      pulSharedObj;
+    PDDESTRUCT	pddes = 0;
+    ULONG		usItemLen;
+    PULONG		pulSharedObj;
     //WRITELOG("MakeDDEObject: Start")
 
     PSZ pItemName = 0;
@@ -126,7 +126,7 @@ APIRET ImpDdeMgr::AllocNamedSharedMem( PPVOID ppBaseAddress, PSZ pName,
     ULONG nElementSize, ULONG nElementCount )
 {
     ULONG nObjSize = (ULONG)(nElementSize * nElementCount );
-    nObjSize += sizeof( ULONG );    // fuer ElementCount am Anfang des Blocks
+    nObjSize += sizeof( ULONG );	// fuer ElementCount am Anfang des Blocks
 
     *ppBaseAddress = 0;
     APIRET nRet = MyDosAllocSharedMem( ppBaseAddress, pName, nObjSize,
@@ -294,9 +294,9 @@ ImpDdeMgrData* ImpDdeMgr::InitAll()
 
     if( pBase )
     {
-        pConvTable  = ImpDdeMgr::GetConvTable( pBase );
+        pConvTable	= ImpDdeMgr::GetConvTable( pBase );
         pTransTable = ImpDdeMgr::GetTransTable( pBase );
-        pAppTable   = ImpDdeMgr::GetAppTable( pBase );
+        pAppTable	= ImpDdeMgr::GetAppTable( pBase );
     }
 
     memset( &aDefaultContext, 0, sizeof(CONVCONTEXT) );
@@ -339,17 +339,17 @@ HCONV ImpDdeMgr::CreateConvHandle( ImpDdeMgrData* pData,
     DdeKeepStringHandle( hszPartner );
     DdeKeepStringHandle( hszServiceReq );
     DdeKeepStringHandle( hszTopic );
-    pPtr->hszPartner    = hszPartner;
+    pPtr->hszPartner	= hszPartner;
     pPtr->hszServiceReq = hszServiceReq;
-    pPtr->hszTopic      = hszTopic;
+    pPtr->hszTopic		= hszTopic;
 
-    pPtr->hWndThis      = hWndMe;
-    pPtr->hWndPartner   = hWndPartner;
-    pPtr->pidOwner      = pidOwner;
-    pPtr->hConvPartner  = (HCONV)0;
-    pPtr->nPrevHCONV    = (USHORT)hPrevHCONV;
-    pPtr->nNextHCONV    = 0;
-    pPtr->nStatus       = ST_CONNECTED;
+    pPtr->hWndThis		= hWndMe;
+    pPtr->hWndPartner	= hWndPartner;
+    pPtr->pidOwner		= pidOwner;
+    pPtr->hConvPartner	= (HCONV)0;
+    pPtr->nPrevHCONV	= (USHORT)hPrevHCONV;
+    pPtr->nNextHCONV	= 0;
+    pPtr->nStatus		= ST_CONNECTED;
 
     pData->nCurConvCount++;
 
@@ -398,7 +398,7 @@ void ImpDdeMgr::FreeConvHandle( ImpDdeMgrData* pBase, HCONV hConv,
 
         DdeFreeStringHandle( pPtr->hszPartner );
         DdeFreeStringHandle( pPtr->hszServiceReq );
-        DdeFreeStringHandle( pPtr->hszTopic );
+        DdeFreeStringHandle( pPtr->hszTopic	);
         if( bDestroyHWndThis )
             DestroyConversationWnd( pPtr->hWndThis );
         memset( pPtr, 0, sizeof(ImpHCONV) );
@@ -545,8 +545,8 @@ ULONG ImpDdeMgr::GetTransaction( ImpDdeMgrData* pBase,
         if( pTrans->hConvOwner )
         {
             if(( pTrans->hConvOwner == hOwner ||
-                 pTrans->hConvOwner == hConvPartner)    &&
-                 pTrans->nFormat == nFormat             &&
+                 pTrans->hConvOwner == hConvPartner)	&&
+                 pTrans->nFormat == nFormat 			&&
                  pTrans->hszItem == hszItem )
             {
                 // gefunden!
@@ -641,7 +641,7 @@ HDDEDATA ImpDdeMgr::DdeCreateDataHandle( void* pSrc, ULONG cb,
     else
         nStatus = 0;
     PDDESTRUCT hData=MakeDDEObject(0,(ATOM)hszItem,nStatus,wFmt,pData,cb);
-//  WRITEDATA(hData)
+//	WRITEDATA(hData)
     if ( !hData )
         ImpDdeMgr::nLastErrInstance = DMLERR_INVALIDPARAMETER;
     return (HDDEDATA)hData;
@@ -753,7 +753,7 @@ void ImpDdeMgr::FreeTransactions( ImpDdeMgrData* pData, HCONV hConvOwner )
         return;
 
     Transaction* pTrans = GetTransTable( pData );
-//  ImpHCONV* pConvTable = GetConvTable( pData );
+//	ImpHCONV* pConvTable = GetConvTable( pData );
     pTrans++;
     for( USHORT nPos=1; nPos < pData->nMaxTransCount; nPos++, pTrans++ )
     {

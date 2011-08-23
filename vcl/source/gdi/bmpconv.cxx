@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,12 +51,12 @@ namespace vcl {
 class BmpTransporter :
         public cppu::WeakImplHelper1< com::sun::star::awt::XBitmap >
 {
-    Sequence<sal_Int8>          m_aBM;
-    com::sun::star::awt::Size   m_aSize;
+    Sequence<sal_Int8>			m_aBM;
+    com::sun::star::awt::Size	m_aSize;
 public:
     BmpTransporter( const Bitmap& rBM );
     virtual  ~BmpTransporter();
-
+    
     virtual com::sun::star::awt::Size SAL_CALL getSize() throw();
     virtual Sequence< sal_Int8 > SAL_CALL getDIB() throw();
     virtual Sequence< sal_Int8 > SAL_CALL getMaskDIB() throw();
@@ -68,7 +68,7 @@ class BmpConverter :
 public:
     BmpConverter();
     virtual ~BmpConverter();
-
+    
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() throw();
     virtual void SAL_CALL setValue( const OUString& rProperty, const Any& rValue )
         throw( UnknownPropertyException );
@@ -76,7 +76,7 @@ public:
         throw( UnknownPropertyException );
     virtual sal_Bool SAL_CALL hasMethod( const OUString& rName ) throw();
     virtual sal_Bool SAL_CALL hasProperty( const OUString& rProp ) throw();
-
+    
     virtual Any SAL_CALL invoke( const OUString& rFunction,
                                  const Sequence< Any >& rParams,
                                  Sequence< sal_Int16 >& rOutParamIndex,
@@ -169,10 +169,10 @@ Any SAL_CALL BmpConverter::invoke(
         {
             switch( nTargetDepth )
             {
-                case 1:     aBM.Convert( BMP_CONVERSION_1BIT_THRESHOLD );break;
-                case 4:     aBM.ReduceColors( BMP_CONVERSION_4BIT_COLORS );break;
-                case 8:     aBM.ReduceColors( BMP_CONVERSION_8BIT_COLORS );break;
-                case 24:    aBM.Convert( BMP_CONVERSION_24BIT );break;
+                case 1:		aBM.Convert( BMP_CONVERSION_1BIT_THRESHOLD );break;
+                case 4:		aBM.ReduceColors( BMP_CONVERSION_4BIT_COLORS );break;
+                case 8:		aBM.ReduceColors( BMP_CONVERSION_8BIT_COLORS );break;
+                case 24:	aBM.Convert( BMP_CONVERSION_24BIT );break;
             }
         }
         xBM = new BmpTransporter( aBM );

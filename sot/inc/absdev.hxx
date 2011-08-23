@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ protected:
     JobSetup * pJobSetup;
 public:
     virtual ~AbstractDeviceData() {}
-    virtual AbstractDeviceData *    Copy() const = 0;
-    virtual BOOL                    Equals( const AbstractDeviceData & ) const = 0;
+    virtual AbstractDeviceData *	Copy() const = 0;
+    virtual BOOL					Equals( const AbstractDeviceData & ) const = 0;
 
     JobSetup * GetJobSetup() const { return pJobSetup; }
 };

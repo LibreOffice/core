@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define INCLUDED_unotools_WORKINGSETOPTIONS_HXX
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include <sal/types.h>
@@ -39,12 +39,12 @@
 #include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
-//  forward declarations
+//	forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
+    @short			forward declaration to our private date container implementation
+    @descr			We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
@@ -52,91 +52,91 @@
 class SvtWorkingSetOptions_Impl;
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          collect informations about security features
+    @short			collect informations about security features
     @descr          -
 
-    @implements     -
-    @base           -
+    @implements		-
+    @base			-
 
-    @devstatus      ready to use
+    @devstatus		ready to use
 *//*-*************************************************************************************************************/
 
 class SvtWorkingSetOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      standard constructor and destructor
-            @descr      This will initialize an instance with default values.
+            @short		standard constructor and destructor
+            @descr		This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
                         at create and decrease it at delete time - but all instances use the same data container!
                         He is implemented as a static member ...
 
-            @seealso    member m_nRefCount
-            @seealso    member m_pDataContainer
+            @seealso	member m_nRefCount
+            @seealso	member m_pDataContainer
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
          SvtWorkingSetOptions();
         virtual ~SvtWorkingSetOptions();
 
         //---------------------------------------------------------------------------------------------------------
-        //  interface
+        //	interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/SecureURL"
-            @descr      These value defines the editing view for documents and windows, which have to be restored
+            @short		interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/SecureURL"
+            @descr		These value defines the editing view for documents and windows, which have to be restored
                         when restarting StarOffice. The list gets filled, if Save/WorkingSet = true.
 
-            @seealso    -
+            @seealso	-
 
-            @param      "seqWindowList", new values to set it in configuration.
-            @return     The values which represent current state of internal variable.
+            @param		"seqWindowList", new values to set it in configuration.
+            @return		The values which represent current state of internal variable.
 
-            @onerror    No error should occurre!
+            @onerror	No error should occurre!
         *//*-*****************************************************************************************************/
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetWindowList(                                                                          ) const ;
-        void                                                SetWindowList( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& seqWindowList  )       ;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >	GetWindowList(																			) const	;
+        void												SetWindowList( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& seqWindowList	)		;
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      return a reference to a static mutex
-            @descr      These class use his own static mutex to be threadsafe.
+            @short		return a reference to a static mutex
+            @descr		These class use his own static mutex to be threadsafe.
                         We create a static mutex only for one ime and use at different times.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     A reference to a static mutex member.
+            @param		-
+            @return		A reference to a static mutex member.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -149,10 +149,10 @@ class SvtWorkingSetOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtWorkingSetOptions_Impl*   m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                    m_nRefCount         ;   /// internal ref count mechanism
+        static SvtWorkingSetOptions_Impl*	m_pDataContainer	;	/// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32					m_nRefCount			;	/// internal ref count mechanism
 
-};      // class SvtWorkingSetOptions
+};		// class SvtWorkingSetOptions
 
 #endif  // #ifndef INCLUDED_unotools_WORKINGSETOPTIONS_HXX
 

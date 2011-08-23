@@ -73,7 +73,7 @@ void FastSerializerHelper::endElement(const char* elementName)
 {
     mpSerializer->endUnknownElement(::rtl::OUString(), ::rtl::OUString::createFromAscii(elementName));
 }
-
+    
 void FastSerializerHelper::startElementV(sal_Int32 elementTokenId, va_list args)
 {
     FastAttributeList* pAttrList = new FastAttributeList( mxTokenHandler );
@@ -102,8 +102,8 @@ void FastSerializerHelper::singleElementV(sal_Int32 elementTokenId, va_list args
         if (nName == FSEND)
             break;
         const char* pValue = va_arg(args, const char*);
-        if  (pValue)
-            pAttrList->add(nName, pValue);
+        if 	(pValue)
+            pAttrList->add(nName, pValue);	
     }
 
     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> xAttrList(pAttrList);
@@ -123,7 +123,7 @@ void FastSerializerHelper::startElementV(sal_Int32 elementTokenId, XFastAttribut
 
 void FastSerializerHelper::singleElement(const char* elementName, XFastAttributeListRef xAttrList)
 {
-    mpSerializer->singleUnknownElement(::rtl::OUString(), ::rtl::OUString::createFromAscii(elementName), xAttrList);
+    mpSerializer->singleUnknownElement(::rtl::OUString(), ::rtl::OUString::createFromAscii(elementName), xAttrList);	
 }
 
 void FastSerializerHelper::singleElementV(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
@@ -197,7 +197,7 @@ FastAttributeList * FastSerializerHelper::createAttrList()
 {
     return new FastAttributeList( mxTokenHandler );
 }
-
+    
 
 }
 

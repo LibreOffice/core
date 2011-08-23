@@ -366,7 +366,7 @@ void DeInitSalMain()
 
 SalYieldMutex::SalYieldMutex()
 {
-    mnCount  = 0;
+    mnCount	 = 0;
     mnThreadId  = 0;
 }
 
@@ -622,7 +622,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
             // kept for experimentation purpose (scheduled for future implementation)
             // case kRemoteButtonMenu:         nCommand = MEDIA_COMMAND_MENU; break;
 
-            case kRemoteButtonPlus:         nCommand = MEDIA_COMMAND_VOLUME_UP; break;
+            case kRemoteButtonPlus:     	nCommand = MEDIA_COMMAND_VOLUME_UP; break;
 
             case kRemoteButtonMinus:        nCommand = MEDIA_COMMAND_VOLUME_DOWN; break;
 
@@ -1049,8 +1049,8 @@ void AquaSalInstance::SetErrorEventCallback( void* pInstance, bool(*pCallback)(v
 
 void* AquaSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
-    rReturnedBytes  = 1;
-    rReturnedType   = AsciiCString;
+    rReturnedBytes	= 1;
+    rReturnedType	= AsciiCString;
     return (void*)"";
 }
 

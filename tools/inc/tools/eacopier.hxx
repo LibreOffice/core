@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@ class SvFileStream;
 
 class EA_Copier
 {
-    static EA_Copier*   _pCopier;
+    static EA_Copier*	_pCopier;
 
 public:
-    static void         Register( EA_Copier* pCopier );
-    static EA_Copier*   Get();
+    static void 		Register( EA_Copier* pCopier );
+    static EA_Copier*	Get();
 
-    virtual             ~EA_Copier();
-    virtual BOOL        Copy( const SvFileStream& rFrom, const SvFileStream& rTo ) const = 0;
+    virtual 			~EA_Copier();
+    virtual BOOL		Copy( const SvFileStream& rFrom, const SvFileStream& rTo ) const = 0;
 };
 
 #endif

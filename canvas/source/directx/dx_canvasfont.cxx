@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@ namespace dxcanvas
         }
     }
 
-    CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >&    /*extraFontProperties*/,
-                            const geometry::Matrix2D&                       fontMatrix ) :
+    CanvasFont::CanvasFont( const rendering::FontRequest& 					rFontRequest,
+                            const uno::Sequence< beans::PropertyValue >& 	/*extraFontProperties*/,
+                            const geometry::Matrix2D& 						fontMatrix ) :
         CanvasFont_Base( m_aMutex ),
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
         // TODO(F1): extraFontProperties, fontMatrix
@@ -91,8 +91,8 @@ namespace dxcanvas
     }
 
     uno::Reference< rendering::XTextLayout > SAL_CALL CanvasFont::createTextLayout( const rendering::StringContext& aText,
-                                                                                    sal_Int8                        nDirection,
-                                                                                    sal_Int64                       nRandomSeed ) throw (uno::RuntimeException)
+                                                                                    sal_Int8 						nDirection,
+                                                                                    sal_Int64 						nRandomSeed ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

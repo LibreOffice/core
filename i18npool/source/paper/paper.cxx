@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -188,7 +188,7 @@ bool PaperInfo::doSloppyFit()
 
 bool PaperInfo::sloppyEqual(const PaperInfo &rOther) const
 {
-    return
+    return 
     (
       (labs(m_nPaperWidth - rOther.m_nPaperWidth) < MAXSLOPPY) &&
       (labs(m_nPaperHeight - rOther.m_nPaperHeight) < MAXSLOPPY)
@@ -335,13 +335,13 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         for ( size_t i = 0; i < nTabSize; ++i )
         {
             if (i == PAPER_USER) continue;
-
+            
             //glibc stores sizes as integer mm units, and so is inaccurate. To
             //find a standard paper size we calculate the standard paper sizes
             //into equally inaccurate mm and compare
             long width = (aDinTab[i].m_nWidth + 50) / 100;
             long height = (aDinTab[i].m_nHeight + 50) / 100;
-
+    
             if (width == w.word/100 && height == h.word/100)
             {
                 w.word = aDinTab[i].m_nWidth;
@@ -398,7 +398,7 @@ PaperInfo::PaperInfo(long nPaperWidth, long nPaperHeight)
 {
     for ( size_t i = 0; i < nTabSize; ++i )
     {
-        if (
+        if ( 
              (nPaperWidth == aDinTab[i].m_nWidth) &&
              (nPaperHeight == aDinTab[i].m_nHeight)
            )
@@ -422,7 +422,7 @@ Paper PaperInfo::fromPSName(const rtl::OString &rName)
 
     for ( size_t i = 0; i < nTabSize; ++i )
     {
-        if (aDinTab[i].m_pPSName &&
+        if (aDinTab[i].m_pPSName && 
           !rtl_str_compareIgnoreAsciiCase(aDinTab[i].m_pPSName, rName.getStr()))
         {
             return static_cast<Paper>(i);

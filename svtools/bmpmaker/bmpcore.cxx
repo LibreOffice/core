@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,10 +95,10 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
     if( rInDirs.size() )
     {
         ByteString                  aLine;
-        String                      aInfo, aPrefix, aName( rName ), aString;
-        SvFileStream                aOutStream;
-        BitmapEx                    aTotalBmpEx;
-        DirEntry                    aOutFile( rOut );
+        String 				        aInfo, aPrefix, aName( rName ), aString;
+        SvFileStream		        aOutStream;
+        BitmapEx				    aTotalBmpEx;
+        DirEntry			        aOutFile( rOut );
         ::std::vector< DirEntry >   aInFiles( rInDirs );
         ::std::vector< String >     aNameVector;
         sal_uInt32                  i;
@@ -328,9 +328,9 @@ void BmpCreator::Create( const String& rSRSName,
                          const String& rOutName,
                          const LangInfo& rLang )
 {
-    DirEntry                    aFileName( ImplGetSystemFileName( rSRSName ) ), aOutDir( ImplGetSystemFileName( rOutName ) );
+    DirEntry	                aFileName( ImplGetSystemFileName( rSRSName ) ), aOutDir( ImplGetSystemFileName( rOutName ) );
     ::std::vector< DirEntry >   aInDirs;
-    BOOL                        bDone = FALSE;
+    BOOL		                bDone = FALSE;
 
     aFileName.ToAbs();
     aOutDir.ToAbs();
@@ -360,9 +360,9 @@ void BmpCreator::Create( const String& rSRSName,
         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Kein SRS file!" ) ), EXIT_NOSRSFILE );
     else
     {
-        String      aText;
-        ByteString  aByteText;
-        BOOL        bLangDep = FALSE;
+        String		aText;
+        ByteString	aByteText;
+        BOOL		bLangDep = FALSE;
 
         do
         {
@@ -405,7 +405,7 @@ void BmpCreator::Create( const String& rSRSName,
                 bDone = TRUE;
                 ImplCreate( aInDirs, aOutDir, aName, rLang );
             }
-/*          else if( ( rLang.mnLangNum != 49 ) && !bLangDep )
+/*			else if( ( rLang.mnLangNum != 49 ) && !bLangDep )
             {
                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "INFO: ImageList is not language dependent! Nothing to do for this language." ) ) );
                 bDone = TRUE;

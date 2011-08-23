@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@ namespace svt { namespace table
 {
 //........................................................................
 
-
+    
     //====================================================================
-    //= cell data
+    //= cell data 
     //====================================================================
     struct TableContentType
     {
-        ::rtl::OUString sContent;
-        Image*  pImage;
+        ::rtl::OUString	sContent; 
+        Image*	pImage;
         TableContentType() :
             sContent(),
             pImage(  )
@@ -85,7 +85,7 @@ namespace svt { namespace table
     class SAL_NO_VTABLE ITableModelListener
     {
     public:
-        //virtual void  onTableModelChanged(PTableModel pTableModel) = 0;
+        //virtual void	onTableModelChanged(PTableModel pTableModel) = 0;
         /** notifies the listener that one or more rows have been inserted into
             the table
 
@@ -220,7 +220,7 @@ namespace svt { namespace table
         /** returns the width of the column, in 1/100 millimeters
 
             The returned value must be a positive ->TableMetrics value.
-
+            
             It can also be COLWIDTH_FIT_TO_VIEW, to indicate that the width of the column
             should automatically be adjusted to completely fit the view. For instance, a
             model's last column could return this value, to indicate that it is to occupy
@@ -285,7 +285,7 @@ namespace svt { namespace table
         virtual void            setMaxWidth( TableMetrics _nMaxWidth ) = 0;
 
         /** returns the preferred width of the column,  or 0 if the column
-            does not have a preferred width.
+            does not have a preferred width. 
 
             @see setMaxWidth
             @see getMinWidth
@@ -323,8 +323,8 @@ namespace svt { namespace table
         */
         virtual TableSize   getRowCount() const = 0;
 
-        SVT_DLLPRIVATE virtual void     setColumnCount(TableSize _nColCount) = 0;
-        SVT_DLLPRIVATE virtual void     setRowCount(TableSize _nRowCount) = 0;
+        SVT_DLLPRIVATE virtual void	    setColumnCount(TableSize _nColCount) = 0;
+        SVT_DLLPRIVATE virtual void	    setRowCount(TableSize _nRowCount) = 0;
 
         /** determines whether the table has column headers
 
@@ -337,12 +337,12 @@ namespace svt { namespace table
         /** sets whether the table should have row headers
             @see IColumnRenderer
         */
-        SVT_DLLPRIVATE virtual void     setRowHeaders( bool rowHeaders) = 0;
-
+        SVT_DLLPRIVATE virtual void		setRowHeaders( bool rowHeaders) = 0;
+        
         /** sets whether the table should have column headers
             @see IColumnRenderer
         */
-        SVT_DLLPRIVATE virtual void     setColumnHeaders( bool columnHeaders) = 0;
+        SVT_DLLPRIVATE virtual void		setColumnHeaders( bool columnHeaders) = 0;
 
         /** determines whether the table has row headers
 
@@ -354,7 +354,7 @@ namespace svt { namespace table
         virtual bool        hasRowHeaders() const = 0;
 
         /** determines whether the given cell is editable
-
+        
             @see ICellEditor
             @todo
         */
@@ -410,7 +410,7 @@ namespace svt { namespace table
         */
         SVT_DLLPRIVATE virtual TableMetrics    getRowHeight() const = 0;
 
-        SVT_DLLPRIVATE virtual void         setRowHeight(TableMetrics _nRowHeight) = 0;
+        SVT_DLLPRIVATE virtual void			setRowHeight(TableMetrics _nRowHeight) = 0;
 
         /** determines the height of the column header row
 
@@ -452,7 +452,7 @@ namespace svt { namespace table
     virtual void setCellContent(const std::vector< std::vector< ::com::sun::star::uno::Any > >& cellContent)=0;
     /** gets the content of the cells
     */
-    virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent() = 0;
+    virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&	getCellContent() = 0;
     /**sets title of header rows
     */
     SVT_DLLPRIVATE virtual void setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent)=0;
@@ -475,7 +475,7 @@ namespace svt { namespace table
         /// destroys the table model instance
         virtual ~ITableModel() { }
     };
-    typedef ::boost::shared_ptr< ITableModel > PTableModel;
+    typedef ::boost::shared_ptr< ITableModel > PTableModel;    
 
 //........................................................................
 } } // namespace svt::table

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ const char* ImplDbgCheckOutputDevice( const void* pObj )
 
 // =======================================================================
 
-#define OUTDEV_POLYPOLY_STACKBUF        32
+#define OUTDEV_POLYPOLY_STACKBUF		32
 
 // =======================================================================
 
@@ -221,14 +221,14 @@ bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGr
         return true;
     }
 
-    long                nX;
-    long                nY;
-    long                nWidth;
-    long                nHeight;
-    ULONG               nRectCount;
-    ImplRegionInfo      aInfo;
-    BOOL                bRegionRect;
-    BOOL                bClipRegion = TRUE;
+    long				nX;
+    long				nY;
+    long				nWidth;
+    long				nHeight;
+    ULONG				nRectCount;
+    ImplRegionInfo		aInfo;
+    BOOL				bRegionRect;
+    BOOL				bClipRegion = TRUE;
     const BOOL          bClipDeviceBounds( !pOutDev->GetPDFWriter()
                                            && pOutDev->GetOutDevType() != OUTDEV_PRINTER );
 
@@ -333,36 +333,36 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
     if(!nPoly)
         return;
 
-    sal_uInt32          aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
-    PCONSTSALPOINT      aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
-    BYTE*               aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
-    sal_uInt32*         pPointAry;
-    PCONSTSALPOINT*     pPointAryAry;
-    const BYTE**        pFlagAryAry;
-    USHORT              i = 0, j = 0, last = 0;
-    BOOL                bHaveBezier = sal_False;
+    sal_uInt32			aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
+    PCONSTSALPOINT		aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
+    BYTE*				aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
+    sal_uInt32*			pPointAry;
+    PCONSTSALPOINT* 	pPointAryAry;
+    const BYTE**	 	pFlagAryAry;
+    USHORT				i = 0, j = 0, last = 0;
+    BOOL				bHaveBezier = sal_False;
     if ( nPoly > OUTDEV_POLYPOLY_STACKBUF )
     {
-        pPointAry       = new sal_uInt32[nPoly];
-        pPointAryAry    = new PCONSTSALPOINT[nPoly];
-        pFlagAryAry     = new const BYTE*[nPoly];
+        pPointAry		= new sal_uInt32[nPoly];
+        pPointAryAry	= new PCONSTSALPOINT[nPoly];
+        pFlagAryAry		= new const BYTE*[nPoly];
     }
     else
     {
-        pPointAry       = aStackAry1;
-        pPointAryAry    = aStackAry2;
-        pFlagAryAry     = (const BYTE**)aStackAry3;
+        pPointAry		= aStackAry1;
+        pPointAryAry	= aStackAry2;
+        pFlagAryAry		= (const BYTE**)aStackAry3;
     }
     do
     {
-        const Polygon&  rPoly = rPolyPoly.GetObject( i );
-        USHORT          nSize = rPoly.GetSize();
+        const Polygon&	rPoly = rPolyPoly.GetObject( i );
+        USHORT			nSize = rPoly.GetSize();
         if ( nSize )
         {
-            pPointAry[j]    = nSize;
+            pPointAry[j]	= nSize;
             pPointAryAry[j] = (PCONSTSALPOINT)rPoly.GetConstPointAry();
             pFlagAryAry[j]  = rPoly.GetConstFlagAry();
-            last            = i;
+            last 			= i;
 
             if( pFlagAryAry[j] )
                 bHaveBezier = sal_True;
@@ -425,81 +425,81 @@ OutputDevice::OutputDevice() :
 {
     DBG_CTOR( OutputDevice, ImplDbgCheckOutputDevice );
 
-    mpGraphics          = NULL;
-    mpUnoGraphicsList   = NULL;
-    mpPrevGraphics      = NULL;
-    mpNextGraphics      = NULL;
-    mpMetaFile          = NULL;
-    mpFontEntry         = NULL;
-    mpFontCache         = NULL;
-    mpFontList          = NULL;
-    mpGetDevFontList    = NULL;
-    mpGetDevSizeList    = NULL;
-    mpObjStack          = NULL;
-    mpOutDevData        = NULL;
-    mpPDFWriter         = NULL;
-    mpAlphaVDev         = NULL;
-    mpExtOutDevData     = NULL;
-    mnOutOffX           = 0;
-    mnOutOffY           = 0;
-    mnOutWidth          = 0;
-    mnOutHeight         = 0;
-    mnDPIX              = 0;
-    mnDPIY              = 0;
-    mnTextOffX          = 0;
-    mnTextOffY          = 0;
-    mnOutOffOrigX       = 0;
-    mnOutOffLogicX      = 0;
-    mnOutOffOrigY       = 0;
-    mnOutOffLogicY      = 0;
-    mnEmphasisAscent    = 0;
-    mnEmphasisDescent   = 0;
-    mnDrawMode          = 0;
+    mpGraphics			= NULL;
+    mpUnoGraphicsList	= NULL;
+    mpPrevGraphics		= NULL;
+    mpNextGraphics		= NULL;
+    mpMetaFile			= NULL;
+    mpFontEntry 		= NULL;
+    mpFontCache 		= NULL;
+    mpFontList			= NULL;
+    mpGetDevFontList	= NULL;
+    mpGetDevSizeList	= NULL;
+    mpObjStack			= NULL;
+    mpOutDevData		= NULL;
+    mpPDFWriter			= NULL;
+    mpAlphaVDev			= NULL;
+    mpExtOutDevData		= NULL;
+    mnOutOffX			= 0;
+    mnOutOffY			= 0;
+    mnOutWidth			= 0;
+    mnOutHeight 		= 0;
+    mnDPIX				= 0;
+    mnDPIY				= 0;
+    mnTextOffX			= 0;
+    mnTextOffY			= 0;
+    mnOutOffOrigX		= 0;
+    mnOutOffLogicX		= 0;
+    mnOutOffOrigY		= 0;
+    mnOutOffLogicY		= 0;
+    mnEmphasisAscent	= 0;
+    mnEmphasisDescent	= 0;
+    mnDrawMode			= 0;
     mnTextLayoutMode        = TEXT_LAYOUT_DEFAULT;
     if( Application::GetSettings().GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL
         mnTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
-    meOutDevType        = OUTDEV_DONTKNOW;
+    meOutDevType		= OUTDEV_DONTKNOW;
     meOutDevViewType    = OUTDEV_VIEWTYPE_DONTKNOW;
-    mbMap               = FALSE;
-    mbMapIsDefault      = TRUE;
-    mbClipRegion        = FALSE;
-    mbBackground        = FALSE;
-    mbOutput            = TRUE;
-    mbDevOutput         = FALSE;
-    mbOutputClipped     = FALSE;
-    maTextColor         = Color( COL_BLACK );
-    maOverlineColor     = Color( COL_TRANSPARENT );
-    meTextAlign         = maFont.GetAlign();
-    meRasterOp          = ROP_OVERPAINT;
-    mnAntialiasing      = 0;
+    mbMap				= FALSE;
+    mbMapIsDefault		= TRUE;
+    mbClipRegion		= FALSE;
+    mbBackground		= FALSE;
+    mbOutput			= TRUE;
+    mbDevOutput 		= FALSE;
+    mbOutputClipped 	= FALSE;
+    maTextColor 		= Color( COL_BLACK );
+    maOverlineColor 	= Color( COL_TRANSPARENT );
+    meTextAlign 		= maFont.GetAlign();
+    meRasterOp			= ROP_OVERPAINT;
+    mnAntialiasing		= 0;
     meTextLanguage      = 0;  // TODO: get default from configuration?
-    mbLineColor         = TRUE;
-    mbFillColor         = TRUE;
-    mbInitLineColor     = TRUE;
-    mbInitFillColor     = TRUE;
-    mbInitFont          = TRUE;
-    mbInitTextColor     = TRUE;
-    mbInitClipRegion    = TRUE;
-    mbClipRegionSet     = FALSE;
-    mbKerning           = FALSE;
-    mbNewFont           = TRUE;
-    mbTextLines         = FALSE;
-    mbTextSpecial       = FALSE;
-    mbRefPoint          = FALSE;
+    mbLineColor 		= TRUE;
+    mbFillColor 		= TRUE;
+    mbInitLineColor 	= TRUE;
+    mbInitFillColor 	= TRUE;
+    mbInitFont			= TRUE;
+    mbInitTextColor 	= TRUE;
+    mbInitClipRegion	= TRUE;
+    mbClipRegionSet 	= FALSE;
+    mbKerning			= FALSE;
+    mbNewFont			= TRUE;
+    mbTextLines 		= FALSE;
+    mbTextSpecial		= FALSE;
+    mbRefPoint			= FALSE;
     mbEnableRTL         = FALSE;    // mirroring must be explicitly allowed (typically for windows only)
 
     // struct ImplMapRes
-    maMapRes.mnMapOfsX          = 0;
-    maMapRes.mnMapOfsY          = 0;
-    maMapRes.mnMapScNumX        = 1;
-    maMapRes.mnMapScNumY        = 1;
-    maMapRes.mnMapScDenomX      = 1;
-    maMapRes.mnMapScDenomY      = 1;
+    maMapRes.mnMapOfsX 			= 0;
+    maMapRes.mnMapOfsY 			= 0;
+    maMapRes.mnMapScNumX 		= 1;
+    maMapRes.mnMapScNumY 		= 1;
+    maMapRes.mnMapScDenomX 		= 1;
+    maMapRes.mnMapScDenomY		= 1;
     // struct ImplThresholdRes
-    maThresRes.mnThresLogToPixX = 0;
-    maThresRes.mnThresLogToPixY = 0;
-    maThresRes.mnThresPixToLogX = 0;
-    maThresRes.mnThresPixToLogY = 0;
+    maThresRes.mnThresLogToPixX	= 0;
+    maThresRes.mnThresLogToPixY	= 0;
+    maThresRes.mnThresPixToLogX	= 0;
+    maThresRes.mnThresPixToLogY	= 0;
 }
 
 // -----------------------------------------------------------------------
@@ -597,7 +597,7 @@ void OutputDevice::EnableRTL( BOOL bEnable )
     Window* pWin = dynamic_cast<Window*>(this);
     if( pWin )
         pWin->StateChanged( STATE_CHANGE_MIRRORING );
-
+    
     if( mpAlphaVDev )
         mpAlphaVDev->EnableRTL( bEnable );
 }
@@ -630,12 +630,12 @@ void    OutputDevice::ImplReMirror( Rectangle &rRect ) const
 }
 void    OutputDevice::ImplReMirror( Region &rRegion ) const
 {
-    long                nX;
-    long                nY;
-    long                nWidth;
-    long                nHeight;
-    ImplRegionInfo      aInfo;
-    BOOL                bRegionRect;
+    long				nX;
+    long				nY;
+    long				nWidth;
+    long				nHeight;
+    ImplRegionInfo		aInfo;
+    BOOL				bRegionRect;
     Region              aMirroredRegion;
 
     bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
@@ -659,11 +659,11 @@ int OutputDevice::ImplGetGraphics() const
     if ( mpGraphics )
         return TRUE;
 
-    mbInitLineColor     = TRUE;
-    mbInitFillColor     = TRUE;
-    mbInitFont          = TRUE;
-    mbInitTextColor     = TRUE;
-    mbInitClipRegion    = TRUE;
+    mbInitLineColor 	= TRUE;
+    mbInitFillColor 	= TRUE;
+    mbInitFont			= TRUE;
+    mbInitTextColor 	= TRUE;
+    mbInitClipRegion	= TRUE;
 
     ImplSVData* pSVData = ImplGetSVData();
     if ( meOutDevType == OUTDEV_WINDOW )
@@ -917,9 +917,9 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
         }
     }
 
-    mpGraphics      = NULL;
-    mpPrevGraphics  = NULL;
-    mpNextGraphics  = NULL;
+    mpGraphics		= NULL;
+    mpPrevGraphics	= NULL;
+    mpNextGraphics	= NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1037,7 +1037,7 @@ void OutputDevice::ImplInitClipRegion()
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
         Window* pWindow = (Window*)this;
-        Region  aRegion;
+        Region	aRegion;
 
         // Hintergrund-Sicherung zuruecksetzen
         if ( pWindow->mpWindowImpl->mpFrameData->mpFirstBackWin )
@@ -1104,16 +1104,16 @@ void OutputDevice::ImplSetClipRegion( const Region* pRegion )
     {
         if ( mbClipRegion )
         {
-            maRegion            = Region( REGION_NULL );
-            mbClipRegion        = FALSE;
-            mbInitClipRegion    = TRUE;
+            maRegion			= Region( REGION_NULL );
+            mbClipRegion		= FALSE;
+            mbInitClipRegion	= TRUE;
         }
     }
     else
     {
-        maRegion            = *pRegion;
-        mbClipRegion        = TRUE;
-        mbInitClipRegion    = TRUE;
+        maRegion			= *pRegion;
+        mbClipRegion		= TRUE;
+        mbInitClipRegion	= TRUE;
     }
 }
 
@@ -1142,8 +1142,8 @@ namespace
             return 0x80000000;
         if(a >= 0)
             return a / b;
-        int q = -(-a / b);  // quotient
-        int r = -a % b;     // remainder
+        int q = -(-a / b);	// quotient
+        int r = -a % b;		// remainder
         if(r)
             q--;
         return q;
@@ -1155,7 +1155,7 @@ namespace
             return 0x80000000;
         if(a >= 0)
             return a % b;
-        int r = -a % b;     // remainder
+        int r = -a % b;		// remainder
         if(r)
             r = b - r;
         return r;
@@ -1168,8 +1168,8 @@ namespace
         a += - 1 + b;
         if(a >= 0)
             return a / b;
-        int q = -(-a / b);  // quotient
-        int r = -a % b;     // remainder
+        int q = -(-a / b);	// quotient
+        int r = -a % b;		// remainder
         if(r)
             q--;
         return q;
@@ -1940,8 +1940,8 @@ void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
 
     Rectangle aRect = LogicToPixel( rRect );
     maRegion.Intersect( aRect );
-    mbClipRegion        = TRUE;
-    mbInitClipRegion    = TRUE;
+    mbClipRegion		= TRUE;
+    mbInitClipRegion	= TRUE;
 
     if( mpAlphaVDev )
         mpAlphaVDev->IntersectClipRegion( rRect );
@@ -1964,8 +1964,8 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
 
         Region aRegion = LogicToPixel( rRegion );
         maRegion.Intersect( aRegion );
-        mbClipRegion        = TRUE;
-        mbInitClipRegion    = TRUE;
+        mbClipRegion		= TRUE;
+        mbInitClipRegion	= TRUE;
     }
 
     if( mpAlphaVDev )
@@ -2284,7 +2284,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
         ImplInitLineColor();
 
     // #i101598# support AA and snap for lines, too
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) 
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor())
@@ -2325,7 +2325,7 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
     const LineInfo& rInfo,
     basegfx::B2DPolyPolygon aLinePolyPolygon)
 {
-    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) 
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor());
@@ -2381,19 +2381,19 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
             // #i110768# When area geometry has to be created, do not
             // use the fallback bezier decomposition inside createAreaGeometry,
             // but one that is at least as good as ImplSubdivideBezier was.
-            // There, Polygon::AdaptiveSubdivide was used with default parameter
+            // There, Polygon::AdaptiveSubdivide was used with default parameter 
             // 1.0 as quality index.
             aLinePolyPolygon = basegfx::tools::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0);
         }
-
+        
         for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
         {
             aFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
-                aLinePolyPolygon.getB2DPolygon(a),
-                fHalfLineWidth,
+                aLinePolyPolygon.getB2DPolygon(a), 
+                fHalfLineWidth, 
                 rInfo.GetLineJoin()));
         }
-
+        
         aLinePolyPolygon.clear();
     }
 
@@ -2422,8 +2422,8 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
 
     if(aFillPolyPolygon.count())
     {
-        const Color     aOldLineColor( maLineColor );
-        const Color     aOldFillColor( maFillColor );
+        const Color 	aOldLineColor( maLineColor );
+        const Color 	aOldFillColor( maFillColor );
 
         SetLineColor();
         ImplInitLineColor();
@@ -2431,7 +2431,7 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
         ImplInitFillColor();
 
         bool bDone(false);
-
+        
         if(bTryAA)
         {
             bDone = mpGraphics->DrawPolyPolygon(aFillPolyPolygon, 0.0, this);
@@ -2445,7 +2445,7 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
                 mpGraphics->DrawPolygon(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry(), this);
             }
         }
-
+        
         SetFillColor( aOldFillColor );
         SetLineColor( aOldLineColor );
     }
@@ -2578,7 +2578,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     if ( mbInitLineColor )
         ImplInitLineColor();
 
-    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) 
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor());
@@ -2643,7 +2643,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
 
     // #i101491#
     // Try direct Fallback to B2D-Version of DrawPolyLine
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) 
         && LINE_SOLID == rLineInfo.GetStyle())
     {
         DrawPolyLine( rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin());
@@ -2666,7 +2666,7 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
 
     // #100127# LineInfo is not curve-safe, subdivide always
-    //
+    // 
     // What shall this mean? It's wrong to subdivide here when the
     // polygon is a fat line. In that case, the painted geometry
     // WILL be much different.
@@ -2711,7 +2711,7 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
             aPoly = ImplSubdivideBezier( aPoly );
             nPoints = aPoly.GetSize();
         }
-
+        
         mpGraphics->DrawPolyLine(nPoints, (const SalPoint*)aPoly.GetConstPointAry(), this);
     }
 
@@ -2751,7 +2751,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         ImplInitFillColor();
 
     // use b2dpolygon drawing if possible
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) 
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && (IsLineColor() || IsFillColor()))
@@ -2841,7 +2841,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         ImplInitFillColor();
 
     // use b2dpolygon drawing if possible
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) 
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && (IsLineColor() || IsFillColor()))
@@ -2956,7 +2956,7 @@ void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPo
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) 
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && (IsLineColor() || IsFillColor()))
@@ -3010,7 +3010,7 @@ bool OutputDevice::ImpTryDrawPolyLineDirect(
 {
     const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
     basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
-
+    
     // transform the line width if used
     if( fLineWidth != 0.0 )
     {
@@ -3020,8 +3020,8 @@ bool OutputDevice::ImpTryDrawPolyLineDirect(
     // transform the polygon
     basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
     aB2DPolygon.transform(aTransform);
-
-    if((mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+    
+    if((mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE) 
         && aB2DPolygon.count() < 1000)
     {
         // #i98289#, #i101491#
@@ -3071,7 +3071,7 @@ void OutputDevice::DrawPolyLine(
     if( mbInitLineColor )
         ImplInitLineColor();
 
-    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) 
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor());
@@ -3086,7 +3086,7 @@ void OutputDevice::DrawPolyLine(
     // no output yet; fallback to geometry decomposition and use filled polygon paint
     // when line is fat and not too complex. ImpDrawPolyPolygonWithB2DPolyPolygon
     // will do internal needed AA checks etc.
-    if(fLineWidth >= 2.5
+    if(fLineWidth >= 2.5 
         && rB2DPolygon.count()
         && rB2DPolygon.count() <= 1000)
     {
@@ -3234,8 +3234,8 @@ void OutputDevice::Pop()
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPopAction() );
 
-    GDIMetaFile*    pOldMetaFile = mpMetaFile;
-    ImplObjStack*   pData = mpObjStack;
+    GDIMetaFile*	pOldMetaFile = mpMetaFile;
+    ImplObjStack*	pData = mpObjStack;
     mpMetaFile = NULL;
 
     if ( !pData )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,16 +50,16 @@ using namespace ::com::sun::star::container;
 // ===================================================================
 class UnoTreeModel : public UnoControlModel
 {
-protected:
-    Any     ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
+protected:	
+    Any		ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&	SAL_CALL getInfoHelper();
 
 public:
     UnoTreeModel();
     UnoTreeModel( const UnoTreeModel& rModel );
-
+                        
     UnoControlModel* Clone() const;
-
+                        
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -78,7 +78,7 @@ class UnoTreeControl : public ::cppu::ImplInheritanceHelper1< UnoControlBase, ::
 {
 public:
     UnoTreeControl();
-    ::rtl::OUString             GetComponentServiceName();
+    ::rtl::OUString				GetComponentServiceName();
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);

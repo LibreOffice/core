@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ SourceDirectory::~SourceDirectory()
 
 /*****************************************************************************/
 CodedDependency *SourceDirectory::AddCodedDependency(
-    const ByteString &rCodedIdentifier, USHORT nOperatingSystems )
+    const ByteString &rCodedIdentifier,	USHORT nOperatingSystems )
 /*****************************************************************************/
 {
     CodedDependency *pReturn = NULL;
@@ -117,7 +117,7 @@ CodedDependency *SourceDirectory::AddCodedDependency(
 
 /*****************************************************************************/
 CodedDependency *SourceDirectory::AddCodedIdentifier(
-    const ByteString &rCodedIdentifier, USHORT nOperatingSystems )
+    const ByteString &rCodedIdentifier,	USHORT nOperatingSystems )
 /*****************************************************************************/
 {
     CodedDependency *pReturn = NULL;
@@ -537,8 +537,8 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
     ByteString sStandLst( aIniManager.ToLocal( sDefLst ));
     String s = String( sStandLst, gsl_getSystemTextEncoding());
     InformationParser aParser;
-//  fprintf( stderr,
-//      "Reading database %s ...\n", sStandLst.GetBuffer());
+//	fprintf( stderr,
+//		"Reading database %s ...\n", sStandLst.GetBuffer());
     GenericInformationList *pVerList = aParser.Execute(
         s );
 
@@ -561,13 +561,13 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
 
     sSolarList = aIniManager.ToLocal( sSolarList );
     fprintf( stderr,
-        "Reading directory information %s ...\n", sSolarList.GetBuffer());
+        "Reading directory information %s ...\n", sSolarList.GetBuffer()); 
 */
 
     ByteString sVersion( rVersion );
     Star aStar( pVerList, sVersion, TRUE, rRoot.GetBuffer());
-//  fprintf( stderr,
-//      "Creating virtual directory tree ...\n" );
+//	fprintf( stderr,
+//		"Creating virtual directory tree ...\n" );
 
 
     SourceDirectory *pSourceRoot = new SourceDirectory( rRoot, OS_ALL );

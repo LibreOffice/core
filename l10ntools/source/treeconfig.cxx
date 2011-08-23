@@ -21,7 +21,7 @@ namespace transex3
 {
 
 bool Treeconfig::parseConfig(){
-
+    
     string source_config_file = string( static_cast<ByteString>( Export::GetEnv("SOURCE_ROOT_DIR") ).GetBuffer() );
     if( source_config_file.empty() )
     {
@@ -44,7 +44,7 @@ bool Treeconfig::parseConfig(){
 // if you are in some misc place like /tmp then return true
 // => the application can decide what to do in case the function returns true thus how to handle pwd() path
 bool Treeconfig::getActiveRepositories( vector<string>& active_repos ){
-
+    
     bool isPresent = isConfigFilePresent();
     bool hasPath   = false;
     string pwd;
@@ -66,7 +66,7 @@ bool Treeconfig::getActiveRepositories( vector<string>& active_repos ){
     }
     else                              // I am NOT within SOURCE_ROOT_DIR
         hasPath = true;
-
+    
     if( isPresent )
     {
         hasPath = false;                // if config_file is present don't care about pwd
@@ -111,11 +111,11 @@ bool Treeconfig::isConfigFilePresent()
 {
     string config_file = Export::GetEnv( "SOURCE_ROOT_DIR" );
     config_file += "/source_config";
-
+    
     struct stat status;
     if( stat( config_file.c_str() , &status ) < 0 )
     {
-        return false;
+        return false; 
     }
 #ifdef WNT
     return ( status.st_mode & _S_IFREG ) && ( _access( config_file.c_str() , 4 ) >= 0 ) ;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,20 +55,20 @@ class Gradient;
 #define GDI_METAFILE_LABEL_NOTFOUND     ((ULONG)0xFFFFFFFF)
 
 #ifndef METAFILE_END
-#define METAFILE_END                    GDI_METAFILE_END
+#define METAFILE_END					GDI_METAFILE_END
 #endif
 
 #ifndef METAFILE_LABEL_NOTFOUND
-#define METAFILE_LABEL_NOTFOUND         GDI_METAFILE_LABEL_NOTFOUND
+#define METAFILE_LABEL_NOTFOUND			GDI_METAFILE_LABEL_NOTFOUND
 #endif
 
 // -----------
 // - Defines -
 // -----------
 
-#define MTF_MIRROR_NONE             0x00000000UL
-#define MTF_MIRROR_HORZ             0x00000001UL
-#define MTF_MIRROR_VERT             0x00000002UL
+#define MTF_MIRROR_NONE				0x00000000UL
+#define MTF_MIRROR_HORZ				0x00000001UL
+#define MTF_MIRROR_VERT				0x00000002UL
 
 // ---------
 // - Enums -
@@ -112,29 +112,29 @@ private:
     SAL_DLLPRIVATE static Color    ImplColAdjustFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color    ImplColConvertFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static Color	   ImplColConvertFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color    ImplColMonoFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static Color	   ImplColMonoFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color    ImplColReplaceFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static Color	   ImplColReplaceFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE void            ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pColParam,
+    SAL_DLLPRIVATE void			   ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pColParam, 
                                                        BmpExchangeFnc pFncBmp, const void* pBmpParam );
 
-    SAL_DLLPRIVATE Point           ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt,
+    SAL_DLLPRIVATE Point           ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt, 
                                                         const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE Polygon         ImplGetRotatedPolygon( const Polygon& rPoly, const Point& rRotatePt,
+    SAL_DLLPRIVATE Polygon         ImplGetRotatedPolygon( const Polygon& rPoly, const Point& rRotatePt, 
                                                           const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE PolyPolygon     ImplGetRotatedPolyPolygon( const PolyPolygon& rPoly, const Point& rRotatePt,
+    SAL_DLLPRIVATE PolyPolygon     ImplGetRotatedPolyPolygon( const PolyPolygon& rPoly, const Point& rRotatePt, 
                                                               const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE void            ImplAddGradientEx( GDIMetaFile&          rMtf,
+    SAL_DLLPRIVATE void            ImplAddGradientEx( GDIMetaFile&          rMtf, 
                                                       const OutputDevice&   rMapDev,
                                                       const PolyPolygon&    rPolyPoly,
-                                                      const Gradient&       rGrad       );
-    SAL_DLLPRIVATE bool            ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize );
+                                                      const Gradient&	  	rGrad 		);
+    SAL_DLLPRIVATE bool			   ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize );
     SAL_DLLPRIVATE void          ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut );
 
 
@@ -146,16 +146,16 @@ protected:
 public:
                     GDIMetaFile();
                     GDIMetaFile( const GDIMetaFile& rMtf );
-    virtual         ~GDIMetaFile();
+    virtual			~GDIMetaFile();
 
     using List::operator==;
     using List::operator!=;
     GDIMetaFile&    operator=( const GDIMetaFile& rMtf );
-    BOOL            operator==( const GDIMetaFile& rMtf ) const;
-    BOOL            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
+    BOOL			operator==( const GDIMetaFile& rMtf ) const;
+    BOOL			operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
-    sal_Bool        IsEqual( const GDIMetaFile& rMtf ) const;
+    sal_Bool		IsEqual( const GDIMetaFile& rMtf ) const;
     BOOL            Mirror( ULONG nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
@@ -173,12 +173,12 @@ public:
     */
     Rectangle       GetBoundRect( OutputDevice& i_rReference );
 
-    void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
-                            short nChannelRPercent = 0, short nChannelGPercent = 0,
+    void			Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
+                            short nChannelRPercent = 0, short nChannelGPercent = 0, 
                             short nChannelBPercent = 0, double fGamma = 1.0, BOOL bInvert = FALSE );
-    void            Convert( MtfConversion eConversion );
-    void            ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, ULONG nTol = 0 );
-    void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
+    void			Convert( MtfConversion eConversion );
+    void			ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, ULONG nTol = 0 );
+    void			ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors, 
                                    ULONG nColorCount, ULONG* pTols = NULL );
 
     GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
@@ -205,12 +205,12 @@ public:
     ULONG           GetActionCount() const { return Count(); }
     void            AddAction( MetaAction* pAction );
     void            AddAction( MetaAction* pAction, ULONG nPos );
-    void            RemoveAction( ULONG nPos );
+    void 			RemoveAction( ULONG nPos );
     MetaAction*     CopyAction( ULONG nPos ) const;
     MetaAction*     GetCurAction() const { return (MetaAction*) GetCurObject(); }
     MetaAction*     GetAction( ULONG nAction ) const { return (MetaAction*) GetObject( nAction ); }
-    MetaAction*     FirstAction() { return (MetaAction*) First(); }
-    MetaAction*     NextAction() {  return (MetaAction*) Next(); }
+    MetaAction*     FirstAction() {	return (MetaAction*) First(); }
+    MetaAction*     NextAction() { 	return (MetaAction*) Next(); }
     MetaAction*     ReplaceAction( MetaAction* pAction, ULONG nAction ) { return (MetaAction*) Replace( pAction, nAction ); }
 
     ULONG           GetActionPos( const String& rLabel );
@@ -231,13 +231,13 @@ public:
     void            SetHookHdl( const Link& rLink ) { aHookHdlLink = rLink; }
     const Link&     GetHookHdl() const { return aHookHdlLink; }
 
-    ULONG           GetChecksum() const;
+    ULONG			GetChecksum() const;
     ULONG           GetSizeBytes() const;
 
     // Methoden zum Lesen und Schreiben des neuen Formats;
     // die Read-Methode kann auch das alte Format lesen
-    SvStream&       Read( SvStream& rIStm );
-    SvStream&       Write( SvStream& rOStm );
+    SvStream&		Read( SvStream& rIStm );
+    SvStream&		Write( SvStream& rOStm );
 
     // Stream-Operatoren schreiben das alte Format (noch)
     // und lesen sowohl das alte wie auch das neue Format

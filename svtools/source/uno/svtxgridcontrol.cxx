@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ SVTXGridControl::SVTXGridControl()
     m_xDataModel(0),
     m_xColumnModel(0),
     m_bHasColumnHeaders(false),
-    m_bHasRowHeaders(false),
+    m_bHasRowHeaders(false), 
     m_bVScroll(false),
     m_bHScroll(false),
     m_bUpdate(false),
@@ -149,11 +149,11 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 SelectionMode eSelMode;
                 switch( eSelectionType )
                 {
-                case SelectionType_SINGLE:  eSelMode = SINGLE_SELECTION; break;
-                case SelectionType_RANGE:   eSelMode = RANGE_SELECTION; break;
-                case SelectionType_MULTI:   eSelMode = MULTIPLE_SELECTION; break;
-    //          case SelectionType_NONE:
-                default:                    eSelMode = NO_SELECTION; break;
+                case SelectionType_SINGLE:	eSelMode = SINGLE_SELECTION; break;
+                case SelectionType_RANGE:	eSelMode = RANGE_SELECTION; break;
+                case SelectionType_MULTI:	eSelMode = MULTIPLE_SELECTION; break;
+    //			case SelectionType_NONE:		
+                default:					eSelMode = NO_SELECTION; break;
                 }
                 if( pTable->getSelEngine()->GetSelectionMode() != eSelMode )
                     pTable->getSelEngine()->SetSelectionMode( eSelMode );
@@ -242,16 +242,16 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             {
                 switch( vAlign )
                 {
-                case com::sun::star::style::VerticalAlignment_TOP:  m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(0)); break;
-                case com::sun::star::style::VerticalAlignment_MIDDLE:   m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(1)); break;
-                case com::sun::star::style::VerticalAlignment_BOTTOM: m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(2)); break;
+                case com::sun::star::style::VerticalAlignment_TOP:	m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(0)); break;
+                case com::sun::star::style::VerticalAlignment_MIDDLE:	m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(1)); break;
+                case com::sun::star::style::VerticalAlignment_BOTTOM: m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(2)); break;		
                 default: m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(0)); break;
                 }
             }
             break;
         }
 
-        case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
+        case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:	
         {
             sal_Bool colHeader = true;
             if( aValue >>= colHeader )
@@ -293,12 +293,12 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                             }
                             m_pTableModel->getCellContent().push_back(newRow);
                         }
-
+                        
                         Sequence< ::rtl::OUString > rowHeaders = m_xDataModel->getRowHeaders();
                         std::vector< rtl::OUString > newRow(
                             comphelper::sequenceToContainer< std::vector<rtl::OUString > >(rowHeaders));
                         m_pTableModel->setRowCount(m_xDataModel->getRowCount());
-                        m_pTableModel->setRowHeaderName(newRow);
+                        m_pTableModel->setRowHeaderName(newRow);			
                     }
                 }
                 else
@@ -312,7 +312,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 else
                     m_pTableModel->setRowHeight(m_xDataModel->getRowHeight());
                 m_pTableModel->setRowHeaderWidth(m_xDataModel->getRowHeaderWidth());
-            }
+            }		
             break;
         }
         case BASEPROPERTY_GRID_COLUMNMODEL:
@@ -378,11 +378,11 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
             SelectionMode eSelMode = pTable->getSelEngine()->GetSelectionMode();
             switch( eSelMode )
             {
-                case SINGLE_SELECTION:  eSelectionType = SelectionType_SINGLE; break;
-                case RANGE_SELECTION:   eSelectionType = SelectionType_RANGE; break;
+                case SINGLE_SELECTION:	eSelectionType = SelectionType_SINGLE; break;
+                case RANGE_SELECTION:	eSelectionType = SelectionType_RANGE; break;
                 case MULTIPLE_SELECTION:eSelectionType = SelectionType_MULTI; break;
-//              case NO_SELECTION:
-                default:                eSelectionType = SelectionType_NONE; break;
+//				case NO_SELECTION:		
+                default:				eSelectionType = SelectionType_NONE; break;
             }
             return Any( eSelectionType );
         }
@@ -399,7 +399,7 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
             case BASEPROPERTY_HSCROLL:
                 return Any ( m_bHScroll);
             case BASEPROPERTY_VSCROLL:
-                return Any ( m_bVScroll);
+                return Any ( m_bVScroll);		
         }
     }
     return VCLXWindow::getProperty( PropertyName );
@@ -451,15 +451,15 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
         {
             UnoControlTableColumn* tableColumn = new UnoControlTableColumn();
             m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
-            m_xColumnModel->getColumn(col)->addColumnListener(listener);
+            m_xColumnModel->getColumn(col)->addColumnListener(listener);	
         }
-
+        
     }
     else if((unsigned int)rawRowData.getLength()!=(unsigned)colCount)
         throw GridInvalidDataException(rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), m_xDataModel);
 
-    for ( int k = 0; k < rawRowData.getLength(); k++)
-        newRow.push_back(rawRowData[k]);
+    for ( int k = 0; k < rawRowData.getLength(); k++)	
+        newRow.push_back(rawRowData[k]);	
     m_pTableModel->getCellContent().push_back(newRow);
     if(m_pTableModel->hasRowHeaders())
         m_pTableModel->getRowHeaderName().push_back(Event.headerName);
@@ -663,7 +663,7 @@ void SAL_CALL SVTXGridControl::disposing( const ::com::sun::star::lang::EventObj
 }
 
 void SAL_CALL SVTXGridControl::selectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException)
-{
+{	
     TableControl* pTable = (TableControl*)GetWindow();
     SelectionMode eSelMode = pTable->getSelEngine()->GetSelectionMode();
     if(eSelMode != NO_SELECTION)
@@ -680,7 +680,7 @@ void SAL_CALL SVTXGridControl::selectRows(const ::com::sun::star::uno::Sequence<
                     selectedRows.clear();
                 if(rangeOfRows.getLength() == 1)
                     selectedRows.push_back(start);
-                else
+                else 
                     return;
             }
             else
@@ -719,7 +719,7 @@ void SAL_CALL SVTXGridControl::selectAllRows() throw (::com::sun::star::uno::Run
 }
 
 void SAL_CALL SVTXGridControl::deselectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException)
-{
+{	
     TableControl* pTable = (TableControl*)GetWindow();
     std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
     std::vector<RowPos>::iterator itStart = selectedRows.begin();
@@ -795,7 +795,7 @@ void SAL_CALL SVTXGridControl::selectRow(::sal_Int32 index) throw (::com::sun::s
                 return;
         }
         else if(eSelMode == SINGLE_SELECTION)
-        {
+        {	
             if(!selectedRows.empty())
             {
                 if(!isSelectedIndex(index))

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,22 +40,22 @@
 // -------------
 
 XPMReader::XPMReader( SvStream& rStm ) :
-            mrIStm          ( rStm ),
-            mpAcc           ( NULL ),
-            mpMaskAcc       ( NULL ),
-            mnLastPos       ( rStm.Tell() ),
-            mnWidth         ( 0 ),
-            mnHeight        ( 0 ),
-            mnColors        ( 0 ),
-            mnCpp           ( 0 ),
-            mbTransparent   ( FALSE ),
-            mbStatus        ( TRUE ),
-            mnStatus        ( 0 ),
-            mnIdentifier    ( XPMIDENTIFIER ),
-            mcThisByte      ( 0 ),
-            mnTempAvail     ( 0 ),
+            mrIStm			( rStm ),
+            mpAcc			( NULL ),
+            mpMaskAcc		( NULL ),
+            mnLastPos		( rStm.Tell() ),
+            mnWidth			( 0 ),
+            mnHeight		( 0 ),
+            mnColors		( 0 ),
+            mnCpp			( 0 ),
+            mbTransparent	( FALSE ),
+            mbStatus		( TRUE ),
+            mnStatus		( 0 ),
+            mnIdentifier	( XPMIDENTIFIER ),
+            mcThisByte		( 0 ),
+            mnTempAvail		( 0 ),
             mpFastColorTable( NULL ),
-            mpColMap        ( NULL )
+            mpColMap		( NULL )
 {
 
 }
@@ -76,8 +76,8 @@ XPMReader::~XPMReader()
 
 ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 {
-    ReadState   eReadState;
-    BYTE        cDummy;
+    ReadState	eReadState;
+    BYTE		cDummy;
 
     // sehen, ob wir _alles_ lesen koennen
     mrIStm.Seek( STREAM_SEEK_TO_END );
@@ -97,7 +97,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 
             if ( ( mbStatus = ImplGetString() ) == TRUE )
             {
-                mnIdentifier = XPMVALUES;           // Bitmap informationen einholen
+                mnIdentifier = XPMVALUES;			// Bitmap informationen einholen
                 mnWidth = ImplGetULONG( 0 );
                 mnHeight = ImplGetULONG( 1 );
                 mnColors = ImplGetULONG( 2 );
@@ -112,9 +112,9 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                 mnIdentifier = XPMCOLORS;
 
                 // mpColMap beinhaltet fuer jede vorhandene
-                // Farbe:   ( mnCpp )Byte(s)-> ASCII Eintrag der der Farbe zugeordnet ist
-                //              1    Byte   -> 0xff wenn Farbe transparent ist
-                //              3    Bytes  -> RGB Wert der Farbe
+                // Farbe:	( mnCpp )Byte(s)-> ASCII Eintrag der der Farbe zugeordnet ist
+                //			    1    Byte	-> 0xff wenn Farbe transparent ist
+                //				3    Bytes  -> RGB Wert der Farbe
                 mpColMap = new BYTE[ mnColors * ( 4 + mnCpp ) ];
                 if ( mpColMap )
                 {
@@ -151,15 +151,15 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                     {
                         maMaskBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
                         if ( ( mpMaskAcc = maMaskBmp.AcquireWriteAccess() ) == NULL )
-                            mbStatus =  FALSE;
+                            mbStatus =	FALSE;
                     }
                     if( mpAcc && mbStatus )
                     {
-                        ULONG   i;
-                        if ( mnColors <=256 )   // palette is only needed by using less than 257
-                        {                       // colors
+                        ULONG	i;
+                        if ( mnColors <=256 )	// palette is only needed by using less than 257
+                        {						// colors
 
-                            BYTE*   pPtr = &mpColMap[mnCpp];
+                            BYTE*	pPtr = &mpColMap[mnCpp];
 
                             for ( i = 0; i < mnColors; i++ )
                             {
@@ -167,12 +167,12 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                                 pPtr += ( mnCpp + 4 );
                             }
                             // using 2 charakters per pixel and less than 257 Colors we speed up
-                            if ( mnCpp == 2 )   // by using a 64kb indexing table
+                            if ( mnCpp == 2 )	// by using a 64kb indexing table
                             {
                                 mpFastColorTable = new BYTE[ 256 * 256 ];
                                 for ( pPtr = mpColMap, i = 0; i < mnColors; i++, pPtr += mnCpp + 4 )
                                 {
-                                    ULONG   j =  pPtr[ 0 ] << 8;
+                                    ULONG	j =  pPtr[ 0 ] << 8;
                                             j += pPtr[ 1 ];
                                     mpFastColorTable[ j ] = (BYTE)i;
                                 }
@@ -239,9 +239,9 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 
 BOOL XPMReader::ImplGetColor( ULONG nNumb )
 {
-    BYTE*   pString = mpStringBuf;
-    BYTE*   pPtr =  ( mpColMap + nNumb * ( 4 + mnCpp ) );
-    BOOL    bStatus = ImplGetString();
+    BYTE*	pString = mpStringBuf;
+    BYTE*	pPtr =  ( mpColMap + nNumb * ( 4 + mnCpp ) );
+    BOOL	bStatus = ImplGetString();
 
     if ( bStatus )
     {
@@ -258,11 +258,11 @@ BOOL XPMReader::ImplGetColor( ULONG nNumb )
 
 BOOL XPMReader::ImplGetScanLine( ULONG nY )
 {
-    BOOL    bStatus = ImplGetString();
-    BYTE*   pString = mpStringBuf;
-    BYTE*   pColor;
-    BitmapColor     aWhite;
-    BitmapColor     aBlack;
+    BOOL	bStatus = ImplGetString();
+    BYTE*	pString = mpStringBuf;
+    BYTE*	pColor;
+    BitmapColor		aWhite;
+    BitmapColor		aBlack;
 
     if ( bStatus )
     {
@@ -336,9 +336,9 @@ BOOL XPMReader::ImplGetColSub( BYTE* pDest )
         {
                 *pDest++ = 0;
                 bColStatus = TRUE;
-                switch ( mnParaSize )
+                switch ( mnParaSize	)
                 {
-                    case 25 :
+                    case 25	:
                         ImplGetRGBHex ( pDest, 6 );
                         break;
                     case 13 :
@@ -360,7 +360,7 @@ BOOL XPMReader::ImplGetColSub( BYTE* pDest )
             mbTransparent = TRUE;
         }
         // last we will try to get the colorname
-        else if ( mnParaSize > 2 )  // name must enlarge the minimum size
+        else if ( mnParaSize > 2 )	// name must enlarge the minimum size
         {
             ULONG i = 0;
             while ( TRUE )
@@ -434,15 +434,15 @@ BOOL XPMReader::ImplGetColKey( BYTE nKey )
 // ImplGetRGBHex uebersetzt den ASCII-Hexadezimalwert der sich bei mpPara befindet
 // in einen RGB wert und schreibt diesen nach pDest
 // folgende Formate muessen sich bei mpPara befinden:
-// wenn nAdd = 0 : '#12ab12'                    -> RGB = 0x12, 0xab, 0x12
-//             2 : '#1234abcd1234'                  "      "     "     "
-//             6 : '#12345678abcdefab12345678'      "      "     "     "
+// wenn nAdd = 0 : '#12ab12'					-> RGB = 0x12, 0xab, 0x12
+//			   2 : '#1234abcd1234'					"	   "     "	   "
+//			   6 : '#12345678abcdefab12345678'		"	   "	 "	   "
 
 
 void XPMReader::ImplGetRGBHex( BYTE* pDest,ULONG  nAdd )
 {
-    BYTE*   pPtr = mpPara+1;
-    BYTE    nHex, nTemp;
+    BYTE*	pPtr = mpPara+1;
+    BYTE 	nHex, nTemp;
 
     for ( ULONG i = 0; i < 3; i++ )
     {
@@ -474,7 +474,7 @@ ULONG XPMReader::ImplGetULONG( ULONG nPara )
         for ( ULONG i = 0; i < mnParaSize; i++ )
         {
             BYTE j = (*pPtr++) - 48;
-            if ( j > 9 ) return 0;              // ascii is invalid
+            if ( j > 9 ) return 0;				// ascii is invalid
             nRetValue*=10;
             nRetValue+=j;
         }
@@ -522,10 +522,10 @@ BOOL XPMReader::ImplCompare( BYTE* pSource, BYTE* pDest, ULONG nSize, ULONG nMod
 
 BOOL XPMReader::ImplGetPara ( ULONG nNumb )
 {
-    BYTE    nByte;
-    ULONG   pSize = 0;
-    BYTE*   pPtr = mpStringBuf;
-    ULONG   nCount = 0;
+    BYTE 	nByte;
+    ULONG	pSize = 0;
+    BYTE*	pPtr = mpStringBuf;
+    ULONG	nCount = 0;
 
     if ( ( *pPtr != ' ' ) && ( *pPtr != 0x09 ) )
     {
@@ -577,8 +577,8 @@ BOOL XPMReader::ImplGetPara ( ULONG nNumb )
 
 BOOL XPMReader::ImplGetString( void )
 {
-    BYTE        sID[] = "/* XPM */";
-    BYTE*       pString = mpStringBuf;
+    BYTE		sID[] = "/* XPM */";
+    BYTE*		pString = mpStringBuf;
 
     mnStringSize = 0;
     mpStringBuf[0] = 0;
@@ -597,10 +597,10 @@ BOOL XPMReader::ImplGetString( void )
             {
                 if ( mnTempAvail <= 50 )
                 {
-                    mbStatus = FALSE;   // file is too short to be a correct XPM format
+                    mbStatus = FALSE;	// file is too short to be a correct XPM format
                     break;
                 }
-                for ( int i = 0; i < 9; i++ )   // searching for "/* XPM */"
+                for ( int i = 0; i < 9; i++ )	// searching for "/* XPM */"
                     if ( *mpTempPtr++ != sID[i] )
                     {
                         mbStatus = FALSE;
@@ -626,11 +626,11 @@ BOOL XPMReader::ImplGetString( void )
                 mnStatus &=~XPMREMARK;
             continue;
         }
-        if ( mnStatus & XPMSTRING )             // characters in string
+        if ( mnStatus & XPMSTRING )				// characters in string
         {
             if ( mcThisByte == '"' )
             {
-                mnStatus &=~XPMSTRING;          // end of parameter by eol
+                mnStatus &=~XPMSTRING;			// end of parameter by eol
                 break;
             }
             if ( mnStringSize >= ( XPMSTRINGBUF - 1 ) )
@@ -644,7 +644,7 @@ BOOL XPMReader::ImplGetString( void )
             continue;
         }
         else
-        {                                           // characters beside string
+        {											// characters beside string
             switch ( mcThisByte )
             {
                 case '*' :
@@ -675,9 +675,9 @@ BOOL XPMReader::ImplGetString( void )
 
 BOOL ImportXPM( SvStream& rStm, Graphic& rGraphic )
 {
-    XPMReader*  pXPMReader = (XPMReader*) rGraphic.GetContext();
-    ReadState   eReadState;
-    BOOL        bRet = TRUE;
+    XPMReader*	pXPMReader = (XPMReader*) rGraphic.GetContext();
+    ReadState	eReadState;
+    BOOL		bRet = TRUE;
 
     if( !pXPMReader )
         pXPMReader = new XPMReader( rStm );

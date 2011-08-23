@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,20 +39,20 @@ class SourceTreeIterator
 private:
     transex::Directory aRootDirectory;
     bool bInExecute;
-
+        
     void ExecuteDirectory( transex::Directory& pDirectory );
 
 protected:
     bool bLocal;
     bool bSkipLinks;
-
+    
 public:
     SourceTreeIterator( const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in = false);
     virtual ~SourceTreeIterator();
 
     BOOL StartExecute();
     void EndExecute();
-
+    
     virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,13 @@
 #include <svl/cancel.hxx>
 #include <tools/rtti.hxx>
 
-#define SFXCANCELHINT_REMOVED       1
+#define SFXCANCELHINT_REMOVED		1
 
 class SfxCancelHint: public SfxHint
 {
 private:
     SfxCancellable* pCancellable;
-    USHORT          nAction;
+    USHORT			nAction;
 public:
     TYPEINFO();
     SfxCancelHint( SfxCancellable*, USHORT nAction );

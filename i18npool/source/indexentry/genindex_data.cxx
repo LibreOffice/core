@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (argc < 4) exit(-1);
 
-    fp = fopen(argv[1], "rb");  // open the source file for read;
+    fp = fopen(argv[1], "rb");	// open the source file for read;
     if (fp == NULL) {
         printf("Open the rule source file failed.");
         return 1;
@@ -164,6 +164,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     fclose(fp);
     return 0;
-}   // End of main
+}	// End of main
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

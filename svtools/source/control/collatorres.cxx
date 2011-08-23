@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,31 +45,31 @@ class CollatorRessourceData
 {
     friend class CollatorRessource;
     private: /* data */
-        String          ma_Name;
-        String          ma_Translation;
+        String 			ma_Name;
+        String 			ma_Translation;
     private: /* member functions */
         CollatorRessourceData () {}
     public:
         CollatorRessourceData ( const String &r_Algorithm, const String &r_Translation)
                     : ma_Name (r_Algorithm), ma_Translation (r_Translation) {}
 
-        const String&   GetAlgorithm () const { return ma_Name; }
+        const String&	GetAlgorithm () const { return ma_Name; }
 
-        const String&   GetTranslation () const { return ma_Translation; }
+        const String&	GetTranslation () const { return ma_Translation; }
 
         ~CollatorRessourceData () {}
 
         CollatorRessourceData& operator= (const CollatorRessourceData& r_From)
-        {
-            ma_Name         = r_From.GetAlgorithm();
-            ma_Translation  = r_From.GetTranslation();
+        { 
+            ma_Name 		= r_From.GetAlgorithm(); 
+            ma_Translation 	= r_From.GetTranslation(); 
             return *this;
         }
 };
 
 // -------------------------------------------------------------------------
 //
-//  implementation of the collator-algorithm-name translation
+//  implementation of the collator-algorithm-name translation 
 //
 // -------------------------------------------------------------------------
 
@@ -117,12 +117,12 @@ CollatorRessource::GetTranslation (const String &r_Algorithm)
         nIndex += 1;
         aLocaleFreeAlgorithm = String(r_Algorithm, nIndex, r_Algorithm.Len() - nIndex);
     }
-
+    
     for (sal_uInt32 i = 0; i < COLLATOR_RESSOURCE_COUNT; i++)
     {
         if (aLocaleFreeAlgorithm == mp_Data[i].GetAlgorithm())
             return mp_Data[i].GetTranslation();
-    }
+    } 
 
     return r_Algorithm;
 }

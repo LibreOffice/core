@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 
 void FixedBorder::ImplInit( Window* pParent, WinBits nStyle )
 {
-    mnType          = FIXEDBORDER_TYPE_DOUBLEOUT;
-    mbTransparent   = TRUE;
+    mnType			= FIXEDBORDER_TYPE_DOUBLEOUT;
+    mbTransparent	= TRUE;
 
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
@@ -118,9 +118,9 @@ FixedBorder::~FixedBorder()
 void FixedBorder::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                             const Point& rPos, const Size& rSize )
 {
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    Rectangle               aRect( rPos, rSize );
-    USHORT                  nBorderStyle = mnType;
+    const StyleSettings&	rStyleSettings = GetSettings().GetStyleSettings();
+    Rectangle				aRect( rPos, rSize );
+    USHORT					nBorderStyle = mnType;
 
     if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
          (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
@@ -143,7 +143,7 @@ void FixedBorder::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     else
     */
     {
-        DecorationView  aDecoView( pDev );
+        DecorationView	aDecoView( pDev );
         aDecoView.DrawFrame( aRect, nBorderStyle );
     }
 }
@@ -160,8 +160,8 @@ void FixedBorder::Paint( const Rectangle& )
 void FixedBorder::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                         ULONG nFlags )
 {
-    Point   aPos  = pDev->LogicToPixel( rPos );
-    Size    aSize = pDev->LogicToPixel( rSize );
+    Point	aPos  = pDev->LogicToPixel( rPos );
+    Size	aSize = pDev->LogicToPixel( rSize );
 
     pDev->Push();
     pDev->SetMapMode();

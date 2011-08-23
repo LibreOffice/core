@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,7 +163,7 @@ DECLARE_UNIQUEINDEX( SvPersistUIdx,SvPersistBase *)
 //=========================================================================
 class SvStream;
 class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Klasse k"onnen Laufzeit Objektstrukturen gespeichert
     und geladen werden. Es m"ussen immer alle beteiligten Objekte
@@ -187,11 +187,11 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
 
     Die Reihenfolge beim Speichern und Laden ist egal, sie muss nur
     gleich sein:
-    Speichern:      Laden:
-    A,B,C,D         A,B,C,D     richtig
-    B,A,C,D         B,A,C,D     richtig
-    C,A,B,D         A,B,C,D     falsch
-    A,B,C,D         A,B,C       falsch
+    Speichern:		Laden:
+    A,B,C,D			A,B,C,D     richtig
+    B,A,C,D			B,A,C,D     richtig
+    C,A,B,D			A,B,C,D     falsch
+    A,B,C,D			A,B,C		falsch
 
     [Anmerkung]
 
@@ -216,8 +216,8 @@ protected:
     ULONG               GetCurMaxIndex() const
                         { return GetCurMaxIndex( aPUIdx ); }
 
-    void                WriteObj( BYTE nHdr, SvPersistBase * pObj );
-    UINT32              ReadObj( SvPersistBase * & rpObj,
+    void				WriteObj( BYTE nHdr, SvPersistBase * pObj );
+    UINT32  			ReadObj( SvPersistBase * & rpObj,
                                 BOOL bRegister );
 public:
     BOOL                IsStreamed( SvPersistBase * pObj ) const
@@ -231,8 +231,8 @@ public:
                         ~SvPersistStream();
 
     void                SetStream( SvStream * pStream );
-    SvStream *          GetStream() const { return pStm; }
-    virtual USHORT      IsA() const;
+    SvStream *			GetStream() const { return pStm; }
+    virtual USHORT		IsA() const;
 
     SvPersistBase *     GetObject( ULONG nIdx ) const;
     ULONG               GetIndex( SvPersistBase * ) const;
@@ -256,8 +256,8 @@ public:
                         // gespeichert werden.
     friend SvStream& operator >> ( SvStream &, SvPersistStream & );
     friend SvStream& operator << ( SvStream &, SvPersistStream & );
-    ULONG               InsertObj( SvPersistBase * );
-    ULONG               RemoveObj( SvPersistBase * );
+    ULONG   			InsertObj( SvPersistBase * );
+    ULONG   			RemoveObj( SvPersistBase * );
 };
 
 #endif // _PSTM_HXX

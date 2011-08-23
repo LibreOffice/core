@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace cppcanvas
     {
 
         ImplFont::ImplFont( const uno::Reference< rendering::XCanvas >& rCanvas,
-                            const ::rtl::OUString& rFontName,
+                            const ::rtl::OUString& rFontName, 
                             const double& rCellSize ) :
             mxCanvas( rCanvas ),
             mxFont( NULL )
@@ -57,12 +57,12 @@ namespace cppcanvas
             geometry::Matrix2D aFontMatrix;
             ::canvas::tools::setIdentityMatrix2D( aFontMatrix );
 
-            mxFont = mxCanvas->createFont( aFontRequest,
+            mxFont = mxCanvas->createFont( aFontRequest, 
                                            uno::Sequence< beans::PropertyValue >(),
                                            aFontMatrix );
         }
 
-
+        
         ImplFont::~ImplFont()
         {
         }

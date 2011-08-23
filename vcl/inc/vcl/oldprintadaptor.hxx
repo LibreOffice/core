@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@ namespace vcl
     public:
         OldStylePrintAdaptor( const boost::shared_ptr< Printer >& );
         virtual ~OldStylePrintAdaptor();
-
+        
         void StartPage();
         void EndPage();
-
+        
         virtual int  getPageCount() const;
         virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParameters( int i_nPage ) const;
         virtual void printPage( int i_nPage ) const;

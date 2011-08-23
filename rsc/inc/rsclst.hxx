@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,27 +40,27 @@ class REResourceList : public RESubResourceList
 {
 protected:
     REResourceList*  pParent;
-    RscId            aRscId;    //Id und Name des Resourceobjektes
-    ByteString       aClassName;
-    BOOL             bVisible;
+    RscId			 aRscId;	//Id und Name des Resourceobjektes
+    ByteString		 aClassName;
+    BOOL			 bVisible;
 
 public:
                      REResourceList();
                      REResourceList( REResourceList * pParentList,
                                      ByteString& rClassName,
                                      const RscId & rResourceID,
-                                     BOOL   bVisible = FALSE );
+                                     BOOL	bVisible = FALSE );
                      ~REResourceList();
 
-    REResourceList*  GetParent()     { return pParent; }
-    ByteString       GetObjName()    { return aRscId.GetName(); }
-    ByteString       GetClassName()  { return aClassName; }
-    RscId            GetRscId()      { return aRscId; }
-    void             SetRscId( const RscId & rId ){ aRscId = rId; }
+    REResourceList*  GetParent()	 { return pParent; }
+    ByteString		 GetObjName()	 { return aRscId.GetName(); }
+    ByteString		 GetClassName()  { return aClassName; }
+    RscId			 GetRscId() 	 { return aRscId; }
+    void			 SetRscId( const RscId & rId ){ aRscId = rId; }
 
-    void             SetVisible( BOOL bVis )
+    void			 SetVisible( BOOL bVis )
                                      { bVisible = bVis; }
-    BOOL             IsVisible()     { return bVisible; }
+    BOOL			 IsVisible()	 { return bVisible; }
 };
 
 #endif // _RSCLST_HXX

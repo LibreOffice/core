@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,22 +40,22 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
 using namespace ::rtl;
-using namespace ::utl                       ;   // getProcessServiceFactory
-using namespace ::com::sun::star::lang      ;   // XMultiServiceFactory
-using namespace ::com::sun::star::beans     ;   // PropertyValue
-using namespace ::com::sun::star::uno       ;   // Reference
-using namespace ::com::sun::star::util      ;   // XChangesBatch
-using namespace ::com::sun::star::awt       ;   // Size
-using namespace ::com::sun::star::container ;   //
-using namespace ::com::sun::star::task      ;   // XStatusIndicator
+using namespace ::utl						;	// getProcessServiceFactory
+using namespace ::com::sun::star::lang		;	// XMultiServiceFactory
+using namespace ::com::sun::star::beans		;	// PropertyValue
+using namespace ::com::sun::star::uno		;	// Reference
+using namespace ::com::sun::star::util		;	// XChangesBatch
+using namespace ::com::sun::star::awt		;	// Size
+using namespace ::com::sun::star::container ;	//
+using namespace ::com::sun::star::task		;	// XStatusIndicator
 
 static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const String& rTree )
 {
-    sal_Bool    bAvailable = rTree.Len() != 0;
+    sal_Bool	bAvailable = rTree.Len() != 0;	
     if ( bAvailable )
     {
-        xub_StrLen  nTokenCount = rTree.GetTokenCount( (sal_Unicode)'/' );
-        xub_StrLen  i = 0;
+        xub_StrLen	nTokenCount = rTree.GetTokenCount( (sal_Unicode)'/' );
+        xub_StrLen	i = 0;
 
         if ( rTree.GetChar( 0 ) == (sal_Unicode)'/' )
             i++;
@@ -65,7 +65,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
         Any aAny;
         aAny <<= (OUString)rTree.GetToken( i++, (sal_Unicode)'/' );
 
-        // creation arguments: nodepath
+        // creation arguments: nodepath   
         PropertyValue aPathArgument;
         aPathArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
         aPathArgument.Value = aAny;
@@ -83,7 +83,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
         catch ( ::com::sun::star::uno::Exception& )
         {
             bAvailable = sal_False;
-        }
+        }	
         if ( xReadAccess.is() )
         {
             for ( ; bAvailable && ( i < nTokenCount ); i++ )
@@ -109,7 +109,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
                         {
                             bAvailable = sal_False;
                         }
-                    }
+                    }				
                 }
             }
         }
@@ -123,9 +123,9 @@ void FilterConfigItem::ImpInitTree( const String& rSubTree )
 
     OUString sTree( ConfigManager::GetConfigBaseURL() );
     sTree += rSubTree;
-    Reference< XMultiServiceFactory > xSMGR = getProcessServiceFactory();   // get global uno service manager
+    Reference< XMultiServiceFactory > xSMGR = getProcessServiceFactory();	// get global uno service manager
 
-    Reference< XMultiServiceFactory > xCfgProv(
+    Reference< XMultiServiceFactory > xCfgProv(		
         xSMGR->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) ) ),
             UNO_QUERY );
 
@@ -134,19 +134,19 @@ void FilterConfigItem::ImpInitTree( const String& rSubTree )
         if ( ImpIsTreeAvailable( xCfgProv, String( sTree ) ) )
         {
             Any aAny;
-            // creation arguments: nodepath
+            // creation arguments: nodepath   
             PropertyValue aPathArgument;
             aAny <<= sTree;
             aPathArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
             aPathArgument.Value = aAny;
 
-            // creation arguments: commit mode
+            // creation arguments: commit mode   
             PropertyValue aModeArgument;
             sal_Bool bAsyncron = sal_True;
             aAny <<= bAsyncron;
             aModeArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ) );
             aModeArgument.Value = aAny;
-
+        
             Sequence< Any > aArguments( 2 );
             aArguments[ 0 ] <<= aPathArgument;
             aArguments[ 1 ] <<= aModeArgument;
@@ -178,7 +178,7 @@ FilterConfigItem::FilterConfigItem( ::com::sun::star::uno::Sequence< ::com::sun:
         aFilterData = *pFilterData;
 }
 
-FilterConfigItem::FilterConfigItem( const OUString& rSubTree,
+FilterConfigItem::FilterConfigItem( const OUString& rSubTree, 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData )
 {
     ImpInitTree( rSubTree );

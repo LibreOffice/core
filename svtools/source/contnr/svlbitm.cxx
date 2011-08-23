@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 
 struct SvLBoxButtonData_Impl
 {
-    SvLBoxEntry*    pEntry;
-    BOOL            bDefaultImages;
-    BOOL            bShowRadioButton;
+    SvLBoxEntry*	pEntry;
+    BOOL			bDefaultImages;
+    BOOL			bShowRadioButton;
 
     SvLBoxButtonData_Impl() : pEntry( NULL ), bDefaultImages( FALSE ), bShowRadioButton( FALSE ) {}
 };
@@ -177,21 +177,21 @@ void SvLBoxButtonData::SetDefaultImages( const Control* pCtrl )
 
     if ( pImpl->bShowRadioButton )
     {
-        aBmps[ SV_BMP_UNCHECKED ]   = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DEFAULT );
-        aBmps[ SV_BMP_CHECKED ]     = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_CHECKED );
-        aBmps[ SV_BMP_HICHECKED ]   = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
-        aBmps[ SV_BMP_HIUNCHECKED ] = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED );
-        aBmps[ SV_BMP_TRISTATE ]    = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DONTKNOW );
-        aBmps[ SV_BMP_HITRISTATE ]  = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
+        aBmps[ SV_BMP_UNCHECKED ]	= RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DEFAULT );
+        aBmps[ SV_BMP_CHECKED ]		= RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_CHECKED );
+        aBmps[ SV_BMP_HICHECKED ]	= RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
+        aBmps[ SV_BMP_HIUNCHECKED ]	= RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED );
+        aBmps[ SV_BMP_TRISTATE ]	= RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DONTKNOW );
+        aBmps[ SV_BMP_HITRISTATE ]	= RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
     }
     else
     {
-        aBmps[ SV_BMP_UNCHECKED ]   = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT );
-        aBmps[ SV_BMP_CHECKED ]     = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED );
-        aBmps[ SV_BMP_HICHECKED ]   = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
-        aBmps[ SV_BMP_HIUNCHECKED ] = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED );
-        aBmps[ SV_BMP_TRISTATE ]    = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW );
-        aBmps[ SV_BMP_HITRISTATE ]  = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
+        aBmps[ SV_BMP_UNCHECKED ]	= CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT );
+        aBmps[ SV_BMP_CHECKED ]		= CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED );
+        aBmps[ SV_BMP_HICHECKED ]	= CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
+        aBmps[ SV_BMP_HIUNCHECKED ]	= CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED );
+        aBmps[ SV_BMP_TRISTATE ]	= CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW );
+        aBmps[ SV_BMP_HITRISTATE ]	= CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
     }
 }
 
@@ -201,7 +201,7 @@ BOOL SvLBoxButtonData::HasDefaultImages( void ) const
 }
 
 BOOL SvLBoxButtonData::IsRadio() {
-    return pImpl->bShowRadioButton;
+    return pImpl->bShowRadioButton; 
 }
 
 // ***************************************************************
@@ -246,7 +246,7 @@ void SvLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
     }
     else
         rDev.DrawText( rPos, aStr);
-
+    
 }
 
 SvLBoxItem* SvLBoxString::Create() const
@@ -412,7 +412,7 @@ void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
         ? SV_BMP_STATICIMAGE : pData->GetIndex( nItemFlags );
     USHORT nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
         rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
-
+        
 ///
 //Native drawing
 ///
@@ -420,16 +420,16 @@ void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
     Window *pWin = NULL;
     if( rDev.GetOutDevType() == OUTDEV_WINDOW )
         pWin = (Window*) &rDev;
-
+        
     if ( nIndex != SV_BMP_STATICIMAGE && pWin && pWin->IsNativeControlSupported( (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX, PART_ENTIRE_CONTROL) )
     {
         ImplControlValue    aControlValue;
         Rectangle           aCtrlRegion( rPos, Size(pData->Width(), pData->Height()) );
         ControlState        nState = 0;
-
+        
         //states CTRL_STATE_DEFAULT, CTRL_STATE_PRESSED and CTRL_STATE_ROLLOVER are not implemented
-        if ( IsStateHilighted() )                   nState |= CTRL_STATE_FOCUSED;
-        if ( nStyle != IMAGE_DRAW_DISABLE )         nState |= CTRL_STATE_ENABLED;
+        if ( IsStateHilighted() ) 					nState |= CTRL_STATE_FOCUSED;
+        if ( nStyle != IMAGE_DRAW_DISABLE )			nState |= CTRL_STATE_ENABLED;
 
         if ( IsStateChecked() )
             aControlValue.setTristateVal( BUTTONVALUE_ON );
@@ -442,7 +442,7 @@ void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
                                              aCtrlRegion, nState, aControlValue, rtl::OUString() );
     }
 
-    if( !bNativeOK)
+    if( !bNativeOK) 
         rDev.DrawImage( rPos, pData->aBmps[nIndex + nBaseOffs] ,nStyle);
 }
 
@@ -480,13 +480,13 @@ bool SvLBoxButton::CheckModification() const
 
 struct SvLBoxContextBmp_Impl
 {
-    Image       m_aImage1;
-    Image       m_aImage2;
+    Image		m_aImage1;
+    Image		m_aImage2;
 
-    Image       m_aImage1_hc;
-    Image       m_aImage2_hc;
+    Image		m_aImage1_hc;
+    Image		m_aImage2_hc;
 
-    USHORT      m_nB2IndicatorFlags;
+    USHORT		m_nB2IndicatorFlags;
 };
 
 // ***************************************************************
@@ -585,7 +585,7 @@ void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
     // determine the image set
     BmpColorMode eMode( BMP_COLOR_NORMAL );
     if ( !!m_pImpl->m_aImage1_hc )
-    {   // we really have HC images
+    {	// we really have HC images
         if ( _rDev.GetSettings().GetStyleSettings().GetHighContrastMode() )
             eMode = BMP_COLOR_HIGHCONTRAST;
     }

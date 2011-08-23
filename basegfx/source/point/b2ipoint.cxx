@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,30 +34,30 @@
 
 namespace basegfx
 {
-    B2IPoint& B2IPoint::operator=( const ::basegfx::B2ITuple& rPoint )
-    {
+    B2IPoint& B2IPoint::operator=( const ::basegfx::B2ITuple& rPoint ) 
+    { 
         mnX = rPoint.getX();
-        mnY = rPoint.getY();
-        return *this;
+        mnY = rPoint.getY(); 
+        return *this; 
     }
 
     B2IPoint& B2IPoint::operator*=( const ::basegfx::B2DHomMatrix& rMat )
     {
         double fTempX(
-            rMat.get(0, 0) * mnX +
-            rMat.get(0, 1) * mnY +
+            rMat.get(0, 0) * mnX + 
+            rMat.get(0, 1) * mnY + 
             rMat.get(0, 2));
         double fTempY(
-            rMat.get(1, 0) * mnX +
-            rMat.get(1, 1) * mnY +
+            rMat.get(1, 0) * mnX + 
+            rMat.get(1, 1) * mnY + 
             rMat.get(1, 2));
 
         if(!rMat.isLastLineDefault())
         {
             const double fOne(1.0);
             const double fTempM(
-                rMat.get(2, 0) * mnX +
-                rMat.get(2, 1) * mnY +
+                rMat.get(2, 0) * mnX + 
+                rMat.get(2, 1) * mnY + 
                 rMat.get(2, 2));
 
             if(!fTools::equalZero(fTempM) && !fTools::equal(fOne, fTempM))

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace toolkit
         const Reference< XNumberFormatsSupplier >& lcl_getDefaultFormats_throw()
         {
             ::osl::MutexGuard aGuard( getDefaultFormatsMutex() );
-
+            
             bool& rbTriedCreation = lcl_getTriedCreation();
             Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
             if ( !rDefaultFormats.is() && !rbTriedCreation )
@@ -376,7 +376,7 @@ namespace toolkit
 
             throw IllegalArgumentException(
                         ( ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
-                    +=  GetPropertyName((sal_uInt16)nPropId) )
+                    +=	GetPropertyName((sal_uInt16)nPropId) )
                     +=  ::rtl::OUString::createFromAscii(" (double, integer, or string expected)."),
                 static_cast< XPropertySet* >(this),
                 1);
@@ -416,7 +416,7 @@ namespace toolkit
         static UnoPropertyArrayHelper* pHelper = NULL;
         if ( !pHelper )
         {
-            Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
+            Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
             pHelper = new UnoPropertyArrayHelper( aIDs );
         }
         return *pHelper;
@@ -459,13 +459,13 @@ namespace toolkit
         aValues[1] = xPeer->getProperty( aNames[1] );
 
         ImplSetPropertyValues( aNames, aValues, FALSE );
-
+        
         if ( GetTextListeners().getLength() )
             GetTextListeners().textChanged( e );
     }
 
 //........................................................................
-}   // namespace toolkit
+}	// namespace toolkit
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

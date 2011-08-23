@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,8 +64,8 @@ using namespace ::std;
 //------------------------------------------------------------------------
 /*
     in the constructor we enumerate all formats offered by the transferable
-    and convert the formats into formatetc structures
-    if the transferable supports text in different charsets we use either
+    and convert the formats into formatetc structures 
+    if the transferable supports text in different charsets we use either 
     the charset equal to the charset of the current thread or an arbitrary
     charset supported by the transferable and the system
     if the transferable supports only unicodetext we offer in addition to
@@ -75,8 +75,8 @@ using namespace ::std;
 */
 CXTDataObject::CXTDataObject( ) :
     m_nRefCnt( 0 )
-{
-
+{		
+    
 }
 
 //------------------------------------------------------------------------
@@ -84,7 +84,7 @@ CXTDataObject::CXTDataObject( ) :
 //------------------------------------------------------------------------
 
 STDMETHODIMP CXTDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
-{
+{	
     OSL_ASSERT( NULL != ppvObject );
 
     if ( NULL == ppvObject )
@@ -133,7 +133,7 @@ STDMETHODIMP_(ULONG) CXTDataObject::Release( )
 }
 
 /*------------------------------------------------------------------------
-
+ 
  IDataObject->GetData
  we deliver data only into global memory
 
@@ -144,11 +144,11 @@ STDMETHODIMP_(ULONG) CXTDataObject::Release( )
         problems (windows needs '\0' terminated strings
  2.2. we expect unicode data as Sequence< sal_Unicode > and all other
         text and raw data as Sequence< sal_Int8 >
-
+ 
 ------------------------------------------------------------------------*/
 
 STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
-{
+{		
     if ( ( NULL == pFormatetc ) || ( NULL == pmedium ) )
         return E_INVALIDARG;
 
@@ -167,7 +167,7 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
 
         hr = S_OK;
     }
-
+    
     return hr;
 }
 
@@ -179,7 +179,7 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** p
 {
     if ( ( NULL == ppenumFormatetc ) || ( DATADIR_SET == dwDirection ) )
         return E_INVALIDARG;
-
+    
     *ppenumFormatetc = NULL;
 
     HRESULT hr = E_FAIL;
@@ -312,7 +312,7 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
 STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
 {
     // keep the dataobject alive
-    m_pUnkDataObj->AddRef( );
+    m_pUnkDataObj->AddRef( );		
     return InterlockedIncrement( &m_nRefCnt );
 }
 
@@ -322,7 +322,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 {
-    // release the outer dataobject
+    // release the outer dataobject		
     m_pUnkDataObj->Release( );
 
     // we need a helper variable because it's
@@ -347,9 +347,9 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFe
     ULONG   ulFetched = 0;
     ULONG   ulToFetch = celt;
     HRESULT hr        = S_FALSE;
-
+    
     while( m_nCurrPos < 1 )
-    {
+    {		
         rgelt->cfFormat = CF_TEXT;
         rgelt->ptd      = NULL;
         rgelt->dwAspect = DVASPECT_CONTENT;
@@ -361,15 +361,15 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFe
         --ulToFetch;
         ++ulFetched;
     }
-
+    
     if ( ulFetched == celt )
         hr = S_OK;
 
     if ( NULL != pceltFetched )
-    {
+    {		
         *pceltFetched = ulFetched;
     }
-
+    
     return hr;
 }
 
@@ -380,7 +380,7 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFe
 STDMETHODIMP CEnumFormatEtc::Skip( ULONG celt )
 {
     HRESULT hr = S_FALSE;
-
+    
     /*
     if ( ( m_nCurrPos + celt ) < m_nClipFormats )
     {
@@ -414,9 +414,9 @@ STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC** ppenum )
         return E_INVALIDARG;
 
     HRESULT hr = E_FAIL;
-
+    
     *ppenum = NULL;
-
+    
     CEnumFormatEtc* pCEnumFEtc = new CEnumFormatEtc( m_pUnkDataObj );
     if ( NULL != pCEnumFEtc )
     {

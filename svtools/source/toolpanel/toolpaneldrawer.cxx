@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,7 +152,7 @@ namespace svt
                 i_rTextBox.Top() + ( GetTextHeight() - nHeight ) / 2
             );
             m_pPaintDevice->DrawImage( aPosition, aImage );
-
+            
             aExpansionIndicatorArea = Rectangle( aPosition, aImage.GetSizePixel() );
         }
 
@@ -279,7 +279,7 @@ namespace svt
                 m_pPaintDevice.reset( new VirtualDevice( *this ) );
 
                 // fall through.
-
+                
             case DATACHANGED_FONTS:
             case DATACHANGED_FONTSUBSTITUTION:
             {
@@ -290,7 +290,7 @@ namespace svt
                 if ( IsControlFont() )
                     aFont.Merge( GetControlFont() );
                 SetZoomedPointFont( aFont );
-
+                
                 // Color.
                 Color aColor;
                 if ( IsControlForeground() )
@@ -331,7 +331,7 @@ namespace svt
         Rectangle aTextBox(
             Point(),
             Size(
-                nAvailableWidth,
+                nAvailableWidth, 
                 GetSettings().GetStyleSettings().GetTitleHeight()
             )
         );

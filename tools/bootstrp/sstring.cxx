@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #  define _TOOLS_STRINGLIST
 #endif
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
+#define ENABLE_BYTESTRING_STREAM_OPERATORS 
 #include <tools/stream.hxx>
 #include "bootstrp/sstring.hxx"
 
@@ -105,8 +105,8 @@ ULONG SByteStringList::GetPrevString( ByteString* pStr )
 
 /**************************************************************************
 *
-*   Sortiert einen ByteString in die Liste ein und gibt die Position,
-*   an der einsortiert wurde, zurueck
+*	Sortiert einen ByteString in die Liste ein und gibt die Position,
+*	an der einsortiert wurde, zurueck
 *
 **************************************************************************/
 
@@ -171,7 +171,7 @@ SByteStringList& SByteStringList::operator<<  ( SvStream& rStream )
 {
     sal_uInt32 nListCount;
     rStream >> nListCount;
-    for ( USHORT i = 0; i < nListCount; i++ ) {
+    for ( USHORT i = 0; i < nListCount; i++ ) { 
         ByteString* pByteString = new ByteString();
         rStream >> *pByteString;
         Insert (pByteString, LIST_APPEND);
@@ -265,8 +265,8 @@ ULONG SUniStringList::GetPrevString( UniString* pStr )
 
 /**************************************************************************
 *
-*   Sortiert einen UniString in die Liste ein und gibt die Position,
-*   an der einsortiert wurde, zurueck
+*	Sortiert einen UniString in die Liste ein und gibt die Position,
+*	an der einsortiert wurde, zurueck
 *
 **************************************************************************/
 

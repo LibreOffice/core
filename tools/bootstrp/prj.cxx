@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include "bootstrp/prj.hxx"
 #include "bootstrp/inimgr.hxx"
 
-//#define TEST  1
+//#define TEST 	1
 
 #if defined(WNT) || defined(OS2)
 #define LIST_DELIMETER ';'
@@ -51,7 +51,7 @@
 Link Star::aDBNotFoundHdl;
 
 //
-//  class SimpleConfig
+//	class SimpleConfig
 //
 
 /*****************************************************************************/
@@ -99,7 +99,7 @@ ByteString SimpleConfig::GetNext()
 }
 
 /*****************************************************************************/
-ByteString  SimpleConfig::GetNextLine()
+ByteString	SimpleConfig::GetNextLine()
 /*****************************************************************************/
 {
     ByteString aSecStr;
@@ -141,7 +141,7 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
 
     aTmpStr = aTmpStr.EraseLeadingChars();
     aTmpStr = aTmpStr.EraseTrailingChars();
-//  while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (USHORT)-1 );
+//	while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (USHORT)-1 );
     int nLength = aTmpStr.Len();
     ByteString aEraseString;
     BOOL bFirstTab = TRUE;
@@ -170,7 +170,7 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
 
 
 //
-//  class CommandData
+//	class CommandData
 //
 
 /*****************************************************************************/
@@ -279,7 +279,7 @@ CommandData* Prj::GetDirectoryData( ByteString aLogFileName )
 }
 
 //
-//  class Prj
+//	class Prj
 //
 
 /*****************************************************************************/
@@ -424,7 +424,7 @@ CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
 }
 
 //
-//  class Star
+//	class Star
 //
 
 /*****************************************************************************/
@@ -452,7 +452,7 @@ Star::Star( SolarFileList *pSolarFiles )
 }
 
 /*****************************************************************************/
-Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
+Star::Star( GenericInformationList *pStandLst, ByteString &rVersion, 
     BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
 {
@@ -546,7 +546,7 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                                     aPrjEntry += DirEntry( sPrjDir );
                                     aPrjEntry += DirEntry( sSolarFile );
 
-                                    pFileList->Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );
+                                    pFileList->Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );										   
 
                                     ByteString sFile( aPrjEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
                                 }
@@ -582,7 +582,7 @@ BOOL Star::NeedsUpdate()
 }
 
 /*****************************************************************************/
-void Star::Read( String &rFileName )
+void Star::Read( String &rFileName ) 
 /*****************************************************************************/
 {
     ByteString aString;
@@ -624,7 +624,7 @@ void Star::Read( SolarFileList *pSolarFiles )
         }
 
         aMutex.acquire();
-        aLoadedFilesList.Insert( pFile, LIST_APPEND );
+        aLoadedFilesList.Insert( pFile,	LIST_APPEND );
         aMutex.release();
         delete pSolarFiles->Remove(( ULONG ) 0 );
     }
@@ -938,7 +938,7 @@ Prj* Star::GetPrj ( ByteString aProjectName )
         if ( pPrj->GetProjectName().EqualsIgnoreCaseAscii(aProjectName) )
             return pPrj;
     }
-//  return (Prj*)NULL;
+//	return (Prj*)NULL;
     return 0L ;
 }
 
@@ -965,7 +965,7 @@ ByteString Star::GetPrjName( DirEntry &aPath )
 
 
 //
-//  class StarWriter
+//	class StarWriter
 //
 
 /*****************************************************************************/
@@ -983,7 +983,7 @@ StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 }
 
 /*****************************************************************************/
-StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
+StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,         
     BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
 {
@@ -1077,7 +1077,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                                     aPrjEntry += DirEntry( sPrjDir );
                                     aPrjEntry += DirEntry( sSolarFile );
 
-                                    pFileList->Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );
+                                    pFileList->Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );										   
 
                                     ByteString sFile( aPrjEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
                                     fprintf( stdout, "%s\n", sFile.GetBuffer());
@@ -1153,7 +1153,7 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
         }
 
         aMutex.acquire();
-        aLoadedFilesList.Insert( pFile, LIST_APPEND );
+        aLoadedFilesList.Insert( pFile,	LIST_APPEND );
         aMutex.release();
         delete pSolarFiles->Remove(( ULONG ) 0 );
     }
@@ -1315,7 +1315,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
     int i = 0;
     ByteString aWhat, aWhatOS,
         sClientRestriction, aLogFileName, aProjectName, aPrefix, aCommandPara;
-    static  ByteString aDirName;
+    static	ByteString aDirName;
     BOOL bPrjDep = FALSE;
     BOOL bHardDep = FALSE;
     USHORT nCommandType = 0;
@@ -1592,7 +1592,7 @@ BOOL StarFile::NeedsUpdate()
             return TRUE;
         }
         FileStat aStat( aEntry );
-        if (( aStat.DateModified() > aDate ) ||
+        if (( aStat.DateModified() > aDate ) || 
             (( aStat.DateModified() == aDate ) && ( aStat.TimeModified() > aTime )))
             return TRUE;
     }

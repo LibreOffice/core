@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ namespace toolkit
     {
         mpThrobber->start();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::stop() throw ( uno::RuntimeException )
     {
@@ -116,7 +116,7 @@ namespace toolkit
                         mnStepTime = nStepTime;
                         mpThrobber->setStepTime( mnStepTime );
                     }
-
+                    
                     break;
                 }
                 case BASEPROPERTY_REPEAT: {
@@ -133,7 +133,7 @@ namespace toolkit
             }
         }
     }
-
+    
     //--------------------------------------------------------------------
     uno::Any SAL_CALL XSimpleAnimation::getProperty( const ::rtl::OUString& PropertyName )
         throw( uno::RuntimeException )

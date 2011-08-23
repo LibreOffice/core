@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ class SAX_DLLPUBLIC Converter
 {
 public:
     /** convert string to measure using optional min and max values*/
-    static bool convertMeasure( sal_Int32& rValue,
+    static bool convertMeasure(	sal_Int32& rValue, 
                                 const ::rtl::OUString& rString,
                                 sal_Int16 nTargetUnit = ::com::sun::star::util::MeasureUnit::MM_100TH,
                                 sal_Int32 nMin = SAL_MIN_INT32,
@@ -132,7 +132,7 @@ public:
 
     /** convert string to double number (using ::rtl::math) and DO convert from
         source unit to target unit. */
-    static bool convertDouble(  double& rValue,
+    static bool convertDouble(	double& rValue,
                                 const ::rtl::OUString& rString,
                                 sal_Int16 nSourceUnit,
                                 sal_Int16 nTargetUnit );
@@ -206,6 +206,6 @@ public:
 
 }
 
-#endif  //  _SAX_CONVERTER_HXX
+#endif	//  _SAX_CONVERTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

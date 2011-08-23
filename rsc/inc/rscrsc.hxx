@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,49 +39,49 @@ class DirEntry;
 
 /****************** T Y P E S ********************************************/
 
-#define MAX_INPUTFILES  100
-#define MAX_SYMBOLS     10
-#define MAX_INCLUDES    10
+#define MAX_INPUTFILES	100
+#define MAX_SYMBOLS 	10
+#define MAX_INCLUDES	10
 
 /****************** R s c C m d L i n e **********************************/
 class RscCmdLine
 {
-    void        Init();
+    void		Init();
 
 public:
-
-    RscStrList          aInputList;     // Liste der Quelldateien
-    RscStrList          aSymbolList;    // Liste der Symbole
-    ByteString          aPath;          // Liste der Pfade
-    RSCBYTEORDER_TYPE   nByteOrder;
-    unsigned short      nCommands;      // Steuerbits
-    ByteString          aOutputLst;     // Name der List-Ausgabedatei
-    ByteString          aOutputSrs;     // Name der Srs-Ausgabedatei
-    ByteString          aOutputSrc;     // Name der Src-Ausgabedatei
-    ByteString          aOutputRcCtor;  // Name der Ctor-Ausgabedatei
-    ByteString          aOutputCxx;     // Name der Cxx-Ausgabedatei
-    ByteString          aOutputHxx;     // Name der Hxx-Ausgabedatei
-    ByteString          aTouchFile;     // create this file when done in rsc2
-    ByteString          aILDir;
+    
+    RscStrList			aInputList; 	// Liste der Quelldateien
+    RscStrList			aSymbolList;	// Liste der Symbole
+    ByteString			aPath;		    // Liste der Pfade
+    RSCBYTEORDER_TYPE	nByteOrder;
+    unsigned short		nCommands;		// Steuerbits
+    ByteString			aOutputLst; 	// Name der List-Ausgabedatei
+    ByteString			aOutputSrs; 	// Name der Srs-Ausgabedatei
+    ByteString			aOutputSrc; 	// Name der Src-Ausgabedatei
+    ByteString			aOutputRcCtor;	// Name der Ctor-Ausgabedatei
+    ByteString			aOutputCxx; 	// Name der Cxx-Ausgabedatei
+    ByteString			aOutputHxx; 	// Name der Hxx-Ausgabedatei
+    ByteString			aTouchFile;		// create this file when done in rsc2
+    ByteString			aILDir;
 
     struct OutputFile
     {
-        ByteString                   aLangName;         // language name
-        ByteString                   aOutputRc;         // target file
-        ByteString                   aLangSearchPath;   // language specific search path
-        ::std::list< ByteString >    aSysSearchDirs;    // pathes to search for images
-
+        ByteString			         aLangName;			// language name
+        ByteString			         aOutputRc;			// target file
+        ByteString			         aLangSearchPath;	// language specific search path
+        ::std::list< ByteString >    aSysSearchDirs;    // pathes to search for images         
+        
         OutputFile() {}
     };
-
-    std::list<OutputFile>                                   m_aOutputFiles;
+    
+    std::list<OutputFile>						            m_aOutputFiles;
     std::list< std::pair< rtl::OString, rtl::OString > >    m_aReplacements;
 
                     RscCmdLine( int argc, char ** argv, RscError * pEH );
                     RscCmdLine();
 
                     ~RscCmdLine();
-
+                        
   ::rtl::OString     substitutePaths( const ::rtl::OString& rIn );
 };
 /****************** R s c ************************************************/
@@ -91,43 +91,43 @@ struct WriteRcContext;
 class RscCompiler
 {
 private:
-    RscStrList      aTmpFileList;   // Liste der Tmp-Dateien
-    ByteString      aTmpOutputHxx;  // Name der TempHxx-Ausgabedatei
-    ByteString      aTmpOutputCxx;  // Name der TempCxx-Ausgabedatei
-    ByteString      aTmpOutputRcCtor; // Name der Temp Ctor-Ausgabedatei
-    ByteString      aTmpOutputSrc;  // Name der TempSrc-Ausgabedatei
+    RscStrList		aTmpFileList;	// Liste der Tmp-Dateien
+    ByteString		aTmpOutputHxx;	// Name der TempHxx-Ausgabedatei
+    ByteString		aTmpOutputCxx;	// Name der TempCxx-Ausgabedatei
+    ByteString		aTmpOutputRcCtor; // Name der Temp Ctor-Ausgabedatei
+    ByteString		aTmpOutputSrc;	// Name der TempSrc-Ausgabedatei
 
-    void            CreateResFile( const char * pRc );
-    void            Append( const ByteString& rOutputSrs, const ByteString& rTmpFile );
-    void            OpenInput( const ByteString& rInput );
-
-    bool            GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
+    void			CreateResFile( const char * pRc );
+    void			Append( const ByteString& rOutputSrs, const ByteString& rTmpFile );
+    void			OpenInput( const ByteString& rInput );
+    
+    bool 			GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                        const WriteRcContext& rContext,
-                                    const ByteString& rBaseFileName,
+                                    const ByteString& rBaseFileName, 
                                     ByteString& rImagePath,
                                     FILE* pSysListFile );
-    void            PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
+    void			PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                                           const WriteRcContext& rContext,
-                                         const DirEntry& rSrsInPath,
+                                         const DirEntry& rSrsInPath, 
                                          const DirEntry& rSrsOutPath );
 
 public:
-    RscTypCont*     pTC;        // String und Id-Verwalter
-    RscCmdLine*     pCL;        // Kommandozeile
-    FILE *          fListing;   // Ausgabedatei fuer Listings
-    FILE *          fExitFile;  // bei Abbruch muss diese Datei geschlossen werden
+    RscTypCont* 	pTC;		// String und Id-Verwalter
+    RscCmdLine* 	pCL;		// Kommandozeile
+    FILE *			fListing;	// Ausgabedatei fuer Listings
+    FILE *			fExitFile;	// bei Abbruch muss diese Datei geschlossen werden
 
                     RscCompiler( RscCmdLine *, RscTypCont * );
                     ~RscCompiler();
 
-    ERRTYPE         Start();
-    ByteString      GetTmpFileName();   // Die Dateien werden geloescht
+    ERRTYPE 		Start();
+    ByteString		GetTmpFileName();	// Die Dateien werden geloescht
 
                     // Include Statements lesen
-    ERRTYPE         IncludeParser( ULONG lFileKey );
-    ERRTYPE         ParseOneFile( ULONG lFileKey, const RscCmdLine::OutputFile* pOutputFile, const WriteRcContext* pContext );
-    ERRTYPE         Link();
-    void            EndCompile();
+    ERRTYPE 		IncludeParser( ULONG lFileKey );
+    ERRTYPE 		ParseOneFile( ULONG lFileKey, const RscCmdLine::OutputFile* pOutputFile, const WriteRcContext* pContext );
+    ERRTYPE 		Link();
+    void			EndCompile();
 };
 
 #endif //_RSCRSC_HXX

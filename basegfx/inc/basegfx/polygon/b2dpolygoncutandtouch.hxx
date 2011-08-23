@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ namespace basegfx
         B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPolyPolygon& rMask);
         B2DPolyPolygon addPointsAtCuts(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rMask);
 
-        // look for self-intersections in given polygon and add extra points there. Result will have no
+        // look for self-intersections in given polygon and add extra points there. Result will have no 
         // intersections on an edge
         B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate);
 

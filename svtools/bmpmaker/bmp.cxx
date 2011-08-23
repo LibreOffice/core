@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,13 +52,13 @@ class BmpApp : public BmpCreator
 {
 private:
 
-    String          aOutputFileName;
-    BYTE            cExitCode;
+    String	        aOutputFileName;
+    BYTE	        cExitCode;
+                    
+    BOOL	        GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
+    BOOL	        GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
 
-    BOOL            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
-    BOOL            GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
-
-    void            SetExitCode( BYTE cExit )
+    void	        SetExitCode( BYTE cExit )
                     {
                         if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) )
                             cExitCode = cExit;
@@ -95,7 +95,7 @@ BOOL BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
-        String  aTestStr( '-' );
+        String	aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
@@ -127,7 +127,7 @@ BOOL BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const Stri
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ); i++ )
     {
-        String  aTestStr( '-' );
+        String	aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
@@ -139,7 +139,7 @@ BOOL BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const Stri
                     rParams.push_back( rArgs[ i + 1 ] );
                 else
                     rParams.push_back( String() );
-
+            
                 break;
             }
 
@@ -166,7 +166,7 @@ void BmpApp::Message( const String& rText, BYTE cExit )
 // -----------------------------------------------------------------------------
 
 void BmpApp::ShowUsage()
-{
+{   
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Usage:" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp srs_inputfile output_dir lang_dir lang_num -i input_dir [-i input_dir ][-f err_file]" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Options:" ) ), EXIT_NOERROR );
@@ -187,13 +187,13 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
     if( rArgs.size() >= 6 )
     {
         LangInfo                aLangInfo;
-        USHORT                  nCurCmd = 0;
+        USHORT	                nCurCmd = 0;
         const String            aSrsName( rArgs[ nCurCmd++ ] );
         ::std::vector< String > aInDirVector;
-        ByteString              aLangDir;
-
+        ByteString	            aLangDir;
+        
         aOutName = rArgs[ nCurCmd++ ];
-
+        
         aLangDir = ByteString( rArgs[ nCurCmd++ ], RTL_TEXTENCODING_ASCII_US );
         aLangInfo.mnLangNum = static_cast< sal_uInt16 >( rArgs[ nCurCmd++ ].ToInt32() );
 
@@ -209,11 +209,11 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
         ShowUsage();
         cExitCode = EXIT_COMMONERROR;
     }
-
+    
     if( ( EXIT_NOERROR == cExitCode ) && aOutputFileName.Len() && aOutName.Len() )
     {
-        SvFileStream    aOStm( aOutputFileName, STREAM_WRITE | STREAM_TRUNC );
-        ByteString      aStr( "Successfully generated ImageList(s) in: " );
+        SvFileStream	aOStm( aOutputFileName, STREAM_WRITE | STREAM_TRUNC );
+        ByteString		aStr( "Successfully generated ImageList(s) in: " );
 
         aOStm.WriteLine( aStr.Append( ByteString( aOutName, RTL_TEXTENCODING_UTF8 ) ) );
         aOStm.Close();
@@ -234,7 +234,7 @@ int main( int nArgCount, char* ppArgs[] )
     strcpy( aDisplayVar, "DISPLAY=" );
     putenv( aDisplayVar );
 #endif
-
+    
     ::std::vector< String > aArgs;
     BmpApp                  aBmpApp;
 
@@ -242,7 +242,7 @@ int main( int nArgCount, char* ppArgs[] )
 
     for( int i = 1; i < nArgCount; i++ )
         aArgs.push_back( String( ppArgs[ i ], RTL_TEXTENCODING_ASCII_US ) );
-
+    
     return aBmpApp.Start( aArgs );
 }
 

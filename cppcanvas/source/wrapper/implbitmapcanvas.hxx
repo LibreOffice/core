@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,13 +47,13 @@ namespace cppcanvas
         class ImplBitmapCanvas : public virtual BitmapCanvas, protected virtual ImplCanvas
         {
         public:
-            ImplBitmapCanvas( const ::com::sun::star::uno::Reference<
+            ImplBitmapCanvas( const ::com::sun::star::uno::Reference< 
                                   ::com::sun::star::rendering::XBitmapCanvas >& rCanvas );
             virtual ~ImplBitmapCanvas();
 
-            virtual ::basegfx::B2ISize      getSize() const;
+            virtual ::basegfx::B2ISize 		getSize() const;
 
-            virtual CanvasSharedPtr         clone() const;
+            virtual CanvasSharedPtr			clone() const;
 
             // take compiler-provided default copy constructor
             //ImplBitmapCanvas(const ImplBitmapCanvas&);
@@ -62,8 +62,8 @@ namespace cppcanvas
             // default: disabled assignment
             ImplBitmapCanvas& operator=( const ImplBitmapCanvas& );
 
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >    mxBitmapCanvas;
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >          mxBitmap;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > 	mxBitmapCanvas;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > 			mxBitmap;
         };
     }
 }

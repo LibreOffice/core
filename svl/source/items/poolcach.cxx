@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ DBG_NAME(SfxItemPoolCache)
 struct SfxItemModifyImpl
 {
     const SfxSetItem  *pOrigItem;
-    SfxSetItem        *pPoolItem;
+    SfxSetItem		  *pPoolItem;
 };
 
 SV_DECL_VARARR( SfxItemModifyArr_Impl, SfxItemModifyImpl, 8, 8 )
@@ -112,7 +112,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, BOOL b
             {
                 rMapEntry.pPoolItem->AddRef(2); // einen davon fuer den Cache
                 if ( bNew )
-                    pPool->Put( rOrigItem );    //! AddRef??
+                    pPool->Put( rOrigItem );	//! AddRef??
             }
             return *rMapEntry.pPoolItem;
         }
@@ -135,7 +135,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, BOOL b
     // Refernzzaehler anpassen, je einen davon fuer den Cache
     pNewPoolItem->AddRef( pNewPoolItem != &rOrigItem ? 2 : 1 );
     if ( bNew )
-        pPool->Put( rOrigItem );    //! AddRef??
+        pPool->Put( rOrigItem );	//! AddRef??
 
     // die Transformation im Cache eintragen
     SfxItemModifyImpl aModify;

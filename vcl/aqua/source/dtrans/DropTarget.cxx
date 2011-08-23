@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ namespace /* private */
 {
   self = [super init];
 
-  if (self)
+  if (self) 
     {
       mDropTarget = pdt;
     }
@@ -169,8 +169,8 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
 {
   sal_Int8 dropAct = dropActions;
   bool srcAndDestEqual = false;
-
-  if ([sender draggingSource] != nil)
+  
+  if ([sender draggingSource] != nil) 
     {
       // Internal DnD
       NSView* destView = [[sender draggingDestinationWindow] contentView];
@@ -178,8 +178,8 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
     }
 
   // If ACTION_DEFAULT is set this means NSDragOperationGeneric
-  // has been set and we map this to ACTION_MOVE or ACTION_COPY
-  // depending on whether or not source and dest are equal,
+  // has been set and we map this to ACTION_MOVE or ACTION_COPY 
+  // depending on whether or not source and dest are equal, 
   // this hopefully satisfies all parties
   if( (dropActions == DNDConstants::ACTION_DEFAULT)
   || ((dropActions == mDragSourceSupportedActions)
@@ -188,8 +188,8 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
       dropAct = srcAndDestEqual ? DNDConstants::ACTION_MOVE :
         DNDConstants::ACTION_COPY;
     }
-     // if more than one drop actions have been specified
-     // set ACTION_DEFAULT in order to let the drop target
+     // if more than one drop actions have been specified 
+     // set ACTION_DEFAULT in order to let the drop target 
      // decide which one to use
   else if (dropActions != DNDConstants::ACTION_NONE &&
            dropActions != DNDConstants::ACTION_MOVE &&
@@ -207,7 +207,7 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
           else if (dropActions & DNDConstants::ACTION_MOVE)
             dropAct = DNDConstants::ACTION_MOVE;
           else if (dropActions & DNDConstants::ACTION_LINK)
-            dropAct = DNDConstants::ACTION_LINK;
+            dropAct = DNDConstants::ACTION_LINK;		 
         }
 
       dropAct |= DNDConstants::ACTION_DEFAULT;
@@ -220,56 +220,56 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
 NSDragOperation DropTarget::draggingEntered(id sender)
 {
   // Initially when DnD will be started no modifier key can be pressed yet
-  // thus we are getting all actions that the drag source supports, we save
+  // thus we are getting all actions that the drag source supports, we save 
   // this value because later the system masks the drag source actions if
   // a modifier key will be pressed
   mDragSourceSupportedActions = SystemToOfficeDragActions([sender draggingSourceOperationMask]);
-
+  
   // Only if the drop target is really interessted in the drag actions
   // supported by the source
   if (mDragSourceSupportedActions & mDefaultActions)
     {
-      sal_Int8 currentAction = determineDropAction(mDragSourceSupportedActions, sender);
+      sal_Int8 currentAction = determineDropAction(mDragSourceSupportedActions, sender);	  
 
       NSRect bounds = [mView bounds];
       NSPoint dragLocation = [sender draggedImageLocation];
-
+  
       CocoaToVCL(dragLocation, bounds);
-
+      
       sal_Int32 posX = static_cast<sal_Int32>(dragLocation.x);
       sal_Int32 posY = static_cast<sal_Int32>(dragLocation.y);
 
       NSPasteboard* dragPboard = [sender draggingPasteboard];
       mXCurrentDragClipboard = new AquaClipboard(dragPboard, false);
-
+      
       Reference<XTransferable> xTransferable = DragSource::g_XTransferable.is() ?
         DragSource::g_XTransferable : mXCurrentDragClipboard->getContents();
 
-      DropTargetDragEnterEvent dtdee(static_cast<OWeakObject*>(this),
-                                     0,
-                                     this,
-                                     currentAction,
-                                     posX,
-                                     posY,
-                                     mDragSourceSupportedActions,
+      DropTargetDragEnterEvent dtdee(static_cast<OWeakObject*>(this), 
+                                     0, 
+                                     this, 
+                                     currentAction, 
+                                     posX, 
+                                     posY, 
+                                     mDragSourceSupportedActions, 
                                      xTransferable->getTransferDataFlavors());
 
-      fire_dragEnter(dtdee);
+      fire_dragEnter(dtdee);	  
     }
 
-  return OfficeToSystemDragActions(mSelectedDropAction);
+  return OfficeToSystemDragActions(mSelectedDropAction); 
 }
 
 
 NSDragOperation DropTarget::draggingUpdated(id sender)
 {
-  sal_Int8 currentDragSourceActions =
+  sal_Int8 currentDragSourceActions = 
     SystemToOfficeDragActions([sender draggingSourceOperationMask]);
   NSDragOperation dragOp = NSDragOperationNone;
 
   if (currentDragSourceActions & mDefaultActions)
     {
-      sal_Int8 currentAction = determineDropAction(currentDragSourceActions, sender);
+      sal_Int8 currentAction = determineDropAction(currentDragSourceActions, sender);	  
       NSRect bounds = [mView bounds];
       NSPoint dragLocation = [sender draggedImageLocation];
 
@@ -278,24 +278,24 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
       sal_Int32 posX = static_cast<sal_Int32>(dragLocation.x);
       sal_Int32 posY = static_cast<sal_Int32>(dragLocation.y);
 
-      DropTargetDragEvent dtde(static_cast<OWeakObject*>(this),
-                               0,
-                               this,
+      DropTargetDragEvent dtde(static_cast<OWeakObject*>(this), 
+                               0, 
+                               this, 
                                currentAction,
                                posX,
-                               posY,
+                               posY, 
                                mDragSourceSupportedActions);
 
       fire_dragOver(dtde);
 
-      // drag over callbacks likely have rendered something
+      // drag over callbacks likely have rendered something 
       [mView setNeedsDisplay: TRUE];
-
+      
       dragOp = OfficeToSystemDragActions(mSelectedDropAction);
 
       //NSLog(@"Drag update: Source actions: %x proposed action %x selected action %x", mDragSourceSupportedActions, currentAction, mSelectedDropAction);
     }
-
+ 
   // Weird but it appears as if there is no method in Cocoa
   // to create a kThemeCopyArrowCursor hence we have to use
   // Carbon to do it
@@ -303,7 +303,7 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
     SetThemeCursor(kThemeNotAllowedCursor);
   else if (dragOp == NSDragOperationCopy)
     SetThemeCursor(kThemeCopyArrowCursor);
-  else
+  else 
     SetThemeCursor(kThemeArrowCursor);
 
   return dragOp;
@@ -334,11 +334,11 @@ MacOSBOOL DropTarget::performDragOperation(id sender)
     {
       Reference<XTransferable> xTransferable = DragSource::g_XTransferable;
 
-      if (!DragSource::g_XTransferable.is())
+      if (!DragSource::g_XTransferable.is())			
         {
           xTransferable = mXCurrentDragClipboard->getContents();
         }
-
+          
       NSRect bounds = [mView bounds];
       NSPoint dragLocation = [sender draggedImageLocation];
 
@@ -352,10 +352,10 @@ MacOSBOOL DropTarget::performDragOperation(id sender)
                                this,
                                mSelectedDropAction,
                                posX,
-                               posY,
+                               posY, 
                                mDragSourceSupportedActions,
                                xTransferable);
-
+          
       fire_drop(dtde);
 
       bSuccess = true;
@@ -397,10 +397,10 @@ MacOSBOOL DropTarget::performDragOperation(id sender)
     mView = (id)tmp;
 
     mDropTargetHelper = [[DropTargetHelper alloc] initWithDropTarget: this];
-
+    
     [(id <DraggingDestinationHandler>)mView registerDraggingDestinationHandler:mDropTargetHelper];
     [mView registerForDraggedTypes: mDataFlavorMapper->getAllSupportedPboardTypes()];
-
+    
     id wnd = [mView window];
     NSWindow* parentWnd = [wnd parentWindow];
     unsigned int topWndStyle = (NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask);
@@ -483,7 +483,7 @@ MacOSBOOL DropTarget::performDragOperation(id sender)
 
   void SAL_CALL DropTarget::dropComplete(sal_Bool success) throw (RuntimeException)
   {
-    // Reset the internal transferable used as shortcut in case this is
+    // Reset the internal transferable used as shortcut in case this is 
     // an internal D&D operation
     DragSource::g_XTransferable = Reference<XTransferable>();
     DragSource::g_DropSuccessSet = true;
@@ -535,7 +535,7 @@ MacOSBOOL DropTarget::performDragOperation(id sender)
         while( iter.hasMoreElements())
           {
             Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
-
+            
             try { listener->dragExit( dte); }
             catch (RuntimeException&) {}
           }
@@ -581,7 +581,7 @@ MacOSBOOL DropTarget::performDragOperation(id sender)
 
   OUString SAL_CALL DropTarget::getImplementationName() throw (RuntimeException)
   {
-    return dropTarget_getImplementationName();
+    return dropTarget_getImplementationName();   
   }
 
 

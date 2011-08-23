@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,27 +41,27 @@ class AgentApi
 protected:
     friend class ChannelList;
 
-    AgentItem*          pChannelAgent;
-    virtual BOOL        StartAgent() = 0;
+    AgentItem*			pChannelAgent;
+    virtual BOOL		StartAgent() = 0;
 
     AgentApi(AgentItem* pAgent) { pChannelAgent = pAgent; }
 
 public:
     virtual ~AgentApi() {}
 
-    virtual void    InitAgent() = 0;
-    virtual void    ShutDownAgent() = 0;
+    virtual void	InitAgent() = 0;
+    virtual void	ShutDownAgent() = 0;
 
-    virtual BOOL    NewDataPermission(const String& rChannelName) = 0;
-    virtual void    NewData(const String& rChannelName,
+    virtual BOOL	NewDataPermission(const String& rChannelName) = 0;
+    virtual void 	NewData(const String& rChannelName,
                         const INetURLObject& rURL) = 0;
-    virtual void    NotifyChannelObjFile(const INetURLObject& rURL,
+    virtual void	NotifyChannelObjFile(const INetURLObject& rURL,
                         const String& rFileName) = 0;
-    virtual void    NotifyChannelObjData(const INetURLObject& rURL,
+    virtual void	NotifyChannelObjData(const INetURLObject& rURL,
                         void* pBuffer, long nOffset, long nLen, long nTotalLen) = 0;
 
-    virtual void    RegisterChannels() = 0;
-    virtual void    RegisterUpdateTransmitter() = 0;
+    virtual void	RegisterChannels() = 0;
+    virtual void 	RegisterUpdateTransmitter() = 0;
 };
 
 #endif //_AGAPI_HXX

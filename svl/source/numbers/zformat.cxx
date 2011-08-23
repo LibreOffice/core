@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1823,8 +1823,8 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, String& rOutStr
             rtl_math_StringFormat_G, -3, '.', sal_True );
 }
 #endif
-
-    // We decided to strip trailing zeros unconditionally, since binary
+    
+    // We decided to strip trailing zeros unconditionally, since binary 
     // double-precision rounding error makes it impossible to determine e.g.
     // whether 844.10000000000002273737 is what the user has typed, or the
     // user has typed 844.1 but IEEE 754 represents it that way internally.
@@ -2085,7 +2085,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                         xub_StrLen nLen = OutString.Len();
                         if (!nLen)
                             return false;
-
+        
                         // #i112250# With the 10-decimal limit, small numbers are formatted as "0".
                         // Switch to scientific in that case, too:
                         if (nLen > 11 || (OutString.EqualsAscii("0") && fNumber != 0.0))

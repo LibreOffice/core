@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,13 +148,13 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar
 
 struct ContentImplHelper_Impl
 {
-    rtl::Reference< ::ucbhelper::PropertySetInfo >      m_xPropSetInfo;
+    rtl::Reference< ::ucbhelper::PropertySetInfo > 	    m_xPropSetInfo;
     rtl::Reference< ::ucbhelper::CommandProcessorInfo > m_xCommandsInfo;
     cppu::OInterfaceContainerHelper*              m_pDisposeEventListeners;
     cppu::OInterfaceContainerHelper*              m_pContentEventListeners;
     cppu::OInterfaceContainerHelper*              m_pPropSetChangeListeners;
     cppu::OInterfaceContainerHelper*              m_pCommandChangeListeners;
-    PropertyChangeListeners*                      m_pPropertyChangeListeners;
+    PropertyChangeListeners*    	              m_pPropertyChangeListeners;
 
     ContentImplHelper_Impl()
     : m_pDisposeEventListeners( 0 ),
@@ -190,7 +190,7 @@ namespace ucbhelper {
 ContentImplHelper::ContentImplHelper(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             const rtl::Reference< ContentProviderImplHelper >& rxProvider,
-            const uno::Reference<
+            const uno::Reference< 
             com::sun::star::ucb::XContentIdentifier >& Identifier )
 : m_pImpl( new ContentImplHelper_Impl ),
   m_xSMgr( rxSMgr ),
@@ -224,7 +224,7 @@ void SAL_CALL ContentImplHelper::release()
 {
     // #144882# - Call to OWeakObject::release may destroy m_xProvider.
     //            Prevent this.
-    rtl::Reference< ContentProviderImplHelper > xKeepProviderAlive(
+    rtl::Reference< ContentProviderImplHelper > xKeepProviderAlive( 
         m_xProvider );
 
     {
@@ -322,7 +322,7 @@ void SAL_CALL ContentImplHelper::dispose()
          m_pImpl->m_pPropSetChangeListeners->getLength() )
     {
         lang::EventObject aEvt;
-        aEvt.Source
+        aEvt.Source 
             = static_cast< beans::XPropertySetInfoChangeNotifier * >( this );
         m_pImpl->m_pPropSetChangeListeners->disposeAndClear( aEvt );
     }
@@ -338,7 +338,7 @@ void SAL_CALL ContentImplHelper::dispose()
     if ( m_pImpl->m_pPropertyChangeListeners )
     {
         lang::EventObject aEvt;
-        aEvt.Source
+        aEvt.Source 
             = static_cast< beans::XPropertiesChangeNotifier * >( this );
         m_pImpl->m_pPropertyChangeListeners->disposeAndClear( aEvt );
     }
@@ -378,7 +378,7 @@ void SAL_CALL ContentImplHelper::removeEventListener(
 //=========================================================================
 
 // virtual
-uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
+uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL 
 ContentImplHelper::getIdentifier()
     throw( uno::RuntimeException )
 {
@@ -540,8 +540,8 @@ void SAL_CALL ContentImplHelper::removeCommandInfoChangeListener(
 
 // virtual
 void SAL_CALL ContentImplHelper::addProperty(
-        const rtl::OUString& Name,
-        sal_Int16 Attributes,
+        const rtl::OUString& Name, 
+        sal_Int16 Attributes, 
         const uno::Any& DefaultValue )
     throw( beans::PropertyExistException,
            beans::IllegalTypeException,
@@ -574,15 +574,15 @@ void SAL_CALL ContentImplHelper::addProperty(
     uno::Reference< com::sun::star::ucb::XPersistentPropertySet > xSet(
                                     getAdditionalPropertySet( sal_True ) );
 
-    OSL_ENSURE( xSet.is(),
+    OSL_ENSURE( xSet.is(), 
                 "ContentImplHelper::addProperty - No property set!" );
 
     if ( xSet.is() )
     {
-        uno::Reference< beans::XPropertyContainer > xContainer(
+        uno::Reference< beans::XPropertyContainer > xContainer( 
             xSet, uno::UNO_QUERY );
 
-        OSL_ENSURE(
+        OSL_ENSURE( 
             xContainer.is(),
             "ContentImplHelper::addProperty - No property container!" );
 
@@ -653,7 +653,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const rtl::OUString& Name )
         //     XCommandProcessor commands!
         uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
 
-        beans::Property aProp
+        beans::Property aProp 
             = getPropertySetInfo( xEnv )->getPropertyByName( Name );
 
         if ( !( aProp.Attributes & beans::PropertyAttribute::REMOVEABLE ) )
@@ -677,10 +677,10 @@ void SAL_CALL ContentImplHelper::removeProperty( const rtl::OUString& Name )
         getAdditionalPropertySet( sal_False ) );
     if ( xSet.is() )
     {
-        uno::Reference< beans::XPropertyContainer > xContainer(
+        uno::Reference< beans::XPropertyContainer > xContainer( 
             xSet, uno::UNO_QUERY );
 
-        OSL_ENSURE(
+        OSL_ENSURE( 
             xContainer.is(),
             "ContentImplHelper::removeProperty - No property container!" );
 
@@ -698,7 +698,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const rtl::OUString& Name )
             }
             catch ( beans::NotRemoveableException const & )
             {
-                OSL_ENSURE(
+                OSL_ENSURE( 
                     sal_False,
                     "ContentImplHelper::removeProperty - Unremoveable!" );
                 throw;
@@ -711,7 +711,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const rtl::OUString& Name )
             if ( xSet->getPropertySetInfo()->getProperties().getLength() == 0 )
             {
                 // Remove empty propertyset from registry.
-                uno::Reference< com::sun::star::ucb::XPropertySetRegistry >
+                uno::Reference< com::sun::star::ucb::XPropertySetRegistry > 
                     xReg = xSet->getRegistry();
                 if ( xReg.is() )
                 {
@@ -865,7 +865,7 @@ void ContentImplHelper::notifyPropertiesChange(
     {
         // First, notify listeners interested in changes of every property.
         cppu::OInterfaceContainerHelper* pAllPropsContainer
-            = m_pImpl->m_pPropertyChangeListeners->getContainer(
+            = m_pImpl->m_pPropertyChangeListeners->getContainer( 
                 rtl::OUString() );
         if ( pAllPropsContainer )
         {
@@ -966,7 +966,7 @@ void ContentImplHelper::notifyCommandInfoChange(
         return;
 
     // Notify event listeners.
-    cppu::OInterfaceIteratorHelper aIter(
+    cppu::OInterfaceIteratorHelper aIter( 
         *m_pImpl->m_pCommandChangeListeners );
     while ( aIter.hasMoreElements() )
     {
@@ -979,7 +979,7 @@ void ContentImplHelper::notifyCommandInfoChange(
 }
 
 //=========================================================================
-void ContentImplHelper::notifyContentEvent(
+void ContentImplHelper::notifyContentEvent( 
     const com::sun::star::ucb::ContentEvent& evt ) const
 {
     if ( !m_pImpl->m_pContentEventListeners )
@@ -990,8 +990,8 @@ void ContentImplHelper::notifyContentEvent(
     while ( aIter.hasMoreElements() )
     {
         // Propagate event.
-        uno::Reference<
-            com::sun::star::ucb::XContentEventListener > xListener(
+        uno::Reference< 
+            com::sun::star::ucb::XContentEventListener > xListener( 
                 aIter.next(), uno::UNO_QUERY );
         if ( xListener.is() )
             xListener->contentEvent( evt );
@@ -1012,11 +1012,11 @@ void ContentImplHelper::inserted()
 
     if ( xParent.is() )
     {
-        com::sun::star::ucb::ContentEvent aEvt(
+        com::sun::star::ucb::ContentEvent aEvt( 
             static_cast< cppu::OWeakObject * >( xParent.get() ), // Source
-            com::sun::star::ucb::ContentAction::INSERTED,        // Action
-            this,                                                // Content
-            xParent->getIdentifier() );                          // Id
+            com::sun::star::ucb::ContentAction::INSERTED,		 // Action
+            this,									             // Content
+            xParent->getIdentifier() );				             // Id
         xParent->notifyContentEvent( aEvt );
     }
 }
@@ -1032,16 +1032,16 @@ void ContentImplHelper::deleted()
     if ( xParent.is() )
     {
         // Let parent notify "REMOVED" event.
-        com::sun::star::ucb::ContentEvent aEvt(
+        com::sun::star::ucb::ContentEvent aEvt( 
             static_cast< cppu::OWeakObject * >( xParent.get() ),
             com::sun::star::ucb::ContentAction::REMOVED,
             this,
-            xParent->getIdentifier()    );
+            xParent->getIdentifier()	);
         xParent->notifyContentEvent( aEvt );
     }
 
     // Notify "DELETED" event.
-    com::sun::star::ucb::ContentEvent aEvt1(
+    com::sun::star::ucb::ContentEvent aEvt1( 
         static_cast< cppu::OWeakObject * >( this ),
         com::sun::star::ucb::ContentAction::DELETED,
         this,
@@ -1069,7 +1069,7 @@ sal_Bool ContentImplHelper::exchange(
         return sal_False;
     }
 
-    uno::Reference< com::sun::star::ucb::XContentIdentifier > xOldId
+    uno::Reference< com::sun::star::ucb::XContentIdentifier > xOldId 
         = getIdentifier();
 
     // Re-insert at provider.
@@ -1080,7 +1080,7 @@ sal_Bool ContentImplHelper::exchange(
     aGuard.clear();
 
     // Notify "EXCHANGED" event.
-    com::sun::star::ucb::ContentEvent aEvt(
+    com::sun::star::ucb::ContentEvent aEvt( 
         static_cast< cppu::OWeakObject * >( this ),
         com::sun::star::ucb::ContentAction::EXCHANGED,
         this,
@@ -1090,9 +1090,9 @@ sal_Bool ContentImplHelper::exchange(
 }
 
 //=========================================================================
-uno::Reference< com::sun::star::ucb::XCommandInfo >
+uno::Reference< com::sun::star::ucb::XCommandInfo > 
 ContentImplHelper::getCommandInfo(
-    const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv,
+    const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv, 
     sal_Bool bCache )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -1103,14 +1103,14 @@ ContentImplHelper::getCommandInfo(
     else if ( !bCache )
         m_pImpl->m_xCommandsInfo->reset();
 
-    return uno::Reference< com::sun::star::ucb::XCommandInfo >(
+    return uno::Reference< com::sun::star::ucb::XCommandInfo >( 
         m_pImpl->m_xCommandsInfo.get() );
 }
 
 //=========================================================================
-uno::Reference< beans::XPropertySetInfo >
+uno::Reference< beans::XPropertySetInfo > 
 ContentImplHelper::getPropertySetInfo(
-    const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv,
+    const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv, 
     sal_Bool bCache )
 {
     osl::MutexGuard aGuard( m_aMutex );

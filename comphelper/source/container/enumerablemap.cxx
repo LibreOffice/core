@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -467,7 +467,7 @@ namespace comphelper
                          ,public MapEnumeration_Base
     {
     public:
-        MapEnumeration( ::cppu::OWeakObject& _parentMap, MapData& _mapData, ::cppu::OBroadcastHelper& _rBHelper,
+        MapEnumeration( ::cppu::OWeakObject& _parentMap, MapData& _mapData, ::cppu::OBroadcastHelper& _rBHelper, 
                         const EnumerationType _type, const bool _isolated )
             :ComponentBase( _rBHelper, ComponentBase::NoInitializationNeeded() )
             ,m_xKeepMapAlive( _parentMap )
@@ -756,14 +756,14 @@ namespace comphelper
         ComponentMethodGuard aGuard( *this );
         return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eKeys, _Isolated );
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XEnumeration > SAL_CALL EnumerableMap::createValueEnumeration( ::sal_Bool _Isolated ) throw (NoSupportException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
         return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eValues, _Isolated );
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XEnumeration > SAL_CALL EnumerableMap::createElementEnumeration( ::sal_Bool _Isolated ) throw (NoSupportException, RuntimeException)
     {
@@ -777,14 +777,14 @@ namespace comphelper
         ComponentMethodGuard aGuard( *this );
         return m_aData.m_aKeyType;
     }
-
+    
     //--------------------------------------------------------------------
     Type SAL_CALL EnumerableMap::getValueType() throw (RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
         return m_aData.m_aValueType;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL EnumerableMap::clear(  ) throw (NoSupportException, RuntimeException)
     {
@@ -795,7 +795,7 @@ namespace comphelper
 
         lcl_notifyMapDataListeners_nothrow( m_aData );
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL EnumerableMap::containsKey( const Any& _key ) throw (IllegalTypeException, IllegalArgumentException, RuntimeException)
     {
@@ -805,7 +805,7 @@ namespace comphelper
         KeyedValues::const_iterator pos = m_aData.m_pValues->find( _key );
         return ( pos != m_aData.m_pValues->end() );
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL EnumerableMap::containsValue( const Any& _value ) throw (IllegalTypeException, IllegalArgumentException, RuntimeException)
     {
@@ -822,7 +822,7 @@ namespace comphelper
         }
         return sal_False;
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL EnumerableMap::get( const Any& _key ) throw (IllegalTypeException, IllegalArgumentException, NoSuchElementException, RuntimeException)
     {
@@ -835,7 +835,7 @@ namespace comphelper
 
         return pos->second;
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL EnumerableMap::put( const Any& _key, const Any& _value ) throw (NoSupportException, IllegalTypeException, IllegalArgumentException, RuntimeException)
     {
@@ -861,7 +861,7 @@ namespace comphelper
 
         return previousValue;
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL EnumerableMap::remove( const Any& _key ) throw (NoSupportException, IllegalTypeException, IllegalArgumentException, NoSuchElementException, RuntimeException)
     {
@@ -983,7 +983,7 @@ namespace comphelper
         ComponentMethodGuard aGuard( *this );
         return m_aEnumerator.hasMoreElements();
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL MapEnumeration::nextElement(  ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {

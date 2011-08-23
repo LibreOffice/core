@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -528,21 +528,21 @@ void FileStat::ImpInit( void* p )
     FILETIME aLocTime;
 
     // use the last write date / time when the creation date / time isn't set
-    if ( ( pDirEnt->ftCreationTime.dwLowDateTime == 0 ) &&
+    if ( ( pDirEnt->ftCreationTime.dwLowDateTime == 0 ) && 
          ( pDirEnt->ftCreationTime.dwHighDateTime == 0 ) )
     {
         pDirEnt->ftCreationTime.dwLowDateTime = pDirEnt->ftLastWriteTime.dwLowDateTime;
         pDirEnt->ftCreationTime.dwHighDateTime = pDirEnt->ftLastWriteTime.dwHighDateTime;
     }
-
+    
     // use the last write date / time when the last accessed date / time isn't set
-    if ( ( pDirEnt->ftLastAccessTime.dwLowDateTime == 0 ) &&
+    if ( ( pDirEnt->ftLastAccessTime.dwLowDateTime == 0 ) && 
          ( pDirEnt->ftLastAccessTime.dwHighDateTime == 0 ) )
     {
         pDirEnt->ftLastAccessTime.dwLowDateTime = pDirEnt->ftLastWriteTime.dwLowDateTime;
         pDirEnt->ftLastAccessTime.dwHighDateTime = pDirEnt->ftLastWriteTime.dwHighDateTime;
     }
-
+    
     FileTimeToLocalFileTime( &pDirEnt->ftCreationTime, &aLocTime );
     FileTimeToSystemTime( &aLocTime, &aSysTime );
     aDateCreated  = Date( aSysTime.wDay, aSysTime.wMonth, aSysTime.wYear );

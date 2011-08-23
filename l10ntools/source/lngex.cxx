@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,18 @@
 #include "lngmerge.hxx"
 
 // defines to parse command line
-#define STATE_NON       0x0001
-#define STATE_INPUT     0x0002
-#define STATE_OUTPUT    0x0003
-#define STATE_PRJ       0x0004
-#define STATE_ROOT      0x0005
-#define STATE_MERGESRC  0x0006
-#define STATE_ERRORLOG  0x0007
-#define STATE_BREAKHELP 0x0008
-#define STATE_UNMERGE   0x0009
-#define STATE_UTF8      0x000A
-#define STATE_ULF       0x000B
-#define STATE_LANGUAGES 0x000C
+#define STATE_NON  		0x0001
+#define STATE_INPUT		0x0002
+#define STATE_OUTPUT	0x0003
+#define STATE_PRJ		0x0004
+#define STATE_ROOT		0x0005
+#define STATE_MERGESRC	0x0006
+#define STATE_ERRORLOG	0x0007
+#define STATE_BREAKHELP	0x0008
+#define STATE_UNMERGE	0x0009
+#define STATE_UTF8		0x000A
+#define STATE_ULF		0x000B
+#define STATE_LANGUAGES	0x000C
 
 // set of global variables
 ByteString sInputFile;
@@ -71,7 +71,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
     sPrj = "";
     sPrjRoot = "";
     Export::sLanguages = "";
-
+    
     USHORT nState = STATE_NON;
     BOOL bInput = FALSE;
 
@@ -102,11 +102,11 @@ BOOL ParseCommandLine( int argc, char* argv[])
             nState = STATE_UTF8;
             bUTF8 = TRUE;
         }
-/*      else if ( sSwitch == "-NOUTF8" ) {
+/*		else if ( sSwitch == "-NOUTF8" ) {
             nState = STATE_UTF8;
             bUTF8 = FALSE;
         }*/
-/*      else if ( sSwitch == "-ULF" ) {
+/*		else if ( sSwitch == "-ULF" ) {
             nState = STATE_ULF;
             bULF = TRUE;
         }*/
@@ -116,7 +116,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
         else {
             switch ( nState ) {
                 case STATE_NON: {
-                    return FALSE;   // no valid command line
+                    return FALSE;	// no valid command line
                 }
                 //break;
                 case STATE_INPUT: {
@@ -130,7 +130,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = argv[ i ];
-//                  sPrj.ToLowerAscii(); // the project
+//					sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
@@ -192,7 +192,7 @@ int _cdecl main( int argc, char *argv[] )
         return 1;
     }
         fprintf(stdout, ".");
-        fflush( stdout );
+        fflush( stdout ); 
 
     if ( sOutputFile.Len()) {
         LngParser aParser( sInputFile, bUTF8, bULF );

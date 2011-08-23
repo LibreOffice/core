@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -430,11 +430,11 @@ ImplStyleData::ImplStyleData()
     mnSelectionOptions          = 0;
     mnDisplayOptions            = 0;
     mnOptions                   = 0;
-    mnAutoMnemonic              = 1;
-    mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
-    mnSymbolsStyle              = STYLE_SYMBOLS_AUTO;
-    mnUseImagesInMenus          = STYLE_MENUIMAGES_AUTO;
-    mnPreferredSymbolsStyle         = STYLE_SYMBOLS_AUTO;
+    mnAutoMnemonic				= 1;
+    mnToolbarIconSize			= STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
+    mnSymbolsStyle				= STYLE_SYMBOLS_AUTO;
+    mnUseImagesInMenus			= STYLE_MENUIMAGES_AUTO;
+    mnPreferredSymbolsStyle			= STYLE_SYMBOLS_AUTO;
     mpFontOptions              = NULL;
 
     SetStandardStyles();
@@ -532,17 +532,17 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnSelectionOptions          = rData.mnSelectionOptions;
     mnDisplayOptions            = rData.mnDisplayOptions;
     mnOptions                   = rData.mnOptions;
-    mnHighContrast              = rData.mnHighContrast;
-    mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
-    mnUseFlatBorders            = rData.mnUseFlatBorders;
-    mnUseFlatMenues             = rData.mnUseFlatMenues;
-    mnAutoMnemonic              = rData.mnAutoMnemonic;
-    mnUseImagesInMenus          = rData.mnUseImagesInMenus;
-    mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
-    mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
-    mnToolbarIconSize           = rData.mnToolbarIconSize;
-    mnSymbolsStyle              = rData.mnSymbolsStyle;
-    mnPreferredSymbolsStyle         = rData.mnPreferredSymbolsStyle;
+    mnHighContrast				= rData.mnHighContrast;
+    mnUseSystemUIFonts			= rData.mnUseSystemUIFonts;
+    mnUseFlatBorders 			= rData.mnUseFlatBorders;
+    mnUseFlatMenues 			= rData.mnUseFlatMenues;
+    mnAutoMnemonic				= rData.mnAutoMnemonic;
+    mnUseImagesInMenus			= rData.mnUseImagesInMenus;
+    mbPreferredUseImagesInMenus	= rData.mbPreferredUseImagesInMenus;
+    mnSkipDisabledInMenus		= rData.mnSkipDisabledInMenus;
+    mnToolbarIconSize			= rData.mnToolbarIconSize;
+    mnSymbolsStyle				= rData.mnSymbolsStyle;
+    mnPreferredSymbolsStyle			= rData.mnPreferredSymbolsStyle;
     mpFontOptions               = rData.mpFontOptions;
 }
 
@@ -615,7 +615,7 @@ void ImplStyleData::SetStandardStyles()
     maLinkColor                 = Color( COL_BLUE );
     maVisitedLinkColor          = Color( 0x00, 0x00, 0xCC );
     maHighlightLinkColor        = Color( COL_LIGHTBLUE );
-    maFontColor                 = Color( COL_BLACK );
+    maFontColor					= Color( COL_BLACK );
 
     mnRadioButtonStyle         &= ~STYLE_RADIOBUTTON_STYLE;
     mnCheckBoxStyle            &= ~STYLE_CHECKBOX_STYLE;
@@ -628,12 +628,12 @@ void ImplStyleData::SetStandardStyles()
     mnFloatTitleHeight          = 13;
     mnTearOffTitleHeight        = 8;
     mnMenuBarHeight             = 14;
-    mnHighContrast              = 0;
-    mnUseSystemUIFonts          = 1;
-    mnUseFlatBorders            = 0;
-    mnUseFlatMenues             = 0;
-    mbPreferredUseImagesInMenus = TRUE;
-    mnSkipDisabledInMenus       = (USHORT)FALSE;
+    mnHighContrast				= 0;
+    mnUseSystemUIFonts			= 1;
+    mnUseFlatBorders 			= 0;
+    mnUseFlatMenues 			= 0;
+    mbPreferredUseImagesInMenus	= TRUE;
+    mnSkipDisabledInMenus		= (USHORT)FALSE;
 
     Gradient aGrad( GRADIENT_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
     maWorkspaceGradient = Wallpaper( aGrad );
@@ -1031,7 +1031,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
         return TRUE;
 
     if ( (mpData->mnOptions                 == rSet.mpData->mnOptions)                  &&
-         (mpData->mnAutoMnemonic            == rSet.mpData->mnAutoMnemonic)             &&
+         (mpData->mnAutoMnemonic			== rSet.mpData->mnAutoMnemonic)				&&
          (mpData->mnLogoDisplayTime         == rSet.mpData->mnLogoDisplayTime)          &&
          (mpData->mnDragFullOptions         == rSet.mpData->mnDragFullOptions)          &&
          (mpData->mnAnimationOptions        == rSet.mpData->mnAnimationOptions)         &&
@@ -1057,10 +1057,10 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnCheckBoxStyle           == rSet.mpData->mnCheckBoxStyle)            &&
          (mpData->mnPushButtonStyle         == rSet.mpData->mnPushButtonStyle)          &&
          (mpData->mnTabControlStyle         == rSet.mpData->mnTabControlStyle)          &&
-         (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
-         (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
-         (mpData->mnUseFlatBorders          == rSet.mpData->mnUseFlatBorders)           &&
-         (mpData->mnUseFlatMenues           == rSet.mpData->mnUseFlatMenues)            &&
+         (mpData->mnHighContrast			== rSet.mpData->mnHighContrast)             &&
+         (mpData->mnUseSystemUIFonts		== rSet.mpData->mnUseSystemUIFonts)         &&
+         (mpData->mnUseFlatBorders   		== rSet.mpData->mnUseFlatBorders)           &&
+         (mpData->mnUseFlatMenues   		== rSet.mpData->mnUseFlatMenues)            &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
          (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
@@ -1117,11 +1117,11 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maRadioCheckFont          == rSet.mpData->maRadioCheckFont)           &&
          (mpData->maPushButtonFont          == rSet.mpData->maPushButtonFont)           &&
          (mpData->maFieldFont               == rSet.mpData->maFieldFont)                &&
-         (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
-         (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
+         (mpData->maIconFont                == rSet.mpData->maIconFont)					&&
+         (mpData->mnUseImagesInMenus		== rSet.mpData->mnUseImagesInMenus)			&&
          (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
-         (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
-         (mpData->maFontColor               == rSet.mpData->maFontColor ))
+         (mpData->mnSkipDisabledInMenus		== rSet.mpData->mnSkipDisabledInMenus)		&&
+         (mpData->maFontColor				== rSet.mpData->maFontColor ))
         return TRUE;
     else
         return FALSE;
@@ -1132,8 +1132,8 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
 ImplMiscData::ImplMiscData()
 {
     mnRefCount                  = 1;
-    mnEnableATT                 = sal::static_int_cast<USHORT>(~0U);
-    mnDisablePrinting           = sal::static_int_cast<USHORT>(~0U);
+    mnEnableATT					= sal::static_int_cast<USHORT>(~0U);
+    mnDisablePrinting			= sal::static_int_cast<USHORT>(~0U);
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
     mbEnableLocalizedDecimalSep = (pEnv != NULL) ? TRUE : FALSE;
 }
@@ -1143,8 +1143,8 @@ ImplMiscData::ImplMiscData()
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )
 {
     mnRefCount                  = 1;
-    mnEnableATT                 = rData.mnEnableATT;
-    mnDisablePrinting           = rData.mnDisablePrinting;
+    mnEnableATT					= rData.mnEnableATT;
+    mnDisablePrinting			= rData.mnDisablePrinting;
     mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
 }
 
@@ -1216,8 +1216,8 @@ BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
     if ( mpData == rSet.mpData )
         return TRUE;
 
-    if ( (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) &&
-         (mpData->mnDisablePrinting     == rSet.mpData->mnDisablePrinting ) &&
+    if ( (mpData->mnEnableATT			== rSet.mpData->mnEnableATT ) &&
+         (mpData->mnDisablePrinting		== rSet.mpData->mnDisablePrinting ) &&
          (mpData->mbEnableLocalizedDecimalSep == rSet.mpData->mbEnableLocalizedDecimalSep ) )
         return TRUE;
     else
@@ -1338,7 +1338,7 @@ void MiscSettings::SetEnableATToolSupport( BOOL bEnable )
             DWORD cbData = sizeof(Data);
 
             if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
-                NULL,   &dwType, Data, &cbData) )
+                NULL,	&dwType, Data, &cbData) )
             {
                 switch (dwType)
                 {
@@ -1351,7 +1351,7 @@ void MiscSettings::SetEnableATToolSupport( BOOL bEnable )
                     case REG_DWORD:
                         ((DWORD *) Data)[0] = bEnable ? 1 : 0;
                         RegSetValueEx(hkey, "SupportAssistiveTechnology",
-                            NULL, dwType, Data, sizeof(DWORD));
+                            NULL, dwType, Data,	sizeof(DWORD));
                         break;
                     default:
                         // Unsupported registry type
@@ -1859,7 +1859,7 @@ BOOL AllSettings::operator ==( const AllSettings& rSet ) const
          (mpData->maNotificationSettings    == rSet.mpData->maNotificationSettings) &&
          (mpData->maHelpSettings            == rSet.mpData->maHelpSettings)         &&
          (mpData->mnSystemUpdate            == rSet.mpData->mnSystemUpdate)         &&
-         (mpData->maLocale                  == rSet.mpData->maLocale)               &&
+         (mpData->maLocale					== rSet.mpData->maLocale)				&&
          (mpData->mnWindowUpdate            == rSet.mpData->mnWindowUpdate) )
     {
         return TRUE;

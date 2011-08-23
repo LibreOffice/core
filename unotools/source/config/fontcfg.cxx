@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -234,7 +234,7 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
             }
         }
     }
-
+    
     return aRet;
 }
 
@@ -244,7 +244,7 @@ OUString DefaultFontConfiguration::getDefaultFont( const Locale& rLocale, int nT
     aLocale.Language = rLocale.Language.toAsciiLowerCase();
     aLocale.Country = rLocale.Country.toAsciiUpperCase();
     aLocale.Variant = rLocale.Variant.toAsciiUpperCase();
-
+    
     OUString aType = OUString::createFromAscii( getKeyType( nType ) );
     OUString aRet = tryLocale( aLocale, aType );
     if( ! aRet.getLength() && aLocale.Variant.getLength() )
@@ -571,7 +571,7 @@ struct ImplFontAttrWeightSearchData
 static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {
 // the attribute names are ordered by "first match wins"
-// e.g. "semilight" should wins over "semi"
+// e.g. "semilight" should wins over "semi" 
 {   "extrablack",           WEIGHT_BLACK },
 {   "ultrablack",           WEIGHT_BLACK },
 {   "ultrabold",            WEIGHT_ULTRABOLD },
@@ -1087,7 +1087,7 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
     catch( WrappedTargetException )
     {
     }
-
+    
     return type;
 }
 
@@ -1119,7 +1119,7 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
                 const OUString* pFontNames = aFonts.getConstArray();
                 // improve performance, heap fragmentation
                 it->second.aSubstAttributes.reserve( nFonts );
-
+                
                 // strings for subst retrieval, construct only once
                 OUString aSubstFontsStr     ( RTL_CONSTASCII_USTRINGPARAM( "SubstFonts" ) );
                 OUString aSubstFontsMSStr   ( RTL_CONSTASCII_USTRINGPARAM( "SubstFontsMS" ) );
@@ -1161,7 +1161,7 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
                     aAttr.Weight = getSubstWeight( xFont, aSubstWeightStr );
                     aAttr.Width = getSubstWidth( xFont, aSubstWidthStr );
                     aAttr.Type = getSubstType( xFont, aSubstTypeStr );
-
+                    
                     // finally insert this entry
                     it->second.aSubstAttributes.push_back( aAttr );
                 }

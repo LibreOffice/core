@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,30 +41,30 @@
 #include "itemholder2.hxx"
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl					;
+using namespace ::rtl					;
+using namespace ::osl					;
+using namespace ::com::sun::star::uno	;
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_MENU                           OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View/Menu"  ))
-#define DEFAULT_DONTHIDEDISABLEDENTRIES         sal_False
-#define DEFAULT_FOLLOWMOUSE                     sal_True
-#define DEFAULT_MENUICONS                       2
+#define	ROOTNODE_MENU							OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View/Menu"	))
+#define	DEFAULT_DONTHIDEDISABLEDENTRIES			sal_False
+#define	DEFAULT_FOLLOWMOUSE						sal_True
+#define	DEFAULT_MENUICONS						2
 
-#define PROPERTYNAME_DONTHIDEDISABLEDENTRIES    OUString(RTL_CONSTASCII_USTRINGPARAM("DontHideDisabledEntry"    ))
-#define PROPERTYNAME_FOLLOWMOUSE                OUString(RTL_CONSTASCII_USTRINGPARAM("FollowMouse"              ))
+#define	PROPERTYNAME_DONTHIDEDISABLEDENTRIES	OUString(RTL_CONSTASCII_USTRINGPARAM("DontHideDisabledEntry"	))
+#define	PROPERTYNAME_FOLLOWMOUSE				OUString(RTL_CONSTASCII_USTRINGPARAM("FollowMouse"				))
 #define PROPERTYNAME_SHOWICONSINMENUES          OUString(RTL_CONSTASCII_USTRINGPARAM("ShowIconsInMenues"        ))
 #define PROPERTYNAME_SYSTEMICONSINMENUES        OUString(RTL_CONSTASCII_USTRINGPARAM("IsSystemIconsInMenus"     ))
 
-#define PROPERTYHANDLE_DONTHIDEDISABLEDENTRIES  0
-#define PROPERTYHANDLE_FOLLOWMOUSE              1
+#define	PROPERTYHANDLE_DONTHIDEDISABLEDENTRIES	0
+#define	PROPERTYHANDLE_FOLLOWMOUSE				1
 #define PROPERTYHANDLE_SHOWICONSINMENUES        2
 #define PROPERTYHANDLE_SYSTEMICONSINMENUES      3
 
@@ -75,29 +75,29 @@ using namespace ::com::sun::star::uno   ;
 DECLARE_LIST( LinkList, Link * )
 
 //_________________________________________________________________________________________________________________
-//  private declarations!
+//	private declarations!
 //_________________________________________________________________________________________________________________
 
 class SvtMenuOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
         LinkList    aList;
-        sal_Bool    m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
-        sal_Bool    m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
-        sal_Int16   m_nMenuIcons                        ;   /// cache "MenuIcons" of Menu section
+        sal_Bool	m_bDontHideDisabledEntries			;	/// cache "DontHideDisabledEntries" of Menu section
+        sal_Bool	m_bFollowMouse						;	/// cache "FollowMouse" of Menu section
+        sal_Int16	m_nMenuIcons						;	/// cache "MenuIcons" of Menu section
 
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
          SvtMenuOptions_Impl();
@@ -107,67 +107,67 @@ class SvtMenuOptions_Impl : public ConfigItem
         void RemoveListenerLink( const Link& rLink );
 
         //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
+        //	overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
+            @short		called for notify of configmanager
+            @descr		These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
-            @seealso    baseclass ConfigItem
+            @seealso	baseclass ConfigItem
 
-            @param      "seqPropertyNames" is the list of properties which should be updated.
-            @return     -
+            @param		"seqPropertyNames" is the list of properties which should be updated.
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
         /*-****************************************************************************************************//**
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
+            @short		write changes to configuration
+            @descr		These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
 
-            @seealso    baseclass ConfigItem
+            @seealso	baseclass ConfigItem
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
-        //  public interface
+        //	public interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      access method to get internal values
-            @descr      These method give us a chance to regulate acces to ouer internal values.
+            @short		access method to get internal values
+            @descr		These method give us a chance to regulate acces to ouer internal values.
                         It's not used in the moment - but it's possible for the feature!
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsEntryHidingEnabled() const
+        sal_Bool	IsEntryHidingEnabled() const
                     { return m_bDontHideDisabledEntries; }
 
-        sal_Bool    IsFollowMouseEnabled() const
+        sal_Bool	IsFollowMouseEnabled() const
                     { return m_bFollowMouse; }
 
-        sal_Int16   GetMenuIconsState() const
+        sal_Int16	GetMenuIconsState() const
                     { return m_nMenuIcons; }
 
-        void        SetEntryHidingState ( sal_Bool bState )
+        void		SetEntryHidingState	( sal_Bool bState )
                     {
                         m_bDontHideDisabledEntries = bState;
                         SetModified();
@@ -176,7 +176,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                         Commit();
                     }
 
-        void        SetFollowMouseState ( sal_Bool bState )
+        void		SetFollowMouseState	( sal_Bool bState )
                     {
                         m_bFollowMouse = bState;
                         SetModified();
@@ -185,7 +185,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                         Commit();
                     }
 
-        void        SetMenuIconsState ( sal_Int16 nState    )
+        void		SetMenuIconsState ( sal_Int16 nState	)
                     {
                         m_nMenuIcons = nState;
                         SetModified();
@@ -195,45 +195,45 @@ class SvtMenuOptions_Impl : public ConfigItem
                     }
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short      return list of fix key names of ouer configuration management which represent oue module tree
-            @descr      These methods return a static const list of key names. We need it to get needed values from our
+            @short		return list of fix key names of ouer configuration management which represent oue module tree
+            @descr		These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     A list of needed configuration keys is returned.
+            @param		-
+            @return		A list of needed configuration keys is returned.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > impl_GetPropertyNames();
 };
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     // Init baseclasses first
-    :   ConfigItem                  ( ROOTNODE_MENU                     )
+    :	ConfigItem					( ROOTNODE_MENU						)
     // Init member then.
-    ,   m_bDontHideDisabledEntries  ( DEFAULT_DONTHIDEDISABLEDENTRIES   )
-    ,   m_bFollowMouse              ( DEFAULT_FOLLOWMOUSE               )
-    ,   m_nMenuIcons                ( DEFAULT_MENUICONS                 )
+    ,	m_bDontHideDisabledEntries	( DEFAULT_DONTHIDEDISABLEDENTRIES	)
+    ,	m_bFollowMouse				( DEFAULT_FOLLOWMOUSE				)
+    ,   m_nMenuIcons				( DEFAULT_MENUICONS 				)
 {
     // Use our static list of configuration keys to get his values.
-    Sequence< OUString >    seqNames    = impl_GetPropertyNames();
-    Sequence< Any >         seqValues   = GetProperties( seqNames ) ;
+    Sequence< OUString >	seqNames	= impl_GetPropertyNames();
+    Sequence< Any >			seqValues	= GetProperties( seqNames )	;
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
@@ -251,8 +251,8 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     }
 
     // Copy values from list in right order to ouer internal member.
-    sal_Int32 nPropertyCount    =   seqValues.getLength()   ;
-    sal_Int32 nProperty         =   0                       ;
+    sal_Int32 nPropertyCount	=	seqValues.getLength()	;
+    sal_Int32 nProperty			=	0						;
     for( nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // Safe impossible cases.
@@ -260,13 +260,13 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
         DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nInvalid property value for property detected!\n" );
         switch( nProperty )
         {
-            case PROPERTYHANDLE_DONTHIDEDISABLEDENTRIES :   {
+            case PROPERTYHANDLE_DONTHIDEDISABLEDENTRIES	:	{
                                                                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\DontHideDisabledEntry\"?" );
                                                                 seqValues[nProperty] >>= m_bDontHideDisabledEntries;
                                                             }
                                                             break;
 
-            case PROPERTYHANDLE_FOLLOWMOUSE             :   {
+            case PROPERTYHANDLE_FOLLOWMOUSE				:	{
                                                                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\FollowMouse\"?" );
                                                                 seqValues[nProperty] >>= m_bFollowMouse;
                                                             }
@@ -276,7 +276,7 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
                                                                 seqValues[nProperty] >>= bMenuIcons;
                                                             }
                                                             break;
-            case PROPERTYHANDLE_SYSTEMICONSINMENUES     :   {
+            case PROPERTYHANDLE_SYSTEMICONSINMENUES		:   {
                                                                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\IsSystemIconsInMenus\"?" );
                                                                 seqValues[nProperty] >>= bSystemMenuIcons;
                                                             }
@@ -290,7 +290,7 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtMenuOptions_Impl::~SvtMenuOptions_Impl()
 {
@@ -306,7 +306,7 @@ SvtMenuOptions_Impl::~SvtMenuOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
@@ -358,24 +358,24 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtMenuOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
-    Sequence< OUString >    seqNames    = impl_GetPropertyNames();
-    sal_Int32               nCount      = seqNames.getLength();
-    Sequence< Any >         seqValues   ( nCount );
+    Sequence< OUString >	seqNames	= impl_GetPropertyNames();
+    sal_Int32				nCount		= seqNames.getLength();
+    Sequence< Any >			seqValues	( nCount );
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
         switch( nProperty )
         {
-            case PROPERTYHANDLE_DONTHIDEDISABLEDENTRIES :   {
+            case PROPERTYHANDLE_DONTHIDEDISABLEDENTRIES	:	{
                                                                 seqValues[nProperty] <<= m_bDontHideDisabledEntries;
                                                             }
                                                             break;
 
-            case PROPERTYHANDLE_FOLLOWMOUSE             :   {
+            case PROPERTYHANDLE_FOLLOWMOUSE				:	{
                                                                 seqValues[nProperty] <<= m_bFollowMouse;
                                                             }
                                                             break;
@@ -385,7 +385,7 @@ void SvtMenuOptions_Impl::Commit()
                                                                 seqValues[nProperty] <<= bValue;
                                                             }
                                                             break;
-            case PROPERTYHANDLE_SYSTEMICONSINMENUES     :   {
+            case PROPERTYHANDLE_SYSTEMICONSINMENUES		:   {
                                                                 sal_Bool bValue = (m_nMenuIcons == 2 ? sal_True : sal_False) ;
                                                                 seqValues[nProperty] <<= bValue;
                                                             }
@@ -397,16 +397,16 @@ void SvtMenuOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
 {
     // Build static list of configuration key names.
     static const OUString pProperties[] =
     {
-        PROPERTYNAME_DONTHIDEDISABLEDENTRIES    ,
-        PROPERTYNAME_FOLLOWMOUSE                ,
-        PROPERTYNAME_SHOWICONSINMENUES          ,
+        PROPERTYNAME_DONTHIDEDISABLEDENTRIES	,
+        PROPERTYNAME_FOLLOWMOUSE				,
+        PROPERTYNAME_SHOWICONSINMENUES			,
         PROPERTYNAME_SYSTEMICONSINMENUES
     };
     // Initialize return sequence with these list ...
@@ -433,15 +433,15 @@ void SvtMenuOptions_Impl::RemoveListenerLink( const Link& rLink )
 }
 
 //*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//	initialize static member
+//	DON'T DO IT IN YOUR HEADER!
+//	see definition for further informations
 //*****************************************************************************************************************
-SvtMenuOptions_Impl*    SvtMenuOptions::m_pDataContainer    = NULL  ;
-sal_Int32               SvtMenuOptions::m_nRefCount         = 0     ;
+SvtMenuOptions_Impl*	SvtMenuOptions::m_pDataContainer	= NULL	;
+sal_Int32				SvtMenuOptions::m_nRefCount			= 0		;
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtMenuOptions::SvtMenuOptions()
 {
@@ -460,7 +460,7 @@ SvtMenuOptions::SvtMenuOptions()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtMenuOptions::~SvtMenuOptions()
 {
@@ -478,7 +478,7 @@ SvtMenuOptions::~SvtMenuOptions()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtMenuOptions::IsEntryHidingEnabled() const
 {
@@ -487,7 +487,7 @@ sal_Bool SvtMenuOptions::IsEntryHidingEnabled() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtMenuOptions::IsFollowMouseEnabled() const
 {
@@ -496,7 +496,7 @@ sal_Bool SvtMenuOptions::IsFollowMouseEnabled() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtMenuOptions::SetEntryHidingState( sal_Bool bState )
 {
@@ -505,7 +505,7 @@ void SvtMenuOptions::SetEntryHidingState( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtMenuOptions::SetFollowMouseState( sal_Bool bState )
 {
@@ -514,7 +514,7 @@ void SvtMenuOptions::SetFollowMouseState( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int16 SvtMenuOptions::GetMenuIconsState() const
 {
@@ -523,7 +523,7 @@ sal_Int16 SvtMenuOptions::GetMenuIconsState() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtMenuOptions::SetMenuIconsState( sal_Int16 bState )
 {
@@ -532,7 +532,7 @@ void SvtMenuOptions::SetMenuIconsState( sal_Int16 bState )
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Mutex& SvtMenuOptions::GetOwnStaticMutex()
 {

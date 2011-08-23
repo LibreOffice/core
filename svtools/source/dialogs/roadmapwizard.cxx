@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ namespace svt
         StateDescriptions   aStateDescriptors;
         StateSet            aDisabledStates;
         bool                bActivePathIsDefinite;
-           FixedLine*           pFixedLine;
+           FixedLine*	        pFixedLine;
 
         RoadmapWizardImpl()
             :pRoadmap( NULL )
@@ -234,7 +234,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    const BitmapEx& RoadmapWizard::GetRoadmapBitmap( ) const
+    const BitmapEx&	RoadmapWizard::GetRoadmapBitmap( ) const
     {
         return m_pImpl->pRoadmap->GetRoadmapBitmap();
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ namespace vcl
 
 struct ImplPrnQueueData
 {
-    QueueInfo*              mpQueueInfo;
-    SalPrinterQueueInfo*    mpSalQueueInfo;
+    QueueInfo*				mpQueueInfo;
+    SalPrinterQueueInfo*	mpSalQueueInfo;
 };
 
 // --------------------
@@ -67,7 +67,7 @@ public:
     ImplPrnQueueList() {}
     ~ImplPrnQueueList();
 
-    void                    Add( SalPrinterQueueInfo* pData );
+    void					Add( SalPrinterQueueInfo* pData );
     ImplPrnQueueData*       Get( const rtl::OUString& rPrinter );
 };
 

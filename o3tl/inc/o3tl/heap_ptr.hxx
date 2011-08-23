@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,7 +105,7 @@ class heap_ptr
     const T &           operator*() const;
     T &                 operator*();
     const T *           operator->() const;
-    T *                 operator->();
+    T *			        operator->();
 
     /// True, if pHeapObject != 0.
 #ifndef __SUNPRO_CC
@@ -123,33 +123,33 @@ class heap_ptr
         Such, multiple assignment of the same pointer to the same
         instance of heap_ptr<> is possible (though not recommended).
     */
-    void                reset(
+    void		        reset(
                             T *                 pass_heapObject );
     /** @return     An object on the heap that must be deleted by the caller,
                     or 0.
 
         @postcond   get() == 0;
     */
-    T *                 release();
+    T *	  	            release();
     void                swap(
                             self &              io_other );
 
     /// True, if pHeapObject != 0.
-    bool                is() const;
-    const T *           get() const;
-    T *                 get();
+    bool			    is() const;
+    const T *		    get() const;
+    T *			        get();
 
   private:
     // Forbidden functions:
                           heap_ptr( const self & );   /// Prevent copies.
-    self &              operator=( const self & );  /// Prevent copies.
+    self &		        operator=( const self & );  /// Prevent copies.
 
     /// @attention Does not set ->pHeapObject = 0.
-      void              internal_delete();
+      void			    internal_delete();
 
   // DATA
     /// Will be deleted, when *this is destroyed.
-    T *                 pHeapObject;
+    T *		            pHeapObject;
 };
 
 

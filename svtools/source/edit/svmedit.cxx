@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@
 
 
 // IDs erstmal aus VCL geklaut, muss mal richtig delivert werden...
-#define SV_MENU_EDIT_UNDO           1
-#define SV_MENU_EDIT_CUT            2
-#define SV_MENU_EDIT_COPY           3
-#define SV_MENU_EDIT_PASTE          4
-#define SV_MENU_EDIT_DELETE         5
-#define SV_MENU_EDIT_SELECTALL      6
-#define SV_MENU_EDIT_INSERTSYMBOL   7
+#define SV_MENU_EDIT_UNDO			1
+#define SV_MENU_EDIT_CUT			2
+#define SV_MENU_EDIT_COPY			3
+#define SV_MENU_EDIT_PASTE			4
+#define SV_MENU_EDIT_DELETE 		5
+#define SV_MENU_EDIT_SELECTALL		6
+#define SV_MENU_EDIT_INSERTSYMBOL	7
 #include <vcl/scrbar.hxx>
 
 namespace css = ::com::sun::star;
@@ -63,40 +63,40 @@ namespace css = ::com::sun::star;
 class TextWindow : public Window
 {
 private:
-    ExtTextEngine*  mpExtTextEngine;
-    ExtTextView*    mpExtTextView;
+    ExtTextEngine*	mpExtTextEngine;
+    ExtTextView*	mpExtTextView;
 
-    BOOL            mbInMBDown;
-    BOOL            mbFocusSelectionHide;
-    BOOL            mbIgnoreTab;
-    BOOL            mbActivePopup;
+    BOOL			mbInMBDown;
+    BOOL			mbFocusSelectionHide;
+    BOOL			mbIgnoreTab;
+    BOOL			mbActivePopup;
     BOOL            mbSelectOnTab;
 
 public:
                     TextWindow( Window* pParent );
                     ~TextWindow();
 
-    ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
-    ExtTextView*    GetTextView() const { return mpExtTextView; }
+    ExtTextEngine* 	GetTextEngine() const { return mpExtTextEngine; }
+    ExtTextView*	GetTextView() const { return mpExtTextView; }
 
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvent );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	KeyInput( const KeyEvent& rKEvent );
 
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
 
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Resize();
+    virtual void	Paint( const Rectangle& rRect );
+    virtual void	Resize();
 
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void	GetFocus();
+    virtual void	LoseFocus();
 
-    BOOL            IsAutoFocusHide() const { return mbFocusSelectionHide; }
-    void            SetAutoFocusHide( BOOL bAutoHide ) { mbFocusSelectionHide = bAutoHide; }
+    BOOL			IsAutoFocusHide() const { return mbFocusSelectionHide; }
+    void			SetAutoFocusHide( BOOL bAutoHide ) { mbFocusSelectionHide = bAutoHide; }
 
-    BOOL            IsIgnoreTab() const { return mbIgnoreTab; }
-    void            SetIgnoreTab( BOOL bIgnore ) { mbIgnoreTab = bIgnore; }
+    BOOL			IsIgnoreTab() const { return mbIgnoreTab; }
+    void			SetIgnoreTab( BOOL bIgnore ) { mbIgnoreTab = bIgnore; }
 
     void            DisableSelectionOnFocus() {mbSelectOnTab = sal_False;}
 
@@ -109,78 +109,78 @@ public:
 class ImpSvMEdit : public SfxListener
 {
 private:
-    MultiLineEdit*      pSvMultiLineEdit;
+    MultiLineEdit*		pSvMultiLineEdit;
 
-    TextWindow*         mpTextWindow;
-    ScrollBar*          mpHScrollBar;
-    ScrollBar*          mpVScrollBar;
-    ScrollBarBox*       mpScrollBox;
+    TextWindow* 		mpTextWindow;
+    ScrollBar*			mpHScrollBar;
+    ScrollBar*			mpVScrollBar;
+    ScrollBarBox*		mpScrollBox;
 
-    Point               maTextWindowOffset;
-    xub_StrLen          mnTextWidth;
+    Point				maTextWindowOffset;
+    xub_StrLen			mnTextWidth;
     mutable Selection   maSelection;
 
 protected:
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    void                ImpUpdateSrollBarVis( WinBits nWinStyle );
-    void                ImpInitScrollBars();
-    void                ImpSetScrollBarRanges();
+    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    void				ImpUpdateSrollBarVis( WinBits nWinStyle );
+    void				ImpInitScrollBars();
+    void				ImpSetScrollBarRanges();
     void                ImpSetHScrollBarThumbPos();
-    DECL_LINK(          ScrollHdl, ScrollBar* );
+    DECL_LINK(			ScrollHdl, ScrollBar* );
 
 public:
                 ImpSvMEdit( MultiLineEdit* pSvMultiLineEdit, WinBits nWinStyle );
                 ~ImpSvMEdit();
 
-    void        SetModified( BOOL bMod );
-    BOOL        IsModified() const;
+    void		SetModified( BOOL bMod );
+    BOOL		IsModified() const;
 
-    void        SetReadOnly( BOOL bRdOnly );
-    BOOL        IsReadOnly() const;
+    void		SetReadOnly( BOOL bRdOnly );
+    BOOL		IsReadOnly() const;
 
-    void        SetMaxTextLen( xub_StrLen nLen );
-    xub_StrLen  GetMaxTextLen() const;
+    void		SetMaxTextLen( xub_StrLen nLen );
+    xub_StrLen	GetMaxTextLen() const;
 
-    void        SetInsertMode( BOOL bInsert );
-    BOOL        IsInsertMode() const;
+    void		SetInsertMode( BOOL bInsert );
+    BOOL		IsInsertMode() const;
 
-    void        InsertText( const String& rStr );
-    String      GetSelected() const;
-    String      GetSelected( LineEnd aSeparator ) const;
+    void		InsertText( const String& rStr );
+    String		GetSelected() const;
+    String		GetSelected( LineEnd aSeparator ) const;
 
-    void        SetSelection( const Selection& rSelection );
+    void		SetSelection( const Selection& rSelection );
     const Selection& GetSelection() const;
 
-    void        Cut();
-    void        Copy();
-    void        Paste();
+    void		Cut();
+    void		Copy();
+    void		Paste();
 
-    void        SetText( const String& rStr );
-    String      GetText() const;
-    String      GetText( LineEnd aSeparator ) const;
-    String      GetTextLines() const;
-    String      GetTextLines( LineEnd aSeparator ) const;
+    void		SetText( const String& rStr );
+    String		GetText() const;
+    String		GetText( LineEnd aSeparator ) const;
+    String		GetTextLines() const;
+    String		GetTextLines( LineEnd aSeparator ) const;
 
-    void        Resize();
-    void        GetFocus();
+    void		Resize();
+    void		GetFocus();
 
-    BOOL        HandleCommand( const CommandEvent& rCEvt );
+    BOOL		HandleCommand( const CommandEvent& rCEvt );
 
-    void        Enable( BOOL bEnable );
+    void		Enable( BOOL bEnable );
 
-    Size        CalcMinimumSize() const;
-    Size        CalcSize( USHORT nColumns, USHORT nLines ) const;
-    void        GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const;
+    Size		CalcMinimumSize() const;
+    Size		CalcSize( USHORT nColumns, USHORT nLines ) const;
+    void		GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const;
 
-    void        SetAlign( WinBits nWinStyle );
+    void		SetAlign( WinBits nWinStyle );
 
-    void        InitFromStyle( WinBits nWinStyle );
+    void		InitFromStyle( WinBits nWinStyle );
 
     TextWindow* GetTextWindow() { return mpTextWindow; }
     ScrollBar*  GetHScrollBar() { return mpHScrollBar; }
     ScrollBar*  GetVScrollBar() { return mpVScrollBar; }
 
-    void        SetTextWindowOffset( const Point& rOffset );
+    void 		SetTextWindowOffset( const Point& rOffset );
 };
 
 ImpSvMEdit::ImpSvMEdit( MultiLineEdit* pEdt, WinBits nWinStyle )
@@ -310,10 +310,10 @@ void ImpSvMEdit::ImpSetScrollBarRanges()
     }
     if ( mpHScrollBar )
     {
-//      ULONG nTextWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
+//		ULONG nTextWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
         // Es gibt kein Notify bei Breiten-Aenderung...
-//      ULONG nW = Max( (ULONG)mpTextWindow->GetOutputSizePixel().Width()*5, (ULONG)nTextWidth );
-//      mpHScrollBar->SetRange( Range( 0, (long)nW ) );
+//		ULONG nW = Max( (ULONG)mpTextWindow->GetOutputSizePixel().Width()*5, (ULONG)nTextWidth );
+//		mpHScrollBar->SetRange( Range( 0, (long)nW ) );
         mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth-1 ) );
     }
 }
@@ -373,8 +373,8 @@ IMPL_LINK( ImpSvMEdit, ScrollHdl, ScrollBar*, pCurScrollBar )
 
 // void ImpSvMEdit::ImpModified()
 // {
-//  // Wann wird das gerufen ?????????????????????
-//  pSvMultiLineEdit->Modify();
+//	// Wann wird das gerufen ?????????????????????
+//	pSvMultiLineEdit->Modify();
 // }
 
 void ImpSvMEdit::SetAlign( WinBits nWinStyle )
@@ -681,7 +681,7 @@ const Selection& ImpSvMEdit::GetSelection() const
 
 Size ImpSvMEdit::CalcMinimumSize() const
 {
-    Size aSz(   mpTextWindow->GetTextEngine()->CalcTextWidth(),
+    Size aSz(	mpTextWindow->GetTextEngine()->CalcTextWidth(),
                 mpTextWindow->GetTextEngine()->GetTextHeight() );
 
     if ( mpHScrollBar )
@@ -791,7 +791,7 @@ void TextWindow::MouseMove( const MouseEvent& rMEvt )
 
 void TextWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    mbInMBDown = TRUE;  // Dann im GetFocus nicht alles selektieren wird
+    mbInMBDown = TRUE;	// Dann im GetFocus nicht alles selektieren wird
     mpExtTextView->MouseButtonDown( rMEvt );
     Window::MouseButtonDown( rMEvt );
     GrabFocus();
@@ -808,7 +808,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
 {
     BOOL bDone = FALSE;
     USHORT nCode = rKEvent.GetKeyCode().GetCode();
-    if ( nCode == com::sun::star::awt::Key::SELECT_ALL ||
+    if ( nCode == com::sun::star::awt::Key::SELECT_ALL || 
          ( (nCode == KEY_A) && rKEvent.GetKeyCode().IsMod1() && !rKEvent.GetKeyCode().IsMod2() )
        )
     {
@@ -879,10 +879,10 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         {
             pPopup->EnableItem( SV_MENU_EDIT_UNDO, FALSE );
         }
-//      if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.Len() ) )
-//      {
-//          pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, FALSE );
-//      }
+//		if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.Len() ) )
+//		{
+//			pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, FALSE );
+//		}
         if ( !Edit::GetGetSpecialCharsFunction() )
         {
             USHORT nPos = pPopup->GetItemPos( SV_MENU_EDIT_INSERTSYMBOL );
@@ -898,30 +898,30 @@ void TextWindow::Command( const CommandEvent& rCEvt )
             Size aSize = GetOutputSizePixel();
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
-//      pPopup->RemoveDisabledEntries();
+//		pPopup->RemoveDisabledEntries();
         USHORT n = pPopup->Execute( this, aPos );
         Edit::DeletePopupMenu( pPopup );
         switch ( n )
         {
-            case SV_MENU_EDIT_UNDO:     mpExtTextView->Undo();
+            case SV_MENU_EDIT_UNDO: 	mpExtTextView->Undo();
                                         mpExtTextEngine->SetModified( TRUE );
                                         mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
                                         break;
-            case SV_MENU_EDIT_CUT:      mpExtTextView->Cut();
+            case SV_MENU_EDIT_CUT:		mpExtTextView->Cut();
                                         mpExtTextEngine->SetModified( TRUE );
                                         mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
                                         break;
-            case SV_MENU_EDIT_COPY:     mpExtTextView->Copy();
+            case SV_MENU_EDIT_COPY: 	mpExtTextView->Copy();
                                         break;
-            case SV_MENU_EDIT_PASTE:    mpExtTextView->Paste();
+            case SV_MENU_EDIT_PASTE:	mpExtTextView->Paste();
                                         mpExtTextEngine->SetModified( TRUE );
                                         mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
                                         break;
-            case SV_MENU_EDIT_DELETE:   mpExtTextView->DeleteSelected();
+            case SV_MENU_EDIT_DELETE:	mpExtTextView->DeleteSelected();
                                         mpExtTextEngine->SetModified( TRUE );
                                         mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
                                         break;
-            case SV_MENU_EDIT_SELECTALL:    mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
+            case SV_MENU_EDIT_SELECTALL:	mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
                                             break;
             case SV_MENU_EDIT_INSERTSYMBOL:
                 {
@@ -1515,7 +1515,7 @@ long MultiLineEdit::PreNotify( NotifyEvent& rNEvt )
                             pImpSvMEdit->GetVScrollBar()->DoScrollAction( SCROLL_LINEDOWN );
                     }
                     break;
-                    case KEY_PAGEUP :
+                    case KEY_PAGEUP	:
                     {
                         if ( pImpSvMEdit->GetVScrollBar() )
                             pImpSvMEdit->GetVScrollBar()->DoScrollAction( SCROLL_PAGEUP );

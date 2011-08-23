@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace ucbhelper
 
 struct CommandEnvironmentProxy_Impl
 {
-    osl::Mutex                       m_aMutex;
+    osl::Mutex 						 m_aMutex;
     Reference< XCommandEnvironment > m_xEnv;
     Reference< XInteractionHandler > m_xInteractionHandler;
     Reference< XProgressHandler >    m_xProgressHandler;
@@ -69,7 +69,7 @@ struct CommandEnvironmentProxy_Impl
     sal_Bool m_bGotProgressHandler;
 
     CommandEnvironmentProxy_Impl(
-        const Reference< XCommandEnvironment >& rxEnv )
+        const Reference< XCommandEnvironment >&	rxEnv )
     : m_xEnv( rxEnv ), m_bGotInteractionHandler( sal_False ),
       m_bGotProgressHandler( sal_False ) {}
 };

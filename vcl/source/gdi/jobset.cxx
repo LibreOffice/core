@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,44 +38,44 @@
 
 DBG_NAME( JobSetup )
 
-#define JOBSET_FILEFORMAT2      3780
-#define JOBSET_FILE364_SYSTEM   ((USHORT)0xFFFF)
-#define JOBSET_FILE605_SYSTEM   ((USHORT)0xFFFE)
+#define JOBSET_FILEFORMAT2		3780
+#define JOBSET_FILE364_SYSTEM	((USHORT)0xFFFF)
+#define JOBSET_FILE605_SYSTEM	((USHORT)0xFFFE)
 
 struct ImplOldJobSetupData
 {
-    char    cPrinterName[64];
-    char    cDeviceName[32];
-    char    cPortName[32];
-    char    cDriverName[32];
+    char	cPrinterName[64];
+    char	cDeviceName[32];
+    char	cPortName[32];
+    char	cDriverName[32];
 };
 
 struct Impl364JobSetupData
 {
-    SVBT16  nSize;
-    SVBT16  nSystem;
-    SVBT32  nDriverDataLen;
-    SVBT16  nOrientation;
-    SVBT16  nPaperBin;
-    SVBT16  nPaperFormat;
-    SVBT32  nPaperWidth;
-    SVBT32  nPaperHeight;
+    SVBT16	nSize;
+    SVBT16	nSystem;
+    SVBT32	nDriverDataLen;
+    SVBT16	nOrientation;
+    SVBT16	nPaperBin;
+    SVBT16	nPaperFormat;
+    SVBT32	nPaperWidth;
+    SVBT32	nPaperHeight;
 };
 
 // =======================================================================
 
 ImplJobSetup::ImplJobSetup()
 {
-    mnRefCount          = 1;
-    mnSystem            = 0;
-    meOrientation       = ORIENTATION_PORTRAIT;
+    mnRefCount			= 1;
+    mnSystem			= 0;
+    meOrientation		= ORIENTATION_PORTRAIT;
     meDuplexMode        = DUPLEX_UNKNOWN;
-    mnPaperBin          = 0;
-    mePaperFormat       = PAPER_USER;
-    mnPaperWidth        = 0;
-    mnPaperHeight       = 0;
-    mnDriverDataLen     = 0;
-    mpDriverData        = NULL;
+    mnPaperBin			= 0;
+    mePaperFormat		= PAPER_USER;
+    mnPaperWidth		= 0;
+    mnPaperHeight		= 0;
+    mnDriverDataLen 	= 0;
+    mpDriverData		= NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -84,15 +84,15 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     maPrinterName( rJobSetup.maPrinterName ),
     maDriver( rJobSetup.maDriver )
 {
-    mnRefCount          = 1;
-    mnSystem            = rJobSetup.mnSystem;
-    meOrientation       = rJobSetup.meOrientation;
+    mnRefCount			= 1;
+    mnSystem			= rJobSetup.mnSystem;
+    meOrientation		= rJobSetup.meOrientation;
     meDuplexMode        = rJobSetup.meDuplexMode;
-    mnPaperBin          = rJobSetup.mnPaperBin;
-    mePaperFormat       = rJobSetup.mePaperFormat;
-    mnPaperWidth        = rJobSetup.mnPaperWidth;
-    mnPaperHeight       = rJobSetup.mnPaperHeight;
-    mnDriverDataLen     = rJobSetup.mnDriverDataLen;
+    mnPaperBin			= rJobSetup.mnPaperBin;
+    mePaperFormat		= rJobSetup.mePaperFormat;
+    mnPaperWidth		= rJobSetup.mnPaperWidth;
+    mnPaperHeight		= rJobSetup.mnPaperHeight;
+    mnDriverDataLen 	= rJobSetup.mnDriverDataLen;
     if ( rJobSetup.mpDriverData )
     {
         mpDriverData = (BYTE*)rtl_allocateMemory( mnDriverDataLen );
@@ -100,7 +100,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     }
     else
         mpDriverData = NULL;
-    maValueMap          = rJobSetup.maValueMap;
+    maValueMap 			= rJobSetup.maValueMap;
 }
 
 // -----------------------------------------------------------------------
@@ -271,18 +271,18 @@ BOOL JobSetup::operator==( const JobSetup& rJobSetup ) const
 
     ImplJobSetup* pData1 = mpData;
     ImplJobSetup* pData2 = rJobSetup.mpData;
-    if ( (pData1->mnSystem          == pData2->mnSystem)                &&
-         (pData1->maPrinterName     == pData2->maPrinterName)           &&
-         (pData1->maDriver          == pData2->maDriver)                &&
-         (pData1->meOrientation     == pData2->meOrientation)           &&
-         (pData1->meDuplexMode      == pData2->meDuplexMode)            &&
-         (pData1->mnPaperBin        == pData2->mnPaperBin)              &&
-         (pData1->mePaperFormat     == pData2->mePaperFormat)           &&
-         (pData1->mnPaperWidth      == pData2->mnPaperWidth)            &&
-         (pData1->mnPaperHeight     == pData2->mnPaperHeight)           &&
-         (pData1->mnDriverDataLen   == pData2->mnDriverDataLen)         &&
-         (memcmp( pData1->mpDriverData, pData2->mpDriverData, pData1->mnDriverDataLen ) == 0)                                                           &&
-         (pData1->maValueMap        == pData2->maValueMap)
+    if ( (pData1->mnSystem			== pData2->mnSystem)				&&
+         (pData1->maPrinterName 	== pData2->maPrinterName)			&&
+         (pData1->maDriver			== pData2->maDriver)				&&
+         (pData1->meOrientation 	== pData2->meOrientation)			&&
+         (pData1->meDuplexMode      == pData2->meDuplexMode)			&&
+         (pData1->mnPaperBin		== pData2->mnPaperBin)				&&
+         (pData1->mePaperFormat 	== pData2->mePaperFormat)			&&
+         (pData1->mnPaperWidth		== pData2->mnPaperWidth)			&&
+         (pData1->mnPaperHeight 	== pData2->mnPaperHeight)			&&
+         (pData1->mnDriverDataLen	== pData2->mnDriverDataLen) 		&&
+         (memcmp( pData1->mpDriverData, pData2->mpDriverData, pData1->mnDriverDataLen ) == 0)															&&
+         (pData1->maValueMap		== pData2->maValueMap)
          )
         return TRUE;
 
@@ -296,7 +296,7 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "JobSetup::>> - Solar-Version not set on rOStream" );
 
     // Zur Zeit haben wir noch kein neues FileFormat
-//    if ( rIStream.GetVersion() < JOBSET_FILEFORMAT2 )
+//	  if ( rIStream.GetVersion() < JOBSET_FILEFORMAT2 )
     {
         USHORT nLen;
         USHORT nSystem;
@@ -317,30 +317,30 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                 else
                     rJobSetup.mpData->mnRefCount--;
             }
-
+            
             rtl_TextEncoding aStreamEncoding = RTL_TEXTENCODING_UTF8;
             if( nSystem == JOBSET_FILE364_SYSTEM )
                 aStreamEncoding = rIStream.GetStreamCharSet();
-
+            
             rJobSetup.mpData = new ImplJobSetup;
             ImplJobSetup* pJobData = rJobSetup.mpData;
             pJobData->maPrinterName = UniString( pData->cPrinterName, aStreamEncoding );
-            pJobData->maDriver      = UniString( pData->cDriverName, aStreamEncoding );
+            pJobData->maDriver		= UniString( pData->cDriverName, aStreamEncoding );
 
             // Sind es unsere neuen JobSetup-Daten?
             if ( nSystem == JOBSET_FILE364_SYSTEM ||
                  nSystem == JOBSET_FILE605_SYSTEM )
             {
-                Impl364JobSetupData* pOldJobData    = (Impl364JobSetupData*)(pTempBuf + sizeof( ImplOldJobSetupData ));
-                USHORT nOldJobDataSize              = SVBT16ToShort( pOldJobData->nSize );
-                pJobData->mnSystem                  = SVBT16ToShort( pOldJobData->nSystem );
-                pJobData->mnDriverDataLen           = SVBT32ToUInt32( pOldJobData->nDriverDataLen );
-                pJobData->meOrientation             = (Orientation)SVBT16ToShort( pOldJobData->nOrientation );
+                Impl364JobSetupData* pOldJobData	= (Impl364JobSetupData*)(pTempBuf + sizeof( ImplOldJobSetupData ));
+                USHORT nOldJobDataSize				= SVBT16ToShort( pOldJobData->nSize );
+                pJobData->mnSystem					= SVBT16ToShort( pOldJobData->nSystem );
+                pJobData->mnDriverDataLen			= SVBT32ToUInt32( pOldJobData->nDriverDataLen );
+                pJobData->meOrientation 			= (Orientation)SVBT16ToShort( pOldJobData->nOrientation );
                 pJobData->meDuplexMode              = DUPLEX_UNKNOWN;
-                pJobData->mnPaperBin                = SVBT16ToShort( pOldJobData->nPaperBin );
-                pJobData->mePaperFormat             = (Paper)SVBT16ToShort( pOldJobData->nPaperFormat );
-                pJobData->mnPaperWidth              = (long)SVBT32ToUInt32( pOldJobData->nPaperWidth );
-                pJobData->mnPaperHeight             = (long)SVBT32ToUInt32( pOldJobData->nPaperHeight );
+                pJobData->mnPaperBin				= SVBT16ToShort( pOldJobData->nPaperBin );
+                pJobData->mePaperFormat 			= (Paper)SVBT16ToShort( pOldJobData->nPaperFormat );
+                pJobData->mnPaperWidth				= (long)SVBT32ToUInt32( pOldJobData->nPaperWidth );
+                pJobData->mnPaperHeight 			= (long)SVBT32ToUInt32( pOldJobData->nPaperHeight );
                 if ( pJobData->mnDriverDataLen )
                 {
                     BYTE* pDriverData = ((BYTE*)pOldJobData) + nOldJobDataSize;
@@ -393,7 +393,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
     DBG_ASSERTWARNING( rOStream.GetVersion(), "JobSetup::<< - Solar-Version not set on rOStream" );
 
     // Zur Zeit haben wir noch kein neues FileFormat
-//    if ( rOStream.GetVersion() < JOBSET_FILEFORMAT2 )
+//	  if ( rOStream.GetVersion() < JOBSET_FILEFORMAT2 )
     {
         USHORT nLen = 0;
         if ( !rJobSetup.mpData )
@@ -404,7 +404,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
 
             const ImplJobSetup* pJobData = rJobSetup.ImplGetConstData();
             Impl364JobSetupData aOldJobData;
-            USHORT              nOldJobDataSize = sizeof( aOldJobData );
+            USHORT				nOldJobDataSize = sizeof( aOldJobData );
             ShortToSVBT16( nOldJobDataSize, aOldJobData.nSize );
             ShortToSVBT16( pJobData->mnSystem, aOldJobData.nSystem );
             UInt32ToSVBT32( pJobData->mnDriverDataLen, aOldJobData.nDriverDataLen );
@@ -420,7 +420,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             strncpy( aOldData.cPrinterName, aPrnByteName.GetBuffer(), 63 );
             ByteString aDriverByteName( rJobSetup.GetDriverName(), RTL_TEXTENCODING_UTF8 );
             strncpy( aOldData.cDriverName, aDriverByteName.GetBuffer(), 31 );
-//          nLen = sizeof( aOldData ) + 4 + nOldJobDataSize + pJobData->mnDriverDataLen;
+//			nLen = sizeof( aOldData ) + 4 + nOldJobDataSize + pJobData->mnDriverDataLen;
             int nPos = rOStream.Tell();
             rOStream << nLen;
             rOStream << nSystem;
@@ -436,10 +436,10 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.WriteByteString( "COMPAT_DUPLEX_MODE" ) ;
             switch( pJobData->meDuplexMode )
             {
-            case DUPLEX_UNKNOWN: rOStream.WriteByteString( "DUPLEX_UNKNOWN" );break;
-            case DUPLEX_OFF: rOStream.WriteByteString( "DUPLEX_OFF" );break;
-            case DUPLEX_SHORTEDGE: rOStream.WriteByteString( "DUPLEX_SHORTEDGE" );break;
-            case DUPLEX_LONGEDGE: rOStream.WriteByteString( "DUPLEX_LONGEDGE" );break;
+            case DUPLEX_UNKNOWN: rOStream.WriteByteString( "DUPLEX_UNKNOWN" );break; 
+            case DUPLEX_OFF: rOStream.WriteByteString( "DUPLEX_OFF" );break; 
+            case DUPLEX_SHORTEDGE: rOStream.WriteByteString( "DUPLEX_SHORTEDGE" );break; 
+            case DUPLEX_LONGEDGE: rOStream.WriteByteString( "DUPLEX_LONGEDGE" );break; 
             }
             nLen = sal::static_int_cast<USHORT>(rOStream.Tell() - nPos);
             rOStream.Seek( nPos );

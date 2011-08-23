@@ -467,7 +467,7 @@ uno::Reference< rendering::XBitmap > SAL_CALL VclCanvasBitmap::getScaledBitmap( 
 }
 
 // XIntegerReadOnlyBitmap
-uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerBitmapLayout&     bitmapLayout,
+uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerBitmapLayout& 	 bitmapLayout,
                                                              const geometry::IntegerRectangle2D& rect ) throw( lang::IndexOutOfBoundsException,
                                                                                                                rendering::VolatileContentDestroyedException,
                                                                                                                uno::RuntimeException)
@@ -572,8 +572,8 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     return aRet;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
-                                                              const geometry::IntegerPoint2D&   pos ) throw (lang::IndexOutOfBoundsException,
+uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::IntegerBitmapLayout&	bitmapLayout,
+                                                              const geometry::IntegerPoint2D&	pos ) throw (lang::IndexOutOfBoundsException,
                                                                                                              rendering::VolatileContentDestroyedException,
                                                                                                              uno::RuntimeException)
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,46 +33,46 @@
 
 // ANSI version
 
-#define A_URLSECTION_SHORTCUT   "InternetShortcut"
-#define A_URLKEY_URL            "URL"
-#define A_URLKEY_TITLE          "Title"
-#define A_URLKEY_TARGET         "Target"
-#define A_URLKEY_FRAME          "Frame"
-#define A_URLKEY_OPENAS         "OpenAs"
-#define A_URLKEY_SOICON         "SOIcon"
-#define A_URLKEY_WIN_ICONFILE   "IconFile"
-#define A_URLKEY_WIN_ICONINDEX  "IconIndex"
-#define A_URLKEY_WORKDIR        "WorkingDirectory"
-#define A_URLKEY_ARGUMENTS      "Arguments"
-#define A_URLKEY_INTERN_ORIGURL "[URL]"
+#define A_URLSECTION_SHORTCUT	"InternetShortcut"
+#define A_URLKEY_URL			"URL"
+#define A_URLKEY_TITLE			"Title"
+#define A_URLKEY_TARGET			"Target"
+#define A_URLKEY_FRAME			"Frame"
+#define A_URLKEY_OPENAS			"OpenAs"
+#define A_URLKEY_SOICON			"SOIcon"
+#define A_URLKEY_WIN_ICONFILE	"IconFile"
+#define A_URLKEY_WIN_ICONINDEX	"IconIndex"
+#define A_URLKEY_WORKDIR		"WorkingDirectory"
+#define A_URLKEY_ARGUMENTS		"Arguments"
+#define A_URLKEY_INTERN_ORIGURL	"[URL]"
 
 // Unicode version
 
-#define U_URLSECTION_SHORTCUT   L"InternetShortcut"
-#define U_URLKEY_URL            L"URL"
-#define U_URLKEY_TITLE          L"Title"
-#define U_URLKEY_TARGET         L"Target"
-#define U_URLKEY_FRAME          L"Frame"
-#define U_URLKEY_OPENAS         L"OpenAs"
-#define U_URLKEY_SOICON         L"SOIcon"
-#define U_URLKEY_WIN_ICONFILE   L"IconFile"
-#define U_URLKEY_WIN_ICONINDEX  L"IconIndex"
-#define U_URLKEY_WORKDIR        L"WorkingDirectory"
-#define U_URLKEY_ARGUMENTS      L"Arguments"
-#define U_URLKEY_INTERN_ORIGURL L"[URL]"
+#define U_URLSECTION_SHORTCUT	L"InternetShortcut"
+#define U_URLKEY_URL			L"URL"
+#define U_URLKEY_TITLE			L"Title"
+#define U_URLKEY_TARGET			L"Target"
+#define U_URLKEY_FRAME			L"Frame"
+#define U_URLKEY_OPENAS			L"OpenAs"
+#define U_URLKEY_SOICON			L"SOIcon"
+#define U_URLKEY_WIN_ICONFILE	L"IconFile"
+#define U_URLKEY_WIN_ICONINDEX	L"IconIndex"
+#define U_URLKEY_WORKDIR		L"WorkingDirectory"
+#define U_URLKEY_ARGUMENTS		L"Arguments"
+#define U_URLKEY_INTERN_ORIGURL	L"[URL]"
 
-#   define URLSECTION_SHORTCUT  U_URLSECTION_SHORTCUT
-#   define URLKEY_URL           U_URLKEY_URL
-#   define URLKEY_TITLE         U_URLKEY_TITLE
-#   define URLKEY_TARGET        U_URLKEY_TARGET
-#   define URLKEY_FRAME         U_URLKEY_FRAME
-#   define URLKEY_OPENAS        U_URLKEY_OPENAS
-#   define URLKEY_SOICON        U_URLKEY_SOICON
-#   define URLKEY_WIN_ICONFILE  U_URLKEY_WIN_ICONFILE
-#   define URLKEY_WIN_ICONINDEX U_URLKEY_WIN_ICONINDEX
-#   define URLKEY_WORKDIR       U_URLKEY_WORKDIR
-#   define URLKEY_ARGUMENTS     U_URLKEY_ARGUMENTS
-#   define URLKEY_INTERN_ORIGURL U_URLKEY_INTERN_ORIGURL
+#	define URLSECTION_SHORTCUT	U_URLSECTION_SHORTCUT
+#	define URLKEY_URL			U_URLKEY_URL
+#	define URLKEY_TITLE			U_URLKEY_TITLE
+#	define URLKEY_TARGET		U_URLKEY_TARGET
+#	define URLKEY_FRAME			U_URLKEY_FRAME
+#	define URLKEY_OPENAS		U_URLKEY_OPENAS
+#	define URLKEY_SOICON		U_URLKEY_SOICON
+#	define URLKEY_WIN_ICONFILE	U_URLKEY_WIN_ICONFILE
+#	define URLKEY_WIN_ICONINDEX	U_URLKEY_WIN_ICONINDEX
+#	define URLKEY_WORKDIR		U_URLKEY_WORKDIR
+#	define URLKEY_ARGUMENTS		U_URLKEY_ARGUMENTS
+#	define URLKEY_INTERN_ORIGURL U_URLKEY_INTERN_ORIGURL
 
 #endif // __URLKEYS_HXX
 

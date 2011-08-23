@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ static ::rtl::OString polyToString( const Polygon& rPoly )
         aStr += ",";
         aStr += ::rtl::OString::valueOf( static_cast< double >( rPoly[nVertex].getY() ) );
         aStr += ") ";
-    }
+    }    
 
     return aStr;
 }
@@ -119,7 +119,7 @@ SvtGraphicFill::Transform::Transform()
 {
     matrix[0] = 1.0; matrix[1] = 0.0; matrix[2] = 0.0;
     matrix[3] = 0.0; matrix[4] = 1.0; matrix[5] = 0.0;
-}
+} 
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -133,18 +133,18 @@ SvtGraphicStroke::SvtGraphicStroke() :
     maJoinType(),
     mfMiterLimit( 3.0 ),
     maDashArray()
-{
+{ 
 }
 
-SvtGraphicStroke::SvtGraphicStroke( const Polygon&      rPath,
-                                    const PolyPolygon&  rStartArrow,
-                                    const PolyPolygon&  rEndArrow,
-                                    double              fTransparency,
-                                    double              fStrokeWidth,
-                                    CapType             aCap,
-                                    JoinType            aJoin,
-                                    double              fMiterLimit,
-                                    const DashArray&    rDashArray  ) :
+SvtGraphicStroke::SvtGraphicStroke( const Polygon& 		rPath,
+                                    const PolyPolygon&	rStartArrow,
+                                    const PolyPolygon&	rEndArrow,
+                                    double				fTransparency,
+                                    double 				fStrokeWidth,
+                                    CapType				aCap,
+                                    JoinType			aJoin,
+                                    double				fMiterLimit,
+                                    const DashArray&	rDashArray	) :
     maPath( rPath ),
     maStartArrow( rStartArrow ),
     maEndArrow( rEndArrow ),
@@ -208,7 +208,7 @@ void SvtGraphicStroke::getDashArray( DashArray& rDashArray ) const
 
     aStr += polyToString( maPath );
     aStr += "trans: ";
-    aStr += ::rtl::OString::valueOf( static_cast< double >(getTransparency()) );
+    aStr += ::rtl::OString::valueOf( static_cast< double >(getTransparency()) ); 
     aStr += " width: ";
     aStr += ::rtl::OString::valueOf( static_cast< double >(getStrokeWidth()) );
     aStr += " cap: ";
@@ -322,7 +322,7 @@ void SvtGraphicStroke::setDashArray( const DashArray& rDashArray )
 SvStream& operator<<( SvStream& rOStm, const SvtGraphicStroke& rClass )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
-
+    
     rClass.maPath.Write( rOStm );
     rClass.maStartArrow.Write( rOStm );
     rClass.maEndArrow.Write( rOStm );
@@ -345,7 +345,7 @@ SvStream& operator<<( SvStream& rOStm, const SvtGraphicStroke& rClass )
 SvStream& operator>>( SvStream& rIStm, SvtGraphicStroke& rClass )
 {
     VersionCompat aCompat( rIStm, STREAM_READ );
-
+    
     rClass.maPath.Read( rIStm );
     rClass.maStartArrow.Read( rIStm );
     rClass.maEndArrow.Read( rIStm );
@@ -364,7 +364,7 @@ SvStream& operator>>( SvStream& rIStm, SvtGraphicStroke& rClass )
     size_t i;
     for(i=0; i<rClass.maDashArray.size(); ++i)
         rIStm >> rClass.maDashArray[i];
-
+    
     return rIStm;
 }
 
@@ -388,20 +388,20 @@ SvtGraphicFill::SvtGraphicFill() :
 {
 }
 
-SvtGraphicFill::SvtGraphicFill( const PolyPolygon&  rPath,
-                                Color               aFillColor,
-                                double              fTransparency,
-                                FillRule            aFillRule,
-                                FillType            aFillType,
-                                const Transform&    aFillTransform,
-                                bool                bTiling,
-                                HatchType           aHatchType,
-                                Color               aHatchColor,
-                                GradientType        aGradientType,
-                                Color               aGradient1stColor,
-                                Color               aGradient2ndColor,
-                                int                 aGradientStepCount,
-                                const Graphic&      aFillGraphic ) :
+SvtGraphicFill::SvtGraphicFill( const PolyPolygon& 	rPath,
+                                Color				aFillColor,
+                                double				fTransparency,
+                                FillRule			aFillRule,
+                                FillType			aFillType,
+                                const Transform&	aFillTransform,
+                                bool				bTiling,
+                                HatchType			aHatchType,
+                                Color				aHatchColor,
+                                GradientType		aGradientType,
+                                Color				aGradient1stColor,
+                                Color				aGradient2ndColor,
+                                int					aGradientStepCount,
+                                const Graphic&		aFillGraphic ) :
     maPath( rPath ),
     maFillColor( aFillColor ),
     mfTransparency( fTransparency ),
@@ -502,7 +502,7 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
     aStr += "fill";
     aStr += colorToString( getFillColor() );
     aStr += " trans: ";
-    aStr += ::rtl::OString::valueOf( static_cast< double >(getTransparency()) );
+    aStr += ::rtl::OString::valueOf( static_cast< double >(getTransparency()) ); 
     aStr += " rule: ";
     switch( getFillRule() )
     {
@@ -545,7 +545,7 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
     aStr += " transform: [ ";
     int i;
     for(i=0; i<Transform::MatrixSize; ++i)
-        aStr += ::rtl::OString::valueOf( maFillTransform.matrix[i] );
+        aStr += ::rtl::OString::valueOf( maFillTransform.matrix[i] ); 
     aStr += " ] ";
 
     aStr += " hatch: ";
@@ -606,15 +606,15 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
         switch( maFillGraphic.GetType() )
         {
             case GRAPHIC_BITMAP:
-                aStr += "bitmap";
+                aStr += "bitmap"; 
                 break;
 
             case GRAPHIC_GDIMETAFILE:
-                aStr += "metafile";
+                aStr += "metafile"; 
                 break;
 
             case GRAPHIC_DEFAULT:
-                aStr += "default";
+                aStr += "default"; 
                 break;
 
             default:
@@ -623,7 +623,7 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
         }
 
         aStr += " of ";
-        aStr += ::rtl::OString::valueOf( static_cast< sal_Int32 >(maFillGraphic.GetSizeBytes()) );
+        aStr += ::rtl::OString::valueOf( static_cast< sal_Int32 >(maFillGraphic.GetSizeBytes()) ); 
         aStr += " bytes";
     }
 
@@ -703,7 +703,7 @@ void SvtGraphicFill::setGraphic( const Graphic& rGraphic )
 SvStream& operator<<( SvStream& rOStm, const SvtGraphicFill& rClass )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
-
+    
     rClass.maPath.Write( rOStm );
     rOStm << rClass.maFillColor;
     rOStm << rClass.mfTransparency;
@@ -732,7 +732,7 @@ SvStream& operator<<( SvStream& rOStm, const SvtGraphicFill& rClass )
 SvStream& operator>>( SvStream& rIStm, SvtGraphicFill& rClass )
 {
     VersionCompat aCompat( rIStm, STREAM_READ );
-
+    
     rClass.maPath.Read( rIStm );
     rIStm >> rClass.maFillColor;
     rIStm >> rClass.mfTransparency;

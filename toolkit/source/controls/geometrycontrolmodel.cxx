@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,27 +43,27 @@
 #include <comphelper/sequence.hxx>
 
 
-#define GCM_PROPERTY_ID_POS_X               1
-#define GCM_PROPERTY_ID_POS_Y               2
-#define GCM_PROPERTY_ID_WIDTH               3
-#define GCM_PROPERTY_ID_HEIGHT              4
-#define GCM_PROPERTY_ID_NAME                5
-#define GCM_PROPERTY_ID_TABINDEX            6
-#define GCM_PROPERTY_ID_STEP                7
-#define GCM_PROPERTY_ID_TAG                 8
+#define GCM_PROPERTY_ID_POS_X		        1
+#define GCM_PROPERTY_ID_POS_Y		        2
+#define GCM_PROPERTY_ID_WIDTH		        3
+#define GCM_PROPERTY_ID_HEIGHT		        4
+#define GCM_PROPERTY_ID_NAME		        5
+#define GCM_PROPERTY_ID_TABINDEX	        6
+#define GCM_PROPERTY_ID_STEP		        7
+#define GCM_PROPERTY_ID_TAG			        8
 #define GCM_PROPERTY_ID_RESOURCERESOLVER    9
 
-#define GCM_PROPERTY_POS_X              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"))
-#define GCM_PROPERTY_POS_Y              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"))
-#define GCM_PROPERTY_WIDTH              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))
-#define GCM_PROPERTY_HEIGHT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))
-#define GCM_PROPERTY_NAME               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))
-#define GCM_PROPERTY_TABINDEX           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex"))
-#define GCM_PROPERTY_STEP               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Step"))
-#define GCM_PROPERTY_TAG                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tag"))
-#define GCM_PROPERTY_RESOURCERESOLVER   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceResolver"))
+#define GCM_PROPERTY_POS_X		        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"))
+#define GCM_PROPERTY_POS_Y		        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"))
+#define GCM_PROPERTY_WIDTH		        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))
+#define GCM_PROPERTY_HEIGHT		        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))
+#define GCM_PROPERTY_NAME		        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))
+#define GCM_PROPERTY_TABINDEX	        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex"))
+#define GCM_PROPERTY_STEP		        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Step"))
+#define GCM_PROPERTY_TAG		        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tag"))
+#define GCM_PROPERTY_RESOURCERESOLVER	::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceResolver"))
 
-#define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
+#define DEFAULT_ATTRIBS()		PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
 //........................................................................
 // namespace toolkit
@@ -100,7 +100,7 @@
         {
             m_xAggregate = _pAggregateInstance;
 
-            {   // check if the aggregat is cloneable
+            {	// check if the aggregat is cloneable
                 Reference< XCloneable > xCloneAccess(m_xAggregate, UNO_QUERY);
                 m_bCloneable = xCloneAccess.is();
             }
@@ -183,14 +183,14 @@
     void OGeometryControlModel_Base::registerProperties()
     {
         // register our members for the property handling of the OPropertyContainer
-        registerProperty(GCM_PROPERTY_POS_X,    GCM_PROPERTY_ID_POS_X,      DEFAULT_ATTRIBS(), &m_nPosX, ::getCppuType(&m_nPosX));
-        registerProperty(GCM_PROPERTY_POS_Y,    GCM_PROPERTY_ID_POS_Y,      DEFAULT_ATTRIBS(), &m_nPosY, ::getCppuType(&m_nPosY));
-        registerProperty(GCM_PROPERTY_WIDTH,    GCM_PROPERTY_ID_WIDTH,      DEFAULT_ATTRIBS(), &m_nWidth, ::getCppuType(&m_nWidth));
-        registerProperty(GCM_PROPERTY_HEIGHT,   GCM_PROPERTY_ID_HEIGHT,     DEFAULT_ATTRIBS(), &m_nHeight, ::getCppuType(&m_nHeight));
-        registerProperty(GCM_PROPERTY_NAME,     GCM_PROPERTY_ID_NAME,       DEFAULT_ATTRIBS(), &m_aName, ::getCppuType(&m_aName));
-        registerProperty(GCM_PROPERTY_TABINDEX, GCM_PROPERTY_ID_TABINDEX,   DEFAULT_ATTRIBS(), &m_nTabIndex, ::getCppuType(&m_nTabIndex));
-        registerProperty(GCM_PROPERTY_STEP,     GCM_PROPERTY_ID_STEP,       DEFAULT_ATTRIBS(), &m_nStep, ::getCppuType(&m_nStep));
-        registerProperty(GCM_PROPERTY_TAG,      GCM_PROPERTY_ID_TAG,        DEFAULT_ATTRIBS(), &m_aTag, ::getCppuType(&m_aTag));
+        registerProperty(GCM_PROPERTY_POS_X,	GCM_PROPERTY_ID_POS_X,		DEFAULT_ATTRIBS(), &m_nPosX, ::getCppuType(&m_nPosX));
+        registerProperty(GCM_PROPERTY_POS_Y,	GCM_PROPERTY_ID_POS_Y,		DEFAULT_ATTRIBS(), &m_nPosY, ::getCppuType(&m_nPosY));
+        registerProperty(GCM_PROPERTY_WIDTH,	GCM_PROPERTY_ID_WIDTH,		DEFAULT_ATTRIBS(), &m_nWidth, ::getCppuType(&m_nWidth));
+        registerProperty(GCM_PROPERTY_HEIGHT,	GCM_PROPERTY_ID_HEIGHT,		DEFAULT_ATTRIBS(), &m_nHeight, ::getCppuType(&m_nHeight));
+        registerProperty(GCM_PROPERTY_NAME,		GCM_PROPERTY_ID_NAME,		DEFAULT_ATTRIBS(), &m_aName, ::getCppuType(&m_aName));
+        registerProperty(GCM_PROPERTY_TABINDEX,	GCM_PROPERTY_ID_TABINDEX,	DEFAULT_ATTRIBS(), &m_nTabIndex, ::getCppuType(&m_nTabIndex));
+        registerProperty(GCM_PROPERTY_STEP,		GCM_PROPERTY_ID_STEP,		DEFAULT_ATTRIBS(), &m_nStep, ::getCppuType(&m_nStep));
+        registerProperty(GCM_PROPERTY_TAG,		GCM_PROPERTY_ID_TAG,		DEFAULT_ATTRIBS(), &m_aTag, ::getCppuType(&m_aTag));
         registerProperty(GCM_PROPERTY_RESOURCERESOLVER, GCM_PROPERTY_ID_RESOURCERESOLVER, DEFAULT_ATTRIBS(), &m_xStrResolver, ::getCppuType(&m_xStrResolver));
     }
 
@@ -198,19 +198,19 @@
     ::com::sun::star::uno::Any OGeometryControlModel_Base::ImplGetDefaultValueByHandle(sal_Int32 nHandle) const
     {
         ::com::sun::star::uno::Any aDefault;
-
+    
         switch ( nHandle )
         {
-            case GCM_PROPERTY_ID_POS_X:             aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_POS_Y:             aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_WIDTH:             aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_HEIGHT:            aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_NAME:              aDefault <<= ::rtl::OUString(); break;
-            case GCM_PROPERTY_ID_TABINDEX:          aDefault <<= (sal_Int16) -1; break;
-            case GCM_PROPERTY_ID_STEP:              aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_TAG:               aDefault <<= ::rtl::OUString(); break;
+            case GCM_PROPERTY_ID_POS_X:			    aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_POS_Y:			    aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_WIDTH:			    aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_HEIGHT:		    aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_NAME:			    aDefault <<= ::rtl::OUString(); break;
+            case GCM_PROPERTY_ID_TABINDEX:		    aDefault <<= (sal_Int16) -1; break;
+            case GCM_PROPERTY_ID_STEP:			    aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_TAG:			    aDefault <<= ::rtl::OUString(); break;
             case GCM_PROPERTY_ID_RESOURCERESOLVER:  aDefault <<= Reference< resource::XStringResourceResolver >(); break;
-            default:                            DBG_ERROR( "ImplGetDefaultValueByHandle - unknown Property" );
+            default:							DBG_ERROR( "ImplGetDefaultValueByHandle - unknown Property" );
         }
 
         return aDefault;
@@ -220,19 +220,19 @@
     ::com::sun::star::uno::Any OGeometryControlModel_Base::ImplGetPropertyValueByHandle(sal_Int32 nHandle) const
     {
         ::com::sun::star::uno::Any aValue;
-
+    
         switch ( nHandle )
         {
-            case GCM_PROPERTY_ID_POS_X:         aValue <<= m_nPosX; break;
-            case GCM_PROPERTY_ID_POS_Y:         aValue <<= m_nPosY; break;
-            case GCM_PROPERTY_ID_WIDTH:         aValue <<= m_nWidth; break;
-            case GCM_PROPERTY_ID_HEIGHT:        aValue <<= m_nHeight; break;
-            case GCM_PROPERTY_ID_NAME:          aValue <<= m_aName; break;
-            case GCM_PROPERTY_ID_TABINDEX:      aValue <<= m_nTabIndex; break;
-            case GCM_PROPERTY_ID_STEP:          aValue <<= m_nStep; break;
-            case GCM_PROPERTY_ID_TAG:           aValue <<= m_aTag; break;
+            case GCM_PROPERTY_ID_POS_X:			aValue <<= m_nPosX; break;
+            case GCM_PROPERTY_ID_POS_Y:			aValue <<= m_nPosY; break;
+            case GCM_PROPERTY_ID_WIDTH:			aValue <<= m_nWidth; break;
+            case GCM_PROPERTY_ID_HEIGHT:		aValue <<= m_nHeight; break;
+            case GCM_PROPERTY_ID_NAME:			aValue <<= m_aName; break;
+            case GCM_PROPERTY_ID_TABINDEX:		aValue <<= m_nTabIndex; break;
+            case GCM_PROPERTY_ID_STEP:			aValue <<= m_nStep; break;
+            case GCM_PROPERTY_ID_TAG:			aValue <<= m_aTag; break;
             case GCM_PROPERTY_ID_RESOURCERESOLVER: aValue <<= m_xStrResolver; break;
-            default:                            DBG_ERROR( "ImplGetPropertyValueByHandle - unknown Property" );
+            default:							DBG_ERROR( "ImplGetPropertyValueByHandle - unknown Property" );
         }
 
         return aValue;
@@ -240,19 +240,19 @@
 
     //--------------------------------------------------------------------
     void OGeometryControlModel_Base::ImplSetPropertyValueByHandle(sal_Int32 nHandle, const :: com::sun::star::uno::Any& aValue)
-    {
+    {		
         switch ( nHandle )
         {
-            case GCM_PROPERTY_ID_POS_X:         aValue >>= m_nPosX; break;
-            case GCM_PROPERTY_ID_POS_Y:         aValue >>= m_nPosY; break;
-            case GCM_PROPERTY_ID_WIDTH:         aValue >>= m_nWidth; break;
-            case GCM_PROPERTY_ID_HEIGHT:        aValue >>= m_nHeight; break;
-            case GCM_PROPERTY_ID_NAME:          aValue >>= m_aName; break;
-            case GCM_PROPERTY_ID_TABINDEX:      aValue >>= m_nTabIndex; break;
-            case GCM_PROPERTY_ID_STEP:          aValue >>= m_nStep; break;
-            case GCM_PROPERTY_ID_TAG:           aValue >>= m_aTag; break;
+            case GCM_PROPERTY_ID_POS_X:			aValue >>= m_nPosX; break;
+            case GCM_PROPERTY_ID_POS_Y:			aValue >>= m_nPosY; break;
+            case GCM_PROPERTY_ID_WIDTH:			aValue >>= m_nWidth; break;
+            case GCM_PROPERTY_ID_HEIGHT:		aValue >>= m_nHeight; break;
+            case GCM_PROPERTY_ID_NAME:			aValue >>= m_aName; break;
+            case GCM_PROPERTY_ID_TABINDEX:		aValue >>= m_nTabIndex; break;
+            case GCM_PROPERTY_ID_STEP:			aValue >>= m_nStep; break;
+            case GCM_PROPERTY_ID_TAG:			aValue >>= m_aTag; break;
             case GCM_PROPERTY_ID_RESOURCERESOLVER: aValue >>= m_xStrResolver; break;
-            default:                            DBG_ERROR( "ImplSetPropertyValueByHandle - unknown Property" );
+            default:							DBG_ERROR( "ImplSetPropertyValueByHandle - unknown Property" );
         }
     }
 
@@ -332,7 +332,7 @@
     {
         OPropertyArrayAggregationHelper& rPH = static_cast<OPropertyArrayAggregationHelper&>(const_cast<OGeometryControlModel_Base*>(this)->getInfoHelper());
         ::rtl::OUString sPropName;
-        sal_Int32   nOriginalHandle = -1;
+        sal_Int32	nOriginalHandle = -1;
 
         if (rPH.fillAggregatePropertyInfoByHandle(&sPropName, &nOriginalHandle, _nHandle))
             OPropertySetAggregationHelper::getFastPropertyValue(_rValue, _nHandle);
@@ -392,14 +392,14 @@
             // should have been reset
 
         // set properties
-        pOwnClone->m_nPosX      = m_nPosX;
-        pOwnClone->m_nPosY      = m_nPosY;
-        pOwnClone->m_nWidth     = m_nWidth;
-        pOwnClone->m_nHeight    = m_nHeight;
-        pOwnClone->m_aName      = m_aName;
-        pOwnClone->m_nTabIndex  = m_nTabIndex;
-        pOwnClone->m_nStep      = m_nStep;
-        pOwnClone->m_aTag       = m_aTag;
+        pOwnClone->m_nPosX		= m_nPosX;
+        pOwnClone->m_nPosY		= m_nPosY;
+        pOwnClone->m_nWidth		= m_nWidth;
+        pOwnClone->m_nHeight	= m_nHeight;
+        pOwnClone->m_aName		= m_aName;
+        pOwnClone->m_nTabIndex	= m_nTabIndex;
+        pOwnClone->m_nStep		= m_nStep;
+        pOwnClone->m_aTag		= m_aTag;
 
 
         // Clone event container
@@ -407,13 +407,13 @@
             static_cast< ::com::sun::star::script::XScriptEventsSupplier* >( this );
         Reference< ::com::sun::star::script::XScriptEventsSupplier > xCloneEventsSupplier =
             static_cast< ::com::sun::star::script::XScriptEventsSupplier* >( pOwnClone );
-
+            
         if( xEventsSupplier.is() && xCloneEventsSupplier.is() )
         {
             Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
             Reference< XNameContainer > xCloneEventCont = xCloneEventsSupplier->getEvents();
 
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames =
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = 
                 xEventCont->getElementNames();
             const ::rtl::OUString* pNames = aNames.getConstArray();
             sal_Int32 i, nNameCount = aNames.getLength();
@@ -453,8 +453,8 @@
     //====================================================================
     //--------------------------------------------------------------------
 
-    typedef ::std::hash_map< ::rtl::OUString, sal_Int32, ::comphelper::UStringHash > HashMapString2Int;
-    typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > >   PropSeqArray;
+    typedef	::std::hash_map< ::rtl::OUString, sal_Int32, ::comphelper::UStringHash > HashMapString2Int;
+    typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > >	PropSeqArray;
     typedef ::std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
 
     // for creating class-unique PropertySetInfo's, we need some info:
@@ -518,7 +518,7 @@
     //--------------------------------------------------------------------
     struct PropertyNameEqual : public ::std::unary_function< Property, bool >
     {
-        const ::rtl::OUString&  m_rCompare;
+        const ::rtl::OUString&	m_rCompare;
         PropertyNameEqual( const ::rtl::OUString& _rCompare ) : m_rCompare( _rCompare ) { }
 
         bool operator()( const Property& _rLHS )
@@ -561,7 +561,7 @@
             // look for the current property in the properties of our aggregate
             const Property* pAggPropPos = ::std::find_if( pAggProps, pAggPropsEnd, PropertyNameEqual( pProp->Name ) );
             if ( pAggPropPos != pAggPropsEnd )
-            {   // found a duplicate
+            {	// found a duplicate
                 // -> remove from the aggregate property sequence
                 ::comphelper::removeElementAt( aAggregateProps, pAggPropPos - pAggProps );
                 // which means we have to adjust the pointers
@@ -612,7 +612,7 @@
     //--------------------------------------------------------------------
     struct Int32Equal : public ::std::unary_function< sal_Int32, bool >
     {
-        sal_Int32   m_nCompare;
+        sal_Int32	m_nCompare;
         Int32Equal( sal_Int32 _nCompare ) : m_nCompare( _nCompare ) { }
 
         bool operator()( sal_Int32 _nLHS )
@@ -648,7 +648,7 @@
     }
 
 //........................................................................
-// }    // namespace toolkit
+// }	// namespace toolkit
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

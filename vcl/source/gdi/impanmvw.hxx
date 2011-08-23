@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,30 +44,30 @@ class ImplAnimView
 {
 private:
 
-    Animation*      mpParent;
-    OutputDevice*   mpOut;
-    long            mnExtraData;
-    Point           maPt;
-    Point           maDispPt;
-    Point           maRestPt;
-    Size            maSz;
-    Size            maSzPix;
-    Size            maDispSz;
-    Size            maRestSz;
-    MapMode         maMap;
-    Region          maClip;
-    VirtualDevice*  mpBackground;
-    VirtualDevice*  mpRestore;
-    ULONG           mnActPos;
-    Disposal        meLastDisposal;
-    BOOL            mbPause;
-    BOOL            mbFirst;
-    BOOL            mbMarked;
-    BOOL            mbHMirr;
-    BOOL            mbVMirr;
+    Animation*		mpParent;
+    OutputDevice*	mpOut;
+    long			mnExtraData;
+    Point			maPt;
+    Point			maDispPt;
+    Point			maRestPt;
+    Size			maSz;
+    Size			maSzPix;
+    Size			maDispSz;
+    Size			maRestSz;
+    MapMode			maMap;
+    Region			maClip;
+    VirtualDevice*	mpBackground;
+    VirtualDevice*	mpRestore;
+    ULONG			mnActPos;
+    Disposal		meLastDisposal;
+    BOOL			mbPause;
+    BOOL			mbFirst;
+    BOOL			mbMarked;
+    BOOL			mbHMirr;
+    BOOL			mbVMirr;
 
-    void            ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
-    void            ImplDraw( ULONG nPos, VirtualDevice* pVDev );
+    void			ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
+    void			ImplDraw( ULONG nPos, VirtualDevice* pVDev );
 
 public:
 
@@ -76,22 +76,22 @@ public:
                                   OutputDevice* pFirstFrameOutDev = NULL );
                     ~ImplAnimView();
 
-    BOOL            ImplMatches( OutputDevice* pOut, long nExtraData ) const;
-    void            ImplDrawToPos( ULONG nPos );
-    void            ImplDraw( ULONG nPos );
-    void            ImplRepaint();
-    AInfo*          ImplCreateAInfo() const;
+    BOOL			ImplMatches( OutputDevice* pOut, long nExtraData ) const;
+    void			ImplDrawToPos( ULONG nPos );
+    void			ImplDraw( ULONG nPos );
+    void			ImplRepaint();
+    AInfo*			ImplCreateAInfo() const;
 
-    const Point&    ImplGetOutPos() const { return maPt; }
+    const Point&	ImplGetOutPos() const { return maPt; }
 
-    const Size&     ImplGetOutSize() const { return maSz; }
-    const Size&     ImplGetOutSizePix() const { return maSzPix; }
+    const Size&		ImplGetOutSize() const { return maSz; }
+    const Size&		ImplGetOutSizePix() const { return maSzPix; }
 
-    void            ImplPause( BOOL bPause ) { mbPause = bPause; }
-    BOOL            ImplIsPause() const { return mbPause; }
+    void			ImplPause( BOOL bPause ) { mbPause = bPause; }
+    BOOL			ImplIsPause() const { return mbPause; }
 
-    void            ImplSetMarked( BOOL bMarked ) { mbMarked = bMarked; }
-    BOOL            ImplIsMarked() const { return mbMarked; }
+    void			ImplSetMarked( BOOL bMarked ) { mbMarked = bMarked; }
+    BOOL			ImplIsMarked() const { return mbMarked; }
 };
 
 #endif

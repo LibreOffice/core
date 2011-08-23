@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,12 +54,12 @@ class OFSStreamContainer : public cppu::OWeakObject,
 {
     ::osl::Mutex m_aMutex;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >               m_xStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >             m_xSeekable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >          m_xInputStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >         m_xOutputStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTruncate >             m_xTruncate;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XAsyncOutputMonitor >   m_xAsyncOutputMonitor;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >				m_xStream;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >				m_xSeekable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >			m_xInputStream;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >			m_xOutputStream;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTruncate >				m_xTruncate;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XAsyncOutputMonitor >	m_xAsyncOutputMonitor;
 
     sal_Bool m_bDisposed;
     sal_Bool m_bInputClosed;
@@ -73,12 +73,12 @@ public:
     virtual ~OFSStreamContainer();
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType ) 
         throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
 
-    //  XTypeProvider
+    //	XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
@@ -99,14 +99,14 @@ public:
     virtual sal_Int64 SAL_CALL getLength() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) 
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL available(  )
+    virtual sal_Int32 SAL_CALL available(  ) 
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL closeInput(  )
+    virtual void SAL_CALL closeInput(  ) 
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // XOutputStream

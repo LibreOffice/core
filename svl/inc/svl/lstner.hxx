@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,27 +49,27 @@ class SVL_DLLPUBLIC SfxListener
     SfxBroadcasterArr_Impl aBCs;
 
 private:
-    const SfxListener&  operator=(const SfxListener &); // n.i., ist verboten
+    const SfxListener&	operator=(const SfxListener &); // n.i., ist verboten
 
 public:
     TYPEINFO();
 
                         SfxListener();
                         SfxListener( const SfxListener &rCopy );
-    virtual             ~SfxListener();
+    virtual 			~SfxListener();
 
-    BOOL                StartListening( SfxBroadcaster& rBroadcaster, BOOL bPreventDups = FALSE );
-    BOOL                EndListening( SfxBroadcaster& rBroadcaster, BOOL bAllDups = FALSE );
-    void                EndListening( USHORT nNo );
-    void                EndListeningAll();
-    BOOL                IsListening( SfxBroadcaster& rBroadcaster ) const;
+    BOOL				StartListening( SfxBroadcaster& rBroadcaster, BOOL bPreventDups = FALSE );
+    BOOL				EndListening( SfxBroadcaster& rBroadcaster, BOOL bAllDups = FALSE );
+    void				EndListening( USHORT nNo );
+    void				EndListeningAll();
+    BOOL				IsListening( SfxBroadcaster& rBroadcaster ) const;
 
-    USHORT              GetBroadcasterCount() const
+    USHORT				GetBroadcasterCount() const
                         { return aBCs.Count(); }
-    SfxBroadcaster*     GetBroadcasterJOE( USHORT nNo ) const
+    SfxBroadcaster* 	GetBroadcasterJOE( USHORT nNo ) const
                         { return (SfxBroadcaster*) aBCs.GetObject(nNo); }
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 #ifndef _NOTIFY_HXX
     void RemoveBroadcaster_Impl( SfxBroadcaster& rBC );

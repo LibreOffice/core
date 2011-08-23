@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,83 +78,83 @@ enum TxtAlign { TXTALIGN_LEFT, TXTALIGN_CENTER, TXTALIGN_RIGHT };
 
 class SVT_DLLPUBLIC TextEngine : public SfxBroadcaster
 {
-    friend class        TextView;
-    friend class        TextSelFunctionSet;
-    friend class        ExtTextEngine;
-    friend class        ExtTextView;
+    friend class 		TextView;
+    friend class 		TextSelFunctionSet;
+    friend class		ExtTextEngine;
+    friend class		ExtTextView;
 
-    friend class        TextUndo;
-    friend class        TextUndoManager;
-    friend class        TextUndoDelPara;
-    friend class        TextUndoConnectParas;
-    friend class        TextUndoSplitPara;
-    friend class        TextUndoInsertChars;
-    friend class        TextUndoRemoveChars;
-    friend class        TextUndoSetAttribs;
+    friend class 		TextUndo;
+    friend class 		TextUndoManager;
+    friend class		TextUndoDelPara;
+    friend class		TextUndoConnectParas;
+    friend class		TextUndoSplitPara;
+    friend class		TextUndoInsertChars;
+    friend class		TextUndoRemoveChars;
+    friend class		TextUndoSetAttribs;
 
 private:
-    TextDoc*            mpDoc;
-    TEParaPortions*     mpTEParaPortions;
-    OutputDevice*       mpRefDev;
+    TextDoc* 			mpDoc;
+    TEParaPortions*		mpTEParaPortions;
+    OutputDevice*		mpRefDev;
 
-    TextViews*          mpViews;
-    TextView*           mpActiveView;
+    TextViews*			mpViews;
+    TextView*			mpActiveView;
 
-    TextUndoManager*    mpUndoManager;
+    TextUndoManager*	mpUndoManager;
 
-    IdleFormatter*      mpIdleFormatter;
+    IdleFormatter*		mpIdleFormatter;
 
-    TEIMEInfos*         mpIMEInfos;
+    TEIMEInfos*			mpIMEInfos;
 
     ::com::sun::star::lang::Locale maLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > mxBreakIterator;
 
-    Rectangle           maInvalidRec;
-    Range               maInvalidRange;
+    Rectangle			maInvalidRec;
+    Range				maInvalidRange;
 
     LocaleDataWrapper*  mpLocaleDataWrapper;
 
-    Font                maFont;
+    Font				maFont;
     Color               maTextColor;
-    USHORT              mnCharHeight;
-    USHORT              mnFixCharWidth100;
+    USHORT				mnCharHeight;
+    USHORT				mnFixCharWidth100;
 
-    ULONG               mnMaxTextLen;
-    ULONG               mnMaxTextWidth;
-    ULONG               mnCurTextWidth;
-    ULONG               mnCurTextHeight;
-    ULONG               mnDefTab;
+    ULONG				mnMaxTextLen;
+    ULONG				mnMaxTextWidth;
+    ULONG 				mnCurTextWidth;
+    ULONG 				mnCurTextHeight;
+    ULONG				mnDefTab;
 
-    TxtAlign            meAlign;
+    TxtAlign			meAlign;
 
-    BOOL                mbIsFormatting      : 1;    // Semaphore wegen der Hook's
-    BOOL                mbFormatted         : 1;
-    BOOL                mbUpdate            : 1;
-    BOOL                mbModified          : 1;
-    BOOL                mbUndoEnabled       : 1;
-    BOOL                mbIsInUndo          : 1;
-    BOOL                mbDowning           : 1;
-    BOOL                mbRightToLeft       : 1;
-    BOOL                mbHasMultiLineParas : 1;
+    BOOL				mbIsFormatting 		: 1;	// Semaphore wegen der Hook's
+    BOOL				mbFormatted			: 1;
+    BOOL				mbUpdate 			: 1;
+    BOOL				mbModified			: 1;
+    BOOL				mbUndoEnabled 		: 1;
+    BOOL				mbIsInUndo			: 1;
+    BOOL				mbDowning 			: 1;
+    BOOL				mbRightToLeft		: 1;
+    BOOL				mbHasMultiLineParas	: 1;
 
-                        TextEngine( const TextEngine& ) : SfxBroadcaster()  {}
-    TextEngine&         operator=( const TextEngine& )      { return *this; }
+                        TextEngine( const TextEngine& ) : SfxBroadcaster() 	{}
+    TextEngine&			operator=( const TextEngine& ) 		{ return *this; }
 
 protected:
 
-    void                CursorMoved( ULONG nNode );
-    void                TextModified();
+    void				CursorMoved( ULONG nNode );
+    void				TextModified();
 
-    void                ImpInitDoc();
-    void                ImpRemoveText();
-    TextPaM             ImpDeleteText( const TextSelection& rSel );
-    TextPaM             ImpInsertText( const TextSelection& rSel, sal_Unicode c, BOOL bOverwrite = FALSE );
-    TextPaM             ImpInsertText( const TextSelection& rSel, const String& rText );
-    TextPaM             ImpInsertParaBreak( const TextSelection& rTextSelection, BOOL bKeepEndingAttribs = TRUE );
-    TextPaM             ImpInsertParaBreak( const TextPaM& rPaM, BOOL bKeepEndingAttribs = TRUE );
-    void                ImpRemoveChars( const TextPaM& rPaM, USHORT nChars, SfxUndoAction* pCurUndo = 0 );
-    TextPaM             ImpConnectParagraphs( ULONG nLeft, ULONG nRight );
-    void                ImpRemoveParagraph( ULONG nPara );
+    void				ImpInitDoc();
+    void				ImpRemoveText();
+    TextPaM				ImpDeleteText( const TextSelection& rSel );
+    TextPaM				ImpInsertText( const TextSelection& rSel, sal_Unicode c, BOOL bOverwrite = FALSE );
+    TextPaM				ImpInsertText( const TextSelection& rSel, const String& rText );
+    TextPaM				ImpInsertParaBreak( const TextSelection& rTextSelection, BOOL bKeepEndingAttribs = TRUE );
+    TextPaM				ImpInsertParaBreak( const TextPaM& rPaM, BOOL bKeepEndingAttribs = TRUE );
+    void				ImpRemoveChars( const TextPaM& rPaM, USHORT nChars, SfxUndoAction* pCurUndo = 0 );
+    TextPaM				ImpConnectParagraphs( ULONG nLeft, ULONG nRight );
+    void				ImpRemoveParagraph( ULONG nPara );
     void                ImpInitWritingDirections( ULONG nPara );
     LocaleDataWrapper*  ImpGetLocaleDataWrapper();
 
@@ -167,161 +167,161 @@ protected:
     SAL_DLLPRIVATE BOOL IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const;
 
     // Broadcasten bzw. Selektionen anpassen:
-    void                ImpParagraphInserted( ULONG nPara );
-    void                ImpParagraphRemoved( ULONG nPara );
-    void                ImpCharsRemoved( ULONG nPara, USHORT nPos, USHORT nChars );
-    void                ImpCharsInserted( ULONG nPara, USHORT nPos, USHORT nChars );
-    void                ImpFormattingParagraph( ULONG nPara );
-    void                ImpTextHeightChanged();
-    void                ImpTextFormatted();
+    void				ImpParagraphInserted( ULONG nPara );
+    void				ImpParagraphRemoved( ULONG nPara );
+    void 				ImpCharsRemoved( ULONG nPara, USHORT nPos, USHORT nChars );
+    void 				ImpCharsInserted( ULONG nPara, USHORT nPos, USHORT nChars );
+    void				ImpFormattingParagraph( ULONG nPara );
+    void				ImpTextHeightChanged();
+    void				ImpTextFormatted();
 
-    DECL_LINK(          IdleFormatHdl, Timer * );
-    void                CheckIdleFormatter();
-    void                IdleFormatAndUpdate( TextView* pCurView = 0, USHORT nMaxTimerRestarts = 5 );
+    DECL_LINK( 			IdleFormatHdl, Timer * );
+    void				CheckIdleFormatter();
+    void				IdleFormatAndUpdate( TextView* pCurView = 0, USHORT nMaxTimerRestarts = 5 );
 
-    BOOL                CreateLines( ULONG nPara );
-    void                CreateAndInsertEmptyLine( ULONG nPara );
-    void                ImpBreakLine( ULONG nPara, TextLine* pLine, TETextPortion* pPortion, USHORT nPortionStart, long nRemainingWidth );
-    USHORT              SplitTextPortion( ULONG nPara, USHORT nPos );
-    void                CreateTextPortions( ULONG nPara, USHORT nStartPos );
-    void                RecalcTextPortion( ULONG nPara, USHORT nStartPos, short nNewChars );
-    void                SeekCursor( ULONG nNode, USHORT nPos, Font& rFont, OutputDevice* pOutDev );
+    BOOL 				CreateLines( ULONG nPara );
+    void 				CreateAndInsertEmptyLine( ULONG nPara );
+    void 				ImpBreakLine( ULONG nPara, TextLine* pLine, TETextPortion* pPortion, USHORT nPortionStart, long nRemainingWidth );
+    USHORT 				SplitTextPortion( ULONG nPara, USHORT nPos );
+    void 				CreateTextPortions( ULONG nPara, USHORT nStartPos );
+    void 				RecalcTextPortion( ULONG nPara, USHORT nStartPos, short nNewChars );
+    void				SeekCursor( ULONG nNode, USHORT nPos, Font& rFont, OutputDevice* pOutDev );
 
-    void                FormatDoc();
-    void                FormatFullDoc();
-    void                FormatAndUpdate( TextView* pCurView = 0 );
-    BOOL                IsFormatting() const { return mbIsFormatting; }
-    void                UpdateViews( TextView* pCurView = 0 );
-    void                SetUpdateMode( BOOL bUp, TextView* pCurView, BOOL bForceUpdate );
+    void				FormatDoc();
+    void				FormatFullDoc();
+    void				FormatAndUpdate( TextView* pCurView = 0 );
+    BOOL				IsFormatting() const { return mbIsFormatting; }
+    void 				UpdateViews( TextView* pCurView = 0 );
+    void 				SetUpdateMode( BOOL bUp, TextView* pCurView, BOOL bForceUpdate );
 
-    void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0 );
+    void				ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0 );
 
-    void                UpdateSelections();
+    void				UpdateSelections();
 
-    BOOL                IsFormatted() const { return mbFormatted; }
+    BOOL				IsFormatted() const { return mbFormatted; }
 
-    USHORT              GetCharPos( ULONG nPara, USHORT nLine, long nDocPosX, BOOL bSmart = FALSE );
-    Rectangle           GetEditCursor( const TextPaM& rPaM, BOOL bSpecial, BOOL bPreferPortionStart = FALSE );
-    USHORT              ImpFindIndex( ULONG nPortion, const Point& rPosInPara, BOOL bSmart );
+    USHORT				GetCharPos( ULONG nPara, USHORT nLine, long nDocPosX, BOOL bSmart = FALSE );
+    Rectangle			GetEditCursor( const TextPaM& rPaM, BOOL bSpecial, BOOL bPreferPortionStart = FALSE );
+    USHORT 				ImpFindIndex( ULONG nPortion, const Point& rPosInPara, BOOL bSmart );
     long                ImpGetPortionXOffset( ULONG nPara, TextLine* pLine, USHORT nTextPortion );
     long                ImpGetXPos( ULONG nPara, TextLine* pLine, USHORT nIndex, BOOL bPreferPortionStart = FALSE );
     long                ImpGetOutputOffset( ULONG nPara, TextLine* pLine, USHORT nIndex, USHORT nIndex2 );
     BYTE                ImpGetRightToLeft( ULONG nPara, USHORT nPos, USHORT* pStart = NULL, USHORT* pEnd = NULL );
     void                ImpInitLayoutMode( OutputDevice* pOutDev, BOOL bDrawingR2LPortion = FALSE );
-    TxtAlign            ImpGetAlign() const;
+    TxtAlign			ImpGetAlign() const;
 
-    ULONG               CalcTextHeight();
-    ULONG               CalcParaHeight( ULONG nParagraph ) const;
-    ULONG               CalcTextWidth( ULONG nPara );
-    ULONG               CalcTextWidth( ULONG nPara, USHORT nPortionStart, USHORT nPortionLen, const Font* pFont = 0 );
-    Range               GetInvalidYOffsets( ULONG nPortion );
+    ULONG				CalcTextHeight();
+    ULONG 				CalcParaHeight( ULONG nParagraph ) const;
+    ULONG				CalcTextWidth( ULONG nPara );
+    ULONG				CalcTextWidth( ULONG nPara, USHORT nPortionStart, USHORT nPortionLen, const Font* pFont = 0 );
+    Range 				GetInvalidYOffsets( ULONG nPortion );
 
     // Fuer Undo/Redo
-    void                InsertContent( TextNode* pNode, ULONG nPara );
-    TextPaM             SplitContent( ULONG nNode, USHORT nSepPos );
-    TextPaM             ConnectContents( ULONG nLeftNode );
+    void 				InsertContent( TextNode* pNode, ULONG nPara );
+    TextPaM 			SplitContent( ULONG nNode, USHORT nSepPos );
+    TextPaM 			ConnectContents( ULONG nLeftNode );
 
     // Ans API uebergebene PaM's und Selektionen auf einen gueltigen Bereich einstellen
-    void                ValidateSelection( TextSelection& rSel ) const;
-    void                ValidatePaM( TextPaM& rPaM ) const;
+    void				ValidateSelection( TextSelection& rSel ) const;
+    void				ValidatePaM( TextPaM& rPaM ) const;
 
 public:
                         TextEngine();
                         ~TextEngine();
 
-    void                SetText( const String& rStr );
-    String              GetText( LineEnd aSeparator = LINEEND_LF ) const;
-    String              GetText( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
-    String              GetTextLines( LineEnd aSeparator = LINEEND_LF ) const;
+    void				SetText( const String& rStr );
+    String				GetText( LineEnd aSeparator = LINEEND_LF ) const;
+    String				GetText( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
+    String				GetTextLines( LineEnd aSeparator = LINEEND_LF ) const;
     void                ReplaceText(const TextSelection& rSel, const String& rText);
 
-    ULONG               GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
-    ULONG               GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
+    ULONG				GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
+    ULONG				GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
 
-    void                SetFont( const Font& rFont );
-    const Font&         GetFont() const { return maFont; }
+    void				SetFont( const Font& rFont );
+    const Font&			GetFont() const { return maFont; }
 
-    void                SetDefTab( USHORT nDefTab );
-    USHORT              GetDefTab() const;
+    void				SetDefTab( USHORT nDefTab );
+    USHORT				GetDefTab() const;
 
-    void                SetLeftMargin( USHORT n );
-    USHORT              GetLeftMargin() const;
+    void				SetLeftMargin( USHORT n );
+    USHORT				GetLeftMargin() const;
 
-    void                SetUpdateMode( BOOL bUpdate );
-    BOOL                GetUpdateMode() const { return mbUpdate; }
+    void				SetUpdateMode( BOOL bUpdate );
+    BOOL				GetUpdateMode() const { return mbUpdate; }
 
-    USHORT              GetViewCount() const;
-    TextView*           GetView( USHORT nView ) const;
-    void                InsertView( TextView* pTextView );
-    void                RemoveView( TextView* pTextView );
-    TextView*           GetActiveView() const;
-    void                SetActiveView( TextView* pView );
+    USHORT				GetViewCount() const;
+    TextView*			GetView( USHORT nView ) const;
+    void				InsertView( TextView* pTextView );
+    void				RemoveView( TextView* pTextView );
+    TextView*			GetActiveView() const;
+    void				SetActiveView( TextView* pView );
 
-    void                SetMaxTextLen( ULONG nLen );
-    ULONG               GetMaxTextLen() const { return mnMaxTextLen; }
+    void 				SetMaxTextLen( ULONG nLen );
+    ULONG 				GetMaxTextLen() const { return mnMaxTextLen; }
 
-    void                SetMaxTextWidth( ULONG nWidth );
-    ULONG               GetMaxTextWidth() const { return mnMaxTextWidth; }
+    void				SetMaxTextWidth( ULONG nWidth );
+    ULONG				GetMaxTextWidth() const { return mnMaxTextWidth; }
 
-    ULONG               GetTextHeight() const;
-    ULONG               CalcTextWidth();
-    USHORT              GetCharHeight() const { return mnCharHeight; }
+    ULONG				GetTextHeight() const;
+    ULONG				CalcTextWidth();
+    USHORT				GetCharHeight() const { return mnCharHeight; }
 
-    ULONG               GetParagraphCount() const;
-    String              GetText( ULONG nParagraph ) const;
-    USHORT              GetTextLen( ULONG nParagraph ) const;
-    ULONG               GetTextHeight( ULONG nParagraph ) const;
+    ULONG				GetParagraphCount() const;
+    String 				GetText( ULONG nParagraph ) const;
+    USHORT				GetTextLen( ULONG nParagraph ) const;
+    ULONG				GetTextHeight( ULONG nParagraph ) const;
 
-    USHORT              GetLineCount( ULONG nParagraph ) const;
-    USHORT              GetLineLen( ULONG nParagraph, USHORT nLine ) const;
+    USHORT				GetLineCount( ULONG nParagraph ) const;
+    USHORT				GetLineLen( ULONG nParagraph, USHORT nLine ) const;
 
     void                SetRightToLeft( BOOL bR2L );
     BOOL                IsRightToLeft() const { return mbRightToLeft; }
 
-    BOOL                HasUndoManager() const { return mpUndoManager ? TRUE : FALSE; }
-    SfxUndoManager&     GetUndoManager();
-    void                UndoActionStart( USHORT nId );
-    void                UndoActionEnd( USHORT nId );
-    void                InsertUndo( TextUndo* pUndo, BOOL bTryMerge = FALSE );
-    BOOL                IsInUndo()                  { return mbIsInUndo; }
-    void                SetIsInUndo( BOOL bInUndo ) { mbIsInUndo = bInUndo; }
-    void                ResetUndo();
+    BOOL				HasUndoManager() const { return mpUndoManager ? TRUE : FALSE; }
+    SfxUndoManager&		GetUndoManager();
+    void				UndoActionStart( USHORT nId );
+    void				UndoActionEnd( USHORT nId );
+    void				InsertUndo( TextUndo* pUndo, BOOL bTryMerge = FALSE );
+    BOOL				IsInUndo() 					{ return mbIsInUndo; }
+    void				SetIsInUndo( BOOL bInUndo )	{ mbIsInUndo = bInUndo; }
+    void				ResetUndo();
 
-    void                EnableUndo( BOOL bEnable );
-    BOOL                IsUndoEnabled()             { return mbUndoEnabled; }
+    void				EnableUndo( BOOL bEnable );
+    BOOL				IsUndoEnabled() 			{ return mbUndoEnabled; }
 
-    void                SetModified( BOOL bModified )   { mbModified = bModified; }
-    BOOL                IsModified() const              { return mbModified; }
+    void				SetModified( BOOL bModified ) 	{ mbModified = bModified; }
+    BOOL				IsModified() const 				{ return mbModified; }
 
-    BOOL                Read( SvStream& rInput, const TextSelection* pSel = NULL );
+    BOOL				Read( SvStream& rInput, const TextSelection* pSel = NULL );
 
-    BOOL                Write( SvStream& rOutput, const TextSelection* pSel = NULL, BOOL bHTML = FALSE );
+    BOOL				Write( SvStream& rOutput, const TextSelection* pSel = NULL, BOOL bHTML = FALSE );
 
-    TextPaM             GetPaM( const Point& rDocPos, BOOL bSmart = TRUE );
-    Rectangle           PaMtoEditCursor( const TextPaM& rPaM, BOOL bSpecial = FALSE );
-    String              GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = 0 );
+    TextPaM				GetPaM( const Point& rDocPos, BOOL bSmart = TRUE );
+    Rectangle			PaMtoEditCursor( const TextPaM& rPaM, BOOL bSpecial = FALSE );
+    String				GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = 0 );
 
-    BOOL                    HasAttrib( USHORT nWhich ) const;
-    const TextAttrib*       FindAttrib( const TextPaM& rPaM, USHORT nWhich ) const;
-    const TextCharAttrib*   FindCharAttrib( const TextPaM& rPaM, USHORT nWhich ) const;
+    BOOL					HasAttrib( USHORT nWhich ) const;
+    const TextAttrib*		FindAttrib( const TextPaM& rPaM, USHORT nWhich ) const;
+    const TextCharAttrib*	FindCharAttrib( const TextPaM& rPaM, USHORT nWhich ) const;
 
     void                RemoveAttribs( ULONG nPara, USHORT nWhich, BOOL bIdleFormatAndUpdate );
     void                RemoveAttrib( ULONG nPara, const TextCharAttrib& rAttrib );
-    void                RemoveAttribs( ULONG nPara, BOOL bIdleFormatAndUpdate = TRUE );
-    void                SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd, BOOL bIdleFormatAndUpdate = TRUE );
+    void				RemoveAttribs( ULONG nPara, BOOL bIdleFormatAndUpdate = TRUE );
+    void				SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd, BOOL bIdleFormatAndUpdate = TRUE );
 
-    TxtAlign            GetTextAlign() const { return meAlign; }
-    void                SetTextAlign( TxtAlign eAlign );
+    TxtAlign			GetTextAlign() const { return meAlign; }
+    void				SetTextAlign( TxtAlign eAlign );
 
-    void                Draw( OutputDevice* pDev, const Point& rPos );
+    void				Draw( OutputDevice* pDev, const Point& rPos );
 
     void                            SetLocale( const ::com::sun::star::lang::Locale& rLocale );
     ::com::sun::star::lang::Locale  GetLocale();
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > GetBreakIterator();
 
-    static BOOL         DoesKeyChangeText( const KeyEvent& rKeyEvent );
-    static BOOL         DoesKeyMoveCursor( const KeyEvent& rKeyEvent );
-    static BOOL         IsSimpleCharInput( const KeyEvent& rKeyEvent );
+    static BOOL			DoesKeyChangeText( const KeyEvent& rKeyEvent );
+    static BOOL			DoesKeyMoveCursor( const KeyEvent& rKeyEvent );
+    static BOOL			IsSimpleCharInput( const KeyEvent& rKeyEvent );
 };
 
 #endif // _TEXTENG_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 #include "precompiled_svtools.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include "svtools/popupmenucontrollerbase.hxx"
 
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -46,7 +46,7 @@
 #include <com/sun/star/awt/XMenuExtended.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
@@ -56,9 +56,9 @@
 #include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
-//
+// 
 
 using ::rtl::OUString;
 
@@ -113,14 +113,14 @@ void PopupMenuControllerBase::resetPopupMenu( com::sun::star::uno::Reference< co
          if ( pPopupMenu )
          {
             SolarMutexGuard aSolarMutexGuard;
-
+    
             PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
             pVCLPopupMenu->Clear();
          }
     }
 }
 
-void SAL_CALL PopupMenuControllerBase::disposing()
+void SAL_CALL PopupMenuControllerBase::disposing() 
 {
     // Reset our members and set disposed flag
     osl::MutexGuard aLock( m_aMutex );
@@ -160,7 +160,7 @@ void SAL_CALL PopupMenuControllerBase::highlight( const awt::MenuEvent& ) throw 
 
 void PopupMenuControllerBase::impl_select(const Reference< XDispatch >& _xDispatch,const URL& aURL)
 {
-    Sequence<PropertyValue>      aArgs;
+    Sequence<PropertyValue>	     aArgs;
     OSL_ENSURE(_xDispatch.is(),"PopupMenuControllerBase::impl_select: No dispatch");
     if ( _xDispatch.is() )
         _xDispatch->dispatch( aURL, aArgs );
@@ -189,7 +189,7 @@ void PopupMenuControllerBase::dispatchCommand( const ::rtl::OUString& sCommandUR
     try
     {
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY_THROW );
-        URL aURL;
+        URL aURL;       
         aURL.Complete = sCommandURL;
         m_xURLTransformer->parseStrict( aURL );
 
@@ -220,8 +220,8 @@ void SAL_CALL PopupMenuControllerBase::deactivate( const awt::MenuEvent& ) throw
 }
 
 void SAL_CALL PopupMenuControllerBase::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
-{
-    osl::ClearableMutexGuard aLock( m_aMutex );
+{   
+    osl::ClearableMutexGuard aLock( m_aMutex );   
     throwIfDisposed();
     aLock.clear();
 
@@ -230,7 +230,7 @@ void SAL_CALL PopupMenuControllerBase::updatePopupMenu() throw ( ::com::sun::sta
 
 void SAL_CALL PopupMenuControllerBase::updateCommand( const rtl::OUString& rCommandURL )
 {
-    osl::ClearableMutexGuard aLock( m_aMutex );
+    osl::ClearableMutexGuard aLock( m_aMutex );   
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XDispatch > xDispatch( m_xDispatch );
     URL aTargetURL;
@@ -248,17 +248,17 @@ void SAL_CALL PopupMenuControllerBase::updateCommand( const rtl::OUString& rComm
 
 
 // XDispatchProvider
-Reference< XDispatch > SAL_CALL
-PopupMenuControllerBase::queryDispatch(
-    const URL& /*aURL*/,
-    const rtl::OUString& /*sTarget*/,
-    sal_Int32 /*nFlags*/ )
+Reference< XDispatch > SAL_CALL 
+PopupMenuControllerBase::queryDispatch( 
+    const URL& /*aURL*/, 
+    const rtl::OUString& /*sTarget*/, 
+    sal_Int32 /*nFlags*/ ) 
 throw( RuntimeException )
 {
     // must be implemented by subclass
     osl::MutexGuard aLock( m_aMutex );
     throwIfDisposed();
-
+    
     return Reference< XDispatch >();
 }
 
@@ -269,7 +269,7 @@ Sequence< Reference< XDispatch > > SAL_CALL PopupMenuControllerBase::queryDispat
     osl::ClearableMutexGuard aLock( m_aMutex );
     throwIfDisposed();
     aLock.clear();
-
+    
     sal_Int32                                                          nCount = lDescriptor.getLength();
     uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
 
@@ -285,10 +285,10 @@ Sequence< Reference< XDispatch > > SAL_CALL PopupMenuControllerBase::queryDispat
 }
 
 // XDispatch
-void SAL_CALL
+void SAL_CALL 
 PopupMenuControllerBase::dispatch(
-    const URL& /*aURL*/,
-    const Sequence< PropertyValue >& /*seqProperties*/ )
+    const URL& /*aURL*/, 
+    const Sequence< PropertyValue >& /*seqProperties*/ ) 
 throw( ::com::sun::star::uno::RuntimeException )
 {
     // must be implemented by subclass
@@ -296,16 +296,16 @@ throw( ::com::sun::star::uno::RuntimeException )
     throwIfDisposed();
 }
 
-void SAL_CALL
-PopupMenuControllerBase::addStatusListener(
+void SAL_CALL 
+PopupMenuControllerBase::addStatusListener( 
     const Reference< XStatusListener >& xControl,
-    const URL& aURL )
+    const URL& aURL ) 
 throw( ::com::sun::star::uno::RuntimeException )
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
     throwIfDisposed();
     aLock.clear();
-
+    
     bool bStatusUpdate( false );
     rBHelper.addListener( ::getCppuType( &xControl ), xControl );
 
@@ -313,7 +313,7 @@ throw( ::com::sun::star::uno::RuntimeException )
     if ( aURL.Complete.indexOf( m_aBaseURL ) == 0 )
         bStatusUpdate = true;
     aLock.clear();
-
+    
     if ( bStatusUpdate )
     {
         // Dummy update for popup menu controllers
@@ -326,9 +326,9 @@ throw( ::com::sun::star::uno::RuntimeException )
     }
 }
 
-void SAL_CALL PopupMenuControllerBase::removeStatusListener(
-    const Reference< XStatusListener >& xControl,
-    const URL& /*aURL*/ )
+void SAL_CALL PopupMenuControllerBase::removeStatusListener( 
+    const Reference< XStatusListener >& xControl, 
+    const URL& /*aURL*/ ) 
 throw( ::com::sun::star::uno::RuntimeException )
 {
     rBHelper.removeListener( ::getCppuType( &xControl ), xControl );
@@ -340,18 +340,18 @@ throw( ::com::sun::star::uno::RuntimeException )
     sal_Int32     nQueryPart( 0 );
     sal_Int32     nSchemePart( 0 );
     rtl::OUString aMainURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.popup:" ));
-
+    
     nSchemePart = aURL.indexOf( ':' );
-    if (( nSchemePart > 0 ) &&
+    if (( nSchemePart > 0 ) && 
         ( aURL.getLength() > ( nSchemePart+1 )))
     {
         nQueryPart  = aURL.indexOf( '?', nSchemePart );
         if ( nQueryPart > 0 )
             aMainURL += aURL.copy( nSchemePart, nQueryPart-nSchemePart );
         else if ( nQueryPart == -1 )
-            aMainURL += aURL.copy( nSchemePart+1 );
+            aMainURL += aURL.copy( nSchemePart+1 );        
     }
-
+    
     return aMainURL;
 }
 
@@ -359,14 +359,14 @@ throw( ::com::sun::star::uno::RuntimeException )
 void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     osl::MutexGuard aLock( m_aMutex );
-
+    
     sal_Bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
         PropertyValue       aPropValue;
         rtl::OUString       aCommandURL;
         Reference< XFrame > xFrame;
-
+        
         for ( int i = 0; i < aArguments.getLength(); i++ )
         {
             if ( aArguments[i] >>= aPropValue )
@@ -392,17 +392,17 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
 {
     osl::MutexGuard aLock( m_aMutex );
     throwIfDisposed();
-
+    
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
         // Create popup menu on demand
         SolarMutexGuard aSolarMutexGuard;
-
+        
         m_xPopupMenu = xPopupMenu;
         m_xPopupMenu->addMenuListener( Reference< awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
-
+            
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
+        
         URL aTargetURL;
         aTargetURL.Complete = m_aCommandURL;
         m_xURLTransformer->parseStrict( aTargetURL );
@@ -411,7 +411,7 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
         impl_setPopupMenu();
 
         updatePopupMenu();
-    }
+    }    
 }
 void PopupMenuControllerBase::impl_setPopupMenu()
 {

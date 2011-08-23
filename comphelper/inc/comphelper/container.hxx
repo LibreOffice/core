@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,17 +46,17 @@ namespace comphelper
 class COMPHELPER_DLLPUBLIC IndexAccessIterator
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xStartingPoint;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>	m_xStartingPoint;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xCurrentObject;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>	m_xCurrentObject;
         // das aktuelle Objekt
-    ::std::vector<sal_Int32>        m_arrChildIndizies;
+    ::std::vector<sal_Int32>		m_arrChildIndizies;
         // ich bewege mich eigentlich durch einen Baum, dummerweise haben dessen
         // Elemente aber kein GetNextSibling, also muss ich mir merken, wo die Childs
         // innerhalb ihres Parents sitzen (das ist sozusagen der Pfad von der Wurzel
         // zu m_xCurrentObject
 
-    ::rtl::OUString     m_ustrProperty;
+    ::rtl::OUString		m_ustrProperty;
         // der Name der gesuchten property
 
 public:
@@ -64,7 +64,7 @@ public:
 
     virtual ~IndexAccessIterator();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    Next();
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>	Next();
 
     virtual void Invalidate() { m_xCurrentObject = NULL; }
 
@@ -78,7 +78,7 @@ protected:
 };
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // _COMPHELPER_CONTAINER_HXX_

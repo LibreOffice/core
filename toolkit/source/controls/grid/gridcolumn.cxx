@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ void GridColumn::broadcast( broadcast_column_type eType, const GridColumnEvent& 
             XGridColumnListener* pListener = static_cast<XGridColumnListener*>(aListIter.next());
             switch( eType )
             {
-                case column_attribute_changed:  pListener->columnChanged(aEvent); break;
+                case column_attribute_changed:	pListener->columnChanged(aEvent); break;
             }
         }
     }

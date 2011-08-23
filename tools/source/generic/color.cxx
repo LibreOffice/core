@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,9 +61,9 @@ Color::Color( const ResId& rResId )
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
         // Daten laden
-        USHORT nRed     = pResMgr->ReadShort();
-        USHORT nGreen   = pResMgr->ReadShort();
-        USHORT nBlue    = pResMgr->ReadShort();
+        USHORT nRed		= pResMgr->ReadShort();
+        USHORT nGreen	= pResMgr->ReadShort();
+        USHORT nBlue	= pResMgr->ReadShort();
         // one more historical ULONG
         pResMgr->ReadLong();
 
@@ -77,8 +77,8 @@ Color::Color( const ResId& rResId )
 }
 UINT8 Color::GetColorError( const Color& rCompareColor ) const
 {
-    const long nErrAbs = labs( (long) rCompareColor.GetRed() - GetRed() ) +
-                         labs( (long) rCompareColor.GetGreen() - GetGreen() ) +
+    const long nErrAbs = labs( (long) rCompareColor.GetRed() - GetRed() ) + 
+                         labs( (long) rCompareColor.GetGreen() - GetGreen() ) + 
                          labs( (long) rCompareColor.GetBlue() - GetBlue() );
 
     return (UINT8) _FRound( nErrAbs * 0.3333333333 );
@@ -145,14 +145,14 @@ void Color::Invert()
 
 BOOL Color::IsDark() const
 {
-    return GetLuminance() <= 38;
+    return GetLuminance() <= 38; 
 }
 
 // -----------------------------------------------------------------------
 
 BOOL Color::IsBright() const
 {
-    return GetLuminance() >= 245;
+    return GetLuminance() >= 245; 
 }
 
 // -----------------------------------------------------------------------
@@ -247,12 +247,12 @@ ColorData Color::HSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri )
 
         switch( n )
         {
-            case 0: cR = nB;    cG = c;     cB = a;     break;
-            case 1: cR = b;     cG = nB;    cB = a;     break;
-            case 2: cR = a;     cG = nB;    cB = c;     break;
-            case 3: cR = a;     cG = b;     cB = nB;    break;
-            case 4: cR = c;     cG = a;     cB = nB;    break;
-            case 5: cR = nB;    cG = a;     cB = b;     break;
+            case 0: cR = nB;	cG = c;		cB = a; 	break;
+            case 1: cR = b;		cG = nB;	cB = a; 	break;
+            case 2: cR = a;		cG = nB;	cB = c;		break;
+            case 3: cR = a;		cG = b; 	cB = nB;	break;
+            case 4: cR = c;		cG = a; 	cB = nB;	break;
+            case 5: cR = nB; 	cG = a;		cB = b;		break;
         }
     }
 
@@ -285,13 +285,13 @@ SvStream& Color::Write( SvStream& rOStm, BOOL bNewFormat )
 
 // -----------------------------------------------------------------------
 
-#define COL_NAME_USER       ((USHORT)0x8000)
-#define COL_RED_1B          ((USHORT)0x0001)
-#define COL_RED_2B          ((USHORT)0x0002)
-#define COL_GREEN_1B        ((USHORT)0x0010)
-#define COL_GREEN_2B        ((USHORT)0x0020)
-#define COL_BLUE_1B         ((USHORT)0x0100)
-#define COL_BLUE_2B         ((USHORT)0x0200)
+#define COL_NAME_USER		((USHORT)0x8000)
+#define COL_RED_1B			((USHORT)0x0001)
+#define COL_RED_2B			((USHORT)0x0002)
+#define COL_GREEN_1B		((USHORT)0x0010)
+#define COL_GREEN_2B		((USHORT)0x0020)
+#define COL_BLUE_1B 		((USHORT)0x0100)
+#define COL_BLUE_2B 		((USHORT)0x0200)
 
 // -----------------------------------------------------------------------
 
@@ -299,10 +299,10 @@ SvStream& operator>>( SvStream& rIStream, Color& rColor )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Color::>> - Solar-Version not set on rIStream" );
 
-    USHORT      nColorName;
-    USHORT      nRed;
-    USHORT      nGreen;
-    USHORT      nBlue;
+    USHORT		nColorName;
+    USHORT		nRed;
+    USHORT		nGreen;
+    USHORT		nBlue;
 
     rIStream >> nColorName;
 
@@ -310,12 +310,12 @@ SvStream& operator>>( SvStream& rIStream, Color& rColor )
     {
         if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
         {
-            unsigned char   cAry[6];
-            USHORT          i = 0;
+            unsigned char	cAry[6];
+            USHORT			i = 0;
 
-            nRed    = 0;
-            nGreen  = 0;
-            nBlue   = 0;
+            nRed	= 0;
+            nGreen	= 0;
+            nBlue	= 0;
 
             if ( nColorName & COL_RED_2B )
                 i += 2;
@@ -389,37 +389,37 @@ SvStream& operator>>( SvStream& rIStream, Color& rColor )
     {
         static ColorData aColAry[] =
         {
-            COL_BLACK,                          // COL_BLACK
-            COL_BLUE,                           // COL_BLUE
-            COL_GREEN,                          // COL_GREEN
-            COL_CYAN,                           // COL_CYAN
-            COL_RED,                            // COL_RED
-            COL_MAGENTA,                        // COL_MAGENTA
-            COL_BROWN,                          // COL_BROWN
-            COL_GRAY,                           // COL_GRAY
-            COL_LIGHTGRAY,                      // COL_LIGHTGRAY
-            COL_LIGHTBLUE,                      // COL_LIGHTBLUE
-            COL_LIGHTGREEN,                     // COL_LIGHTGREEN
-            COL_LIGHTCYAN,                      // COL_LIGHTCYAN
-            COL_LIGHTRED,                       // COL_LIGHTRED
-            COL_LIGHTMAGENTA,                   // COL_LIGHTMAGENTA
-            COL_YELLOW,                         // COL_YELLOW
-            COL_WHITE,                          // COL_WHITE
-            COL_WHITE,                          // COL_MENUBAR
-            COL_BLACK,                          // COL_MENUBARTEXT
-            COL_WHITE,                          // COL_POPUPMENU
-            COL_BLACK,                          // COL_POPUPMENUTEXT
-            COL_BLACK,                          // COL_WINDOWTEXT
-            COL_WHITE,                          // COL_WINDOWWORKSPACE
-            COL_BLACK,                          // COL_HIGHLIGHT
-            COL_WHITE,                          // COL_HIGHLIGHTTEXT
-            COL_BLACK,                          // COL_3DTEXT
-            COL_LIGHTGRAY,                      // COL_3DFACE
-            COL_WHITE,                          // COL_3DLIGHT
-            COL_GRAY,                           // COL_3DSHADOW
-            COL_LIGHTGRAY,                      // COL_SCROLLBAR
-            COL_WHITE,                          // COL_FIELD
-            COL_BLACK                           // COL_FIELDTEXT
+            COL_BLACK,							// COL_BLACK
+            COL_BLUE,							// COL_BLUE
+            COL_GREEN,							// COL_GREEN
+            COL_CYAN,							// COL_CYAN
+            COL_RED,							// COL_RED
+            COL_MAGENTA,						// COL_MAGENTA
+            COL_BROWN,							// COL_BROWN
+            COL_GRAY,							// COL_GRAY
+            COL_LIGHTGRAY,						// COL_LIGHTGRAY
+            COL_LIGHTBLUE,						// COL_LIGHTBLUE
+            COL_LIGHTGREEN, 					// COL_LIGHTGREEN
+            COL_LIGHTCYAN,						// COL_LIGHTCYAN
+            COL_LIGHTRED,						// COL_LIGHTRED
+            COL_LIGHTMAGENTA,					// COL_LIGHTMAGENTA
+            COL_YELLOW, 						// COL_YELLOW
+            COL_WHITE,							// COL_WHITE
+            COL_WHITE,							// COL_MENUBAR
+            COL_BLACK,							// COL_MENUBARTEXT
+            COL_WHITE,							// COL_POPUPMENU
+            COL_BLACK,							// COL_POPUPMENUTEXT
+            COL_BLACK,							// COL_WINDOWTEXT
+            COL_WHITE,							// COL_WINDOWWORKSPACE
+            COL_BLACK,							// COL_HIGHLIGHT
+            COL_WHITE,							// COL_HIGHLIGHTTEXT
+            COL_BLACK,							// COL_3DTEXT
+            COL_LIGHTGRAY,						// COL_3DFACE
+            COL_WHITE,							// COL_3DLIGHT
+            COL_GRAY,							// COL_3DSHADOW
+            COL_LIGHTGRAY,						// COL_SCROLLBAR
+            COL_WHITE,							// COL_FIELD
+            COL_BLACK							// COL_FIELDTEXT
         };
 
         if ( nColorName < (sizeof( aColAry )/sizeof(ColorData)) )
@@ -437,18 +437,18 @@ SvStream& operator<<( SvStream& rOStream, const Color& rColor )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Color::<< - Solar-Version not set on rOStream" );
 
-    USHORT nColorName   = COL_NAME_USER;
-    USHORT nRed         = rColor.GetRed();
-    USHORT nGreen       = rColor.GetGreen();
-    USHORT nBlue        = rColor.GetBlue();
-    nRed    = (nRed<<8) + nRed;
-    nGreen  = (nGreen<<8) + nGreen;
-    nBlue   = (nBlue<<8) + nBlue;
+    USHORT nColorName	= COL_NAME_USER;
+    USHORT nRed 		= rColor.GetRed();
+    USHORT nGreen		= rColor.GetGreen();
+    USHORT nBlue		= rColor.GetBlue();
+    nRed	= (nRed<<8) + nRed;
+    nGreen	= (nGreen<<8) + nGreen;
+    nBlue	= (nBlue<<8) + nBlue;
 
     if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
-        unsigned char   cAry[6];
-        USHORT          i = 0;
+        unsigned char	cAry[6];
+        USHORT			i = 0;
 
         if ( nRed & 0x00FF )
         {

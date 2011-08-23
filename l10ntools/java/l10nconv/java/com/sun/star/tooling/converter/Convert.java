@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 /*
  * the main Class
- *
+ * 
  * Command Line arguments are reviewed
  * and a Converter is constructed
  */
@@ -42,32 +42,32 @@ import com.sun.star.tooling.DirtyTags.DirtyTagWrapper;
 
 /**
  * The main class of the converter tool
- *
+ * 
  * The converter tool is command line based.
  * Its classes allow the converting between the
  * file formats sdf, gsi and <a href="http://www.oasis-open.org/committees/xliff/documents/cs-xliff-core-1.1-20031031.htm">xliff</a>.
- *
+ * 
  * Those file formats are used in localization
  * of Star-Office and Open-Office.
- *
- * Information about the whole localization process can be found in
+ * 
+ * Information about the whole localization process can be found in 
  * <a href="http://ded-1.germany.sun.com/webcontent/guidelines/pdf/L10NSO8.pdf">http://ded-1.germany.sun.com/webcontent/guidelines/pdf/L10NSO8.pdf</a>
- *
+ * 
  * @author Christian Schmidt 2005
- *
+ *  
  */
 public class Convert {
 
     private static Calendar     cal;
-
+     
     private static final String EMPTY              = "";
-
+    
     /**
      * The name of the  file containing the debug information
      * that where found while converting (every output goes here too)
      */
     private static String       dbgName            = EMPTY;
-
+    
     /**
      * the character that separates the extension from the file name
      */
@@ -95,7 +95,7 @@ public class Convert {
     private static File secondSource;
 
     //private static final char   pathSeperator      = '\\';
-
+    
     /**
      * The language that should be the source language
      * that means the language to translate from
@@ -111,7 +111,7 @@ public class Convert {
      * the type of the source file (sdf,xliff,...)
      */
     private static String       sourceType         = EMPTY;
-
+    
     /**
      * The time when converting started
      */
@@ -133,7 +133,7 @@ public class Convert {
     private static String       targetType         = EMPTY;
 
     /**
-     * Store the current version ID and number of this tool
+     * Store the current version ID and number of this tool 
      */
     final static String         version            = " Prod.20050710:1255 ";
 
@@ -143,19 +143,19 @@ public class Convert {
     private static String secondSourceName=EMPTY;
     /**
      * Indicate whether strings in xliff files should
-     * be wrapped with ept/bpt or sub tags to enable translation tools
+     * be wrapped with ept/bpt or sub tags to enable translation tools 
      * to synchronize source language string with there translation
-     *
+     * 
      * @see <a href="http://ded-1.germany.sun.com/webcontent/guidelines/pdf/L10NSO8.pdf">http://ded-1.germany.sun.com/webcontent/guidelines/pdf/L10NSO8.pdf</a>
      */
     private static boolean doWrap=true;
 
 
-
+    
             public static void main(String[] args) throws IOException, Exception {
                 try{
-
-                    //go, parse and check the command line parameters
+        
+                    //go, parse and check the command line parameters 
                     ParameterChecker.checkClParameters(args);
                     ParameterChecker.createContentOfClParameters();
                     //Initialize the tagWrapper
@@ -170,12 +170,12 @@ public class Convert {
                     printPreamble();
                     //do the job
                     conv.convert();
-
+            
                     showStatistic();
-
+            
                     //close log, debug...
                     OutputHandler.closeAll();
-
+                
                 } catch(Exception e){
                     System.out.print("An EXCEPTION occured, please check your commad line settings \n"+e.getMessage());
                     System.exit(-1);
@@ -194,7 +194,7 @@ public class Convert {
         final String ls = System.getProperty("line.separator");
         System.out
                 .println(
-
+    
                 "File Converting Tool 'converter' Version "
                         + Convert.version
                         + ls
@@ -220,13 +220,13 @@ public class Convert {
                         + "-nw              disable the wrapping with ept/bpt tags." + ls
                         + ls
                         + "The created files were stored in the SourceFile Path if nothing else is given. " + ls
-                        + "The extension is '.xliff','.sdf' depending on the source file and '.log' " + ls
+                        + "The extension is '.xliff','.sdf' depending on the source file and '.log' " + ls 
                         + "for the logfile." + ls);
     }
 
     /**
      * show the parameters the converter starts with
-     *
+     * 
      * @throws IOException
      */
     final private static void printPreamble() throws IOException {
@@ -245,7 +245,7 @@ public class Convert {
 
     /**
      * show some statistic data
-     *
+     * 
      * @throws IOException
      */
     final private static void showStatistic() throws IOException {
@@ -265,9 +265,9 @@ public class Convert {
     /**
      * Get the extensiion of a file name
      * (sdf,xliff,gsi)
-     *
+     * 
      * @param sourceString     the file name
-     * @return                 the extension
+     * @return                 the extension 
      */
     static protected String extractExtension(String sourceString) {
         String ext = sourceString.substring(sourceString
@@ -291,16 +291,16 @@ public class Convert {
 //    }
 
     /**
-     *
+     *  
      */
     public Convert() {
     }
 
     /**
-     *
-     * Verify a parameter array and create content useable by the programm
+     * 
+     * Verify a parameter array and create content useable by the programm 
      * from the switches and attributes set at command line
-     *
+     * 
      * @author Christian Schmidt 2005
      */
     private static class ParameterChecker {
@@ -316,13 +316,13 @@ public class Convert {
 
         /**
          * Create a new Instance of ParameterChecker
-         *
-         *
+         * 
+         * 
          */
         public ParameterChecker(){};
         /**
          * Checks the command line parameters
-         *
+         * 
          * @param args          the parameters to check and to parse
          * @throws IOException
          */
@@ -350,54 +350,54 @@ public class Convert {
                 if (!source.exists())
                     throw new IOException("ERROR:Can not find Source File '"
                             + sourceName + "'. Aborting...");
-
+                
     //            String name=source.getName();
     //            String parent=source.getParent();
     //            String path=source.getPath();
-
+                
                 filePath = (source.getParent()==null)?"":source.getParent()+File.separator; //extractPath(sourceName);
                 fileName = source.getName().substring(0,source.getName().lastIndexOf(extensionSeperator));
-
+    
                 for (int i = 1; i < args.length; i++) {
-
-
+    
+    
                         if ("-s".equals(args[i])) {
                             if (args.length > i + 1) {
                                 sourceLanguage = args[++i];
-
+    
                             } else {
                                 throw new ConverterException(
                                         "missing argument for -s source language");
                             }
                             continue;
                         }
-
+    
                         if ("-S".equals(args[i])) {
                             if (args.length > i + 1) {
                                 sourceType = args[++i];
                                 if (args.length > i +1 &&!args[i+1].startsWith("-")) {
                                     secondSourceName = args[++i];
                                 }
-
+    
                             } else {
                                 throw new ConverterException(
                                         "missing argument for -S  source type");
                             }
                             continue;
                         }
-
+    
                         if ("-T".equals(args[i])) {
                             if (args.length > i + 1) {
                                 targetType = args[++i];
-
-
+                                
+    
                             } else {
                                 throw new ConverterException(
                                         "missing argument for -T  target type");
                             }
                             continue;
                         }
-
+    
                         if ("-l".equals(args[i])) {
                             OutputHandler.doLog = true;
                             if (args.length > i + 1
@@ -408,27 +408,27 @@ public class Convert {
                             }
                             continue;
                         }
-
+    
                         if ("-o".equals(args[i])) {
                             overwrite = true;
                             continue;
                         }
-
+                        
                         if ("-nw".equals(args[i])) {
                             doWrap = false;
                             continue;
                         }
-
+    
                         if ("-h".equals(args[i])) {
                             printHelp();
                             System.exit(0);
                         }
-
+    
                         if ("-dbg".equals(args[i])) {
                             OutputHandler.doDebug = true;
                             continue;
                         }
-
+    
                         if ("-t".equals(args[i])) {
                             if (args.length > i + 1) {
                                 TargetLanguage = args[++i];
@@ -438,7 +438,7 @@ public class Convert {
                             }
                             continue;
                         }
-
+    
                         if (i == 1 && !args[i].startsWith("-")) { //target file
                             // found
                             targetName = args[i];
@@ -449,7 +449,7 @@ public class Convert {
                         throw new ConverterException("unknown Attribute: "
                                 + args[i]);
 
-
+                
                 }//end for
             } catch (ConverterException e) {
                 OutputHandler.out("ERROR: "+e.getMessage());
@@ -462,9 +462,9 @@ public class Convert {
         }//end checkClParameters
 
         /**
-         * Creates the appropriate content of what ever data
+         * Creates the appropriate content of what ever data 
          * we found in the command line
-         *
+         *  
          * @throws IOException
          */
         private static void createContentOfClParameters() throws IOException {
@@ -498,16 +498,16 @@ public class Convert {
                         throw new ConverterException("Source type is missing");
                     }
                 }
-
+                
                 if(sourceType.equalsIgnoreCase("gsi")){
-
+                    
                     if(EMPTY.equals(Convert.secondSourceName)){
                         Convert.secondSourceName=filePath+fileName+".sdf";
                     }
                     //secondSource=new File(Convert.secondSourceName);
-
+                    
                 }
-
+                
                 if (EMPTY.equals(sourceName)) {
                     sourceName = filePath + fileName + "." + sourceType;
                 }
@@ -537,12 +537,12 @@ public class Convert {
                     OutputHandler.out("ERROR: \nSource '"+Convert.sourceName+"' and \nTarget'"+targetName+"' are the same");
                     System.exit(0);
                 }
-
-
+                
+                
             } catch (ConverterException e) {
-                OutputHandler.out(e.getMessage());
+                OutputHandler.out(e.getMessage());   
             }
-
+            
         }
 
     }

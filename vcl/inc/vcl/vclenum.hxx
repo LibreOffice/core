@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,13 +67,13 @@ enum ExtDateFieldFormat { XTDATEF_SYSTEM_SHORT, XTDATEF_SYSTEM_SHORT_YY, XTDATEF
 // ------------------------------------------------------------
 
 // to avoid conflicts with enum's declared otherwise
-#define GRADIENT_LINEAR             GradientStyle_LINEAR
-#define GRADIENT_AXIAL              GradientStyle_AXIAL
-#define GRADIENT_RADIAL             GradientStyle_RADIAL
-#define GRADIENT_ELLIPTICAL         GradientStyle_ELLIPTICAL
-#define GRADIENT_SQUARE             GradientStyle_SQUARE
-#define GRADIENT_RECT               GradientStyle_RECT
-#define GRADIENT_FORCE_EQUAL_SIZE   GradientStyle_FORCE_EQUAL_SIZE
+#define GRADIENT_LINEAR 			GradientStyle_LINEAR
+#define GRADIENT_AXIAL				GradientStyle_AXIAL
+#define GRADIENT_RADIAL 			GradientStyle_RADIAL
+#define GRADIENT_ELLIPTICAL 		GradientStyle_ELLIPTICAL
+#define GRADIENT_SQUARE 			GradientStyle_SQUARE
+#define GRADIENT_RECT				GradientStyle_RECT
+#define GRADIENT_FORCE_EQUAL_SIZE	GradientStyle_FORCE_EQUAL_SIZE
 
 #ifndef ENUM_GRADIENTSTYLE_DECLARED
 #define ENUM_GRADIENTSTYLE_DECLARED
@@ -94,10 +94,10 @@ enum GradientStyle
 // ------------------------------------------------------------
 
 // to avoid conflicts with enum's declared otherwise
-#define HATCH_SINGLE            HatchStyle_SINGLE
-#define HATCH_DOUBLE            HatchStyle_DOUBLE
-#define HATCH_TRIPLE            HatchStyle_TRIPLE
-#define HATCH_FORCE_EQUAL_SIZE  HatchStyle_FORCE_EQUAL_SIZE
+#define HATCH_SINGLE			HatchStyle_SINGLE
+#define HATCH_DOUBLE			HatchStyle_DOUBLE
+#define HATCH_TRIPLE			HatchStyle_TRIPLE
+#define HATCH_FORCE_EQUAL_SIZE	HatchStyle_FORCE_EQUAL_SIZE
 
 #ifndef ENUM_HATCHSTYLE_DECLARED
 #define ENUM_HATCHSTYLE_DECLARED
@@ -115,10 +115,10 @@ enum HatchStyle
 // ------------------------------------------------------------
 
 // to avoid conflicts with enum's declared otherwise
-#define LINE_NONE               LineStyle_NONE
-#define LINE_SOLID              LineStyle_SOLID
-#define LINE_DASH               LineStyle_DASH
-#define LINE_FORCE_EQUAL_SIZE   LineStyle_FORCE_EQUAL_SIZE
+#define LINE_NONE				LineStyle_NONE
+#define LINE_SOLID				LineStyle_SOLID
+#define LINE_DASH				LineStyle_DASH
+#define LINE_FORCE_EQUAL_SIZE	LineStyle_FORCE_EQUAL_SIZE
 
 #ifndef ENUM_LINESTYLE_DECLARED
 #define ENUM_LINESTYLE_DECLARED
@@ -241,20 +241,20 @@ enum FontStrikeout { STRIKEOUT_NONE, STRIKEOUT_SINGLE, STRIKEOUT_DOUBLE,
 #define ENUM_FONTEMPHASISMARK_DECLARED
 
 typedef USHORT FontEmphasisMark;
-#define EMPHASISMARK_NONE           ((FontEmphasisMark)0x0000)
-#define EMPHASISMARK_DOT            ((FontEmphasisMark)0x0001)
-#define EMPHASISMARK_CIRCLE         ((FontEmphasisMark)0x0002)
-#define EMPHASISMARK_DISC           ((FontEmphasisMark)0x0003)
-#define EMPHASISMARK_ACCENT         ((FontEmphasisMark)0x0004)
-#define EMPHASISMARK_STYLE          ((FontEmphasisMark)0x00FF)
-#define EMPHASISMARK_POS_ABOVE      ((FontEmphasisMark)0x1000)
-#define EMPHASISMARK_POS_BELOW      ((FontEmphasisMark)0x2000)
+#define EMPHASISMARK_NONE			((FontEmphasisMark)0x0000)
+#define EMPHASISMARK_DOT			((FontEmphasisMark)0x0001)
+#define EMPHASISMARK_CIRCLE 		((FontEmphasisMark)0x0002)
+#define EMPHASISMARK_DISC			((FontEmphasisMark)0x0003)
+#define EMPHASISMARK_ACCENT 		((FontEmphasisMark)0x0004)
+#define EMPHASISMARK_STYLE			((FontEmphasisMark)0x00FF)
+#define EMPHASISMARK_POS_ABOVE		((FontEmphasisMark)0x1000)
+#define EMPHASISMARK_POS_BELOW		((FontEmphasisMark)0x2000)
 
 // Only for kompability
-#define EMPHASISMARK_DOTS_ABOVE     (EMPHASISMARK_DOT | EMPHASISMARK_POS_ABOVE)
-#define EMPHASISMARK_DOTS_BELOW     (EMPHASISMARK_DOT | EMPHASISMARK_POS_BELOW)
-#define EMPHASISMARK_SIDE_DOTS      (EMPHASISMARK_ACCENT | EMPHASISMARK_POS_ABOVE)
-#define EMPHASISMARK_CIRCLE_ABOVE   (EMPHASISMARK_CIRCLE | EMPHASISMARK_POS_ABOVE)
+#define EMPHASISMARK_DOTS_ABOVE 	(EMPHASISMARK_DOT | EMPHASISMARK_POS_ABOVE)
+#define EMPHASISMARK_DOTS_BELOW 	(EMPHASISMARK_DOT | EMPHASISMARK_POS_BELOW)
+#define EMPHASISMARK_SIDE_DOTS		(EMPHASISMARK_ACCENT | EMPHASISMARK_POS_ABOVE)
+#define EMPHASISMARK_CIRCLE_ABOVE	(EMPHASISMARK_CIRCLE | EMPHASISMARK_POS_ABOVE)
 
 #endif
 
@@ -317,7 +317,7 @@ enum KeyFuncType { KEYFUNC_DONTKNOW, KEYFUNC_NEW, KEYFUNC_OPEN, KEYFUNC_SAVE,
 
 #endif
 
-typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
+typedef sal_uInt32 sal_UCS4;	// TODO: this should be moved to rtl
 
 #ifndef ENUM_OUTDEVSUPPORT_DECLARED
 #define ENUM_OUTDEVSUPPORT_DECLARED
@@ -326,6 +326,6 @@ enum OutDevSupportType { OutDevSupport_TransparentRect, OutDevSupport_B2DClip, O
 
 #endif
 
-#endif  // _VCL_VCLENUM_HXX
+#endif	// _VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

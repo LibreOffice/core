@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
 {
-    SvLockBytesRef          _xVal;
+    SvLockBytesRef			_xVal;
 
 public:
                             TYPEINFO();
@@ -49,16 +49,16 @@ public:
                             SfxLockBytesItem( const SfxLockBytesItem& );
                             ~SfxLockBytesItem();
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nItemVersion) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	Create(SvStream &, USHORT nItemVersion) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion ) const;
 
-    SvLockBytes*            GetValue() const { return _xVal; }
+    SvLockBytes*			GetValue() const { return _xVal; }
 
-    virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
+    virtual	bool            PutValue  ( const com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 );
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 ) const;
 };
 

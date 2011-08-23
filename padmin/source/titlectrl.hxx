@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ namespace padmin
 
 class TitleImage : public Control
 {
-    Image               m_aImage;
-    String              m_aText;
-    Color               m_aBGColor;
-    Point               m_aImagePos;
-    Point               m_aTextPos;
+    Image				m_aImage;
+    String				m_aText;
+    Color				m_aBGColor;
+    Point				m_aImagePos;
+    Point				m_aTextPos;
 
-    bool                m_bArranged;
+    bool				m_bArranged;
 
     void arrange();
 public:

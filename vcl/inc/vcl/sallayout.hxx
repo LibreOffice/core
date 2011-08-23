@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -197,7 +197,7 @@ public:
 
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
     int             GetOrientation() const                  { return mnOrientation; }
-
+    
     virtual const ImplFontData* GetFallbackFontData( sal_GlyphId ) const;
 
     // methods using string indexing
@@ -330,9 +330,9 @@ public:
 
     enum{ FALLBACK_MASK=0xFF, IS_IN_CLUSTER=0x100, IS_RTL_GLYPH=0x200, IS_DIACRITIC=0x400 };
 
-    bool    IsClusterStart() const  { return ((mnFlags & IS_IN_CLUSTER) == 0); }
-    bool    IsRTLGlyph() const      { return ((mnFlags & IS_RTL_GLYPH) != 0); }
-    bool    IsDiacritic() const     { return ((mnFlags & IS_DIACRITIC) != 0); }
+    bool    IsClusterStart() const	{ return ((mnFlags & IS_IN_CLUSTER) == 0); }
+    bool    IsRTLGlyph() const		{ return ((mnFlags & IS_RTL_GLYPH) != 0); }
+    bool    IsDiacritic() const		{ return ((mnFlags & IS_DIACRITIC) != 0); }
 };
 
 // ---------------

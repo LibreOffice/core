@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
 using namespace ::utl;
@@ -46,66 +46,66 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_START                      OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Cache"  ))
-#define DEFAULT_WRITEROLE                   20
-#define DEFAULT_DRAWINGOLE                  20
-#define DEFAULT_GRFMGR_TOTALSIZE            10000000
-#define DEFAULT_GRFMGR_OBJECTSIZE           2400000
-#define DEFAULT_GRFMGR_OBJECTRELEASE        600
+#define	ROOTNODE_START			   			OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Cache"	))
+#define	DEFAULT_WRITEROLE					20
+#define	DEFAULT_DRAWINGOLE					20
+#define	DEFAULT_GRFMGR_TOTALSIZE			10000000
+#define	DEFAULT_GRFMGR_OBJECTSIZE			2400000
+#define	DEFAULT_GRFMGR_OBJECTRELEASE	    600
 
-#define PROPERTYNAME_WRITEROLE              OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/OLE_Objects"))
-#define PROPERTYNAME_DRAWINGOLE             OUString(RTL_CONSTASCII_USTRINGPARAM("DrawingEngine/OLE_Objects"))
-#define PROPERTYNAME_GRFMGR_TOTALSIZE       OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicManager/TotalCacheSize"))
-#define PROPERTYNAME_GRFMGR_OBJECTSIZE      OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicManager/ObjectCacheSize"))
+#define	PROPERTYNAME_WRITEROLE				OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/OLE_Objects"))
+#define	PROPERTYNAME_DRAWINGOLE				OUString(RTL_CONSTASCII_USTRINGPARAM("DrawingEngine/OLE_Objects"))
+#define	PROPERTYNAME_GRFMGR_TOTALSIZE		OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicManager/TotalCacheSize"))
+#define	PROPERTYNAME_GRFMGR_OBJECTSIZE		OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicManager/ObjectCacheSize"))
 #define PROPERTYNAME_GRFMGR_OBJECTRELEASE   OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicManager/ObjectReleaseTime"))
 
-#define PROPERTYHANDLE_WRITEROLE            0
-#define PROPERTYHANDLE_DRAWINGOLE           1
-#define PROPERTYHANDLE_GRFMGR_TOTALSIZE     2
-#define PROPERTYHANDLE_GRFMGR_OBJECTSIZE    3
+#define	PROPERTYHANDLE_WRITEROLE			0
+#define	PROPERTYHANDLE_DRAWINGOLE			1
+#define	PROPERTYHANDLE_GRFMGR_TOTALSIZE		2
+#define	PROPERTYHANDLE_GRFMGR_OBJECTSIZE	3
 #define PROPERTYHANDLE_GRFMGR_OBJECTRELEASE 4
 
-#define PROPERTYCOUNT                       5
+#define	PROPERTYCOUNT						5
 
 class SvtCacheOptions_Impl : public ConfigItem
 {
 public:
 
 //---------------------------------------------------------------------------------------------------------
-//  constructor / destructor
+//	constructor / destructor
 //---------------------------------------------------------------------------------------------------------
 
      SvtCacheOptions_Impl();
     ~SvtCacheOptions_Impl();
 
 //---------------------------------------------------------------------------------------------------------
-//  overloaded methods of baseclass
+//	overloaded methods of baseclass
 //---------------------------------------------------------------------------------------------------------
 
-    virtual void    Commit();
+    virtual void	Commit();
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
 //---------------------------------------------------------------------------------------------------------
-//  public interface
+//	public interface
 //---------------------------------------------------------------------------------------------------------
 
-    sal_Int32       GetWriterOLE_Objects() const;
-    sal_Int32       GetDrawingEngineOLE_Objects() const;
-    sal_Int32       GetGraphicManagerTotalCacheSize() const;
-    sal_Int32       GetGraphicManagerObjectCacheSize() const;
-    sal_Int32       GetGraphicManagerObjectReleaseTime() const;
+    sal_Int32		GetWriterOLE_Objects() const;
+    sal_Int32		GetDrawingEngineOLE_Objects() const;
+    sal_Int32		GetGraphicManagerTotalCacheSize() const;
+    sal_Int32		GetGraphicManagerObjectCacheSize() const;
+    sal_Int32		GetGraphicManagerObjectReleaseTime() const;
 
-    void            SetWriterOLE_Objects( sal_Int32 nObjects );
-    void            SetDrawingEngineOLE_Objects( sal_Int32 nObjects );
-    void            SetGraphicManagerTotalCacheSize( sal_Int32 nTotalCacheSize );
-    void            SetGraphicManagerObjectCacheSize( sal_Int32 nObjectCacheSize );
+    void			SetWriterOLE_Objects( sal_Int32 nObjects );
+    void			SetDrawingEngineOLE_Objects( sal_Int32 nObjects );
+    void			SetGraphicManagerTotalCacheSize( sal_Int32 nTotalCacheSize );
+    void			SetGraphicManagerObjectCacheSize( sal_Int32 nObjectCacheSize );
     void            SetGraphicManagerObjectReleaseTime( sal_Int32 nReleaseTimeSeconds );
 
 //-------------------------------------------------------------------------------------------------------------
-//  private methods
+//	private methods
 //-------------------------------------------------------------------------------------------------------------
 
 private:
@@ -113,41 +113,41 @@ private:
     static Sequence< OUString > impl_GetPropertyNames();
 
 //-------------------------------------------------------------------------------------------------------------
-//  private member
+//	private member
 //-------------------------------------------------------------------------------------------------------------
 
 private:
 
-        sal_Int32   mnWriterOLE;
-        sal_Int32   mnDrawingOLE;
-        sal_Int32   mnGrfMgrTotalSize;
-        sal_Int32   mnGrfMgrObjectSize;
+        sal_Int32	mnWriterOLE;
+        sal_Int32	mnDrawingOLE;
+        sal_Int32	mnGrfMgrTotalSize;
+        sal_Int32	mnGrfMgrObjectSize;
         sal_Int32   mnGrfMgrObjectRelease;
 };
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtCacheOptions_Impl::SvtCacheOptions_Impl() :
-    ConfigItem( ROOTNODE_START  ),
+    ConfigItem( ROOTNODE_START	),
     mnWriterOLE( DEFAULT_WRITEROLE ),
     mnDrawingOLE( DEFAULT_DRAWINGOLE ),
     mnGrfMgrTotalSize( DEFAULT_GRFMGR_TOTALSIZE ),
     mnGrfMgrObjectSize( DEFAULT_GRFMGR_OBJECTSIZE ),
     mnGrfMgrObjectRelease( DEFAULT_GRFMGR_OBJECTRELEASE )
 {
-    Sequence< OUString >    seqNames( impl_GetPropertyNames() );
-    Sequence< Any >         seqValues   = GetProperties( seqNames ) ;
+    Sequence< OUString >	seqNames( impl_GetPropertyNames() );
+    Sequence< Any >			seqValues	= GetProperties( seqNames )	;
 
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtCacheOptions_Impl::SvtCacheOptions_Impl()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to ouer internal member.
     sal_Int32 nPropertyCount = seqValues.getLength();
-    sal_Int32 nProperty = 0;
+    sal_Int32 nProperty	= 0;
 
     for( nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -195,7 +195,7 @@ SvtCacheOptions_Impl::SvtCacheOptions_Impl() :
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtCacheOptions_Impl::~SvtCacheOptions_Impl()
 {
@@ -204,12 +204,12 @@ SvtCacheOptions_Impl::~SvtCacheOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  Commit
+//	Commit
 //*****************************************************************************************************************
 void SvtCacheOptions_Impl::Commit()
 {
-    Sequence< OUString >    aSeqNames( impl_GetPropertyNames() );
-    Sequence< Any >         aSeqValues( aSeqNames.getLength() );
+    Sequence< OUString >	aSeqNames( impl_GetPropertyNames() );
+    Sequence< Any >			aSeqValues( aSeqNames.getLength() );
 
     for( sal_Int32 nProperty = 0, nCount = aSeqNames.getLength(); nProperty < nCount; ++nProperty )
     {
@@ -245,7 +245,7 @@ void SvtCacheOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int32 SvtCacheOptions_Impl::GetWriterOLE_Objects() const
 {
@@ -253,7 +253,7 @@ sal_Int32 SvtCacheOptions_Impl::GetWriterOLE_Objects() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int32 SvtCacheOptions_Impl::GetDrawingEngineOLE_Objects() const
 {
@@ -261,7 +261,7 @@ sal_Int32 SvtCacheOptions_Impl::GetDrawingEngineOLE_Objects() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int32 SvtCacheOptions_Impl::GetGraphicManagerTotalCacheSize() const
 {
@@ -269,7 +269,7 @@ sal_Int32 SvtCacheOptions_Impl::GetGraphicManagerTotalCacheSize() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int32 SvtCacheOptions_Impl::GetGraphicManagerObjectCacheSize() const
 {
@@ -277,7 +277,7 @@ sal_Int32 SvtCacheOptions_Impl::GetGraphicManagerObjectCacheSize() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int32 SvtCacheOptions_Impl::GetGraphicManagerObjectReleaseTime() const
 {
@@ -285,7 +285,7 @@ sal_Int32 SvtCacheOptions_Impl::GetGraphicManagerObjectReleaseTime() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCacheOptions_Impl::SetWriterOLE_Objects( sal_Int32 nWriterOLE )
 {
@@ -294,7 +294,7 @@ void SvtCacheOptions_Impl::SetWriterOLE_Objects( sal_Int32 nWriterOLE )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCacheOptions_Impl::SetDrawingEngineOLE_Objects( sal_Int32 nDrawingOLE )
 {
@@ -303,7 +303,7 @@ void SvtCacheOptions_Impl::SetDrawingEngineOLE_Objects( sal_Int32 nDrawingOLE )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCacheOptions_Impl::SetGraphicManagerTotalCacheSize( sal_Int32 nGrfMgrTotalSize )
 {
@@ -312,7 +312,7 @@ void SvtCacheOptions_Impl::SetGraphicManagerTotalCacheSize( sal_Int32 nGrfMgrTot
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCacheOptions_Impl::SetGraphicManagerObjectCacheSize( sal_Int32 nGrfMgrObjectSize )
 {
@@ -321,7 +321,7 @@ void SvtCacheOptions_Impl::SetGraphicManagerObjectCacheSize( sal_Int32 nGrfMgrOb
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCacheOptions_Impl::SetGraphicManagerObjectReleaseTime( sal_Int32 nGrfMgrObjectReleaseTime )
 {
@@ -330,7 +330,7 @@ void SvtCacheOptions_Impl::SetGraphicManagerObjectReleaseTime( sal_Int32 nGrfMgr
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtCacheOptions_Impl::impl_GetPropertyNames()
 {
@@ -350,15 +350,15 @@ Sequence< OUString > SvtCacheOptions_Impl::impl_GetPropertyNames()
 }
 
 //*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//	initialize static member
+//	DON'T DO IT IN YOUR HEADER!
+//	see definition for further informations
 //*****************************************************************************************************************
-SvtCacheOptions_Impl*   SvtCacheOptions::m_pDataContainer = NULL;
-sal_Int32               SvtCacheOptions::m_nRefCount = 0;
+SvtCacheOptions_Impl*	SvtCacheOptions::m_pDataContainer = NULL;
+sal_Int32				SvtCacheOptions::m_nRefCount = 0;
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtCacheOptions::SvtCacheOptions()
 {
@@ -374,7 +374,7 @@ SvtCacheOptions::SvtCacheOptions()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtCacheOptions::~SvtCacheOptions()
 {
@@ -392,7 +392,7 @@ SvtCacheOptions::~SvtCacheOptions()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int32 SvtCacheOptions::GetWriterOLE_Objects() const
 {
@@ -401,7 +401,7 @@ sal_Int32 SvtCacheOptions::GetWriterOLE_Objects() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int32 SvtCacheOptions::GetDrawingEngineOLE_Objects() const
 {
@@ -410,7 +410,7 @@ sal_Int32 SvtCacheOptions::GetDrawingEngineOLE_Objects() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int32 SvtCacheOptions::GetGraphicManagerTotalCacheSize() const
 {
@@ -419,7 +419,7 @@ sal_Int32 SvtCacheOptions::GetGraphicManagerTotalCacheSize() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int32 SvtCacheOptions::GetGraphicManagerObjectCacheSize() const
 {
@@ -428,7 +428,7 @@ sal_Int32 SvtCacheOptions::GetGraphicManagerObjectCacheSize() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Int32 SvtCacheOptions::GetGraphicManagerObjectReleaseTime() const
 {
@@ -437,7 +437,7 @@ sal_Int32 SvtCacheOptions::GetGraphicManagerObjectReleaseTime() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCacheOptions::SetWriterOLE_Objects( sal_Int32 nWriterOLE )
 {
@@ -446,7 +446,7 @@ void SvtCacheOptions::SetWriterOLE_Objects( sal_Int32 nWriterOLE )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCacheOptions::SetDrawingEngineOLE_Objects( sal_Int32 nDrawingOLE )
 {
@@ -455,7 +455,7 @@ void SvtCacheOptions::SetDrawingEngineOLE_Objects( sal_Int32 nDrawingOLE )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCacheOptions::SetGraphicManagerTotalCacheSize( sal_Int32 nGrfMgrTotalSize )
 {
@@ -464,7 +464,7 @@ void SvtCacheOptions::SetGraphicManagerTotalCacheSize( sal_Int32 nGrfMgrTotalSiz
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCacheOptions::SetGraphicManagerObjectCacheSize( sal_Int32 nGrfMgrObjectSize )
 {
@@ -473,7 +473,7 @@ void SvtCacheOptions::SetGraphicManagerObjectCacheSize( sal_Int32 nGrfMgrObjectS
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCacheOptions::SetGraphicManagerObjectReleaseTime( sal_Int32 nGrfMgrObjectReleaseTime )
 {
@@ -482,7 +482,7 @@ void SvtCacheOptions::SetGraphicManagerObjectReleaseTime( sal_Int32 nGrfMgrObjec
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Mutex& SvtCacheOptions::GetOwnStaticMutex()
 {

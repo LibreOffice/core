@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,18 +47,18 @@ class VCL_DLLPUBLIC Accelerator : public Resource
     friend class ImplAccelManager;
 
 private:
-    ImplAccelData*  mpData;
-    XubString       maHelpStr;
-    Link            maActivateHdl;
-    Link            maDeactivateHdl;
-    Link            maSelectHdl;
+    ImplAccelData*	mpData;
+    XubString		maHelpStr;
+    Link			maActivateHdl;
+    Link			maDeactivateHdl;
+    Link			maSelectHdl;
 
     // Werden vom AcceleratorManager gesetzt
-    KeyCode         maCurKeyCode;
-    USHORT          mnCurId;
-    USHORT          mnCurRepeat;
-    BOOL            mbIsCancel;
-    BOOL*           mpDel;
+    KeyCode 		maCurKeyCode;
+    USHORT			mnCurId;
+    USHORT			mnCurRepeat;
+    BOOL			mbIsCancel;
+    BOOL*			mpDel;
 
     SAL_DLLPRIVATE  void        ImplInit();
     SAL_DLLPRIVATE  void        ImplCopyData( ImplAccelData& rAccelData );
@@ -75,55 +75,55 @@ public:
                     Accelerator();
                     Accelerator( const Accelerator& rAccel );
                     Accelerator( const ResId& rResId );
-    virtual         ~Accelerator();
+    virtual			~Accelerator();
 
-    virtual void    Activate();
-    virtual void    Deactivate();
-    virtual void    Select();
+    virtual void	Activate();
+    virtual void	Deactivate();
+    virtual void	Select();
 
-    void            InsertItem( USHORT nItemId, const KeyCode& rKeyCode );
-    void            InsertItem( const ResId& rResId );
-    void            RemoveItem( USHORT nItemId );
-    void            RemoveItem( const KeyCode rKeyCode );
-    void            Clear();
+    void			InsertItem( USHORT nItemId, const KeyCode& rKeyCode );
+    void			InsertItem( const ResId& rResId );
+    void			RemoveItem( USHORT nItemId );
+    void			RemoveItem( const KeyCode rKeyCode );
+    void			Clear();
 
-    USHORT          GetCurItemId() const { return mnCurId; }
-    const KeyCode&  GetCurKeyCode() const { return maCurKeyCode; }
-    USHORT          GetCurRepeat() const { return mnCurRepeat; }
-    BOOL            IsCancel() const { return mbIsCancel; }
+    USHORT			GetCurItemId() const { return mnCurId; }
+    const KeyCode&	GetCurKeyCode() const { return maCurKeyCode; }
+    USHORT			GetCurRepeat() const { return mnCurRepeat; }
+    BOOL			IsCancel() const { return mbIsCancel; }
 
-    USHORT          GetItemCount() const;
-    USHORT          GetItemId( USHORT nPos ) const;
-    KeyCode         GetItemKeyCode( USHORT nPos ) const;
-    USHORT          GetItemId( const KeyCode& rKeyCode ) const;
-    KeyCode         GetKeyCode( USHORT nItemId ) const;
-    BOOL            IsIdValid( USHORT nItemId ) const;
-    BOOL            IsKeyCodeValid( const KeyCode rKeyCode ) const;
-    BOOL            Call( const KeyCode& rKeyCode, USHORT nRepeat = 0 );
+    USHORT			GetItemCount() const;
+    USHORT			GetItemId( USHORT nPos ) const;
+    KeyCode 		GetItemKeyCode( USHORT nPos ) const;
+    USHORT			GetItemId( const KeyCode& rKeyCode ) const;
+    KeyCode 		GetKeyCode( USHORT nItemId ) const;
+    BOOL			IsIdValid( USHORT nItemId ) const;
+    BOOL			IsKeyCodeValid( const KeyCode rKeyCode ) const;
+    BOOL			Call( const KeyCode& rKeyCode, USHORT nRepeat = 0 );
 
-    void            SetAccel( USHORT nItemId, Accelerator* pAccel );
-    Accelerator*    GetAccel( USHORT nItemId ) const;
-    void            SetAccel( const KeyCode rKeyCode, Accelerator* pAccel );
-    Accelerator*    GetAccel( const KeyCode rKeyCode ) const;
+    void			SetAccel( USHORT nItemId, Accelerator* pAccel );
+    Accelerator*	GetAccel( USHORT nItemId ) const;
+    void			SetAccel( const KeyCode rKeyCode, Accelerator* pAccel );
+    Accelerator*	GetAccel( const KeyCode rKeyCode ) const;
 
-    void            EnableItem( USHORT nItemId, BOOL bEnable = TRUE );
-    BOOL            IsItemEnabled( USHORT nItemId ) const;
-    void            EnableItem( const KeyCode rKeyCode, BOOL bEnable = TRUE );
-    BOOL            IsItemEnabled( const KeyCode rKeyCode ) const;
+    void			EnableItem( USHORT nItemId, BOOL bEnable = TRUE );
+    BOOL			IsItemEnabled( USHORT nItemId ) const;
+    void			EnableItem( const KeyCode rKeyCode, BOOL bEnable = TRUE );
+    BOOL			IsItemEnabled( const KeyCode rKeyCode ) const;
 
-    void            SetHelpText( const XubString& rHelpText ) { maHelpStr = rHelpText; }
+    void			SetHelpText( const XubString& rHelpText ) { maHelpStr = rHelpText; }
     const XubString& GetHelpText() const { return maHelpStr; }
 
-    void            SetActivateHdl( const Link& rLink ) { maActivateHdl = rLink; }
-    const Link&     GetActivateHdl() const { return maActivateHdl; }
-    void            SetDeactivateHdl( const Link& rLink ) { maDeactivateHdl = rLink; }
-    const Link&     GetDeactivateHdl() const { return maDeactivateHdl; }
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
+    void			SetActivateHdl( const Link& rLink ) { maActivateHdl = rLink; }
+    const Link& 	GetActivateHdl() const { return maActivateHdl; }
+    void			SetDeactivateHdl( const Link& rLink ) { maDeactivateHdl = rLink; }
+    const Link& 	GetDeactivateHdl() const { return maDeactivateHdl; }
+    void			SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
+    const Link& 	GetSelectHdl() const { return maSelectHdl; }
 
-    Accelerator&    operator=( const Accelerator& rAccel );
+    Accelerator&	operator=( const Accelerator& rAccel );
 };
 
-#endif  // _SV_ACCEL_HXX
+#endif	// _SV_ACCEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

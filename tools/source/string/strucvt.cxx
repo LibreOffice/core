@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -143,8 +143,8 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
 
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
                "Overflowing rtl::OUString -> UniString cut to zero length");
-
-
+    
+    
     if (rStr.pData->length < STRING_MAXLEN)
     {
         STRING_RELEASE((STRING_TYPE *)mpData);
@@ -205,7 +205,7 @@ UniString::UniString( const ResId& rResId )
         if( pResMgr )
             pResMgr->PopContext();
     }
-
+        
 
     ResHookProc pImplResHookProc = ResMgr::GetReadStringHook();
     if ( pImplResHookProc )

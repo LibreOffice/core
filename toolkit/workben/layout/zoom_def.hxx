@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #ifndef _SVX_ZOOM_DEF_HXX
 #define _SVX_ZOOM_DEF_HXX
 
-#define ZOOMBTN_OPTIMAL     ((USHORT)0x0001)
-#define ZOOMBTN_PAGEWIDTH   ((USHORT)0x0002)
-#define ZOOMBTN_WHOLEPAGE   ((USHORT)0x0004)
+#define	ZOOMBTN_OPTIMAL		((USHORT)0x0001)
+#define ZOOMBTN_PAGEWIDTH	((USHORT)0x0002)
+#define ZOOMBTN_WHOLEPAGE	((USHORT)0x0004)
 
 #endif
 

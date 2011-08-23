@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,10 +74,10 @@ using namespace ::osl;
 
 FileCopier::FileCopier() :
 
-    nBytesTotal ( 0 ),
+    nBytesTotal	( 0 ),
     nBytesCopied( 0 ),
-    nBlockSize  ( 4096 ),
-    pImp        ( new FileCopier_Impl )
+    nBlockSize	( 4096 ),
+    pImp		( new FileCopier_Impl )
 
 {
 }
@@ -86,12 +86,12 @@ FileCopier::FileCopier() :
 
 FileCopier::FileCopier( const DirEntry& rSource, const DirEntry& rTarget ) :
 
-    aSource     ( rSource ),
-    aTarget     ( rTarget ),
-    nBytesTotal ( 0 ),
+    aSource		( rSource ),
+    aTarget		( rTarget ),
+    nBytesTotal	( 0 ),
     nBytesCopied( 0 ),
-    nBlockSize  ( 4096 ),
-    pImp        ( new FileCopier_Impl )
+    nBlockSize	( 4096 ),
+    pImp		( new FileCopier_Impl )
 
 {
 }
@@ -100,13 +100,13 @@ FileCopier::FileCopier( const DirEntry& rSource, const DirEntry& rTarget ) :
 
 FileCopier::FileCopier( const FileCopier& rCopier ) :
 
-    aSource         ( rCopier.aSource ),
-    aTarget         ( rCopier.aTarget ),
-    nBytesTotal     ( 0 ),
-    nBytesCopied    ( 0 ),
-    aProgressLink   ( rCopier.aProgressLink ),
-    nBlockSize      ( 4096 ),
-    pImp            ( new FileCopier_Impl )
+    aSource			( rCopier.aSource ),
+    aTarget			( rCopier.aTarget ),
+    nBytesTotal		( 0 ),
+    nBytesCopied	( 0 ),
+    aProgressLink	( rCopier.aProgressLink ),
+    nBlockSize		( 4096 ),
+    pImp			( new FileCopier_Impl )
 
 {
 }
@@ -413,10 +413,10 @@ FSysError FileCopier::DoCopy_Impl(
 
     if ( FSYS_ERR_OK == ERRCODE_TOERROR(eRet) )
     {
-        WIN32_FIND_DATA fdSource;
+        WIN32_FIND_DATA	fdSource;
         ByteString aFullSource(aSource.GetFull(), osl_getThreadTextEncoding());
         ByteString aFullTarget(aTgt.GetFull(), osl_getThreadTextEncoding());
-        HANDLE  hFind = FindFirstFile( aFullSource.GetBuffer() , &fdSource );
+        HANDLE	hFind = FindFirstFile( aFullSource.GetBuffer() , &fdSource );
         if ( hFind != INVALID_HANDLE_VALUE )
         {
             FindClose( hFind );

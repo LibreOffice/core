@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,8 +114,8 @@ ByteString &InformationParser::ReadLine()
             if ( nLevel ) {
                 sLine = "}";
                 fprintf( stdout, "Reached EOF parsing %s. Suplying extra '}'\n",ByteString( sStreamName, gsl_getSystemTextEncoding()).GetBuffer() );
-    //          nErrorCode = IP_UNEXPECTED_EOF;
-    //          nErrorLine = nActLine;
+    //	        nErrorCode = IP_UNEXPECTED_EOF;
+    //	        nErrorLine = nActLine;
             }
             else
                 sLine = "";
@@ -449,7 +449,7 @@ USHORT InformationParser::GetErrorCode()
 ByteString &InformationParser::GetErrorText()
 /*****************************************************************************/
 {
-  //    sErrorText = pActStream->GetFileName();
+  //	sErrorText = pActStream->GetFileName();
     sErrorText = ByteString( sStreamName, gsl_getSystemTextEncoding());
     sErrorText += ByteString( " (" );
     sErrorText += ByteString::CreateFromInt64(nErrorLine);

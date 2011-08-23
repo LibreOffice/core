@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 
 inline BOOL SelectionEngine::ShouldDeselect( BOOL bModifierKey1 ) const
 {
-//  return !( eSelMode == MULTIPLE_SELECTION && bModifierKey1 );
+//	return !( eSelMode == MULTIPLE_SELECTION && bModifierKey1 );
     return eSelMode != MULTIPLE_SELECTION || !bModifierKey1;
 }
 
@@ -203,7 +203,7 @@ BOOL SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
     nFlags &= (~SELENG_CMDEVT);
     if ( !pFunctionSet || !pWin )
         return FALSE;
-    const bool bRightClickCursorPositioning =
+    const bool bRightClickCursorPositioning = 
             rMEvt.IsRight() && rMEvt.GetClicks() == 1 && !IsInSelection();
     if ( (rMEvt.GetClicks() > 1 || rMEvt.IsRight()) && !bRightClickCursorPositioning )
         return FALSE;

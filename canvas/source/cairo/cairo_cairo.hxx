@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace cairo {
         For each cairo-supported platform, there's an implementation of
         this interface
      */
-    struct Surface
+    struct Surface 
     {
     public:
         virtual ~Surface() {}
@@ -84,11 +84,11 @@ namespace cairo {
     /// Create Surface from given cairo surface
     SurfaceSharedPtr createSurface( const CairoSurfaceSharedPtr& rSurface );
     /// Create surface with given dimensions
-    SurfaceSharedPtr createSurface( const OutputDevice& rRefDevice,
+    SurfaceSharedPtr createSurface( const OutputDevice& rRefDevice, 
                                     int x, int y, int width, int height );
     /// Create Surface for given bitmap data
-    SurfaceSharedPtr createBitmapSurface( const OutputDevice& rRefDevice,
-                                          const BitmapSystemData& rData,
+    SurfaceSharedPtr createBitmapSurface( const OutputDevice& rRefDevice, 
+                                          const BitmapSystemData& rData, 
                                           const Size&             rSize );
 
     /// Check whether cairo will work on given window

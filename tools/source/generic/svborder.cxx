@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,17 +44,17 @@ SvBorder::SvBorder( const Rectangle & rOuter, const Rectangle & rInner )
 
     OSL_ENSURE( aOuter.IsInside( aInner ),
                 "SvBorder::SvBorder: FALSE == aOuter.IsInside( aInner )" );
-    nTop    = aInner.Top()    - aOuter.Top();
-    nRight  = aOuter.Right()  - aInner.Right();
+    nTop	= aInner.Top()	  - aOuter.Top();
+    nRight	= aOuter.Right()  - aInner.Right();
     nBottom = aOuter.Bottom() - aInner.Bottom();
-    nLeft   = aInner.Left()   - aOuter.Left();
+    nLeft	= aInner.Left()   - aOuter.Left();
 }
 
 Rectangle & operator += ( Rectangle & rRect, const SvBorder & rBorder )
 {
     // wegen Empty-Rect, GetSize muss als erstes gerufen werden
     Size aS( rRect.GetSize() );
-    aS.Width()  += rBorder.Left() + rBorder.Right();
+    aS.Width()	+= rBorder.Left() + rBorder.Right();
     aS.Height() += rBorder.Top() + rBorder.Bottom();
 
     rRect.Left()   -= rBorder.Left();
@@ -67,7 +67,7 @@ Rectangle & operator -= ( Rectangle & rRect, const SvBorder & rBorder )
 {
     // wegen Empty-Rect, GetSize muss als erstes gerufen werden
     Size aS( rRect.GetSize() );
-    aS.Width()  -= rBorder.Left() + rBorder.Right();
+    aS.Width()	-= rBorder.Left() + rBorder.Right();
     aS.Height() -= rBorder.Top() + rBorder.Bottom();
 
     rRect.Left()   += rBorder.Left();

@@ -195,7 +195,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     else
     {
         // fire dragOver on listeners of current window
-        nListeners = fireDragOverEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
+        nListeners = fireDragOverEvent( pChildWindow, dtde.Context,	dtde.DropAction, location,
             dtde.SourceActions );
     }
 

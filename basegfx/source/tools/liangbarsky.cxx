@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace basegfx
         {
             // see Foley/vanDam, pp. 122 for the Liang-Barsky line
             // clipping algorithm
-            inline bool liangBarskyClipT( double  nDenom,
+            inline bool liangBarskyClipT( double  nDenom, 
                                           double  nNumerator,
                                           double& io_rTE,
                                           double& io_rTL )
@@ -55,7 +55,7 @@ namespace basegfx
                         return false;
                     else if( t > io_rTE )
                         io_rTE = t;
-                }
+                } 
                 else if( nDenom < 0 )
                 {
                     t = nNumerator / nDenom;
@@ -75,9 +75,9 @@ namespace basegfx
 
         // see Foley/vanDam, pp. 122 for the Liang-Barsky line
         // clipping algorithm
-        bool liangBarskyClip2D( ::basegfx::B2DPoint&        io_rStart,
-                                ::basegfx::B2DPoint&        io_rEnd,
-                                const ::basegfx::B2DRange&  rClipRect )
+        bool liangBarskyClip2D( ::basegfx::B2DPoint& 		io_rStart, 
+                                ::basegfx::B2DPoint& 		io_rEnd,
+                                const ::basegfx::B2DRange&	rClipRect )
         {
             const double nDX( io_rEnd.getX() - io_rStart.getX() );
             const double nDY( io_rEnd.getY() - io_rStart.getY() );
@@ -92,16 +92,16 @@ namespace basegfx
                 double nTE( 0.0 );
                 double nTL( 1.0 );
                 if( liangBarskyClipT(nDX, rClipRect.getMinX() - io_rStart.getX(),
-                                     nTE, nTL ) )                   // inside wrt. left edge
+                                     nTE, nTL ) ) 					// inside wrt. left edge
                 {
                     if( liangBarskyClipT(-nDX, io_rStart.getX() - rClipRect.getMaxX(),
-                                         nTE, nTL ) )               // inside wrt. right edge
+                                         nTE, nTL ) ) 				// inside wrt. right edge
                     {
                         if( liangBarskyClipT(nDY, rClipRect.getMinY() - io_rStart.getY(),
-                                             nTE, nTL ) )           // inside wrt. bottom edge
+                                             nTE, nTL ) ) 			// inside wrt. bottom edge
                         {
                             if( liangBarskyClipT(-nDY, io_rStart.getY() - rClipRect.getMaxY(),
-                                                 nTE, nTL ) )       // inside wrt. top edge
+                                                 nTE, nTL ) ) 		// inside wrt. top edge
                             {
                                 // compute actual intersection points,
                                 // if nTL has changed

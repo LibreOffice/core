@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace svt
     /** serves a single purpose - let ZoomText read the drawers ...
 
         Strange enough, ZoomText does not read the drawers when they get the focus (in none of the combinations
-        of AccessibleRoles I tried), except when it does have an AccessibleChild with the role LABEL. To "inject"
+        of AccessibleRoles I tried), except when it does have an AccessibleChild with the role LABEL. To "inject"       
         such a child into the A11Y hierarchy, we use this window here.
 
         (We could also inject the A11Y component on the A11Y level only, but this would mean additional code. With

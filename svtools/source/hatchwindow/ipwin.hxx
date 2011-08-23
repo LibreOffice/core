@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ class SvResizeHelper
     Rectangle   aOuter;
     short       nGrab; // -1 kein Grab,  0 - 7, 8 = Move, siehe FillHandle...
     Point       aSelPos;
-    BOOL        bResizeable;
+    BOOL		bResizeable;
 public:
                 SvResizeHelper();
 
-    void        SetResizeable( BOOL b ) { bResizeable = b; }
+    void		SetResizeable( BOOL b ) { bResizeable = b; }
     short       GetGrab() const { return nGrab; }
     void        SetBorderPixel( const Size & rBorderP )
                 { aBorder = rBorderP; }
@@ -71,7 +71,7 @@ public:
     BOOL        SelectBegin( Window *, const Point & rPos );
     short       SelectMove( Window * pWin, const Point & rPos );
     Point       GetTrackPosPixel( const Rectangle & rRect ) const;
-    Rectangle   GetTrackRectPixel( const Point & rTrackPos ) const;
+    Rectangle	GetTrackRectPixel( const Point & rTrackPos ) const;
     void        ValidateRect( Rectangle & rValidate ) const;
     BOOL        SelectRelease( Window *, const Point & rPos, Rectangle & rOutPosSize );
     void        Release( Window * pWin );
@@ -103,7 +103,7 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
-    void    QueryObjAreaPixel( Rectangle & );
+    void	QueryObjAreaPixel( Rectangle & );
     void    RequestObjAreaPixel( const Rectangle & );
 };
 

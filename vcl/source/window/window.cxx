@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -497,7 +497,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
             }
         }
     }
-
+    
     static const char* pEnvHC = getenv( "SAL_FORCE_HC" );
     if( pEnvHC && *pEnvHC )
     {
@@ -719,7 +719,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
 
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pRealParent = pParent;
-
+    
     // 3D-Look vererben
     if ( !mpWindowImpl->mbOverlapWin && pParent && (pParent->GetStyle() & WB_3DLOOK) )
         nStyle |= WB_3DLOOK;
@@ -2337,7 +2337,7 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
     // call PrePaint. PrePaint may add to the invalidate region as well as
     // other parameters used below.
     PrePaint();
-
+    
     mpWindowImpl->mbPaintFrame = FALSE;
 
     if ( nPaintFlags & IMPL_PAINT_PAINTALLCHILDS )
@@ -3278,7 +3278,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
             }
         }
-
+        
         // check maPos as well, as it could have been changed for client windows (ImplCallMove())
         if ( mpWindowImpl->mnAbsScreenX != aPtDev.X() || nX != mpWindowImpl->mnX || nOrgX != mpWindowImpl->maPos.X() )
         {
@@ -9359,7 +9359,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
 {
     if( rRect.IsEmpty() )
         return;
-
+    
     bool bRoundEdges = nCornerRadius > 0;
 
     const StyleSettings& rStyles = GetSettings().GetStyleSettings();
@@ -9838,7 +9838,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     // preserve graphicsstate
     Push();
     Region aClipRegion( GetClipRegion() );
-    SetClipRegion();
+    SetClipRegion();    
 
     GDIMetaFile* pOldMtf = GetConnectMetaFile();
     GDIMetaFile aMtf;
@@ -9900,7 +9900,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     SetConnectMetaFile( pOldMtf );
     EnableOutput( bOutput );
     mpWindowImpl->mbReallyVisible = bRVisible;
-
+    
     // paint metafile to VDev
     VirtualDevice* pMaskedDevice = new VirtualDevice( *i_pTargetOutDev, 0, 0 );
     pMaskedDevice->SetOutputSizePixel( GetOutputSizePixel() );
@@ -9922,7 +9922,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
                 nDeltaX = mnOutWidth - nDeltaX - pChild->mnOutWidth;
             long nDeltaY = pChild->GetOutOffYPixel() - GetOutOffYPixel();
             Point aPos( i_rPos );
-            Point aDelta( nDeltaX, nDeltaY );
+            Point aDelta( nDeltaX, nDeltaY );                
             aPos += aDelta;
             pChild->ImplPaintToDevice( i_pTargetOutDev, aPos );
         }
@@ -9941,11 +9941,11 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /*rSize*/ )
 {
     // FIXME: scaling: currently this is for pixel copying only
-
+    
     DBG_ASSERT( ! pDev->ImplHasMirroredGraphics(), "PaintToDevice to mirroring graphics" );
     DBG_ASSERT( ! pDev->IsRTLEnabled(), "PaintToDevice to mirroring device" );
-
-
+    
+    
     Point       aPos  = pDev->LogicToPixel( rPos );
 
     Window* pRealParent = NULL;
@@ -9963,7 +9963,7 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
 
     BOOL bVisible = mpWindowImpl->mbVisible;
     mpWindowImpl->mbVisible = TRUE;
-
+    
     if( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->ImplPaintToDevice( pDev, rPos );
     else

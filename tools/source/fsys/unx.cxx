@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <sys/mntctl.h>
 #include <sys/vmount.h>
 extern "C" int mntctl( int cmd, size_t size, char* buf );
-#elif defined(NETBSD)
+#elif defined(NETBSD) 
 #include <sys/mount.h>
 #elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD)
 #elif defined DECUNIX
@@ -72,11 +72,11 @@ DECLARE_LIST( FileStatList, FileStat* )
 
 #if defined SOLARIS || defined SINIX
 #define MOUNTSPECIAL mnt_special
-#define MOUNTPOINT   mnt_mountp
+#define MOUNTPOINT 	 mnt_mountp
 #define MOUNTOPTS    mnt_mntopts
 #define MOUNTFS      mnt_fstype
 #elif defined SCO
-#define MNTTAB       "/etc/mnttab"
+#define MNTTAB 		 "/etc/mnttab"
 #define MOUNTSPECIAL mt_dev
 #define MOUNTPOINT   mt_filsys
 #else
@@ -96,7 +96,7 @@ struct mymnttab
 
 
 #if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX) || \
-    defined(OPENBSD)
+	defined(OPENBSD)
 BOOL GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
 {
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );
@@ -183,29 +183,29 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
             if ((stat (mnt->MOUNTPOINT, &buf) == -1) || (buf.st_dev != dev))
                 continue;
         }
-#       ifdef LINUX
+#		ifdef LINUX
         /* #61624# File mit setmntent oeffnen und mit fclose schliessen stoesst
            bei der glibc-2.1 auf wenig Gegenliebe */
         endmntent( fp );
-#       else
+#		else
         fclose (fp);
-#       endif
+#		endif
         mytab->mountspecial = mnt->MOUNTSPECIAL;
-        mytab->mountpoint   = mnt->MOUNTPOINT;
-        mytab->mountdevice  = dev;
+        mytab->mountpoint 	= mnt->MOUNTPOINT;
+        mytab->mountdevice 	= dev;
 #ifndef SCO
         mytab->mymnttab_filesystem = mnt->MOUNTFS;
 #else
-        mytab->mymnttab_filesystem = "ext2";        //default ist case sensitiv unter unix
+        mytab->mymnttab_filesystem = "ext2";		//default ist case sensitiv unter unix
 #endif
         return TRUE;
     }
-#   ifdef LINUX
+#	ifdef LINUX
     /* #61624# dito */
     endmntent( fp );
-#   else
+#	else
     fclose (fp);
-#   endif
+#	endif
     return FALSE;
 }
 
@@ -215,7 +215,7 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
 |*
 |*    DirEntry::IsCaseSensitive()
 |*
-|*    Beschreibung
+|*    Beschreibung      
 |*    Ersterstellung    TPF 25.02.1999
 |*    Letzte Aenderung  TPF 25.02.1999
 |*
@@ -237,7 +237,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
         {
             if (aPath.Level() == 1)
             {
-                return TRUE;    // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
+                return TRUE;	// ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
             }
             aPath = aPath [1];
         }
@@ -248,7 +248,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
             (fsmnt.mymnttab_filesystem.CompareTo("umsdos")==COMPARE_EQUAL) ||
             (fsmnt.mymnttab_filesystem.CompareTo("vfat")==COMPARE_EQUAL) ||
             (fsmnt.mymnttab_filesystem.CompareTo("hpfs")==COMPARE_EQUAL) ||
-            (fsmnt.mymnttab_filesystem.CompareTo("smb") ==COMPARE_EQUAL) ||
+            (fsmnt.mymnttab_filesystem.CompareTo("smb")	==COMPARE_EQUAL) ||
             (fsmnt.mymnttab_filesystem.CompareTo("ncpfs")==COMPARE_EQUAL))
         {
             return FALSE;
@@ -261,7 +261,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
     }
     else
     {
-        BOOL isCaseSensitive = TRUE;    // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
+        BOOL isCaseSensitive = TRUE;	// ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
         switch ( eFormatter )
         {
             case FSYS_STYLE_MAC:
@@ -283,7 +283,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
                 }
             default:
                 {
-                    isCaseSensitive = TRUE; // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
+                    isCaseSensitive = TRUE;	// ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
                     break;
                 }
         }
@@ -345,8 +345,8 @@ String DirEntry::GetVolume() const
     }
     mymnttab &rMnt = mymnt::get();
     return ((buf.st_dev == rMnt.mountdevice ||
-                GetMountEntry(buf.st_dev, &rMnt)) ?
-                    String(rMnt.mountspecial, osl_getThreadTextEncoding()) :
+                GetMountEntry(buf.st_dev, &rMnt)) ? 
+                    String(rMnt.mountspecial, osl_getThreadTextEncoding()) : 
                     String());
 }
 
@@ -366,8 +366,8 @@ DirEntry DirEntry::GetDevice() const
     }
     mymnttab &rMnt = mymnt::get();
     return ((buf.st_dev == rMnt.mountdevice ||
-                GetMountEntry(buf.st_dev, &rMnt)) ?
-                    String( rMnt.mountpoint, osl_getThreadTextEncoding()) :
+                GetMountEntry(buf.st_dev, &rMnt)) ? 
+                    String( rMnt.mountpoint, osl_getThreadTextEncoding()) : 
                     String());
 }
 
@@ -435,8 +435,8 @@ USHORT DirReader_Impl::Read()
         {
             DirEntryFlag eFlag =
                     0 == strcmp( pDosEntry->d_name, "." ) ? FSYS_FLAG_CURRENT
-                :   0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
-                :   FSYS_FLAG_NORMAL;
+                :	0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
+                :	FSYS_FLAG_NORMAL;
             DirEntry *pTemp = new DirEntry( ByteString(pDosEntry->d_name), eFlag, FSYS_STYLE_UNX );
             if ( pParent )
                 pTemp->ImpChangeParent( new DirEntry( *pParent ), FALSE);
@@ -610,7 +610,7 @@ FSysPathStyle DirEntry::GetPathStyle( const String & )
 |*
 |*    FileStat::SetDateTime
 |*
-|*    Ersterstellung    PB  27.06.97
+|*    Ersterstellung	PB  27.06.97
 |*    Letzte Aenderung
 |*
 *************************************************************************/
@@ -620,8 +620,8 @@ void FileStat::SetDateTime( const String& rFileName,
 {
     tm times;
 
-    times.tm_year = rNewDateTime.GetYear()  - 1900;     // 1997 -> 97
-    times.tm_mon  = rNewDateTime.GetMonth() - 1;        // 0 == Januar!
+    times.tm_year = rNewDateTime.GetYear()  - 1900;  	// 1997 -> 97
+    times.tm_mon  = rNewDateTime.GetMonth() - 1;		// 0 == Januar!
     times.tm_mday = rNewDateTime.GetDay();
 
     times.tm_hour = rNewDateTime.GetHour();

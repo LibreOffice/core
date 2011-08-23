@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@
 // class SvtLanguageOptions ----------------------------------------------------
 
 // these defines can be ored
-#define SCRIPTTYPE_LATIN        0x01
-#define SCRIPTTYPE_ASIAN        0x02
-#define SCRIPTTYPE_COMPLEX      0x04
+#define SCRIPTTYPE_LATIN		0x01
+#define SCRIPTTYPE_ASIAN		0x02
+#define SCRIPTTYPE_COMPLEX		0x04
 
 class SvtCJKOptions;
 class SvtCTLOptions;
@@ -49,8 +49,8 @@ class SvtCTLOptions;
 class SVL_DLLPUBLIC SvtLanguageOptions : public ::utl::detail::Options
 {
 private:
-    SvtCJKOptions*  m_pCJKOptions;
-    SvtCTLOptions*  m_pCTLOptions;
+    SvtCJKOptions*	m_pCJKOptions;
+    SvtCTLOptions*	m_pCTLOptions;
 
 public:
     enum EOption
@@ -78,21 +78,21 @@ public:
     ~SvtLanguageOptions();
 
     // CJK options
-    sal_Bool    IsCJKFontEnabled() const;
-    sal_Bool    IsVerticalTextEnabled() const;
-    sal_Bool    IsAsianTypographyEnabled() const;
-    sal_Bool    IsJapaneseFindEnabled() const;
-    sal_Bool    IsRubyEnabled() const;
-    sal_Bool    IsChangeCaseMapEnabled() const;
-    sal_Bool    IsDoubleLinesEnabled() const;
-    sal_Bool    IsEmphasisMarksEnabled() const;
-    sal_Bool    IsVerticalCallOutEnabled() const;
+    sal_Bool	IsCJKFontEnabled() const;
+    sal_Bool	IsVerticalTextEnabled() const;
+    sal_Bool	IsAsianTypographyEnabled() const;
+    sal_Bool	IsJapaneseFindEnabled() const;
+    sal_Bool	IsRubyEnabled() const;
+    sal_Bool	IsChangeCaseMapEnabled() const;
+    sal_Bool	IsDoubleLinesEnabled() const;
+    sal_Bool	IsEmphasisMarksEnabled() const;
+    sal_Bool	IsVerticalCallOutEnabled() const;
     void        SetAll( sal_Bool _bSet );
     sal_Bool    IsAnyEnabled() const;
 
     // CTL options
     void        SetCTLFontEnabled( sal_Bool _bEnabled );
-    sal_Bool    IsCTLFontEnabled() const;
+    sal_Bool	IsCTLFontEnabled() const;
 
     void        SetCTLSequenceChecking( sal_Bool _bEnabled );
     sal_Bool    IsCTLSequenceChecking() const;
@@ -120,7 +120,7 @@ public:
     ~SvtSystemLanguageOptions();
 
     virtual void    Commit();
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
+    virtual void 	Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
 
     LanguageType GetWin16SystemLanguage();
 };

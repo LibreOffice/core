@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ namespace comphelper
 {
 //.........................................................................
 
-namespace stario    = ::com::sun::star::io;
-namespace staruno   = ::com::sun::star::uno;
-namespace starawt   = ::com::sun::star::awt;
+namespace stario	= ::com::sun::star::io;
+namespace staruno	= ::com::sun::star::uno;
+namespace starawt	= ::com::sun::star::awt;
 
 // sal_Bool
 COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, sal_Bool& _rVal);
@@ -100,7 +100,7 @@ const staruno::Reference<stario::XObjectOutputStream>& operator << (const starun
 }
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // _COMPHELPER_BASIC_IO_HXX_
