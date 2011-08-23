@@ -49,16 +49,17 @@ TARFILE_MD5=7740a8ec23878a2f50120e1faa2730f2
 
 # libxml2-global-symbols: #i112480#: Solaris ld won't export non-listed symbols
 PATCH_FILES=libxml2-configure.patch \
-            libxml2-mingw.patch \
             libxml2-gnome599717.patch \
             libxml2-xpath.patch \
             libxml2-global-symbols.patch \
             libxml2-aix.patch \
-            libxml2-vc10.patch \
-            libxml2-mingw.patch
+            libxml2-vc10.patch
 
 .IF "$(OS)" == "WNT"
 PATCH_FILES+= libxml2-long-path.patch
+.IF "$(COM)"=="GCC"
+PATCH_FILES+= libxml2-mingw.patch
+.ENDIF
 .ENDIF
 
 # This is only for UNX environment now
