@@ -1357,7 +1357,7 @@ SvxMSConvertOCXControls::OCX_Factory(String const&)
 SvxMSConvertOCXControls::WriteOCXExcelKludgeStream(SotStorageStreamRef&, com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&, com::sun::star::awt::Size const&, String&)
 SvxMSDffManager::GetAutoForm(MSO_SPT) const
 SvxMSDffManager::ImportFontWork(SvStream&, SfxItemSet&, Rectangle&) const
-SvxMSDffManager::ReadObjText(SvStream&, SdrObject*) const
+SvxMSDffManager::ReadObjText(SvStream&, SdrObject*)
 SvxMSDffManager::Scale(PolyPolygon&) const
 SvxMSDffManager::Scale(Rectangle&) const
 SvxMSDffShapeInfos::Insert(SvxMSDffShapeInfo* const&, unsigned short&)
