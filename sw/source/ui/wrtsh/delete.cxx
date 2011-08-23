@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ BOOL SwWrtShell::TryRemoveIndent()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Zeile loeschen
+ Beschreibung:	Zeile loeschen
 ------------------------------------------------------------------------*/
 
 
@@ -113,8 +113,8 @@ long SwWrtShell::DelLine()
     SetMark();
     SwCrsrShell::RightMargin();
 //Warum soll hier noch ein Zeichen in der naechsten Zeile geloescht werden?
-//  if(!IsEndOfPara())
-//      SwCrsrShell::Right();
+//	if(!IsEndOfPara())
+//		SwCrsrShell::Right();
     long nRet = Delete();
     Pop(FALSE);
     if( nRet )
@@ -269,7 +269,7 @@ long SwWrtShell::DelRight()
     case nsSelectionType::SEL_TXT:
     case nsSelectionType::SEL_TBL:
     case nsSelectionType::SEL_NUM:
-            //  wenn eine Selektion existiert, diese loeschen.
+            //	wenn eine Selektion existiert, diese loeschen.
         if( IsSelection() )
         {
             if( !IsBlockMode() || HasSelection() )

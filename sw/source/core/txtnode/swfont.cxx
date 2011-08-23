@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <vcl/window.hxx>
 #include <charatr.hxx>
-#include <viewsh.hxx>       // Bildschirmabgleich
+#include <viewsh.hxx>		// Bildschirmabgleich
 #include <swfont.hxx>
 #include <fntcache.hxx>     // FontCache
 #include <txtfrm.hxx>       // SwTxtFrm
@@ -173,12 +173,12 @@ void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
  Escapement:
     frEsc:  Fraction, Grad des Escapements
     Esc = resultierendes Escapement
-    A1 = Original-Ascent            (nOrgAscent)
-    A2 = verkleinerter Ascent       (nEscAscent)
-    Ax = resultierender Ascent      (GetAscent())
-    H1 = Original-Hoehe             (nOrgHeight)
-    H2 = verkleinerter Hoehe        (nEscHeight)
-    Hx = resultierender Hoehe       (GetHeight())
+    A1 = Original-Ascent			(nOrgAscent)
+    A2 = verkleinerter Ascent		(nEscAscent)
+    Ax = resultierender Ascent		(GetAscent())
+    H1 = Original-Hoehe 			(nOrgHeight)
+    H2 = verkleinerter Hoehe		(nEscHeight)
+    Hx = resultierender Hoehe		(GetHeight())
     Bx = resultierende Baseline fuer die Textausgabe (CalcPos())
          (Vorsicht: Y - A1!)
 
@@ -198,7 +198,7 @@ void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
 *************************************************************************/
 
 /*************************************************************************
- *                  SwSubFont::CalcEscAscent( const USHORT nOldAscent )
+ *					SwSubFont::CalcEscAscent( const USHORT nOldAscent )
  *************************************************************************/
 
 // nEsc ist der Prozentwert
@@ -423,7 +423,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
 }
 
 /*************************************************************************
- *                      class SwFont
+ *						class SwFont
  *************************************************************************/
 
 SwFont::SwFont( const SwFont &rFont )
@@ -600,7 +600,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
 }
 
 /*************************************************************************
- *                      SwFont::GoMagic()
+ *						SwFont::GoMagic()
  *************************************************************************/
 
 void SwFont::GoMagic( ViewShell *pSh, BYTE nWhich )
@@ -610,7 +610,7 @@ void SwFont::GoMagic( ViewShell *pSh, BYTE nWhich )
 }
 
 /*************************************************************************
- *                      SwSubFont::IsSymbol()
+ *						SwSubFont::IsSymbol()
  *************************************************************************/
 
 BOOL SwSubFont::IsSymbol( ViewShell *pSh )
@@ -620,7 +620,7 @@ BOOL SwSubFont::IsSymbol( ViewShell *pSh )
 }
 
 /*************************************************************************
- *                      SwSubFont::ChgFnt()
+ *						SwSubFont::ChgFnt()
  *************************************************************************/
 
 BOOL SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
@@ -641,7 +641,7 @@ BOOL SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
 }
 
 /*************************************************************************
- *                    SwFont::ChgPhysFnt()
+ *					  SwFont::ChgPhysFnt()
  *************************************************************************/
 
 void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
@@ -671,11 +671,11 @@ void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
 }
 
 /*************************************************************************
- *                      SwFont::CalcEscHeight()
+ *						SwFont::CalcEscHeight()
  *         Height = MaxAscent + MaxDescent
  *      MaxAscent = Max (T1_ascent, T2_ascent + (Esc * T1_height) );
  *     MaxDescent = Max (T1_height-T1_ascent,
- *                       T2_height-T2_ascent - (Esc * T1_height)
+ * 						 T2_height-T2_ascent - (Esc * T1_height)
  *************************************************************************/
 
 USHORT SwSubFont::CalcEscHeight( const USHORT nOldHeight,
@@ -717,7 +717,7 @@ USHORT SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice& rOut )
 }
 
 /*************************************************************************
- *                    SwSubFont::GetHeight()
+ *					  SwSubFont::GetHeight()
  *************************************************************************/
 
 USHORT SwSubFont::GetHeight( ViewShell *pSh, const OutputDevice& rOut )
@@ -734,7 +734,7 @@ USHORT SwSubFont::GetHeight( ViewShell *pSh, const OutputDevice& rOut )
 }
 
 /*************************************************************************
- *                    SwSubFont::_GetTxtSize()
+ *					  SwSubFont::_GetTxtSize()
  *************************************************************************/
 Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
 {
@@ -836,7 +836,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
 }
 
 /*************************************************************************
- *                    SwSubFont::_DrawText()
+ *					  SwSubFont::_DrawText()
  *************************************************************************/
 
 void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
@@ -1054,7 +1054,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 }
 
 /*************************************************************************
- *                    SwSubFont::_GetCrsrOfst()
+ *					  SwSubFont::_GetCrsrOfst()
  *************************************************************************/
 
 xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )

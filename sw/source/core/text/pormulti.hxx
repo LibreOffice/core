@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,9 @@ class SwFont;
  * the Ctor of the SwMultiPortion uses it.
  * --------------------------------------------------*/
 
-#define SW_MC_DOUBLE    0
-#define SW_MC_RUBY      1
-#define SW_MC_ROTATE    2
+#define SW_MC_DOUBLE	0
+#define SW_MC_RUBY		1
+#define SW_MC_ROTATE	2
 #define SW_MC_BIDI      3
 
 struct SwMultiCreator
@@ -68,14 +68,14 @@ struct SwMultiCreator
 
 struct SwBracket
 {
-    xub_StrLen nStart;      // Start of text attribute determins the font
+    xub_StrLen nStart;		// Start of text attribute determins the font
     KSHORT nAscent;         // Ascent of the brackets
-    KSHORT nHeight;         // Height of them
-    KSHORT nPreWidth;       // Width of the opening bracket
+    KSHORT nHeight;			// Height of them
+    KSHORT nPreWidth;		// Width of the opening bracket
     KSHORT nPostWidth;      // Width of the closing bracket
     sal_Unicode cPre;       // Initial character, e.g. '('
     sal_Unicode cPost;      // Final character, e.g. ')'
-    BYTE nPreScript;        // Script of the initial character
+    BYTE nPreScript;		// Script of the initial character
     BYTE nPostScript;       // Script of the final character
 };
 
@@ -90,12 +90,12 @@ struct SwBracket
 
 class SwMultiPortion : public SwLinePortion
 {
-    SwLineLayout aRoot;     // One or more lines
-    SwFldPortion *pFldRest; // Field rest from the previous line
-    sal_Bool bTab1      :1; // First line tabulator
-    sal_Bool bTab2      :1; // Second line includes tabulator
-    sal_Bool bDouble    :1; // Double line
-    sal_Bool bRuby      :1; // Phonetics
+    SwLineLayout aRoot;		// One or more lines
+    SwFldPortion *pFldRest;	// Field rest from the previous line
+    sal_Bool bTab1		:1; // First line tabulator
+    sal_Bool bTab2		:1; // Second line includes tabulator
+    sal_Bool bDouble	:1; // Double line
+    sal_Bool bRuby		:1; // Phonetics
     sal_Bool bBidi      :1;
     sal_Bool bTop       :1; // Phonetic position
     sal_Bool bFormatted :1; // Already formatted
@@ -159,8 +159,8 @@ public:
 
 class SwDoubleLinePortion : public SwMultiPortion
 {
-    SwBracket* pBracket;    // Surrounding brackets
-    SwTwips nLineDiff;      // Difference of the width of the both lines
+    SwBracket* pBracket;	// Surrounding brackets
+    SwTwips	nLineDiff;		// Difference of the width of the both lines
     xub_StrLen nBlank1;     // Number of blanks in the first line
     xub_StrLen nBlank2;     // Number of blanks in the second line
 public:
@@ -254,7 +254,7 @@ public:
 };
 
 /*************************************************************************
- *                  inline - Implementations
+ *					inline - Implementations
  *************************************************************************/
 
 inline sal_Bool SwMultiPortion::HasBrackets() const

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,19 +32,19 @@
 
 
 #include "swrect.hxx"
-#include "paratr.hxx"   // pTabStop, ADJ*
-#include "viewopt.hxx"  // SwViewOptions
-#include "errhdl.hxx"   // ASSERT
+#include "paratr.hxx" 	// pTabStop, ADJ*
+#include "viewopt.hxx"	// SwViewOptions
+#include "errhdl.hxx" 	// ASSERT
 #include <SwPortionHandler.hxx>
 
 #include "txtcfg.hxx"
 #include "porglue.hxx"
 #include "inftxt.hxx"
-#include "porlay.hxx"   // SwParaPortion, SetFull
-#include "porfly.hxx"   // SwParaPortion, SetFull
+#include "porlay.hxx" 	// SwParaPortion, SetFull
+#include "porfly.hxx" 	// SwParaPortion, SetFull
 
 /*************************************************************************
- *                      class SwGluePortion
+ *						class SwGluePortion
  *************************************************************************/
 
 SwGluePortion::SwGluePortion( const KSHORT nInitFixWidth )
@@ -55,7 +55,7 @@ SwGluePortion::SwGluePortion( const KSHORT nInitFixWidth )
 }
 
 /*************************************************************************
- *                virtual SwGluePortion::GetCrsrOfst()
+ *				  virtual SwGluePortion::GetCrsrOfst()
  *************************************************************************/
 
 xub_StrLen SwGluePortion::GetCrsrOfst( const KSHORT nOfst ) const
@@ -67,7 +67,7 @@ xub_StrLen SwGluePortion::GetCrsrOfst( const KSHORT nOfst ) const
 }
 
 /*************************************************************************
- *                virtual SwGluePortion::GetTxtSize()
+ *				  virtual SwGluePortion::GetTxtSize()
  *************************************************************************/
 
 SwPosSize SwGluePortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
@@ -79,7 +79,7 @@ SwPosSize SwGluePortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 }
 
 /*************************************************************************
- *              virtual SwGluePortion::GetExpTxt()
+ *				virtual SwGluePortion::GetExpTxt()
  *************************************************************************/
 
 sal_Bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
@@ -94,7 +94,7 @@ sal_Bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) 
 }
 
 /*************************************************************************
- *                virtual SwGluePortion::Paint()
+ *				  virtual SwGluePortion::Paint()
  *************************************************************************/
 
 void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
@@ -140,7 +140,7 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *                      SwGluePortion::MoveGlue()
+ *						SwGluePortion::MoveGlue()
  *************************************************************************/
 
 void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const short nPrtGlue )
@@ -154,7 +154,7 @@ void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const short nPrtGlue )
 }
 
 /*************************************************************************
- *                void SwGluePortion::Join()
+ *				  void SwGluePortion::Join()
  *************************************************************************/
 
 void SwGluePortion::Join( SwGluePortion *pVictim )
@@ -171,7 +171,7 @@ void SwGluePortion::Join( SwGluePortion *pVictim )
 }
 
 /*************************************************************************
- *                class SwFixPortion
+ *				  class SwFixPortion
  *************************************************************************/
 
 // Wir erwarten ein framelokales SwRect !
@@ -189,7 +189,7 @@ SwFixPortion::SwFixPortion(const KSHORT nFixedWidth, const KSHORT nFixedPos)
 }
 
 /*************************************************************************
- *                class SwMarginPortion
+ *				  class SwMarginPortion
  *************************************************************************/
 
 SwMarginPortion::SwMarginPortion( const KSHORT nFixedWidth )
@@ -199,7 +199,7 @@ SwMarginPortion::SwMarginPortion( const KSHORT nFixedWidth )
 }
 
 /*************************************************************************
- *                SwMarginPortion::AdjustRight()
+ *				  SwMarginPortion::AdjustRight()
  *
  * In der umschliessenden Schleife werden alle Portions durchsucht,
  * dabei werden erst die am Ende liegenden GluePortions verarbeitet.
@@ -242,7 +242,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
         KSHORT nRightGlue = pRight && 0 < pRight->GetPrtGlue()
                           ? KSHORT(pRight->GetPrtGlue()) : 0;
         // 2) linken und rechten Glue ausgleichen
-        //    Bei Tabs haengen wir nix um ...
+        //	  Bei Tabs haengen wir nix um ...
         if( pLeft && nRightGlue && !pRight->InTabGrp() )
         {
             // pPrev ist die Portion, die unmittelbar vor pRight liegt.

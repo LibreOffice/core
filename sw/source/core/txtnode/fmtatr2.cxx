@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include <charfmt.hxx>
 #include <hints.hxx>        // SwUpdateAttr
 #include <unostyle.hxx>
-#include <unoevent.hxx>     // SwHyperlinkEventDescriptor
+#include <unoevent.hxx>		// SwHyperlinkEventDescriptor
 #include <com/sun/star/text/RubyAdjust.hdl>
 
 #include <cmdid.h>
@@ -273,7 +273,7 @@ int SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
     {
         const SvxMacro *pOwnMac = rOwn.GetObject(nNo);
         const SvxMacro *pOtherMac = rOther.GetObject(nNo);
-        if (    rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
+        if ( 	rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
                 pOwnMac->GetLibName() != pOtherMac->GetLibName() ||
                 pOwnMac->GetMacName() != pOtherMac->GetMacName() )
             return FALSE;
@@ -438,7 +438,7 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
                 String aString;
                 SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
                 aINetFmt = OUString ( aString );
-                nINetId = SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                nINetId = SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt,	nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
             break;
             default:
@@ -511,8 +511,8 @@ bool SwFmtRuby::QueryValue( uno::Any& rVal,
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        case MID_RUBY_TEXT: rVal <<= (OUString)sRubyTxt;                    break;
-         case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)nAdjustment;    break;
+        case MID_RUBY_TEXT: rVal <<= (OUString)sRubyTxt; 					break;
+         case MID_RUBY_ADJUST:	rVal <<= (sal_Int16)nAdjustment;	break;
         case MID_RUBY_CHARSTYLE:
         {
             String aString;

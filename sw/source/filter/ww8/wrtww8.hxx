@@ -544,7 +544,7 @@ public:
     BYTE bHasHdr : 1;
     BYTE bHasFtr : 1;
     BYTE bSubstituteBullets : 1; // true: SubstituteBullet() gets called
-
+    
     bool mbExportModeRTF;
 
     SwDoc *pDoc;
@@ -1405,7 +1405,7 @@ public:
 
     bool IsTxtAttr(xub_StrLen nSwPos);
 
-    void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos() { if ( nAktSwPos < STRING_NOTFOUND ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
     void OutAttr( xub_StrLen nSwPos );
     virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const;
@@ -1466,7 +1466,7 @@ public:
     bool IsDropCap( int nSwPos );
     bool RequiresImplicitBookmark();
 
-    void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos() { if ( nAktSwPos < STRING_NOTFOUND ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
     void OutAttr( xub_StrLen nSwPos, bool bRuby = false );
     virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const;

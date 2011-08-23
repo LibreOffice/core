@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,11 +132,11 @@ void DocxExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xu
               it < end; ++it )
         {
             IMark* pMark = (*it);
-
+            
             xub_StrLen nStart = pMark->GetMarkStart().nContent.GetIndex();
             xub_StrLen nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            if ( nStart == nAktPos )
+            if ( nStart == nAktPos ) 
                 aStarts.push_back( pMark->GetName() );
 
             if ( nEnd == nAktPos )
@@ -243,41 +243,41 @@ void DocxExport::DoComboBox(const rtl::OUString& rName,
 {
     m_pDocumentFS->startElementNS( XML_w, XML_ffData, FSEND );
 
-    m_pDocumentFS->singleElementNS( XML_w, XML_name,
+    m_pDocumentFS->singleElementNS( XML_w, XML_name, 
             FSNS( XML_w, XML_val ), OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 
     m_pDocumentFS->singleElementNS( XML_w, XML_enabled, FSEND );
 
     if ( rHelp.getLength( ) > 0 )
-        m_pDocumentFS->singleElementNS( XML_w, XML_helpText,
+        m_pDocumentFS->singleElementNS( XML_w, XML_helpText, 
             FSNS( XML_w, XML_val ), OUStringToOString( rHelp, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
-
+    
     if ( rToolTip.getLength( ) > 0 )
-        m_pDocumentFS->singleElementNS( XML_w, XML_statusText,
+        m_pDocumentFS->singleElementNS( XML_w, XML_statusText, 
             FSNS( XML_w, XML_val ), OUStringToOString( rToolTip, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 
     m_pDocumentFS->startElementNS( XML_w, XML_ddList, FSEND );
-
+  
     // Output the 0-based index of the selected value
     sal_uInt32 nListItems = rListItems.getLength();
     sal_Int32 nId = 0;
     sal_uInt32 nI = 0;
     while ( ( nI < nListItems ) && ( nId == 0 ) )
     {
-        if ( rListItems[nI] == rSelected )
+        if ( rListItems[nI] == rSelected ) 
             nId = nI;
         nI++;
     }
 
-    m_pDocumentFS->singleElementNS( XML_w, XML_result,
+    m_pDocumentFS->singleElementNS( XML_w, XML_result, 
             FSNS( XML_w, XML_val ), rtl::OString::valueOf( nId ).getStr( ),
             FSEND );
 
     // Loop over the entries
-
+    
     for (sal_uInt32 i = 0; i < nListItems; i++)
     {
         m_pDocumentFS->singleElementNS( XML_w, XML_listEntry,
@@ -332,7 +332,7 @@ void DocxExport::ExportDocument_Impl()
     WriteMainText();
 
     WriteFootnotesEndnotes();
-
+    
     WriteNumbering();
 
     WriteFonts();
@@ -384,7 +384,7 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
                 nRstLnNum = 0;
 
             AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo( ) );
-            m_pSections->AppendSection( pAktPageDesc, pParentFmt, nRstLnNum );
+            m_pSections->AppendSection( pAktPageDesc, pParentFmt, nRstLnNum ); 
         }
     }
 }
@@ -411,7 +411,7 @@ void DocxExport::OutputLinkedOLE( const OUString& )
 
 ULONG DocxExport::ReplaceCr( BYTE )
 {
-    // Completely unused for Docx export... only here for code sharing
+    // Completely unused for Docx export... only here for code sharing 
     // purpose with binary export
     return 0;
 }
@@ -549,7 +549,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" ),
                 aName );
-
+        
         pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" ) );
 
@@ -562,7 +562,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" ),
                 aName );
-
+        
         pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" ) );
 
@@ -625,14 +625,14 @@ void DocxExport::WriteFonts()
 }
 
 
-void DocxExport::WriteProperties( )
+void DocxExport::WriteProperties( ) 
 {
     // Write the core properties
     SwDocShell* pDocShell( pDoc->GetDocShell( ) );
     uno::Reference<document::XDocumentProperties> xDocProps;
     if ( pDocShell )
     {
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS( 
                pDocShell->GetModel( ), uno::UNO_QUERY );
         xDocProps = xDPS->getDocumentProperties();
     }
@@ -652,7 +652,7 @@ void DocxExport::WriteMainText()
 
     // body
     m_pDocumentFS->startElementNS( XML_w, XML_body, FSEND );
-
+    
     pCurPam->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
 
     // the text

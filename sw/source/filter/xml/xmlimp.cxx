@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,14 +116,14 @@ enum SwXMLDocTokens
 
 static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,     XML_TOK_DOC_FONTDECLS  },
-    { XML_NAMESPACE_OFFICE, XML_STYLES,         XML_TOK_DOC_STYLES      },
-    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES    },
-    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,   XML_TOK_DOC_MASTERSTYLES   },
-    { XML_NAMESPACE_OFFICE, XML_META,           XML_TOK_DOC_META        },
-    { XML_NAMESPACE_OFFICE, XML_BODY,           XML_TOK_DOC_BODY        },
-    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,        XML_TOK_DOC_SCRIPT      },
-    { XML_NAMESPACE_OFFICE, XML_SETTINGS,       XML_TOK_DOC_SETTINGS    },
+    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,     XML_TOK_DOC_FONTDECLS	},
+    { XML_NAMESPACE_OFFICE, XML_STYLES,	        XML_TOK_DOC_STYLES		},
+    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES	},
+    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,	 XML_TOK_DOC_MASTERSTYLES	},
+    { XML_NAMESPACE_OFFICE, XML_META, 		    XML_TOK_DOC_META		},
+    { XML_NAMESPACE_OFFICE, XML_BODY, 		    XML_TOK_DOC_BODY		},
+    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,	    XML_TOK_DOC_SCRIPT		},
+    { XML_NAMESPACE_OFFICE, XML_SETTINGS,	    XML_TOK_DOC_SETTINGS	},
     { XML_NAMESPACE_XFORMS, XML_MODEL,          XML_TOK_DOC_XFORMS      },
     XML_TOKEN_MAP_END
 };
@@ -240,10 +240,10 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
                                                       sal_True );
         break;
-//  case XML_TOK_DOC_USESTYLES:
-//      pContext = GetSwImport().CreateUseStylesContext( rLocalName,
-//                                                       xAttrList );
-//      break;
+//	case XML_TOK_DOC_USESTYLES:
+//		pContext = GetSwImport().CreateUseStylesContext( rLocalName,
+//														 xAttrList );
+//		break;
     case XML_TOK_DOC_MASTERSTYLES:
         pContext = GetSwImport().CreateMasterStylesContext( rLocalName,
                                                             xAttrList );
@@ -449,7 +449,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
 SwXMLImport::SwXMLImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nImportFlags)
-:   SvXMLImport( xServiceFactory, nImportFlags ),
+:	SvXMLImport( xServiceFactory, nImportFlags ),
     pSttNdIdx( 0 ),
     pTableItemMapper( 0 ),
     pDocElemTokenMap( 0 ),
@@ -482,7 +482,7 @@ SwXMLImport::SwXMLImport(
     const uno::Reference<   frame::XModel > & rModel,
     const uno::Reference<   document::XGraphicObjectResolver > & rEGO,
     SvStorage *pPkg )
-:   SvXMLImport( xServiceFactory, rModel, rEGO ),
+:	SvXMLImport( xServiceFactory, rModel, rEGO ),
     bLoadDoc( bLDoc ),
     bInsert( bInsertMode ),
     nStyleFamilyMask( nStyleFamMask ),
@@ -568,7 +568,7 @@ OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rT
     if( !xCrsrTunnel.is() )
         return 0;
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper *>(
-            sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething(  OTextCursorHelper::getUnoTunnelId() )));
+            sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething(	OTextCursorHelper::getUnoTunnelId() )));
     OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
     return pTxtCrsr;
 }
@@ -921,10 +921,10 @@ void SwXMLImport::endDocument( void )
                     if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) &&
                          *pSttNdIdx != pPos->nNode )
                     {
-//                      SwTxtNode* pPrevNd = pPos->nNode.GetNode().GetTxtNode();
-//                      pPos->nContent.Assign( pPrevNd, 0 );
-//                      pPaM->SetMark(); pPaM->DeleteMark();
-//                      pPrevNd->JoinNext();
+//						SwTxtNode* pPrevNd = pPos->nNode.GetNode().GetTxtNode();
+//						pPos->nContent.Assign( pPrevNd, 0 );
+//						pPaM->SetMark(); pPaM->DeleteMark();
+//						pPrevNd->JoinNext();
                         pNextNd->JoinPrev();
                     }
                 }
@@ -1604,8 +1604,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(
 {
     // #110680#
     //return (cppu::OWeakObject*)new SwXMLImport(
-    //  IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
-    //  IMPORT_FONTDECLS );
+    //	IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
+    //	IMPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLImport(
         rSMgr,
         IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
@@ -1632,11 +1632,11 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(
 {
     // #110680#
     //return (cppu::OWeakObject*)new SwXMLImport(
-    //  IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
-    //  IMPORT_FONTDECLS );
+    //	IMPORT_AUTOSTYLES |	IMPORT_CONTENT | IMPORT_SCRIPTS |
+    //	IMPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLImport(
         rSMgr,
-        IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
+        IMPORT_AUTOSTYLES |	IMPORT_CONTENT | IMPORT_SCRIPTS |
         IMPORT_FONTDECLS );
 }
 

@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _WRONG_HXX
-#define _WRONG_HXX
+#ifndef	_WRONG_HXX
+#define	_WRONG_HXX
 
 #include <com/sun/star/container/XStringKeyMap.hpp>
 

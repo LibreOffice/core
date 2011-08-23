@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 
 
 ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
-    : SwDrawBase(pWrtShell, pEditWin, pSwView), nAnzButUp(0)
+    : SwDrawBase(pWrtShell, pEditWin, pSwView),	nAnzButUp(0)
 {
 }
 
@@ -95,9 +95,9 @@ BOOL ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
             bReturn = TRUE;
         }
         else
-        {   nAnzButUp++;
+        {	nAnzButUp++;
 
-            if (nAnzButUp == 3)     // Kreisbogenerzeugung beendet
+            if (nAnzButUp == 3)		// Kreisbogenerzeugung beendet
             {
                 SwDrawBase::MouseButtonUp(rMEvt);
                 nAnzButUp = 0;
@@ -107,7 +107,7 @@ BOOL ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
                 m_pSh->EndCreate(SDRCREATE_NEXTPOINT);
         }
     }
-/*  else if ( pView->IsCreateObj() && rMEvt.IsRight() )
+/*	else if ( pView->IsCreateObj() && rMEvt.IsRight() )
     {
         pView->EndCreateObj( SDRCREATE_FORCEEND );
         bReturn = TRUE;

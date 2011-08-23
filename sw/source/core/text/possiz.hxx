@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,26 +56,26 @@ public:
 
 inline SwPosSize &SwPosSize::operator=(const SwPosSize &rSize )
 {
-    nWidth  = rSize.Width();
+    nWidth	= rSize.Width();
     nHeight = rSize.Height();
     return *this;
 }
 
 inline void SwPosSize::SvLSize( const Size &rSize )
 {
-    nWidth  = KSHORT(rSize.Width());
+    nWidth	= KSHORT(rSize.Width());
     nHeight = KSHORT(rSize.Height());
 }
 
 inline void SwPosSize::SvXSize( const Size &rSize )
 {
-    nHeight = KSHORT(rSize.Width());
+    nHeight	= KSHORT(rSize.Width());
     nWidth = KSHORT(rSize.Height());
 }
 
 inline SwPosSize &SwPosSize::operator=( const Size &rSize )
 {
-    nWidth  = KSHORT(rSize.Width());
+    nWidth	= KSHORT(rSize.Width());
     nHeight = KSHORT(rSize.Height());
     return *this;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 //using namespace i18n; !using this namespace leads to mysterious conflicts with ScriptType::...!
-//                                              so don't use this instead of the following defines!
+//												so don't use this instead of the following defines!
 
 #define I18N                ::com::sun::star::i18n
 #define I18N_SCRIPTTYPE     ::com::sun::star::i18n::ScriptType
@@ -90,40 +90,40 @@ static USHORT __FAR_DATA aPageRg[] = {
 
 class SwDropCapsPict : public Control
 {
-    String          maText;
-    String          maScriptText;
-    Color           maBackColor;
-    Color           maTextLineColor;
-    BYTE            mnLines;
-    long            mnTotLineH;
-    long            mnLineH;
-    long            mnTextH;
-    USHORT          mnDistance;
+    String			maText;
+    String			maScriptText;
+    Color			maBackColor;
+    Color			maTextLineColor;
+    BYTE			mnLines;
+    long			mnTotLineH;
+    long			mnLineH;
+    long			mnTextH;
+    USHORT			mnDistance;
     sal_Int32       mnLeading;
-    Printer*        mpPrinter;
-    BOOL            mbDelPrinter;
-    SvULongs        maTextWidth;
-    SvXub_StrLens   maScriptChg;
-    SvUShorts       maScriptType;
-    SvxFont         maFont;
-    SvxFont         maCJKFont;
-    SvxFont         maCTLFont;
-    Size            maTextSize;
-    Reference< I18N::XBreakIterator >   xBreak;
+    Printer*		mpPrinter;
+    BOOL			mbDelPrinter;
+    SvULongs		maTextWidth;
+    SvXub_StrLens	maScriptChg;
+    SvUShorts		maScriptType;
+    SvxFont			maFont;
+    SvxFont			maCJKFont;
+    SvxFont			maCTLFont;
+    Size			maTextSize;
+    Reference< I18N::XBreakIterator >	xBreak;
 
-    virtual void    Paint(const Rectangle &rRect);
-    void            CheckScript( void );
-    Size            CalcTextSize( void );
-    inline void     InitPrinter( void );
-    void            _InitPrinter( void );
-    void            GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, USHORT _nWhich );
+    virtual void	Paint(const Rectangle &rRect);
+    void			CheckScript( void );
+    Size			CalcTextSize( void );
+    inline void		InitPrinter( void );
+    void			_InitPrinter( void );
+    void			GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, USHORT _nWhich );
 public:
 
      SwDropCapsPict(Window *pParent, const ResId &rResId) :
             Control(pParent, rResId), mpPrinter( NULL ), mbDelPrinter( FALSE ) {}
     ~SwDropCapsPict();
 
-    void UpdatePaintSettings( void );       // also invalidates control!
+    void UpdatePaintSettings( void );		// also invalidates control!
 
     inline void SetText( const String& rT );
     inline void SetLines( BYTE nL );
@@ -327,7 +327,7 @@ void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
     SetFillColor( maBackColor );
     if(((SwDropCapsPage*)GetParent())->aDropCapsBox.IsChecked())
     {
-        Size    aTextSize( maTextSize );
+        Size	aTextSize( maTextSize );
         aTextSize.Width() += nDistW;
         DrawRect( Rectangle( Point( BORDER, nY0 ), aTextSize ) );
 
@@ -343,12 +343,12 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
     Point aPt(rPt);
     InitPrinter();
 
-    Font        aOldFont = mpPrinter->GetFont();
-    USHORT      nScript;
-    USHORT      nIdx = 0;
-    xub_StrLen  nStart = 0;
-    xub_StrLen  nEnd;
-    USHORT      nCnt = maScriptChg.Count();
+    Font		aOldFont = mpPrinter->GetFont();
+    USHORT		nScript;
+    USHORT		nIdx = 0;
+    xub_StrLen	nStart = 0;
+    xub_StrLen	nEnd;
+    USHORT		nCnt = maScriptChg.Count();
 
     if( nCnt )
     {
@@ -362,7 +362,7 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
     }
     do
     {
-        SvxFont&    rFnt = (nScript==I18N_SCRIPTTYPE::ASIAN) ? maCJKFont : ((nScript==I18N_SCRIPTTYPE::COMPLEX) ? maCTLFont : maFont);
+        SvxFont&	rFnt = (nScript==I18N_SCRIPTTYPE::ASIAN) ? maCJKFont : ((nScript==I18N_SCRIPTTYPE::COMPLEX) ? maCTLFont : maFont);
         mpPrinter->SetFont( rFnt );
 
         rFnt.DrawPrev( this, mpPrinter, aPt, maText, nStart, nEnd - nStart );
@@ -433,11 +433,11 @@ Size SwDropCapsPict::CalcTextSize( void )
 {
     InitPrinter();
 
-    USHORT      nScript;
-    USHORT      nIdx = 0;
-    xub_StrLen  nStart = 0;
-    xub_StrLen  nEnd;
-    USHORT      nCnt = maScriptChg.Count();
+    USHORT		nScript;
+    USHORT		nIdx = 0;
+    xub_StrLen	nStart = 0;
+    xub_StrLen	nEnd;
+    USHORT		nCnt = maScriptChg.Count();
     if( nCnt )
     {
         nEnd = maScriptChg[ nIdx ];
@@ -448,18 +448,18 @@ Size SwDropCapsPict::CalcTextSize( void )
         nEnd = maText.Len();
         nScript = I18N_SCRIPTTYPE::LATIN;
     }
-    long        nTxtWidth = 0;
-    long        nCJKHeight = 0;
-    long        nCTLHeight = 0;
-    long        nHeight = 0;
-    long        nAscent = 0;
-    long        nCJKAscent = 0;
-    long        nCTLAscent = 0;
+    long		nTxtWidth = 0;
+    long		nCJKHeight = 0;
+    long		nCTLHeight = 0;
+    long		nHeight = 0;
+    long		nAscent = 0;
+    long		nCJKAscent = 0;
+    long		nCTLAscent = 0;
     do
     {
-        SvxFont&    rFnt = ( nScript == I18N_SCRIPTTYPE::ASIAN )? maCJKFont :
+        SvxFont&	rFnt = ( nScript == I18N_SCRIPTTYPE::ASIAN )? maCJKFont :
                                 ( ( nScript == I18N_SCRIPTTYPE::COMPLEX )? maCTLFont : maFont );
-        ULONG       nWidth = rFnt.GetTxtSize( mpPrinter, maText, nStart, nEnd-nStart ).Width();
+        ULONG		nWidth = rFnt.GetTxtSize( mpPrinter, maText, nStart, nEnd-nStart ).Width();
 
         if( nIdx < maTextWidth.Count() )
             maTextWidth[ nIdx++ ] = nWidth;
@@ -505,7 +505,7 @@ Size SwDropCapsPict::CalcTextSize( void )
 
 void SwDropCapsPict::_InitPrinter()
 {
-    SfxViewShell*   pSh = SfxViewShell::Current();
+    SfxViewShell*	pSh = SfxViewShell::Current();
 
     if ( pSh )
         mpPrinter = pSh->GetPrinter();
@@ -536,7 +536,7 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, SW_RES(TP_DROPCAPS), rSet),
 
     aDropCapsBox  (this, SW_RES(CB_SWITCH   )),
-    aWholeWordCB  (this, SW_RES(CB_WORD     )),
+    aWholeWordCB  (this, SW_RES(CB_WORD		)),
     aSwitchText   (this, SW_RES(FT_DROPCAPS )),
     aDropCapsField(this, SW_RES(FLD_DROPCAPS)),
     aLinesText    (this, SW_RES(TXT_LINES   )),
@@ -661,7 +661,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
     }
 
     // Preview
-    pPict->SetValues(   aTextEdit.GetText(),
+    pPict->SetValues(	aTextEdit.GetText(),
                         BYTE( aLinesField.GetValue() ),
                         USHORT( aDistanceField.Denormalize( aDistanceField.GetValue( FUNIT_TWIP ) ) ) );
 
@@ -688,8 +688,8 @@ IMPL_LINK( SwDropCapsPage, ClickHdl, Button *, EMPTYARG )
     aDistanceField.Enable( bChecked );
     aTemplateText .Enable( bChecked );
     aTemplateBox  .Enable( bChecked );
-    aTextEdit     .Enable( bChecked && !bFormat );
-    aTextText     .Enable( bChecked && !bFormat );
+    aTextEdit	  .Enable( bChecked && !bFormat );
+    aTextText	  .Enable( bChecked && !bFormat );
 
     if ( bChecked )
     {
@@ -759,7 +759,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
         if (bSetText)
             aTextEdit.SetText(sPreview);
     }
-    else if (pEdit == &aTextEdit)   // Ggf. Anzahl setzen
+    else if (pEdit == &aTextEdit)	// Ggf. Anzahl setzen
     {
         USHORT nTmp = aTextEdit.GetText().Len();
         aDropCapsField.SetValue(Max((USHORT)1, nTmp));

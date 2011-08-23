@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                 const SwLayoutFrm *pRow = pFrm->GetUpper();
                 // Looking for the "most upper" row frame,
                 // skipping sub tables and/or table in table
-                while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() ||
+                while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() || 
                     pRow->GetUpper()->GetUpper()->IsInTab() )
                     pRow = pRow->GetUpper();
                 const SwTabFrm *pTab = pRow->FindTabFrm();
@@ -140,7 +140,7 @@ bool SwTableLine::hasSoftPageBreak() const
             // The row which could get a soft page break must be either the first
             // row of a master table frame or the first "non-headline-row" of a
             // follow table frame...
-            const SwFrm* pRow = pTab->IsFollow() ?
+            const SwFrm* pRow = pTab->IsFollow() ? 
                 pTab->GetFirstNonHeadlineRow() : pTab->Lower();
             if( pRow == pLast )
             {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -833,7 +833,7 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen )
             {
                 nSwNumLevel = *pData - 1;
                 if (!bNoAttrImport)
-                    //((SwTxtFmtColl*)pAktColl)->SetOutlineLevel( nSwNumLevel );    //#outline level,zhaojianwei
+                    //((SwTxtFmtColl*)pAktColl)->SetOutlineLevel( nSwNumLevel );	//#outline level,zhaojianwei
                     ((SwTxtFmtColl*)pAktColl)->AssignToListLevelOfOutlineStyle( nSwNumLevel ); //<-end,zhaojianwei
                     // Bei WW-NoNumbering koennte auch NO_NUMBERING gesetzt
                     // werden. ( Bei normaler Nummerierung muss NO_NUM gesetzt
@@ -860,7 +860,7 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen )
 void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) // Sprm 12
 {
     {
-        SwWW8StyInf * pStyInf = GetStyle(nAktColl);
+        SwWW8StyInf * pStyInf = GetStyle(nAktColl);    
         if( !pAktColl || nLen <= 0                  // nur bei Styledef
             || (pStyInf && !pStyInf->bColl)              // CharFmt -> ignorieren
             || ( nIniFlags & WW8FL_NO_OUTLINE ) ){
@@ -2399,7 +2399,7 @@ void WW8TabDesc::CalcDefaults()
         }
     } */
 
-    if ((nMinLeft && !bIsBiDi && text::HoriOrientation::LEFT == eOri) ||
+    if ((nMinLeft && !bIsBiDi && text::HoriOrientation::LEFT == eOri) || 
         (nMinLeft != -108 && bIsBiDi && text::HoriOrientation::RIGHT == eOri)) // Word sets the first nCenter value to -108 when no indent is used
         eOri = text::HoriOrientation::LEFT_AND_WIDTH; //  absolutely positioned
 
@@ -2572,7 +2572,7 @@ void WW8TabDesc::CreateSwTable()
                 nLeft = GetMinLeft();
             else
             {
-                if (nPreferredWidth)
+                if (nPreferredWidth)                   
                 {
                     nLeft = pIo->maSectionManager.GetTextAreaWidth();
                     nLeft = nLeft - nPreferredWidth  - nOrgDxaLeft;
@@ -3602,25 +3602,25 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 
 bool lcl_PamContainsFly(SwPaM & rPam)
 {
-    bool bResult = false;
+    bool bResult = false;    
     SwNodeRange aRg( rPam.Start()->nNode, rPam.End()->nNode );
     SwDoc * pDoc = rPam.GetDoc();
-
-    sal_uInt16 n = 0;
+    
+    sal_uInt16 n = 0;     
     SwSpzFrmFmts * pSpzFmts = pDoc->GetSpzFrmFmts();
-    sal_uInt16 nCount = pSpzFmts->Count();
+    sal_uInt16 nCount = pSpzFmts->Count(); 
     while (!bResult && n < nCount)
     {
         SwFrmFmt* pFly = (*pSpzFmts)[n];
         const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
-
+        
         switch (pAnchor->GetAnchorId())
         {
             case FLY_AT_PARA:
             case FLY_AT_CHAR:
             {
                 const SwPosition* pAPos = pAnchor->GetCntntAnchor();
-
+                
                 if (pAPos != NULL &&
                     aRg.aStart <= pAPos->nNode &&
                     pAPos->nNode <= aRg.aEnd)
@@ -3632,10 +3632,10 @@ bool lcl_PamContainsFly(SwPaM & rPam)
             default:
                 break;
         }
-
+        
         ++n;
     }
-
+    
     return bResult;
 }
 
@@ -3920,28 +3920,17 @@ WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
 
 void WW8RStyle::Set1StyleDefaults()
 {
+    // see #i25247#, #i25561#, #i48064#, #i92341# for default font
     if (!bCJKFontChanged)   // Style no CJK Font? set the default
-        pIo->SetNewFontAttr(ftcStandardChpCJKStsh, true, RES_CHRATR_CJK_FONT);
-
-    // see i25247
-    const WW8_FFN* pF = pIo->pFonts->GetFont(3);
-    if (pF)
-    {
-        rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(pF->chs);
-        if ((ftcStandardChpCTLStsh == 0) && (eEnc == RTL_TEXTENCODING_MS_1255))
-            ftcStandardChpCTLStsh = 3;
-    }
-
-    if (ftcStandardChpCJKStsh == 0)
-        ftcStandardChpCJKStsh = 2;
+        pIo->SetNewFontAttr(ftcFE, true, RES_CHRATR_CJK_FONT);
 
     if (!bCTLFontChanged)   // Style no CTL Font? set the default
-        pIo->SetNewFontAttr(ftcStandardChpCTLStsh, true, RES_CHRATR_CTL_FONT);
+        pIo->SetNewFontAttr(ftcBi, true, RES_CHRATR_CTL_FONT);
 
     //#88976# western 2nd to make western charset conversion the default
     if (!bFontChanged)      // Style has no Font? set the default,
     {
-        pIo->SetNewFontAttr(ftcStandardChpStsh, true, RES_CHRATR_FONT);
+        pIo->SetNewFontAttr(ftcAsci, true, RES_CHRATR_FONT);
         /* removed by a patch from cmc for #i52786#
         if (pIo->bVer67)
             SetStyleCharSet(pIo->pCollA[pIo->nAktColl]);

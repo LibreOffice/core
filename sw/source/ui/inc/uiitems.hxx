@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,11 +58,11 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     SwPageFtnInfo& GetPageFtnInfo()             { return aFtnInfo; }
     const SwPageFtnInfo& GetPageFtnInfo() const { return aFtnInfo; }
-    void SetPageFtnInfo(SwPageFtnInfo& rInf)    { aFtnInfo = rInf; }
+    void SetPageFtnInfo(SwPageFtnInfo& rInf) 	{ aFtnInfo = rInf; }
 };
 
 class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
@@ -76,8 +76,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    void    SetValue(void * pPtr)   { pMisc= pPtr; }
-    void*   GetValue() const        { return pMisc; }
+    void	SetValue(void * pPtr) 	{ pMisc= pPtr; }
+    void*	GetValue() const 		{ return pMisc; }
 };
 
 class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
@@ -92,11 +92,11 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    const SwNumRule* GetNumRule() const         { return pRule; }
-          SwNumRule* GetNumRule()               { return pRule; }
+    const SwNumRule* GetNumRule() const 		{ return pRule; }
+          SwNumRule* GetNumRule() 				{ return pRule; }
 };
 
 class SwBackgroundDestinationItem : public SfxUInt16Item

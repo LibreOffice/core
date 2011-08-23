@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,20 +36,20 @@
 
 enum SwFtnEndPosEnum
 {
-    FTNEND_ATPGORDOCEND,                // at page or document end
-    FTNEND_ATTXTEND,                    // at end of the current text end
-    FTNEND_ATTXTEND_OWNNUMSEQ,          // -""- and with own number sequence
-    FTNEND_ATTXTEND_OWNNUMANDFMT,       // -""- and with onw numberformat
+    FTNEND_ATPGORDOCEND,				// at page or document end
+    FTNEND_ATTXTEND,					// at end of the current text end
+    FTNEND_ATTXTEND_OWNNUMSEQ,			// -""- and with own number sequence
+    FTNEND_ATTXTEND_OWNNUMANDFMT,		// -""- and with onw numberformat
     FTNEND_ATTXTEND_END
 };
 
 
 class SW_DLLPUBLIC SwFmtFtnEndAtTxtEnd : public SfxEnumItem
 {
-    String      sPrefix;
-    String      sSuffix;
+    String 		sPrefix;
+    String 		sSuffix;
     SvxNumberType aFmt;
-    USHORT      nOffset;
+    USHORT 	  	nOffset;
 
 protected:
     SwFmtFtnEndAtTxtEnd( USHORT nWhichL, SwFtnEndPosEnum ePos )
@@ -62,20 +62,20 @@ protected:
     {}
 
 public:
-    virtual USHORT          GetValueCount() const;
+    virtual USHORT 			GetValueCount() const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual int				operator==( const SfxPoolItem& ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
 // will be used at time??
-//  void                    FillVariable( SbxVariable &rVar,
-//                                        SfxMapUnit eCoreMetric,
-//                                        SfxMapUnit eUserMetric ) const;
-//  virtual SfxArgumentError SetVariable( const SbxVariable &rVal,
-//                                        SfxMapUnit eCoreMetric,
-//                                        SfxMapUnit eUserMetric );
+//	void					FillVariable( SbxVariable &rVar,
+//										  SfxMapUnit eCoreMetric,
+//										  SfxMapUnit eUserMetric ) const;
+//	virtual SfxArgumentError SetVariable( const SbxVariable &rVal,
+//										  SfxMapUnit eCoreMetric,
+//										  SfxMapUnit eUserMetric );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -86,19 +86,19 @@ public:
 
     SwFmtFtnEndAtTxtEnd & operator=( const SwFmtFtnEndAtTxtEnd & rAttr );
 
-    sal_Int16 GetNumType() const        { return aFmt.GetNumberingType(); }
-    void SetNumType( sal_Int16 eType )  { aFmt.SetNumberingType(eType); }
+    sal_Int16 GetNumType() const 		{ return aFmt.GetNumberingType(); }
+    void SetNumType( sal_Int16 eType )	{ aFmt.SetNumberingType(eType); }
 
-    const SvxNumberType& GetSwNumType() const   { return aFmt; }
+    const SvxNumberType& GetSwNumType() const 	{ return aFmt; }
 
-    USHORT GetOffset() const                { return nOffset; }
-    void SetOffset( USHORT nOff )           { nOffset = nOff; }
+    USHORT GetOffset() const 				{ return nOffset; }
+    void SetOffset( USHORT nOff ) 			{ nOffset = nOff; }
 
-    const String& GetPrefix() const         { return sPrefix; }
-    void SetPrefix(const String& rSet)      { sPrefix = rSet; }
+    const String& GetPrefix() const 		{ return sPrefix; }
+    void SetPrefix(const String& rSet)		{ sPrefix = rSet; }
 
-    const String& GetSuffix() const         { return sSuffix; }
-    void SetSuffix(const String& rSet)      { sSuffix = rSet; }
+    const String& GetSuffix() const 		{ return sSuffix; }
+    void SetSuffix(const String& rSet)		{ sSuffix = rSet; }
 };
 
 class SW_DLLPUBLIC SwFmtFtnAtTxtEnd : public SwFmtFtnEndAtTxtEnd

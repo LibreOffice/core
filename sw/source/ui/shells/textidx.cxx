@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include "cmdid.h"
 #include "view.hxx"
 #include "wrtsh.hxx"
-#include "swundo.hxx"                   // fuer Undo-Ids
+#include "swundo.hxx"               	// fuer Undo-Ids
 #include "textsh.hxx"
 #include "idxmrk.hxx"
 #include "cnttab.hxx"
@@ -94,7 +94,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             SwTOXMgr aMgr(GetShellPtr());
             USHORT nRet = RET_OK;
             if(aMgr.GetTOXMarkCount() > 1)
-            {   // Mehrere Marken, welche solls denn sein ?
+            {	// Mehrere Marken, welche solls denn sein ?
                 //
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -104,7 +104,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                 nRet = pMultDlg->Execute();
                 delete pMultDlg;
             }
-            if( nRet == RET_OK)
+            if(	nRet == RET_OK)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -129,7 +129,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                             SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
                             RES_LR_SPACE, RES_LR_SPACE,
                             FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE,
-                            0   );
+                            0	);
             SwWrtShell& rSh = GetShell();
             SwRect aRect;
             rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
@@ -248,7 +248,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         else
             rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, 0 != pAuthMark));
 
-        if( bInReadonly || !pField ||
+        if(	bInReadonly || !pField ||
             pField->GetTyp()->Which() != RES_AUTHORITY)
             rSet.DisableItem(FN_EDIT_AUTH_ENTRY_DLG);
         rSet.DisableItem(FN_REMOVE_CUR_TOX);

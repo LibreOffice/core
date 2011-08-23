@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <comphelper/processfactory.hxx>
 #include <fldmgr.hxx>
 #include <dbmgr.hxx>
-#include <wrtsh.hxx>        // Actives Fenster
+#include <wrtsh.hxx>		// Actives Fenster
 #include <view.hxx>
 #include <swmodule.hxx>
 

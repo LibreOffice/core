@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -212,7 +212,7 @@ BOOL SwCursor::GotoNextFtnAnchor()
                 {
                     pTxtFtn = rFtnArr[ nPos ];
                     if( !CmpLE( *pTxtFtn, nNdPos, nCntPos ) )
-                        break;      // gefunden
+                        break;		// gefunden
                     pTxtFtn = 0;
                 }
             }
@@ -226,9 +226,9 @@ BOOL SwCursor::GotoNextFtnAnchor()
                     if( CmpLE( *pTxtFtn, nNdPos, nCntPos ) )
                     {
                         pTxtFtn = rFtnArr[ ++nPos ];
-                        break;      // gefunden
+                        break;		// gefunden
                     }
-//                  pTxtFtn = 0;
+//					pTxtFtn = 0;
                 }
             }
         }
@@ -284,7 +284,7 @@ BOOL SwCursor::GotoPrevFtnAnchor()
             {
                 pTxtFtn = rFtnArr[ --nPos ];
                 if( CmpL( *pTxtFtn, nNdPos, nCntPos ))
-                    break;      // gefunden
+                    break;		// gefunden
                 pTxtFtn = 0;
             }
         }
@@ -328,7 +328,7 @@ BOOL SwCrsrShell::GotoFlyAnchor()
         pFrm = pFrm->GetUpper();
     } while( pFrm && !pFrm->IsFlyFrm() );
 
-    if( !pFrm )     // ist kein FlyFrame
+    if( !pFrm )		// ist kein FlyFrame
         return FALSE;
 
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,

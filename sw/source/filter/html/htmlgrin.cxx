@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,    text::HoriOrientation::LEFT       },
     { OOO_STRING_SVTOOLS_HTML_AL_right,   text::HoriOrientation::RIGHT      },
-    { 0,                0               }
+    { 0,				0				}
 };
 
 
@@ -102,7 +102,7 @@ HTMLOptionEnum __FAR_DATA aHTMLImgVAlignTable[] =
     { OOO_STRING_SVTOOLS_HTML_VA_bottom,      text::VertOrientation::TOP            },
     { OOO_STRING_SVTOOLS_HTML_VA_baseline,    text::VertOrientation::TOP            },
     { OOO_STRING_SVTOOLS_HTML_VA_absbottom,   text::VertOrientation::LINE_BOTTOM    },
-    { 0,                    0                   }
+    { 0,					0					}
 };
 
 SV_IMPL_PTRARR( ImageMaps, ImageMapPtr )
@@ -159,7 +159,7 @@ void SwHTMLParser::ConnectImageMaps()
                     // Grafik muss nicht skaliert werden
                     pGrfNd->ScaleImageMap();
                 }
-                nMissingImgMaps--;  // eine Map weniger suchen
+                nMissingImgMaps--;	// eine Map weniger suchen
             }
         }
         nIdx = rNds[nIdx]->EndOfSectionIndex() + 1;
@@ -517,7 +517,7 @@ IMAGE_SETEVENT:
             USHORT nPoolId =  static_cast< USHORT >(pDoc->IsVisitedURL( rURL )
                                     ? RES_POOLCHR_INET_VISIT
                                     : RES_POOLCHR_INET_NORMAL);
-            const SwCharFmt *pCharFmt = pCSS1Parser->GetCharFmtFromPool( nPoolId );
+            const SwCharFmt *pCharFmt =	pCSS1Parser->GetCharFmtFromPool( nPoolId );
             aHBorderLine.SetColor( pCharFmt->GetColor().GetValue() );
             aVBorderLine.SetColor( aHBorderLine.GetColor() );
         }
@@ -560,7 +560,7 @@ IMAGE_SETEVENT:
     {
         case SVX_CSS1_LTYPE_TWIP:
             aTwipSz.Width() = aPropInfo.nWidth;
-            nWidth = 1; // != 0
+            nWidth = 1;	// != 0
             bPrcWidth = FALSE;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
@@ -575,7 +575,7 @@ IMAGE_SETEVENT:
     {
         case SVX_CSS1_LTYPE_TWIP:
             aTwipSz.Height() = aPropInfo.nHeight;
-            nHeight = 1;    // != 0
+            nHeight = 1;	// != 0
             bPrcHeight = FALSE;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
@@ -588,8 +588,8 @@ IMAGE_SETEVENT:
     }
 
     Size aGrfSz( 0, 0 );
-    BOOL bSetTwipSize = TRUE;       // Twip-Size am Node setzen?
-    BOOL bChangeFrmSize = FALSE;    // Frame-Format nachtraeglich anpassen?
+    BOOL bSetTwipSize = TRUE;		// Twip-Size am Node setzen?
+    BOOL bChangeFrmSize = FALSE;	// Frame-Format nachtraeglich anpassen?
     BOOL bRequestGrfNow = FALSE;
     BOOL bSetScaleImageMap = FALSE;
     BYTE nPrcWidth = 0, nPrcHeight = 0;
@@ -679,7 +679,7 @@ IMAGE_SETEVENT:
             ImageMap aEmptyImgMap( aName );
             SwFmtURL aURL; aURL.SetMap( &aEmptyImgMap );//wird kopieiert
             aFrmSet.Put( aURL );
-            nMissingImgMaps++;          // es fehlen noch Image-Maps
+            nMissingImgMaps++;			// es fehlen noch Image-Maps
 
             // die Grafik muss beim SetTwipSize skaliert werden, wenn
             // wir keine Groesse am Node gesetzt haben oder die Groesse
@@ -895,9 +895,9 @@ void SwHTMLParser::InsertBodyOptions()
                 break;
 
             case HTML_O_ONERROR:
-//              if( bAnyStarBasic )
-//                  InsertBasicDocEvent( SFX_EVENT_ACTIVATEDOC,
-//                                       pOption->GetString() );
+//				if( bAnyStarBasic )
+//					InsertBasicDocEvent( SFX_EVENT_ACTIVATEDOC,
+//										 pOption->GetString() );
                 break;
 
             case HTML_O_STYLE:

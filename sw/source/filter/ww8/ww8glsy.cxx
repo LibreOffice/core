@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -257,16 +257,16 @@ bool WW8GlossaryFib::IsGlossaryFib()
 }
 
 UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
-                                             SvStream & /* rStrm */,
+                                             SvStream & /* rStrm */, 
                                              const WW8Fib &rFib)
 {
     UINT32 nGlossaryFibOffset = 0;
-    if ( rFib.fDot ) // its a template
+    if ( rFib.fDot ) // its a template 
     {
         if ( rFib.pnNext  )
             nGlossaryFibOffset = ( rFib.pnNext * 512 );
     }
-    return nGlossaryFibOffset;
+    return nGlossaryFibOffset; 
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

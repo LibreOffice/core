@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,15 +45,15 @@ public:
     ConstArc(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
                                        // Mouse- & Key-Events
-    virtual BOOL    MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL    MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL 	MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL 	MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void    Activate(const USHORT nSlotId); // Funktion aktivieren
-    virtual void    Deactivate();
+    virtual void 	Activate(const USHORT nSlotId);	// Funktion aktivieren
+    virtual void	Deactivate();
 };
 
 
 
-#endif      // _CONARC_HXX
+#endif		// _CONARC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

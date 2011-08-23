@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ private:
     sal_uInt8 mnType; // :2 0x3
     sal_uInt8 mnResult; // :5 0x7c
     bool mbOwnHelp; // :1 0x80
-
+    
     // offset 5
     bool mbOwnStat; // :1 0x01
     bool mbProtected; // :1 0x02
@@ -49,13 +49,13 @@ private:
     sal_uInt8 mnTextType; // :3 0x38
     bool mbRecalc; // :1 0x4
     bool mbListBox; // :1 0x80
-
+    
     // offset 6
     sal_uInt16 mnMaxLen; // :15 0x7fff maximum length of text field, 0 <=> no limit
-
+    
     // offset 8
     sal_uInt16 mnCheckboxHeight;
-
+    
     // offset 10 and beyond
     ::rtl::OUString msName;
     ::rtl::OUString msDefault; // only for type == 0
@@ -65,16 +65,16 @@ private:
     ::rtl::OUString msStatus;
     ::rtl::OUString msMacroEnter;
     ::rtl::OUString msMacroExit;
-
+    
     ::std::vector< ::rtl::OUString > msListEntries;
-
+    
 protected:
     void WriteOUString(SvStream * pStream, const ::rtl::OUString & rStr, bool bAddZero);
-
+    
 public:
     WW8FFData();
     ~WW8FFData();
-
+    
     void setType(sal_uInt8 nType) { mnType = nType; }
     sal_uInt8 getType() const { return mnType; }
     void setResult(sal_uInt8 nResult) { mnResult = nResult; }
@@ -109,9 +109,9 @@ public:
     const ::rtl::OUString & getMacroEnter() const { return msMacroEnter; }
     void setMacroExit(const ::rtl::OUString & rMacroExit) { msMacroExit = rMacroExit; }
     const ::rtl::OUString & getMacroExit() const { return msMacroExit; }
-
+    
     void addListboxEntry(const ::rtl::OUString & rEntry);
-
+    
     void Write(SvStream * pDataStrm);
 };
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 
 /************************************************************************
- *                         SwDocStat::SwDocStat()
+ *						   SwDocStat::SwDocStat()
  ************************************************************************/
 
 SwDocStat::SwDocStat() :
@@ -51,19 +51,19 @@ SwDocStat::SwDocStat() :
 {}
 
 /************************************************************************
- *                         void SwDocStat::Reset()
+ *						   void SwDocStat::Reset()
  ************************************************************************/
 
 void SwDocStat::Reset()
 {
-    nTbl    = 0;
-    nGrf    = 0;
-    nOLE    = 0;
+    nTbl 	= 0;
+    nGrf 	= 0;
+    nOLE 	= 0;
     nPage   = 1;
     nPara   = 1;
     nAllPara= 1;
-    nWord   = 0;
-    nChar   = 0;
+    nWord 	= 0;
+    nChar	= 0;
     nCharExcludingSpaces = 0;
     bModified = TRUE;
 }

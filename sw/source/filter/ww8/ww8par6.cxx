@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -2730,15 +2730,15 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
             pAktColl->SetFmtAttr(rAttr);
         }
         else if (pAktItemSet)
-        {
+        {        
             pAktItemSet->Put(rAttr);
         }
         else if (rAttr.Which() == RES_FLTR_REDLINE)
-        {
+        {        
             mpRedlineStack->open(*pPaM->GetPoint(), rAttr);
         }
         else
-        {
+        {        
             pCtrlStck->NewAttr(*pPaM->GetPoint(), rAttr);
             // --> OD 2010-05-06 #i103711#
             if ( bFirstLineOfStSet )
@@ -3569,7 +3569,7 @@ bool SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
 USHORT SwWW8ImplReader::CorrectResIdForCharset(CharSet nCharSet, USHORT nWhich)
 {
     USHORT nResult = 0;
-
+    
     switch (nCharSet) {
         case RTL_TEXTENCODING_MS_932:
             nResult = RES_CHRATR_CJK_FONT;
@@ -3579,7 +3579,7 @@ USHORT SwWW8ImplReader::CorrectResIdForCharset(CharSet nCharSet, USHORT nWhich)
             nResult = nWhich;
             break;
     }
-
+    
     return nResult;
 }
 
@@ -3608,7 +3608,7 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
                 {
                     eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
                 }
-
+                    
                 maFontSrcCJKCharSets.push(eSrcCharSet);
             }
             else
@@ -3621,7 +3621,7 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
                 {
                     eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
                 }
-
+                    
                 maFontSrcCharSets.push(eSrcCharSet);
             }
         }
@@ -3631,7 +3631,7 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
     CharSet eDstCharSet = eSrcCharSet;
 
     SvxFontItem aFont( eFamily, aName, aEmptyStr, ePitch, eDstCharSet, nWhich);
-
+    
     nWhich = CorrectResIdForCharset(eSrcCharSet, nWhich);
 
     if( bSetEnums )
@@ -3690,18 +3690,18 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
     {                       // (siehe sprmCSymbol) gesetzte Font !
         switch( nId )
         {
-    //      case 0x4a51:    //font to bias towards all else being equal ?
             case 113:
-            case 0x4a5E:
+            case 0x4A51:    //"Other" font, override with BiDi if it exists
+            case 0x4A5E:    //BiDi Font
                 nId = RES_CHRATR_CTL_FONT;
                 break;
             case 93:
             case 111:
-            case 0x4a4f:
+            case 0x4A4f:
                 nId = RES_CHRATR_FONT;
                 break;
             case 112:
-            case 0x4a50:
+            case 0x4A50:
                 nId = RES_CHRATR_CJK_FONT;
                 break;
             default:
@@ -3713,7 +3713,7 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
             pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
             if (nId == RES_CHRATR_CJK_FONT)
                 ResetCJKCharSetVars();
-            else
+            else            
                 ResetCharSetVars();
         }
         else
@@ -4047,7 +4047,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         case 0x845E:
             aLR.SetTxtLeft( nPara );
             if (pAktColl)
-            {
+            {        
                 pCollA[nAktColl].bListReleventIndentSet = true;
             }
             // --> OD 2010-05-11 #i105414#
@@ -4084,7 +4084,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
 
             aLR.SetTxtFirstLineOfst(nPara);
             if (pAktColl)
-            {
+            {        
                 pCollA[nAktColl].bListReleventIndentSet = true;
             }
             // --> OD 2010-05-06 #i103711#
@@ -5916,8 +5916,8 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x085B, 0},                                 //"sprmCFDiacColor"
         {0x085C, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFBoldBi"
         {0x085D, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFItalicBi"
-        {0x4A5E, &SwWW8ImplReader::Read_FontCode},
-        {0x485F, &SwWW8ImplReader::Read_Language},   // "sprmCLidBi"
+        {0x4A5E, &SwWW8ImplReader::Read_FontCode},   //"sprmCFtcBi"
+        {0x485F, &SwWW8ImplReader::Read_Language},   //"sprmCLidBi"
       //0x4A60, ? ? ?,                               //"sprmCIcoBi",
         {0x4A61, &SwWW8ImplReader::Read_FontSize},   //"sprmCHpsBi"
         {0xCA62, 0},                                 //"sprmCDispFldRMark"

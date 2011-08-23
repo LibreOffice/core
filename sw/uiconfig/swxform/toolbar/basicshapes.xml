@@ -18,12 +18,12 @@
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.pentagon" toolbar:helpid="helpid:11002" />
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.hexagon" toolbar:helpid="helpid:11002" />
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.octagon" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cross" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ring" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.block-arc" toolbar:helpid="helpid:11002" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cross" toolbar:helpid="helpid:11002" /> 
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ring" toolbar:helpid="helpid:11002" /> 
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.block-arc" toolbar:helpid="helpid:11002" /> 
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.can" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cube" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.paper" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.frame" toolbar:helpid="helpid:11002" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.can" toolbar:helpid="helpid:11002" /> 
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cube" toolbar:helpid="helpid:11002" /> 
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.paper" toolbar:helpid="helpid:11002" /> 
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.frame" toolbar:helpid="helpid:11002" /> 
 </toolbar:toolbar>

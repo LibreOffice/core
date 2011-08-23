@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,16 +110,16 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
             for( n = 0; n < rOutlNds.Count(); ++n )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
-                    break;      // gefunden
-                //else if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )  //#outline level,zhaojianwei
+                    break;		// gefunden
+                //else if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )	//#outline level,zhaojianwei
                 else if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )   //<-end,zhaojianwei
-                    pCapStt = rOutlNds[ n ];    // Start eines neuen Kapitels
+                    pCapStt = rOutlNds[ n ];	// Start eines neuen Kapitels
             // dann suche jetzt noch das Ende vom Bereich
             for( ; n < rOutlNds.Count(); ++n )
                 //if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
                 if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
                 {
-                    nCapEnd = rOutlNds[ n ]->GetIndex();    // Ende des gefundenen Kapitels
+                    nCapEnd = rOutlNds[ n ]->GetIndex();	// Ende des gefundenen Kapitels
                     break;
                 }
         }
@@ -134,7 +134,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
             ++nPos;
         }
 
-        if( nPos == Count() )       // nichts gefunden
+        if( nPos == Count() )		// nichts gefunden
             return;
 
         if( !rOutlNds.Count() )
@@ -227,14 +227,14 @@ void SwFtnIdxs::UpdateAllFtn()
     if( FTNNUM_CHAPTER == rFtnInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-        USHORT nNo = 1,         // Nummer fuer die Fussnoten
-               nFtnIdx = 0;     // Index in das FtnIdx-Array
+        USHORT nNo = 1,			// Nummer fuer die Fussnoten
+               nFtnIdx = 0;		// Index in das FtnIdx-Array
         for( USHORT n = 0; n < rOutlNds.Count(); ++n )
         {
             //if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
             if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {
-                ULONG nCapStt = rOutlNds[ n ]->GetIndex();  // Start eines neuen Kapitels
+                ULONG nCapStt = rOutlNds[ n ]->GetIndex();	// Start eines neuen Kapitels
                 for( ; nFtnIdx < Count(); ++nFtnIdx )
                 {
                     pTxtFtn = (*this)[ nFtnIdx ];
@@ -249,7 +249,7 @@ void SwFtnIdxs::UpdateAllFtn()
                                             &rFtn.GetNumStr() );
                 }
                 if( nFtnIdx >= Count() )
-                    break;          // ok alles geupdatet
+                    break;			// ok alles geupdatet
                 nNo = 1;
             }
         }
@@ -338,7 +338,7 @@ const SwSectionNode* SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr(
                 const SwTxtFtn& rTxtFtn )
 {
     USHORT nWh = static_cast<USHORT>( rTxtFtn.GetFtn().IsEndNote() ?
-                        RES_END_AT_TXTEND : RES_FTN_AT_TXTEND );
+                        RES_END_AT_TXTEND :	RES_FTN_AT_TXTEND );
     USHORT nVal;
     const SwSectionNode* pNd = rTxtFtn.GetTxtNode().FindSectionNode();
     while( pNd && FTNEND_ATTXTEND_OWNNUMSEQ != ( nVal =

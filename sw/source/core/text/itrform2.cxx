@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,35 +38,35 @@
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
 #include <editeng/charrotateitem.hxx>
-#include <layfrm.hxx>       // GetFrmRstHeight, etc
+#include <layfrm.hxx>		// GetFrmRstHeight, etc
 #include <viewsh.hxx>
-#include <viewopt.hxx>      // SwViewOptions
-#include <paratr.hxx>       // SwFmtDrop
+#include <viewopt.hxx>		// SwViewOptions
+#include <paratr.hxx>		// SwFmtDrop
 #include <txtcfg.hxx>
 #include <itrform2.hxx>
 #include <porrst.hxx>
-#include <portab.hxx>       // pLastTab->
-#include <porfly.hxx>       // CalcFlyWidth
-#include <portox.hxx>       // WhichTxtPortion
-#include <porref.hxx>       // WhichTxtPortion
-#include <porfld.hxx>       // SwNumberPortion fuer CalcAscent()
+#include <portab.hxx>		// pLastTab->
+#include <porfly.hxx>		// CalcFlyWidth
+#include <portox.hxx>		// WhichTxtPortion
+#include <porref.hxx>		// WhichTxtPortion
+#include <porfld.hxx>		// SwNumberPortion fuer CalcAscent()
 #include <porftn.hxx>       // SwFtnPortion
 #include <porhyph.hxx>
 #include <guess.hxx>
-#include <blink.hxx>        // pBlink
-#include <ftnfrm.hxx>       // WhichFirstPortion() -> mal Verlagern.
-#include <redlnitr.hxx>     // SwRedlineItr
+#include <blink.hxx>		// pBlink
+#include <ftnfrm.hxx>		// WhichFirstPortion() -> mal Verlagern.
+#include <redlnitr.hxx>		// SwRedlineItr
 #include <pagefrm.hxx>
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>
-#include <doc.hxx>          // SwDoc
-#include <pormulti.hxx>     // SwMultiPortion
+#include <doc.hxx>			// SwDoc
+#include <pormulti.hxx> 	// SwMultiPortion
 #define _SVSTDARR_LONGS
 #include <svl/svstdarr.hxx>
 #include <unotools/charclass.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
-#include <ndtxt.hxx>        // pSwpHints, Ausgabeoperator
+#include <ndtxt.hxx>		// pSwpHints, Ausgabeoperator
 #endif
 
 using namespace ::com::sun::star;
@@ -86,7 +86,7 @@ inline void ClearFly( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                  SwTxtFormatter::CtorInitTxtFormatter()
+ *					SwTxtFormatter::CtorInitTxtFormatter()
  *************************************************************************/
 
 void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *pNewInf )
@@ -115,7 +115,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::DTOR
+ *						SwTxtFormatter::DTOR
  *************************************************************************/
 
 SwTxtFormatter::~SwTxtFormatter()
@@ -130,7 +130,7 @@ SwTxtFormatter::~SwTxtFormatter()
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::Insert()
+ *						SwTxtFormatter::Insert()
  *************************************************************************/
 
 void SwTxtFormatter::Insert( SwLineLayout *pLay )
@@ -146,7 +146,7 @@ void SwTxtFormatter::Insert( SwLineLayout *pLay )
 }
 
 /*************************************************************************
- *                  SwTxtFormatter::GetFrmRstHeight()
+ *					SwTxtFormatter::GetFrmRstHeight()
  *************************************************************************/
 
 KSHORT SwTxtFormatter::GetFrmRstHeight() const
@@ -167,7 +167,7 @@ KSHORT SwTxtFormatter::GetFrmRstHeight() const
 }
 
 /*************************************************************************
- *                  SwTxtFormatter::UnderFlow()
+ *					SwTxtFormatter::UnderFlow()
  *************************************************************************/
 
 SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
@@ -324,7 +324,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::InsertPortion()
+ *						SwTxtFormatter::InsertPortion()
  *************************************************************************/
 
 void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
@@ -335,7 +335,7 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
     if( pPor == pCurr )
     {
         if ( pCurr->GetPortion() )
-        {
+        {        
             pPor = pCurr->GetPortion();
         }
 
@@ -375,7 +375,7 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::BuildPortion()
+ *						SwTxtFormatter::BuildPortion()
  *************************************************************************/
 
 void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
@@ -419,7 +419,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
     const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
     const USHORT nGridWidth = bHasGrid ?
-                                GETGRIDWIDTH(pGrid,pDoc) : 0;   //for textgrid refactor
+                                GETGRIDWIDTH(pGrid,pDoc) : 0;	//for textgrid refactor
 
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
@@ -617,7 +617,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )
             SetFlyInCntBase();
         // 5964: bUnderFlow muss zurueckgesetzt werden, sonst wird beim
-        //       naechsten Softhyphen wieder umgebrochen!
+        // 		 naechsten Softhyphen wieder umgebrochen!
         if ( !bFull )
         {
             rInf.ClrUnderFlow();
@@ -737,7 +737,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                 SwTxtFormatter::CalcAdjustLine()
+ *				   SwTxtFormatter::CalcAdjustLine()
  *************************************************************************/
 
 void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
@@ -756,7 +756,7 @@ void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::CalcAscent()
+ *						SwTxtFormatter::CalcAscent()
  *************************************************************************/
 
 void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
@@ -861,7 +861,7 @@ void SwMetaPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 
 /*************************************************************************
- *                      SwTxtFormatter::WhichTxtPor()
+ *						SwTxtFormatter::WhichTxtPor()
  *************************************************************************/
 
 SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
@@ -908,7 +908,7 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::NewTxtPortion()
+ *						SwTxtFormatter::NewTxtPortion()
  *************************************************************************/
 // Die Laenge wird ermittelt, folgende Portion-Grenzen sind definiert:
 // 1) Tabs
@@ -983,7 +983,7 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
 
 
 /*************************************************************************
- *                 SwTxtFormatter::WhichFirstPortion()
+ *				   SwTxtFormatter::WhichFirstPortion()
  *************************************************************************/
 
 SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
@@ -1140,7 +1140,7 @@ sal_Bool lcl_OldFieldRest( const SwLineLayout* pCurr )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::NewPortion()
+ *						SwTxtFormatter::NewPortion()
  *************************************************************************/
 
 /* NewPortion stellt rInf.nLen ein.
@@ -1148,11 +1148,11 @@ sal_Bool lcl_OldFieldRest( const SwLineLayout* pCurr )
  * attrwechsel.
  * Drei Faelle koennen eintreten:
  * 1) Die Zeile ist voll und der Umbruch wurde nicht emuliert
- *    -> return 0;
+ *	  -> return 0;
  * 2) Die Zeile ist voll und es wurde ein Umbruch emuliert
- *    -> Breite neu einstellen und return new FlyPortion
+ *	  -> Breite neu einstellen und return new FlyPortion
  * 3) Es muss eine neue Portion gebaut werden.
- *    -> CalcFlyWidth emuliert ggf. die Breite und return Portion
+ *	  -> CalcFlyWidth emuliert ggf. die Breite und return Portion
  */
 
 SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
@@ -1313,10 +1313,10 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
             case CH_BREAK:
                 pPor = new SwBreakPortion( *rInf.GetLast() ); break;
 
-            case CHAR_SOFTHYPHEN:                   // soft hyphen
+            case CHAR_SOFTHYPHEN:					// soft hyphen
                 pPor = new SwSoftHyphPortion; break;
 
-            case CHAR_HARDBLANK:                    // no-break space
+            case CHAR_HARDBLANK:					// no-break space
                 pPor = new SwBlankPortion( ' ' ); break;
 
             case CHAR_HARDHYPHEN:               // non-breaking hyphen
@@ -1336,7 +1336,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                                 break;
                             }
                             // No break
-            default        :
+            default 	   :
             {
                 SwTabPortion* pLastTabPortion = rInf.GetLastTab();
                 if ( pLastTabPortion && cChar == rInf.GetTabDecimal() )
@@ -1477,7 +1477,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::FormatLine()
+ *						SwTxtFormatter::FormatLine()
  *************************************************************************/
 
 xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
@@ -1837,7 +1837,7 @@ pCurr->GetAscent() )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::FeedInf()
+ *						SwTxtFormatter::FeedInf()
  *************************************************************************/
 
 void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
@@ -1882,7 +1882,7 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::FormatReset()
+ *						SwTxtFormatter::FormatReset()
  *************************************************************************/
 
 void SwTxtFormatter::FormatReset( SwTxtFormatInfo &rInf )
@@ -1900,7 +1900,7 @@ void SwTxtFormatter::FormatReset( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                SwTxtFormatter::CalcOnceMore()
+ *				  SwTxtFormatter::CalcOnceMore()
  *************************************************************************/
 
 sal_Bool SwTxtFormatter::CalcOnceMore()
@@ -1917,7 +1917,7 @@ sal_Bool SwTxtFormatter::CalcOnceMore()
 }
 
 /*************************************************************************
- *                SwTxtFormatter::CalcBottomLine()
+ *				  SwTxtFormatter::CalcBottomLine()
  *************************************************************************/
 
 SwTwips SwTxtFormatter::CalcBottomLine() const
@@ -1945,7 +1945,7 @@ SwTwips SwTxtFormatter::CalcBottomLine() const
 }
 
 /*************************************************************************
- *                SwTxtFormatter::_CalcFitToContent()
+ *				  SwTxtFormatter::_CalcFitToContent()
  *
  * FME/OD: This routine does a limited text formatting.
  *************************************************************************/

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,17 +70,17 @@ SwBezierShell::SwBezierShell(SwView &_rView):
     SetHelpId(SW_BEZIERSHELL);
 
     SwWrtShell *pSh = &GetShell();
-    SdrView*    pSdrView = pSh->GetDrawView();
+    SdrView*	pSdrView = pSh->GetDrawView();
     pSdrView->SetEliminatePolyPointLimitAngle(1500L);
 }
 
 void SwBezierShell::Execute(SfxRequest &rReq)
 {
     SwWrtShell *pSh = &GetShell();
-    SdrView*    pSdrView = pSh->GetDrawView();
+    SdrView*	pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    USHORT      nSlotId = rReq.GetSlot();
-    BOOL        bChanged = pSdrView->GetModel()->IsChanged();
+    USHORT		nSlotId = rReq.GetSlot();
+    BOOL		bChanged = pSdrView->GetModel()->IsChanged();
     pSdrView->GetModel()->SetChanged(FALSE);
     const SfxPoolItem* pItem;
     if(pArgs)

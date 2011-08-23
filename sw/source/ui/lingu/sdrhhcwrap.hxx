@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ class SdrHHCWrapper : public SdrOutliner
 {
     // modified version of SdrSpeller
 
-    SwView*             pView;
-    SdrTextObj*         pTextObj;
-    OutlinerView*       pOutlView;
-    SdrObjListIter*     pListIter;
+    SwView* 			pView;
+    SdrTextObj* 		pTextObj;
+    OutlinerView*		pOutlView;
+    SdrObjListIter* 	pListIter;
     sal_Int32           nOptions;
     sal_uInt16          nDocIndex;
     LanguageType        nSourceLang;
@@ -53,11 +53,11 @@ class SdrHHCWrapper : public SdrOutliner
     sal_Bool            bIsInteractive;
 
 public:
-    SdrHHCWrapper( SwView* pVw,
+    SdrHHCWrapper( SwView* pVw, 
                    LanguageType nSourceLanguage, LanguageType nTargetLanguage,
                    const Font* pTargetFnt,
                    sal_Int32 nConvOptions, sal_Bool bInteractive );
-
+    
     virtual ~SdrHHCWrapper();
 
     virtual sal_Bool ConvertNextDocument();

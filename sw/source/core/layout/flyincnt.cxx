@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include "hints.hxx"
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-#include "txtfrm.hxx"       //fuer IsLocked()
+#include "txtfrm.hxx"		//fuer IsLocked()
 #include "flyfrms.hxx"
 // OD 2004-01-19 #110582#
 #include <dflyobj.hxx>
@@ -47,10 +47,10 @@ void DeepCalc( const SwFrm *pFrm );
 
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::SwFlyInCntFrm(), ~SwFlyInCntFrm()
+|*	SwFlyInCntFrm::SwFlyInCntFrm(), ~SwFlyInCntFrm()
 |*
-|*  Ersterstellung      MA 01. Dec. 92
-|*  Letzte Aenderung    MA 09. Apr. 99
+|*	Ersterstellung		MA 01. Dec. 92
+|*	Letzte Aenderung	MA 09. Apr. 99
 |*
 |*************************************************************************/
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
@@ -82,10 +82,10 @@ TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
 // <--
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::SetRefPoint(),
+|*	SwFlyInCntFrm::SetRefPoint(),
 |*
-|*  Ersterstellung      MA 01. Dec. 92
-|*  Letzte Aenderung    MA 06. Aug. 95
+|*	Ersterstellung		MA 01. Dec. 92
+|*	Letzte Aenderung	MA 06. Aug. 95
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
@@ -118,10 +118,10 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::Modify()
+|*	SwFlyInCntFrm::Modify()
 |*
-|*  Ersterstellung      MA 16. Dec. 92
-|*  Letzte Aenderung    MA 02. Sep. 93
+|*	Ersterstellung		MA 16. Dec. 92
+|*	Letzte Aenderung	MA 02. Sep. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
@@ -165,21 +165,21 @@ void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 }
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::Format()
+|*	SwFlyInCntFrm::Format()
 |*
-|*  Beschreibung:       Hier wird der Inhalt initial mit Formatiert.
-|*  Ersterstellung      MA 16. Dec. 92
-|*  Letzte Aenderung    MA 19. May. 93
+|*	Beschreibung:		Hier wird der Inhalt initial mit Formatiert.
+|*	Ersterstellung		MA 16. Dec. 92
+|*	Letzte Aenderung	MA 19. May. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 {
     if ( !Frm().Height() )
     {
-        Lock(); //nicht hintenherum den Anker formatieren.
+        Lock();	//nicht hintenherum den Anker formatieren.
         SwCntntFrm *pCntnt = ContainsCntnt();
         while ( pCntnt )
-        {   pCntnt->Calc();
+        {	pCntnt->Calc();
             pCntnt = pCntnt->GetNextCntntFrm();
         }
         Unlock();
@@ -188,13 +188,13 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 }
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::MakeFlyPos()
+|*	SwFlyInCntFrm::MakeFlyPos()
 |*
-|*  Beschreibung        Im Unterschied zu anderen Frms wird hier nur die
-|*      die RelPos berechnet. Die absolute Position wird ausschliesslich
-|*      per SetAbsPos errechnet.
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 12. Apr. 96
+|*	Beschreibung		Im Unterschied zu anderen Frms wird hier nur die
+|*		die RelPos berechnet. Die absolute Position wird ausschliesslich
+|*		per SetAbsPos errechnet.
+|*	Ersterstellung		MA 03. Dec. 92
+|*	Letzte Aenderung	MA 12. Apr. 96
 |*
 |*************************************************************************/
 // OD 2004-03-23 #i26791#
@@ -234,10 +234,10 @@ void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 // <--
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::NotifyBackground()
+|*	SwFlyInCntFrm::NotifyBackground()
 |*
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 26. Aug. 93
+|*	Ersterstellung		MA 03. Dec. 92
+|*	Letzte Aenderung	MA 26. Aug. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
@@ -251,10 +251,10 @@ void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
 
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::GetRelPos()
+|*	SwFlyInCntFrm::GetRelPos()
 |*
-|*  Ersterstellung      MA 04. Dec. 92
-|*  Letzte Aenderung    MA 04. Dec. 92
+|*	Ersterstellung		MA 04. Dec. 92
+|*	Letzte Aenderung	MA 04. Dec. 92
 |*
 |*************************************************************************/
 const Point SwFlyInCntFrm::GetRelPos() const
@@ -265,10 +265,10 @@ const Point SwFlyInCntFrm::GetRelPos() const
 
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::RegistFlys()
+|*	SwFlyInCntFrm::RegistFlys()
 |*
-|*  Ersterstellung      MA 26. Nov. 93
-|*  Letzte Aenderung    MA 26. Nov. 93
+|*	Ersterstellung		MA 26. Nov. 93
+|*	Letzte Aenderung	MA 26. Nov. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::RegistFlys()
@@ -281,10 +281,10 @@ void SwFlyInCntFrm::RegistFlys()
 
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::MakeAll()
+|*	SwFlyInCntFrm::MakeAll()
 |*
-|*  Ersterstellung      MA 18. Feb. 94
-|*  Letzte Aenderung    MA 13. Jun. 96
+|*	Ersterstellung		MA 18. Feb. 94
+|*	Letzte Aenderung	MA 13. Jun. 96
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::MakeAll()
@@ -298,7 +298,7 @@ void SwFlyInCntFrm::MakeAll()
     if ( !GetAnchorFrm() || IsLocked() || IsColLocked() || !FindPageFrm() )
         return;
 
-    Lock(); //Der Vorhang faellt
+    Lock();	//Der Vorhang faellt
 
         //uebernimmt im DTor die Benachrichtigung
     const SwFlyNotify aNotify( this );

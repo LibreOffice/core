@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,21 +44,21 @@ class SwChildWinWrapper;
 
 struct SwRedlineDataChild
 {
-    const SwRedlineData*        pChild;     // Verweis auf originale gestackte Daten
-    const SwRedlineDataChild*   pNext;      // Verweis auf gestackte Daten
-    SvLBoxEntry*                pTLBChild;  // zugehoeriger TreeListBox-Eintrag
+    const SwRedlineData*		pChild;		// Verweis auf originale gestackte Daten
+    const SwRedlineDataChild*	pNext;		// Verweis auf gestackte Daten
+    SvLBoxEntry*				pTLBChild;	// zugehoeriger TreeListBox-Eintrag
 };
 
 struct SwRedlineDataParent
 {
-    const SwRedlineData*        pData;      // RedlineDataPtr
-    const SwRedlineDataChild*   pNext;      // Verweis auf gestackte Daten
-    SvLBoxEntry*                pTLBParent; // zugehoeriger TreeListBox-Eintrag
-    String                      sComment;   // Redline-Kommentar
+    const SwRedlineData*		pData;		// RedlineDataPtr
+    const SwRedlineDataChild*	pNext;		// Verweis auf gestackte Daten
+    SvLBoxEntry*				pTLBParent;	// zugehoeriger TreeListBox-Eintrag
+    String						sComment;	// Redline-Kommentar
 
-    inline BOOL operator==( const SwRedlineDataParent& rObj ) const
+    inline BOOL	operator==( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() == rObj.pData->GetSeqNo()); }
-    inline BOOL operator< ( const SwRedlineDataParent& rObj ) const
+    inline BOOL	operator< ( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() <  rObj.pData->GetSeqNo()); }
 };
 
@@ -78,52 +78,52 @@ SV_DECL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr, 100, 100)
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
-    Dialog*                 pParentDlg;
-    SwRedlineDataParentArr  aRedlineParents;
-    SwRedlineDataChildArr   aRedlineChilds;
+    Dialog*					pParentDlg;
+    SwRedlineDataParentArr	aRedlineParents;
+    SwRedlineDataChildArr	aRedlineChilds;
     SwRedlineDataParentSortArr aUsedSeqNo;
-    SvxAcceptChgCtr         aTabPagesCTRL;
-    PopupMenu               aPopup;
-    Timer                   aDeselectTimer;
-    Timer                   aSelectTimer;
-    String                  sInserted;
-    String                  sDeleted;
-    String                  sFormated;
-    String                  sTableChgd;
-    String                  sFmtCollSet;
-    String                  sFilterAction;
-    String                  sAutoFormat;
-    Size                    aBorderSz;
-    SvxTPView*              pTPView;
-    SvxRedlinTable*         pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
-    Link                    aOldSelectHdl;
-    Link                    aOldDeselectHdl;
-    BOOL                    bOnlyFormatedRedlines;
-    BOOL                    bHasReadonlySel;
-    BOOL                    bRedlnAutoFmt;
+    SvxAcceptChgCtr			aTabPagesCTRL;
+    PopupMenu				aPopup;
+    Timer					aDeselectTimer;
+    Timer					aSelectTimer;
+    String					sInserted;
+    String					sDeleted;
+    String					sFormated;
+    String					sTableChgd;
+    String					sFmtCollSet;
+    String					sFilterAction;
+    String					sAutoFormat;
+    Size					aBorderSz;
+    SvxTPView*				pTPView;
+    SvxRedlinTable*			pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    Link					aOldSelectHdl;
+    Link					aOldDeselectHdl;
+    BOOL 					bOnlyFormatedRedlines;
+    BOOL					bHasReadonlySel;
+    BOOL					bRedlnAutoFmt;
 
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    bInhibitActivate;
 
-    SW_DLLPRIVATE DECL_LINK( AcceptHdl,     void* );
-    SW_DLLPRIVATE DECL_LINK( AcceptAllHdl,  void* );
-    SW_DLLPRIVATE DECL_LINK( RejectHdl,     void* );
-    SW_DLLPRIVATE DECL_LINK( RejectAllHdl,  void* );
-    SW_DLLPRIVATE DECL_LINK( UndoHdl,           void* );
-    SW_DLLPRIVATE DECL_LINK( DeselectHdl,       void* );
-    SW_DLLPRIVATE DECL_LINK( SelectHdl,     void* );
-    SW_DLLPRIVATE DECL_LINK( GotoHdl,           void* );
-    SW_DLLPRIVATE DECL_LINK( CommandHdl,        void* );
+    SW_DLLPRIVATE DECL_LINK( AcceptHdl,		void* );
+    SW_DLLPRIVATE DECL_LINK( AcceptAllHdl,	void* );
+    SW_DLLPRIVATE DECL_LINK( RejectHdl,		void* );
+    SW_DLLPRIVATE DECL_LINK( RejectAllHdl,	void* );
+    SW_DLLPRIVATE DECL_LINK( UndoHdl,			void* );
+    SW_DLLPRIVATE DECL_LINK( DeselectHdl,		void* );
+    SW_DLLPRIVATE DECL_LINK( SelectHdl,		void* );
+    SW_DLLPRIVATE DECL_LINK( GotoHdl,			void* );
+    SW_DLLPRIVATE DECL_LINK( CommandHdl,		void* );
 
-    SW_DLLPRIVATE USHORT            CalcDiff(USHORT nStart, BOOL bChild);
-    SW_DLLPRIVATE void          InsertChilds(SwRedlineDataParent *pParent, const SwRedline& rRedln, const USHORT nAutoFmt);
-    SW_DLLPRIVATE void          InsertParents(USHORT nStart, USHORT nEnd = USHRT_MAX);
-    SW_DLLPRIVATE void          RemoveParents(USHORT nStart, USHORT nEnd);
-    SW_DLLPRIVATE void          InitAuthors();
+    SW_DLLPRIVATE USHORT			CalcDiff(USHORT nStart, BOOL bChild);
+    SW_DLLPRIVATE void			InsertChilds(SwRedlineDataParent *pParent, const SwRedline& rRedln, const USHORT nAutoFmt);
+    SW_DLLPRIVATE void			InsertParents(USHORT nStart, USHORT nEnd = USHRT_MAX);
+    SW_DLLPRIVATE void			RemoveParents(USHORT nStart, USHORT nEnd);
+    SW_DLLPRIVATE void			InitAuthors();
 
-    SW_DLLPRIVATE String            GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, USHORT nStack = 0);
-    SW_DLLPRIVATE const String& GetActionText(const SwRedline& rRedln, USHORT nStack = 0);
-    SW_DLLPRIVATE USHORT            GetRedlinePos( const SvLBoxEntry& rEntry) const;
+    SW_DLLPRIVATE String			GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, USHORT nStack = 0);
+    SW_DLLPRIVATE const String&	GetActionText(const SwRedline& rRedln, USHORT nStack = 0);
+    SW_DLLPRIVATE USHORT			GetRedlinePos( const SvLBoxEntry& rEntry) const;
 
 public:
     SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt = FALSE);
@@ -131,17 +131,17 @@ public:
 
     DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
 
-    inline SvxAcceptChgCtr* GetChgCtrl()        { return &aTabPagesCTRL; }
-    inline BOOL     HasRedlineAutoFmt() const   { return bRedlnAutoFmt; }
+    inline SvxAcceptChgCtr* GetChgCtrl()		{ return &aTabPagesCTRL; }
+    inline BOOL		HasRedlineAutoFmt() const 	{ return bRedlnAutoFmt; }
 
-    void            Init(USHORT nStart = 0);
-    void            CallAcceptReject( BOOL bSelect, BOOL bAccept );
+    void			Init(USHORT nStart = 0);
+    void			CallAcceptReject( BOOL bSelect, BOOL bAccept );
 
-    void            Initialize(const String &rExtraData);
-    void            FillInfo(String &rExtraData) const;
+    void			Initialize(const String &rExtraData);
+    void			FillInfo(String &rExtraData) const;
 
-    virtual void    Activate();
-    virtual void    Resize();
+    virtual void	Activate();
+    virtual void	Resize();
 };
 
 /*------------------------------------------------------------------------
@@ -150,18 +150,18 @@ public:
 
 class SwModelessRedlineAcceptDlg : public SfxModelessDialog
 {
-    SwRedlineAcceptDlg*     pImplDlg;
-    SwChildWinWrapper*      pChildWin;
+    SwRedlineAcceptDlg*		pImplDlg;
+    SwChildWinWrapper*		pChildWin;
 
-    virtual void    Resize();
+    virtual void	Resize();
 
 public:
     SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, Window *pParent);
     ~SwModelessRedlineAcceptDlg();
 
-    virtual void    Activate();
-    virtual void    FillInfo(SfxChildWinInfo&) const;
-    void            Initialize (SfxChildWinInfo* pInfo);
+    virtual void	Activate();
+    virtual void	FillInfo(SfxChildWinInfo&) const;
+    void			Initialize (SfxChildWinInfo* pInfo);
 };
 
 
@@ -172,14 +172,14 @@ public:
 class SwRedlineAcceptChild : public SwChildWinWrapper
 {
 public:
-    SwRedlineAcceptChild(   Window* ,
+    SwRedlineAcceptChild(	Window* ,
                             USHORT nId,
                             SfxBindings*,
                             SfxChildWinInfo*  );
 
     SFX_DECL_CHILDWINDOW( SwRedlineAcceptChild );
 
-    virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
+    virtual BOOL	ReInitDlg(SwDocShell *pDocSh);
 };
 
 

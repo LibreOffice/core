@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,17 +28,17 @@
 #ifndef _GRFATR_HXX
 #define _GRFATR_HXX
 
-#include <hintids.hxx>      // fuer die WhichIds @@@ must be included first @@@
+#include <hintids.hxx>		// fuer die WhichIds @@@ must be included first @@@
 #include <tools/gen.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/grfcrop.hxx>
 #include "swdllapi.h"
-#include <swatrset.hxx>     // fuer inlines
-#include <format.hxx>       // fuer inlines
+#include <swatrset.hxx>		// fuer inlines
+#include <format.hxx>		// fuer inlines
 
 /******************************************************************************
- *  class SwMirrorGrf
+ *	class SwMirrorGrf
  ******************************************************************************/
 
 enum MirrorGraph
@@ -68,17 +68,17 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 
     // pure virtual-Methiden von SfxEnumItem
-    virtual USHORT          GetValueCount() const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual USHORT			GetValueCount() const;
+    virtual int				operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
+    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
+    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 );
 
     inline SwMirrorGrf& operator=( const SwMirrorGrf& rMirrorGrf )
@@ -88,13 +88,13 @@ public:
             return *this;
         }
 
-    inline BOOL IsGrfToggle() const         { return bGrfToggle; }
-    inline void SetGrfToggle( BOOL bNew )   { bGrfToggle = bNew; }
+    inline BOOL IsGrfToggle() const			{ return bGrfToggle; }
+    inline void SetGrfToggle( BOOL bNew )	{ bGrfToggle = bNew; }
 };
 
 
 /******************************************************************************
- *  class SwAttrCropGrf
+ *	class SwAttrCropGrf
  ******************************************************************************/
 
 class SW_DLLPUBLIC SwCropGrf : public SvxGrfCrop
@@ -102,11 +102,11 @@ class SW_DLLPUBLIC SwCropGrf : public SvxGrfCrop
 public:
     TYPEINFO();
     SwCropGrf();
-    SwCropGrf(  sal_Int32 nLeft,    sal_Int32 nRight,
-                sal_Int32 nTop,     sal_Int32 nBottom );
+    SwCropGrf(  sal_Int32 nLeft,	sal_Int32 nRight,
+                sal_Int32 nTop,		sal_Int32 nBottom );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*		Clone( SfxItemPool *pPool = 0 ) const;
 };
 
 class SwRotationGrf : public SfxUInt16Item
@@ -122,19 +122,19 @@ public:
 
     // pure virtual-Methiden from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual int				operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
+    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal,
                                             BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
+    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal,
                                             BYTE nMemberId = 0 );
 
-    void SetUnrotatedSize( const Size& rSz )        { aUnrotatedSize = rSz; }
-    const Size& GetUnrotatedSize() const            { return aUnrotatedSize; }
+    void SetUnrotatedSize( const Size& rSz ) 		{ aUnrotatedSize = rSz; }
+    const Size& GetUnrotatedSize() const 			{ return aUnrotatedSize; }
 };
 
 class SW_DLLPUBLIC SwLuminanceGrf : public SfxInt16Item
@@ -229,22 +229,22 @@ public:
         }
 
     // pure virtual-Methiden von SfxEnumItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem* 	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int				operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
+    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal,
                                             BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
+    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal,
                                             BYTE nMemberId = 0 );
 
 
-    const double& GetValue() const              { return nValue; }
-    void SetValue( const double& rVal )         { nValue = rVal; }
+    const double& GetValue() const				{ return nValue; }
+    void SetValue( const double& rVal )			{ nValue = rVal; }
 };
 
 class SwInvertGrf: public SfxBoolItem
@@ -277,9 +277,9 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual	bool        	QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
+    virtual	bool			PutValue( const com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 );
 };
 
@@ -291,26 +291,26 @@ public:
     {}
 
     // pure virtual-Methoden von SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
 
     // pure virtual-Methiden von SfxEnumItem
-    virtual USHORT          GetValueCount() const;
+    virtual USHORT			GetValueCount() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual	bool        	QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
+    virtual	bool			PutValue( const com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 );
 };
 
 
 
 /******************************************************************************
- *  Implementierung der GrafikAttribut Methoden vom SwAttrSet
+ *	Implementierung der GrafikAttribut Methoden vom SwAttrSet
  ******************************************************************************/
 
 inline const SwMirrorGrf &SwAttrSet::GetMirrorGrf(BOOL bInP) const
@@ -335,11 +335,11 @@ inline const SwInvertGrf &SwAttrSet::GetInvertGrf(BOOL bInP) const
     { return (const SwInvertGrf&)Get( RES_GRFATR_INVERT,bInP); }
 inline const SwTransparencyGrf &SwAttrSet::GetTransparencyGrf(BOOL bInP) const
     { return (const SwTransparencyGrf&)Get( RES_GRFATR_TRANSPARENCY,bInP); }
-inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(BOOL bInP) const
+inline const SwDrawModeGrf		&SwAttrSet::GetDrawModeGrf(BOOL bInP) const
     { return (const SwDrawModeGrf&)Get( RES_GRFATR_DRAWMODE,bInP); }
 
 /******************************************************************************
- *  Implementierung der GrafikAttribut Methoden vom SwFmt
+ *	Implementierung der GrafikAttribut Methoden vom SwFmt
  ******************************************************************************/
 
 inline const SwMirrorGrf &SwFmt::GetMirrorGrf(BOOL bInP) const
@@ -358,7 +358,7 @@ inline const SwChannelGGrf &SwFmt::GetChannelGGrf(BOOL bInP) const
     { return aSet.GetChannelGGrf( bInP); }
 inline const SwChannelBGrf &SwFmt::GetChannelBGrf(BOOL bInP) const
     { return aSet.GetChannelBGrf( bInP); }
-inline const SwGammaGrf &SwFmt::GetGammaGrf(BOOL bInP) const
+inline const SwGammaGrf	&SwFmt::GetGammaGrf(BOOL bInP) const
     { return aSet.GetGammaGrf( bInP); }
 inline const SwInvertGrf &SwFmt::GetInvertGrf(BOOL bInP) const
     { return aSet.GetInvertGrf( bInP); }

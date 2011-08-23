@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>		// fuer die UndoIds
 #include <undobj.hxx>
 #include <rolbck.hxx>
 #include <docary.hxx>
@@ -45,7 +45,7 @@
 using namespace ::com::sun::star;
 
 
-USHORT SwDoc::nUndoActions = UNDO_ACTION_COUNT;     // anzahl von Undo-Action
+USHORT SwDoc::nUndoActions = UNDO_ACTION_COUNT;		// anzahl von Undo-Action
 
 // the undo array should never grow beyond this limit:
 #define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
@@ -161,10 +161,10 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
     ++nUndoPos;
     switch( pUndo->GetId() )
     {
-    case UNDO_START:        ++nUndoSttEnd;
+    case UNDO_START:		++nUndoSttEnd;
                             break;
 
-    case UNDO_END:          OSL_ENSURE( nUndoSttEnd, "Undo-Ende ohne Start" );
+    case UNDO_END:		    OSL_ENSURE( nUndoSttEnd, "Undo-Ende ohne Start" );
                             --nUndoSttEnd;
                             // kein break !!!
     default:
@@ -191,9 +191,9 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
         return;
 
     // folgende Array-Grenzen muessen ueberwacht werden:
-    //  - Undo,             Grenze: fester Wert oder USHRT_MAX - 1000
-    //  - UndoNodes,        Grenze:  USHRT_MAX - 1000
-    //  - AttrHistory       Grenze:  USHRT_MAX - 1000
+    //	- Undo,				Grenze: fester Wert oder USHRT_MAX - 1000
+    //	- UndoNodes,		Grenze:  USHRT_MAX - 1000
+    //	- AttrHistory       Grenze:  USHRT_MAX - 1000
     // (defined in UNDO_ACTION_LIMIT at the top of this file)
 
     USHORT nEnde = UNDO_ACTION_LIMIT;
@@ -237,7 +237,7 @@ void SwDoc::ClearRedo()
 {
     if( DoesUndo() && nUndoPos != pUndos->Count() )
     {
-//?? why ??     if( !nUndoSttEnd )
+//?? why ??		if( !nUndoSttEnd )
         {
             // setze UndoCnt auf den neuen Wert
             SwUndo* pUndo;
@@ -285,11 +285,11 @@ void SwDoc::DelAllUndoObj()
     // loescht alle UndoObjecte vom Anfang bis zum angegebenen Ende
 BOOL SwDoc::DelUndoObj( USHORT nEnde )
 {
-    if( !nEnde )                    // sollte mal 0 uebergeben werden,
+    if( !nEnde )					// sollte mal 0 uebergeben werden,
     {
         if( !pUndos->Count() )
             return FALSE;
-        ++nEnde;                    // dann korrigiere es auf 1
+        ++nEnde;            		// dann korrigiere es auf 1
     }
 
     DoUndo( FALSE );
@@ -313,8 +313,8 @@ BOOL SwDoc::DelUndoObj( USHORT nEnde )
             "Undo-Del-Ende liegt in einer Redo-Aktion" );
 
     // dann setze ab Ende bis Undo-Ende bei allen Undo-Objecte die Werte um
-    nSttEndCnt = nCnt;          // Position merken
-    if( nUndoSavePos < nSttEndCnt )     // SavePos wird aufgegeben
+    nSttEndCnt = nCnt;			// Position merken
+    if( nUndoSavePos < nSttEndCnt )		// SavePos wird aufgegeben
         nUndoSavePos = USHRT_MAX;
     else if( nUndoSavePos != USHRT_MAX )
         nUndoSavePos = nUndoSavePos - nSttEndCnt;
@@ -387,7 +387,7 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
     // zum spaeteren ueberpruefen
     SwUndoId nAktId = pUndo->GetId();
     //JP 11.05.98: FlyFormate ueber die EditShell selektieren, nicht aus dem
-    //              Undo heraus
+    //				Undo heraus
     switch( nAktId )
     {
     case UNDO_START:
@@ -416,10 +416,10 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
         --nUndoPos;
 
     // JP 29.10.96: Start und End setzen kein Modify-Flag.
-    //              Sonst gibt es Probleme mit der autom. Aufnahme von Ausnahmen
-    //              bei der Autokorrektur
+    //				Sonst gibt es Probleme mit der autom. Aufnahme von Ausnahmen
+    //				bei der Autokorrektur
     if( UNDO_START != nAktId && UNDO_END != nAktId )
-        SetModified();      // default: immer setzen, kann zurueck gesetzt werden
+        SetModified();		// default: immer setzen, kann zurueck gesetzt werden
 
     // ist die History leer und wurde nicht wegen Speichermangel
     // verworfen, so kann das Dokument als unveraendert gelten
@@ -489,7 +489,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
     while( nSize )
         if( UNDO_START == ( nId = (pUndo = (*pUndos)[ --nSize ] )->GetId()) &&
             !((SwUndoStart*)pUndo)->GetEndOffset() )
-            break;      // Start gefunden
+            break;		// Start gefunden
 
     if( nId != UNDO_START )
     {
@@ -558,7 +558,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
                 if( !nEndCnt ) // falls mal ein Start ohne Ende vorhanden ist
                     continue;
                 --nEndCnt;
-                if( !nEndCnt )      // hier ist der Anfang
+                if( !nEndCnt )		// hier ist der Anfang
                     break;
             }
             else if( UNDO_END == nTmpId )
@@ -826,7 +826,7 @@ bool SwDoc::Redo( SwUndoIter& rUndoIter )
     SetRedlineMode_intern( (RedlineMode_t)(eTmpMode | nsRedlineMode_t::REDLINE_IGNORE));
 
     //JP 11.05.98: FlyFormate ueber die EditShell selektieren, nicht aus dem
-    //              Undo heraus
+    //				Undo heraus
     if( UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
         rUndoIter.ClearSelections();
 
@@ -936,7 +936,7 @@ bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
     SwPaM* pTmpCrsr = rUndoIter.pAktPam;
     SwUndoId nId = UNDO_EMPTY;
 
-    if( pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo )  // Undo-Klammerung aufbauen
+    if( pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo )	// Undo-Klammerung aufbauen
     {
         if (pUndo->GetId() == UNDO_END)
         {
@@ -948,12 +948,12 @@ bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
 
         StartUndo( nId, NULL );
     }
-    do {        // dann durchlaufe mal den gesamten Ring
+    do {		// dann durchlaufe mal den gesamten Ring
         for( USHORT nRptCnt = nRepeatCnt; nRptCnt > 0; --nRptCnt )
         {
             rUndoIter.pLastUndoObj = 0;
             for( USHORT nCnt = nSize; nCnt < nEndCnt; ++nCnt )
-                (*pUndos)[ nCnt ]->Repeat( rUndoIter );     // Repeat ausfuehren
+                (*pUndos)[ nCnt ]->Repeat( rUndoIter );		// Repeat ausfuehren
         }
     } while( pTmpCrsr !=
         ( rUndoIter.pAktPam = (SwPaM*)rUndoIter.pAktPam->GetNext() ));

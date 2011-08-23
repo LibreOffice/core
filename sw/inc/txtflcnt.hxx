@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ public:
     SwTxtFlyCnt( SwFmtFlyCnt& rAttr, xub_StrLen nStart );
 
     // Setzt den Anker im pFmt und
-    void    SetAnchor( const SwTxtNode *pNode );
+    void	SetAnchor( const SwTxtNode *pNode );
 
-    inline        SwFlyInCntFrm  *GetFlyFrm( const SwFrm *pCurrFrm );
+    inline		  SwFlyInCntFrm  *GetFlyFrm( const SwFrm *pCurrFrm );
     inline const  SwFlyInCntFrm  *GetFlyFrm( const SwFrm *pCurrFrm ) const;
 
     // erzeugt sich ein neues FlyFrameFormat

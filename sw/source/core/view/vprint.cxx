@@ -1,8 +1,8 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/**************************************************************************
+/************************************************************************** 
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@
 #include <tabfrm.hxx>
 #include <txtfrm.hxx>           // MinPrtLine
 #include <viscrs.hxx>          // SwShellCrsr
-#include <fmtpdsc.hxx>      // SwFmtPageDesc
+#include <fmtpdsc.hxx>		// SwFmtPageDesc
 #include <globals.hrc>
 
 
@@ -91,8 +91,8 @@ class SwQueuedPaint
 {
 public:
     SwQueuedPaint *pNext;
-    ViewShell      *pSh;
-    SwRect          aRect;
+    ViewShell	   *pSh;
+    SwRect			aRect;
 
     SwQueuedPaint( ViewShell *pNew, const SwRect &rRect ) :
         pNext( 0 ),
@@ -143,7 +143,7 @@ void SwPaintQueue::Repaint()
     {
         SwQueuedPaint *pPt = pQueue;
         do
-        {   ViewShell *pSh = pPt->pSh;
+        {	ViewShell *pSh = pPt->pSh;
             SET_CURR_SHELL( pSh );
             if ( pSh->IsPreView() )
             {
@@ -161,7 +161,7 @@ void SwPaintQueue::Repaint()
         } while ( pPt );
 
         do
-        {   pPt = pQueue;
+        {	pPt = pQueue;
             pQueue = pQueue->pNext;
             delete pPt;
         } while ( pQueue );
@@ -371,7 +371,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
     if( pFESh->IsTableMode() )
     {
         SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
-
+        
         const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode()->GetCntntNode();
         const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->GetFrm( 0, pShellTblCrsr->Start() ) : 0;
         if( pCntntFrm )
@@ -466,7 +466,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     if( pFESh->IsTableMode() )
     {
         SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
-
+        
         const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode()->GetCntntNode();
         const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->GetFrm( 0, pShellTblCrsr->Start() ) : 0;
         if( pCntntFrm )
@@ -532,7 +532,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 }
 
 
-sal_Bool ViewShell::PrintOrPDFExport(
+sal_Bool ViewShell::PrintOrPDFExport( 
     OutputDevice *pOutDev,
     const SwPrtOptions &rPrintData,
     sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
@@ -578,7 +578,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
         pOutDevDoc = GetDoc();
         pShell = new ViewShell( *this, 0, pOutDev );
     }
-
+    
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
     {
@@ -640,9 +640,9 @@ sal_Bool ViewShell::PrintOrPDFExport(
         pViewSh2 = nPage == 0 ? /* post-it page? */
                 rPrintData.GetRenderData().m_pPostItShell : pShell;
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
-
+                        
         pStPage->GetUpper()->Paint( pStPage->Frm(), &rPrintData );
-
+                        
         SwPaintQueue::Repaint();
     }
 
@@ -744,8 +744,8 @@ SwDrawViewSave::~SwDrawViewSave()
 void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
 {
     pOpt->SetGraphic ( TRUE == rOptions.bPrintGraphic );
-    pOpt->SetTable   ( TRUE == rOptions.bPrintTable );
-    pOpt->SetDraw    ( TRUE == rOptions.bPrintDraw  );
+    pOpt->SetTable	 ( TRUE == rOptions.bPrintTable );
+    pOpt->SetDraw	 ( TRUE == rOptions.bPrintDraw  );
     pOpt->SetControl ( TRUE == rOptions.bPrintControl );
     pOpt->SetPageBack( TRUE == rOptions.bPrintPageBackground );
     pOpt->SetBlackFont( TRUE == rOptions.bPrintBlackFont );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,8 +76,8 @@ SwUnoCrsr::~SwUnoCrsr()
     while( GetNext() != this )
     {
         Ring* pNxt = GetNext();
-        pNxt->MoveTo( 0 );      // ausketten
-        delete pNxt;            // und loeschen
+        pNxt->MoveTo( 0 );		// ausketten
+        delete pNxt;			// und loeschen
     }
 }
 
@@ -224,7 +224,7 @@ SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
 SwUnoTableCrsr::~SwUnoTableCrsr()
 {
     while( aTblSel.GetNext() != &aTblSel )
-        delete aTblSel.GetNext();           // und loeschen
+        delete aTblSel.GetNext();			// und loeschen
 }
 
 

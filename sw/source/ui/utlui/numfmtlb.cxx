@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,12 +74,12 @@ using namespace ::com::sun::star::lang;
 NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
                                     short nFormatType, ULONG nDefFmt,
                                     BOOL bUsrFmts ) :
-    ListBox             ( pWin, rResId ),
-    nCurrFormatType     (-1),
-    nStdEntry           (0),
-    bOneArea            (FALSE),
-    nDefFormat          (nDefFmt),
-    pVw                 (0),
+    ListBox				( pWin, rResId ),
+    nCurrFormatType 	(-1),
+    nStdEntry			(0),
+    bOneArea			(FALSE),
+    nDefFormat			(nDefFmt),
+    pVw					(0),
     pOwnFormatter       (0),
     bShowLanguageControl(FALSE),
     bUseAutomaticLanguage(TRUE)
@@ -90,12 +90,12 @@ NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
 NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
                                     const ResId& rResId, short nFormatType,
                                     ULONG nDefFmt, BOOL bUsrFmts ) :
-    ListBox             ( pWin, rResId ),
-    nCurrFormatType     (-1),
-    nStdEntry           (0),
-    bOneArea            (FALSE),
-    nDefFormat          (nDefFmt),
-    pVw                 (pView),
+    ListBox				( pWin, rResId ),
+    nCurrFormatType 	(-1),
+    nStdEntry			(0),
+    bOneArea			(FALSE),
+    nDefFormat			(nDefFmt),
+    pVw					(pView),
     pOwnFormatter       (0),
     bShowLanguageControl(FALSE),
     bUseAutomaticLanguage(TRUE)
@@ -140,7 +140,7 @@ SwView* NumFormatListBox::GetView()
 void NumFormatListBox::SetFormatType(const short nFormatType)
 {
     if (nCurrFormatType == -1 ||
-        (nCurrFormatType & nFormatType) == 0)   // Es gibt Mischformate, wie z.B. DateTime
+        (nCurrFormatType & nFormatType) == 0)	// Es gibt Mischformate, wie z.B. DateTime
     {
         SvNumberFormatter* pFormatter;
 
@@ -156,7 +156,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             pFormatter = rSh.GetNumberFormatter();
         }
 
-        Clear();    // Alle Eintraege in der Listbox entfernen
+        Clear();	// Alle Eintraege in der Listbox entfernen
 
         NfIndexTableOffset eOffsetStart = NF_NUMBER_START;
         NfIndexTableOffset eOffsetEnd = NF_NUMBER_START;
@@ -254,8 +254,8 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
                 pFormatter->GetOutputString( sTxt, nFormat, sValue, &pCol);
             }
 
-            if (nFormat != nSysNumFmt       &&
-                nFormat != nSysShortDateFmt &&
+            if (nFormat != nSysNumFmt		&&
+                nFormat != nSysShortDateFmt	&&
                 nFormat != nSysLongDateFmt)
             {
                 nPos = InsertEntry( sValue );
@@ -413,7 +413,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet,
+        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet, 
             GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RC_DLG_SWNUMFMTDLG );
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
@@ -471,7 +471,7 @@ double NumFormatListBox::GetDefValue(const short nFormatType) const
         case NUMBERFORMAT_TIME:
             fDefValue = SVX_NUMVAL_TIME;
             break;
-/*      {
+/*		{
             String sValue("31.8.1997 16:57:34");
             ULONG nFormat = pFormatter->GetStandardFormat(nFormatType, LANGUAGE_GERMAN);
             pFormatter->IsNumberFormat( sValue, nFormat, fDefValue );

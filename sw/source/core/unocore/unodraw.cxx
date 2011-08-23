@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,12 +97,12 @@ static SwShapeImplementationIdMap aImplementationIdMap;
 
 class SwShapeDescriptor_Impl
 {
-    SwFmtHoriOrient*    pHOrient;
-    SwFmtVertOrient*    pVOrient;
-    SwFmtAnchor*        pAnchor;
-    SwFmtSurround*      pSurround;
-    SvxULSpaceItem*     pULSpace;
-    SvxLRSpaceItem*     pLRSpace;
+    SwFmtHoriOrient* 	pHOrient;
+    SwFmtVertOrient* 	pVOrient;
+    SwFmtAnchor*		pAnchor;
+    SwFmtSurround*		pSurround;
+    SvxULSpaceItem*		pULSpace;
+    SvxLRSpaceItem*		pLRSpace;
     sal_Bool            bOpaque;
     uno::Reference< text::XTextRange > xTextRange;
     // OD 2004-04-21 #i26791#
@@ -153,7 +153,7 @@ public:
         // OD 2004-05-05 #i28701#
         delete pWrapInfluenceOnObjPos;
     }
-    SwFmtAnchor*    GetAnchor(sal_Bool bCreate = sal_False)
+    SwFmtAnchor* 	GetAnchor(sal_Bool bCreate = sal_False)
         {
             if(bCreate && !pAnchor)
             {
@@ -180,19 +180,19 @@ public:
             return pVOrient;
         }
 
-    SwFmtSurround*  GetSurround(sal_Bool bCreate = sal_False)
+    SwFmtSurround*	GetSurround(sal_Bool bCreate = sal_False)
         {
             if(bCreate && !pSurround)
                 pSurround = new SwFmtSurround();
             return pSurround;
         }
-    SvxLRSpaceItem* GetLRSpace(sal_Bool bCreate = sal_False)
+    SvxLRSpaceItem*	GetLRSpace(sal_Bool bCreate = sal_False)
         {
             if(bCreate && !pLRSpace)
                 pLRSpace = new SvxLRSpaceItem(RES_LR_SPACE);
             return pLRSpace;
         }
-    SvxULSpaceItem* GetULSpace(sal_Bool bCreate = sal_False)
+    SvxULSpaceItem*	GetULSpace(sal_Bool bCreate = sal_False)
         {
             if(bCreate && !pULSpace)
                 pULSpace = new SvxULSpaceItem(RES_UL_SPACE);
@@ -290,7 +290,7 @@ SwFmDrawPage::~SwFmDrawPage() throw ()
     RemovePageView();
 }
 
-const SdrMarkList&  SwFmDrawPage::PreGroup(const uno::Reference< drawing::XShapes > & xShapes)
+const SdrMarkList& 	SwFmDrawPage::PreGroup(const uno::Reference< drawing::XShapes > & xShapes)
 {
     _SelectObjectsInView( xShapes, GetPageView() );
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
@@ -303,21 +303,21 @@ void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >  xSha
     _SelectObjectInView( xShape, GetPageView() );
 }
 
-SdrPageView*    SwFmDrawPage::GetPageView()
+SdrPageView*	SwFmDrawPage::GetPageView()
 {
     if(!pPageView)
         pPageView = mpView->ShowSdrPage( mpPage );
     return pPageView;
 }
 
-void    SwFmDrawPage::RemovePageView()
+void	SwFmDrawPage::RemovePageView()
 {
     if(pPageView && mpView)
         mpView->HideSdrPage();
     pPageView = 0;
 }
 
-uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj )
+uno::Reference< uno::XInterface >  	SwFmDrawPage::GetInterface( SdrObject* pObj )
 {
     uno::Reference< XInterface >  xShape;
     if( pObj )
@@ -613,9 +613,9 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     SvxShape* pSvxShape = 0;
     if(xShapeTunnel.is())
     {
-        pShape      = reinterpret_cast< SwXShape * >(
+        pShape 		= reinterpret_cast< SwXShape * >(
                 sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
-        pSvxShape   = reinterpret_cast< SvxShape * >(
+        pSvxShape 	= reinterpret_cast< SvxShape * >(
                 sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
     }
 
@@ -640,7 +640,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     // <--
     GetSvxPage()->add(xShape);
 
-    uno::Reference< uno::XAggregation >     xAgg = pShape->GetAggregationInterface();
+    uno::Reference< uno::XAggregation > 	xAgg = pShape->GetAggregationInterface();
 
     DBG_ASSERT(pSvxShape, "warum gibt es hier kein SvxShape?");
     //diese Position ist auf jeden Fall in 1/100 mm
@@ -862,7 +862,7 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
     }
 }
 
-SwFmDrawPage*   SwXDrawPage::GetSvxPage()
+SwFmDrawPage* 	SwXDrawPage::GetSvxPage()
 {
     if(!xPageAgg.is() && pDoc)
     {
@@ -1086,8 +1086,8 @@ uno::Sequence< sal_Int8 > SwXShape::getImplementationId(  ) throw(uno::RuntimeEx
             {
                 // we need to create a new implementation id for this
                 // note: this memory is not free'd until application exists
-                //       but since we have a fixed set of shapetypes and the
-                //       memory will be reused this is ok.
+                //		 but since we have a fixed set of shapetypes and the
+                //		 memory will be reused this is ok.
                 pImplementationId = new uno::Sequence< sal_Int8 >( 16 );
                 rtl_createUuid( (sal_uInt8 *) pImplementationId->getArray(), 0, sal_True );
                 aImplementationIdMap[ aShapeType ] = pImplementationId;
@@ -1139,7 +1139,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
             uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt*   pFmt = GetFrmFmt();
+    SwFrmFmt* 	pFmt = GetFrmFmt();
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
     if(xShapeAgg.is())
     {
@@ -1501,7 +1501,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    SwFrmFmt*   pFmt = GetFrmFmt();
+    SwFrmFmt* 	pFmt = GetFrmFmt();
     if(xShapeAgg.is())
     {
         const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
@@ -1766,7 +1766,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
         throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt*   pFmt = GetFrmFmt();
+    SwFrmFmt* 	pFmt = GetFrmFmt();
     uno::Sequence< beans::PropertyState > aRet(aPropertyNames.getLength());
     if(xShapeAgg.is())
     {
@@ -1867,7 +1867,7 @@ void SwXShape::setPropertyToDefault( const rtl::OUString& rPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt*   pFmt = GetFrmFmt();
+    SwFrmFmt* 	pFmt = GetFrmFmt();
     if(xShapeAgg.is())
     {
         const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
@@ -1887,12 +1887,12 @@ void SwXShape::setPropertyToDefault( const rtl::OUString& rPropertyName )
             {
                 switch(pEntry->nWID)
                 {
-                    case RES_ANCHOR:        pImpl->RemoveAnchor();  break;
-                    case RES_HORI_ORIENT:   pImpl->RemoveHOrient(); break;
-                    case RES_VERT_ORIENT:   pImpl->RemoveVOrient(); break;
-                    case  RES_LR_SPACE:     pImpl->RemoveLRSpace(); break;
-                    case  RES_UL_SPACE:     pImpl->RemoveULSpace(); break;
-                    case  RES_SURROUND:     pImpl->RemoveSurround();break;
+                    case RES_ANCHOR:		pImpl->RemoveAnchor(); 	break;
+                    case RES_HORI_ORIENT: 	pImpl->RemoveHOrient(); break;
+                    case RES_VERT_ORIENT:	pImpl->RemoveVOrient();	break;
+                    case  RES_LR_SPACE:		pImpl->RemoveLRSpace();	break;
+                    case  RES_UL_SPACE:		pImpl->RemoveULSpace();	break;
+                    case  RES_SURROUND:		pImpl->RemoveSurround();break;
                     case RES_OPAQUE :       pImpl->SetOpaque(sal_False);  break;
                     case FN_TEXT_RANGE :
                     break;
@@ -1930,7 +1930,7 @@ uno::Any SwXShape::getPropertyDefault( const rtl::OUString& rPropertyName )
            uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt*   pFmt = GetFrmFmt();
+    SwFrmFmt* 	pFmt = GetFrmFmt();
     uno::Any aRet;
     if(xShapeAgg.is())
     {
@@ -2031,9 +2031,9 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         SwXText* pText = 0;
         SwXParagraph* pParagraph = 0;
 
-        pRange  = reinterpret_cast< SwXTextRange * >(
+        pRange 	= reinterpret_cast< SwXTextRange * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        pText   = reinterpret_cast< SwXText * >(
+        pText 	= reinterpret_cast< SwXText * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXText::getUnoTunnelId()) ));
         pCursor = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
@@ -2211,7 +2211,7 @@ uno::Sequence< rtl::OUString > SwXShape::getSupportedServiceNames(void) throw( u
     return aSeq;
 }
 
-SvxShape*   SwXShape::GetSvxShape()
+SvxShape*	SwXShape::GetSvxShape()
 {
     SvxShape* pSvxShape = 0;
     if(xShapeAgg.is())

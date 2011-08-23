@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 #include <editeng/acorrcfg.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
-BOOL   SwViewOption::bTest9 = FALSE;        //DrawingLayerNotLoading
+BOOL   SwViewOption::bTest9 = FALSE;		//DrawingLayerNotLoading
 #endif
 Color SwViewOption::aDocBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aObjectBoundColor(COL_LIGHTGRAY);
@@ -80,21 +80,21 @@ USHORT SwViewOption::nPixelTwips = 0;   //ein Pixel auf dem Bildschirm
 #define LINEBREAK_SIZE 12, 8
 #define TAB_SIZE 12, 6
 
-#define MIN_BLANKWIDTH       40
-#define MIN_BLANKHEIGHT      40
-#define MIN_TABWIDTH        120
-#define MIN_TABHEIGHT       200
+#define MIN_BLANKWIDTH		 40
+#define MIN_BLANKHEIGHT 	 40
+#define MIN_TABWIDTH		120
+#define MIN_TABHEIGHT		200
 
 static const char __FAR_DATA aPostItStr[] = "  ";
 
 BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 {
-    return  nCoreOptions == rOpt.nCoreOptions
+    return	nCoreOptions == rOpt.nCoreOptions
             && nCore2Options == rOpt.nCore2Options
-            && aSnapSize    == rOpt.aSnapSize
+            && aSnapSize	== rOpt.aSnapSize
             && mnViewLayoutColumns == rOpt.mnViewLayoutColumns
-            && nDivisionX   == rOpt.GetDivisionX()
-            && nDivisionY   == rOpt.GetDivisionY()
+            && nDivisionX	== rOpt.GetDivisionX()
+            && nDivisionY	== rOpt.GetDivisionY()
             && nPagePrevRow == rOpt.GetPagePrevRow()
             && nPagePrevCol == rOpt.GetPagePrevCol()
             && aRetoucheColor == rOpt.GetRetoucheColor()
@@ -160,7 +160,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
         USHORT nPix = GetPixelTwips() * 2;
         if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
             nPix = 0;
-        const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
+        const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()	+ nPix );
         const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
         const SwRect aRect( aTopLeft, aBotRight );
         DrawRect( pOut, aRect, aScriptIndicatorColor.GetColor() );
@@ -193,16 +193,16 @@ SwViewOption::SwViewOption() :
     nCoreOptions =  VIEWOPT_1_HARDBLANK | VIEWOPT_1_SOFTHYPH |
                     VIEWOPT_1_REF |
                     VIEWOPT_1_GRAPHIC |
-                    VIEWOPT_1_TABLE    | VIEWOPT_1_DRAW | VIEWOPT_1_CONTROL |
+                    VIEWOPT_1_TABLE	   | VIEWOPT_1_DRAW | VIEWOPT_1_CONTROL	|
                     VIEWOPT_1_PAGEBACK |
                     VIEWOPT_1_SOLIDMARKHDL | VIEWOPT_1_POSTITS;
     nCore2Options = VIEWOPT_CORE2_BLACKFONT | VIEWOPT_CORE2_HIDDENPARA;
     nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_GRFKEEPZOOM |VIEWOPT_2_ANY_RULER;
 
     if(MEASURE_METRIC != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
-        aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"
+        aSnapSize.Width() = aSnapSize.Height() = 720;	// 1/2"
     else
-        aSnapSize.Width() = aSnapSize.Height() = 567;   // 1 cm
+        aSnapSize.Width() = aSnapSize.Height() = 567;	// 1 cm
     nDivisionX = nDivisionY = 1;
 
     bSelectionInReadonly = SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
@@ -223,23 +223,23 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     // #114856# Formular view
     bFormView       = rVOpt.bFormView;
     nZoom           = rVOpt.nZoom       ;
-    aSnapSize       = rVOpt.aSnapSize   ;
+    aSnapSize   	= rVOpt.aSnapSize   ;
     mnViewLayoutColumns = rVOpt.mnViewLayoutColumns ;
-    nDivisionX      = rVOpt.nDivisionX  ;
-    nDivisionY      = rVOpt.nDivisionY  ;
-    nPagePrevRow    = rVOpt.nPagePrevRow;
-    nPagePrevCol    = rVOpt.nPagePrevCol;
+    nDivisionX  	= rVOpt.nDivisionX  ;
+    nDivisionY  	= rVOpt.nDivisionY  ;
+    nPagePrevRow	= rVOpt.nPagePrevRow;
+    nPagePrevCol	= rVOpt.nPagePrevCol;
     bIsPagePreview  = rVOpt.bIsPagePreview;
-    eZoom           = rVOpt.eZoom       ;
-    nTblDest        = rVOpt.nTblDest    ;
-    nUIOptions      = rVOpt.nUIOptions  ;
-    nCoreOptions    = rVOpt.nCoreOptions  ;
-    nCore2Options   = rVOpt.nCore2Options  ;
-    aRetoucheColor  = rVOpt.GetRetoucheColor();
-    sSymbolFont     = rVOpt.sSymbolFont;
+    eZoom      		= rVOpt.eZoom       ;
+    nTblDest    	= rVOpt.nTblDest    ;
+    nUIOptions		= rVOpt.nUIOptions  ;
+    nCoreOptions	= rVOpt.nCoreOptions  ;
+    nCore2Options	= rVOpt.nCore2Options  ;
+    aRetoucheColor	= rVOpt.GetRetoucheColor();
+    sSymbolFont 	= rVOpt.sSymbolFont;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
-    bBookview       = rVOpt.bBookview;
+    bBookview		= rVOpt.bBookview;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
@@ -262,24 +262,24 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 {
     // #114856# Formular view
     bFormView       = rVOpt.bFormView   ;
-    nZoom           = rVOpt.nZoom       ;
-    aSnapSize       = rVOpt.aSnapSize   ;
+    nZoom   		= rVOpt.nZoom   	;
+    aSnapSize   	= rVOpt.aSnapSize   ;
     mnViewLayoutColumns = rVOpt.mnViewLayoutColumns ;
-    nDivisionX      = rVOpt.nDivisionX  ;
-    nDivisionY      = rVOpt.nDivisionY  ;
-    nPagePrevRow    = rVOpt.nPagePrevRow;
-    nPagePrevCol    = rVOpt.nPagePrevCol;
+    nDivisionX  	= rVOpt.nDivisionX  ;
+    nDivisionY  	= rVOpt.nDivisionY  ;
+    nPagePrevRow	= rVOpt.nPagePrevRow;
+    nPagePrevCol	= rVOpt.nPagePrevCol;
     bIsPagePreview  = rVOpt.bIsPagePreview;
-    eZoom           = rVOpt.eZoom       ;
-    nTblDest        = rVOpt.nTblDest    ;
-    nUIOptions      = rVOpt.nUIOptions  ;
-    nCoreOptions    = rVOpt.nCoreOptions;
-    nCore2Options   = rVOpt.nCore2Options;
-    aRetoucheColor  = rVOpt.GetRetoucheColor();
-    sSymbolFont     = rVOpt.sSymbolFont;
+    eZoom      		= rVOpt.eZoom       ;
+    nTblDest    	= rVOpt.nTblDest    ;
+    nUIOptions		= rVOpt.nUIOptions  ;
+    nCoreOptions	= rVOpt.nCoreOptions;
+    nCore2Options	= rVOpt.nCore2Options;
+    aRetoucheColor	= rVOpt.GetRetoucheColor();
+    sSymbolFont 	= rVOpt.sSymbolFont;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
-    bBookview       = rVOpt.bBookview;
+    bBookview		= rVOpt.bBookview;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
@@ -318,13 +318,13 @@ BOOL SwViewOption::IsAutoCompleteWords() const
 }
 
 AuthorCharAttr::AuthorCharAttr() :
-    nItemId (SID_ATTR_CHAR_UNDERLINE),
-    nAttr   (UNDERLINE_SINGLE),
-    nColor  (COL_TRANSPARENT)
+    nItemId	(SID_ATTR_CHAR_UNDERLINE),
+    nAttr	(UNDERLINE_SINGLE),
+    nColor	(COL_TRANSPARENT)
 {
 }
 
-USHORT      GetHtmlMode(const SwDocShell* pShell)
+USHORT		GetHtmlMode(const SwDocShell* pShell)
 {
     USHORT nRet = 0;
     if(!pShell || PTR_CAST(SwWebDocShell, pShell))

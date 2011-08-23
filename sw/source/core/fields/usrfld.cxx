@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ SwField* SwUserField::Copy() const
 String SwUserField::GetCntnt(sal_Bool bName) const
 {
     if ( bName )
-    {   String aStr(SwFieldType::GetTypeStr(TYP_USERFLD));
+    {	String aStr(SwFieldType::GetTypeStr(TYP_USERFLD));
         aStr += ' ';
         aStr += GetTyp()->GetName();
         aStr.AppendAscii(" = ");
@@ -200,7 +200,7 @@ SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const String& aNam )
     aName = aNam;
 
     if (nType & nsSwGetSetExpType::GSE_STRING)
-        EnableFormat(sal_False);    // Numberformatter nicht einsetzen
+        EnableFormat(sal_False);	// Numberformatter nicht einsetzen
 }
 
 String SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng)
@@ -212,7 +212,7 @@ String SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 
         aStr = ExpandValue(nValue, nFmt, nLng);
     }
     else
-        EnableFormat(sal_False);    // Numberformatter nicht einsetzen
+        EnableFormat(sal_False);	// Numberformatter nicht einsetzen
 
     return aStr;
 }
@@ -220,11 +220,11 @@ String SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 
 SwFieldType* SwUserFieldType::Copy() const
 {
     SwUserFieldType *pTmp = new SwUserFieldType( GetDoc(), aName );
-    pTmp->aContent      = aContent;
-    pTmp->nType         = nType;
-    pTmp->bValidValue   = bValidValue;
-    pTmp->nValue        = nValue;
-    pTmp->bDeleted      = bDeleted;
+    pTmp->aContent 		= aContent;
+    pTmp->nType 		= nType;
+    pTmp->bValidValue 	= bValidValue;
+    pTmp->nValue 		= nValue;
+    pTmp->bDeleted 		= bDeleted;
 
     return pTmp;
 }
@@ -303,7 +303,7 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
 
         sal_Bool bModified = GetDoc()->IsModified();
         GetDoc()->SetModified();
-        if( !bModified )    // Bug 57028
+        if( !bModified )	// Bug 57028
             GetDoc()->SetUndoNoResetModified();
     }
 }

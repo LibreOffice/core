@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #if STLPORT_VERSION>=321
-#include <math.h>   // prevent conflict between exception and std::exception
+#include <math.h>	// prevent conflict between exception and std::exception
 #endif
 #include <hintids.hxx>
 #include <svx/svdview.hxx>
@@ -182,7 +182,7 @@ BOOL SwWrtShell::IsEndWrd()
 
 
 /*------------------------------------------------------------------------
- Beschreibung:  Abfrage, ob Einfuegen moeglich ist; gfs. Beep
+ Beschreibung:	Abfrage, ob Einfuegen moeglich ist; gfs. Beep
 ------------------------------------------------------------------------*/
 
 
@@ -197,7 +197,7 @@ BOOL SwWrtShell::_CanInsert()
     return TRUE;
 }
 /*------------------------------------------------------------------------
- Beschreibung:  String einfuegen
+ Beschreibung:	String einfuegen
 ------------------------------------------------------------------------*/
 
 void SwWrtShell::InsertByWord( const String & rStr)
@@ -310,7 +310,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
     EnterSelFrmMode();
 
     BOOL bSetGrfSize = TRUE;
-    BOOL bOwnMgr     = FALSE;
+    BOOL bOwnMgr	 = FALSE;
 
     if ( !pFrmMgr )
     {
@@ -520,7 +520,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:   Object in die Core einfuegen.
+ Beschreibung:	 Object in die Core einfuegen.
                  Vom ClipBoard oder Insert
 ------------------------------------------------------------------------*/
 
@@ -825,7 +825,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                 //ist resized), the Object should be resized too.
                 //If this request comes from the Object itself, the Frame
                 //in the Writer core should be resized.
-                if ( pFlyPrtRect )      //Request from core?
+                if ( pFlyPrtRect )		//Request from core?
                 {
                     xObj->SetVisArea( OutputDevice::LogicToLogic(
                         pFlyPrtRect->SVRect(), MAP_TWIP, xObj->GetMapUnit() ));
@@ -895,7 +895,7 @@ void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Einfuegen harter Seitenumbruch;
+ Beschreibung:	Einfuegen harter Seitenumbruch;
                 Selektionen werden ueberschrieben
 ------------------------------------------------------------------------*/
 
@@ -932,7 +932,7 @@ void SwWrtShell::InsertPageBreak(const String *pPageDesc, USHORT nPgNum )
     }
 }
 /*------------------------------------------------------------------------
- Beschreibung:  Einfuegen harter Zeilenumbruch;
+ Beschreibung:	Einfuegen harter Zeilenumbruch;
                 Selektionen werden ueberschrieben
 ------------------------------------------------------------------------*/
 
@@ -954,7 +954,7 @@ void SwWrtShell::InsertLineBreak()
     }
 }
 /*------------------------------------------------------------------------
- Beschreibung:  Einfuegen harter Spaltenumbruch;
+ Beschreibung:	Einfuegen harter Spaltenumbruch;
                 Selektionen werden ueberschrieben
 ------------------------------------------------------------------------*/
 
@@ -980,8 +980,8 @@ void SwWrtShell::InsertColumnBreak()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Einfuegen Fussnote
- Parameter:     rStr -- optionales Fussnotenzeichen
+ Beschreibung:	Einfuegen Fussnote
+ Parameter: 	rStr -- optionales Fussnotenzeichen
 ------------------------------------------------------------------------*/
 
 
@@ -1013,7 +1013,7 @@ void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
     }
 }
 /*------------------------------------------------------------------------
- Beschreibung:  SplitNode; hier auch, da
+ Beschreibung:	SplitNode; hier auch, da
                     - selektierter Inhalt geloescht wird;
                     - der Cursorstack gfs. zurueckgesetzt wird.
 ------------------------------------------------------------------------*/
@@ -1041,8 +1041,8 @@ void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Numerierung anschalten
- Parameter:     Optionale Angabe eines Namens fuer die benannte Liste;
+ Beschreibung:	Numerierung anschalten
+ Parameter: 	Optionale Angabe eines Namens fuer die benannte Liste;
                 dieser bezeichnet eine Position, wenn er in eine
                 Zahl konvertierbar ist und kleiner ist als nMaxRules.
 -------------------------------------------------------------------------*/
@@ -1451,7 +1451,7 @@ void SwWrtShell::NumOrBulletOff()
 // <- #i29560#
 
 /*------------------------------------------------------------------------
- Beschreibung:  Default-Bulletliste erfragen
+ Beschreibung:	Default-Bulletliste erfragen
 ------------------------------------------------------------------------*/
 
 void SwWrtShell::BulletOn()
@@ -1473,7 +1473,7 @@ SelectionType SwWrtShell::GetSelectionType() const
     if ( BasicActionPend() )
         return IsSelFrmMode() ? nsSelectionType::SEL_FRM : nsSelectionType::SEL_TXT;
 
-//  if ( IsTableMode() )
+//	if ( IsTableMode() )
 //      return nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS;
 
     SwView &_rView = ((SwView&)GetView());
@@ -1489,7 +1489,7 @@ SelectionType SwWrtShell::GetSelectionType() const
             nCnt = nsSelectionType::SEL_DRW_TXT;
         else
         {
-            if (GetView().IsFormMode()) // Nur Forms selektiert
+            if (GetView().IsFormMode())	// Nur Forms selektiert
                 nCnt = nsSelectionType::SEL_DRW_FORM;
             else
                 nCnt = nsSelectionType::SEL_DRW;            // Irgendein Draw-Objekt
@@ -1556,8 +1556,8 @@ SelectionType SwWrtShell::GetSelectionType() const
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Finden der TextCollection mit dem Name rCollname
- Return:                Pointer auf die Collection oder 0, wenn keine
+ Beschreibung:	Finden der TextCollection mit dem Name rCollname
+ Return:				Pointer auf die Collection oder 0, wenn keine
                                 TextCollection mit diesem Namen existiert oder
                                 diese eine Defaultvorlage ist.
 ------------------------------------------------------------------------*/
@@ -1575,8 +1575,8 @@ SwTxtFmtColl *SwWrtShell::GetParaStyle(const String &rCollName, GetStyle eCreate
     return pColl;
 }
 /*------------------------------------------------------------------------
- Beschreibung:  Finden der Zeichenvorlage mit dem Name rCollname
- Return:                Pointer auf die Collection oder 0, wenn keine
+ Beschreibung:	Finden der Zeichenvorlage mit dem Name rCollname
+ Return:				Pointer auf die Collection oder 0, wenn keine
                                 Zeichenvorlage mit diesem Namen existiert oder
                                 diese eine Defaultvorlage oder automatische Vorlage ist.
 ------------------------------------------------------------------------*/
@@ -1596,8 +1596,8 @@ SwCharFmt *SwWrtShell::GetCharStyle(const String &rFmtName, GetStyle eCreate )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Finden des Tabellenformates mit dem Name rFmtname
- Return:                Pointer auf das Format oder 0, wenn kein
+ Beschreibung:	Finden des Tabellenformates mit dem Name rFmtname
+ Return:				Pointer auf das Format oder 0, wenn kein
                                 Rahmenformat mit diesem Namen existiert oder
                                 dieses eine Defaultformat oder automatisches Format ist.
 ------------------------------------------------------------------------*/
@@ -1616,7 +1616,7 @@ SwFrmFmt *SwWrtShell::GetTblStyle(const String &rFmtName)
 
 
 /*------------------------------------------------------------------------
- Beschreibung:  Anwenden der Vorlagen
+ Beschreibung:	Anwenden der Vorlagen
 ------------------------------------------------------------------------*/
 
 
@@ -1632,7 +1632,7 @@ void SwWrtShell::SetPageStyle(const String &rCollName)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Zugriff Vorlagen
+ Beschreibung:	Zugriff Vorlagen
 ------------------------------------------------------------------------*/
 
 
@@ -1643,7 +1643,7 @@ String SwWrtShell::GetCurPageStyle( const BOOL bCalcFrm ) const
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Aktuelle Vorlage anhand der geltenden Attribute aendern
+ Beschreibung:	Aktuelle Vorlage anhand der geltenden Attribute aendern
 ------------------------------------------------------------------------*/
 
 
@@ -1665,16 +1665,16 @@ void SwWrtShell::QuickUpdateStyle()
 void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet)
 {
     SfxItemSet aCoreSet( GetAttrPool(),
-            RES_CHRATR_BEGIN,           RES_CHRATR_END - 1,
-            RES_PARATR_BEGIN,           RES_PARATR_END - 1,
-            RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,
-            SID_ATTR_TABSTOP_POS,       SID_ATTR_TABSTOP_POS,
-            SID_ATTR_TABSTOP_DEFAULTS,  SID_ATTR_TABSTOP_DEFAULTS,
-            SID_ATTR_TABSTOP_OFFSET,    SID_ATTR_TABSTOP_OFFSET,
-            SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_INNER,
-            SID_ATTR_PARA_MODEL,        SID_ATTR_PARA_KEEP,
-            SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,
-            0   );
+            RES_CHRATR_BEGIN, 			RES_CHRATR_END - 1,
+            RES_PARATR_BEGIN, 			RES_PARATR_END - 1,
+            RES_FRMATR_BEGIN, 			RES_FRMATR_END - 1,
+            SID_ATTR_TABSTOP_POS, 		SID_ATTR_TABSTOP_POS,
+            SID_ATTR_TABSTOP_DEFAULTS, 	SID_ATTR_TABSTOP_DEFAULTS,
+            SID_ATTR_TABSTOP_OFFSET, 	SID_ATTR_TABSTOP_OFFSET,
+            SID_ATTR_BORDER_INNER,		SID_ATTR_BORDER_INNER,
+            SID_ATTR_PARA_MODEL,		SID_ATTR_PARA_KEEP,
+            SID_ATTR_PARA_PAGENUM,		SID_ATTR_PARA_PAGENUM,
+            0	);
     GetCurAttr( aCoreSet );
     BOOL bReset = FALSE;
     SfxItemIter aParaIter( aCoreSet );

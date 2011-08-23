@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,34 +40,34 @@
 
 namespace com{namespace sun{ namespace star{ namespace beans{
     class XPropertySet;
-}}}}
+}}}}    
 
 class SwFldDokInfPage : public SwFldPage
 {
-    FixedText           aTypeFT;
-    SvTreeListBox       aTypeTLB;
-    FixedText           aSelectionFT;
-    ListBox             aSelectionLB;
-    FixedText           aFormatFT;
-    NumFormatListBox    aFormatLB;
-    CheckBox            aFixedCB;
+    FixedText 			aTypeFT;
+    SvTreeListBox		aTypeTLB;
+    FixedText			aSelectionFT;
+    ListBox				aSelectionLB;
+    FixedText			aFormatFT;
+    NumFormatListBox	aFormatLB;
+    CheckBox			aFixedCB;
 
-    SvLBoxEntry*        pSelEntry;
+    SvLBoxEntry*		pSelEntry;
     com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > xCustomPropertySet;
 
-    String              aInfoStr;
+    String				aInfoStr;
 
-    USHORT              nOldSel;
-    ULONG               nOldFormat;
+    USHORT				nOldSel;
+    ULONG				nOldFormat;
     ::rtl::OUString     m_sOldCustomFieldName;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
 
-    USHORT              FillSelectionLB(USHORT nSubTypeId);
+    USHORT				FillSelectionLB(USHORT nSubTypeId);
 
 protected:
-    virtual USHORT      GetGroup();
+    virtual USHORT		GetGroup();
 
 public:
                         SwFldDokInfPage(Window* pWindow, const SfxItemSet& rSet);
@@ -79,7 +79,7 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    virtual void        FillUserData();
+    virtual void		FillUserData();
 };
 
 

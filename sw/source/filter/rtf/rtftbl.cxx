@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ void SwRTFParser::ReadTable( int nToken )
     if (CantUseTables())
     {
         // alle Tabellen-Tokens ueberlesen
-        nToken = GetNextToken();        // RTF_TROWD ueberlesen
+        nToken = GetNextToken();		// RTF_TROWD ueberlesen
         do {
             if( RTF_TABLEDEF != (nToken & ~(0xff | RTF_SWGDEFS)) &&
                 RTF_UNKNOWNCONTROL != nToken )
@@ -175,7 +175,7 @@ void SwRTFParser::ReadTable( int nToken )
     if( RTF_TROWD == nToken || !pTableNode )
     {
         if( RTF_TROWD == nToken )
-            nToken = GetNextToken();        // RTF_TROWD ueberlesen
+            nToken = GetNextToken();		// RTF_TROWD ueberlesen
 
         // Flags fuer die gemergten Boxen loeschen
         aMergeBoxes.Remove( 0, aMergeBoxes.Count() );
@@ -458,7 +458,7 @@ void SwRTFParser::ReadTable( int nToken )
 
         case RTF_CLTXLRTB:
         case RTF_CLTXTBRL:
-        case RTF_INTBL:     // das wissen wir !
+        case RTF_INTBL:		// das wissen wir !
         case RTF_CLMGF:
         case RTF_CLVMGF:
         case RTF_CLVMRG:
@@ -529,7 +529,7 @@ void SwRTFParser::ReadTable( int nToken )
         int nC = aMergeBackup.Count();
         for (USHORT i = 0; i < nC; ++i)
             aMergeBoxes.Insert(aMergeBackup[i], i);
-        SkipToken( -1 );            // zum Letzen gueltigen zurueck
+        SkipToken( -1 );			// zum Letzen gueltigen zurueck
         return;
     }
 
@@ -635,9 +635,9 @@ void SwRTFParser::ReadTable( int nToken )
         }
         aBoxFmts.Remove( 0, n );
 
-        if( aBoxFmts.Count() )      // es muessen noch neue zugefuegt werden
+        if( aBoxFmts.Count() )		// es muessen noch neue zugefuegt werden
             nAktBox = n;
-        else                        // es mussen noch Boxen geloescht werden
+        else						// es mussen noch Boxen geloescht werden
         {
             // remove ContentIndex of other Bound
             pPam->SetMark(); pPam->DeleteMark();
@@ -727,7 +727,7 @@ void SwRTFParser::ReadTable( int nToken )
             }
             else
             {
-                SkipToken( -1 );            // zum Letzen gueltigen zurueck
+                SkipToken( -1 );			// zum Letzen gueltigen zurueck
                 return;
             }
 
@@ -832,7 +832,7 @@ void SwRTFParser::ReadTable( int nToken )
     OSL_ENSURE(!bFailure, "RTF Table failure");
     if (bFailure)
     {
-        SkipToken( -1 );            // zum Letzen gueltigen zurueck
+        SkipToken( -1 );			// zum Letzen gueltigen zurueck
         return;
     }
 
@@ -867,7 +867,7 @@ void SwRTFParser::ReadTable( int nToken )
             pStk->MoveFullNode(aOldPos, aNewPos);
         }
     }
-    SkipToken( -1 );            // zum Letzen gueltigen zurueck
+    SkipToken( -1 );			// zum Letzen gueltigen zurueck
 }
 
 // in die naechste Box dieser Line (opt.: falls es nicht die letzte ist)
@@ -945,7 +945,7 @@ void SwRTFParser::NewTblLine()
     if( !bMakeCopy &&
         64000 < pTableNode->GetTable().GetTabSortBoxes().Count() )
     {
-        bMakeCopy = TRUE;       // spaetestens jetzt eine neue anfangen!
+        bMakeCopy = TRUE;		// spaetestens jetzt eine neue anfangen!
     }
 
     if( bMakeCopy )
@@ -964,7 +964,7 @@ void SwRTFParser::NewTblLine()
         pLns = &pTableNode->GetTable().GetTabLines();
     }
     else
-//      pDoc->InsertRow( aBoxes );
+//		pDoc->InsertRow( aBoxes );
         pTableNode->GetTable().AppendRow( pDoc );
 
     pBox = (*pLns)[ pLns->Count()-1 ]->GetTabBoxes()[0];
@@ -1018,8 +1018,8 @@ void SwRTFParser::CheckInsNewTblLine()
     {
         if( nInsTblRow > GetOpenBrakets() || IsPardTokenRead() )
             nInsTblRow = USHRT_MAX;
-        else if( !pTableNode )      // Tabelle nicht mehr vorhanden ?
-            NewTblLine();           // evt. Line copieren
+        else if( !pTableNode )		// Tabelle nicht mehr vorhanden ?
+            NewTblLine();			// evt. Line copieren
     }
 }
 
