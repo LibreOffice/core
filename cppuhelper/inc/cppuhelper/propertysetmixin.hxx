@@ -42,6 +42,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "sal/types.h"
+#include "cppuhelperdllapi.h"
 
 /// @HTML
 
@@ -88,7 +89,7 @@ template< typename T > class PropertySetMixin;
 
    @since UDK 3.2.1
 */
-class PropertySetMixinImpl:
+class CPPUHELPER_DLLPUBLIC PropertySetMixinImpl:
     public com::sun::star::beans::XPropertySet,
     public com::sun::star::beans::XFastPropertySet,
     public com::sun::star::beans::XPropertyAccess

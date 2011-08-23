@@ -32,6 +32,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include "cppuhelperdllapi.h"
 
 
 namespace cppu
@@ -61,8 +62,8 @@ namespace cppu
     path.
     @deprecated
 */
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
-createRegistryServiceFactory(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+SAL_CALL createRegistryServiceFactory(
     const ::rtl::OUString & rWriteRegistryFile,
     const ::rtl::OUString & rReadRegistryFile,
     sal_Bool bReadOnly = sal_False,
@@ -87,8 +88,8 @@ createRegistryServiceFactory(
     path.
     @deprecated
 */
-inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
-createRegistryServiceFactory(
+inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+SAL_CALL createRegistryServiceFactory(
     const ::rtl::OUString & rRegistryFile,
     sal_Bool bReadOnly = sal_False,
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
@@ -108,8 +109,8 @@ createRegistryServiceFactory(
     path.
     @deprecated
 */
-inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
-createServiceFactory(
+inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+SAL_CALL createServiceFactory(
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
     SAL_THROW( (::com::sun::star::uno::Exception) )
 {

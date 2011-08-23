@@ -30,6 +30,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
+#include "cppuhelperdllapi.h"
 
 
 namespace cppu {
@@ -38,7 +39,7 @@ namespace cppu {
   @deprecated
   always returns </NULL>
 */
-::com::sun::star::reflection::XIdlClass * SAL_CALL createStandardClassWithSequence(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::reflection::XIdlClass * SAL_CALL createStandardClassWithSequence(
     const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr ,
     const ::rtl::OUString & sImplementationName ,
     const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > & rSuperClass,

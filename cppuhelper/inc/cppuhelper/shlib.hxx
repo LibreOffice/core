@@ -33,6 +33,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/registry/CannotRegisterImplementationException.hpp>
+#include "cppuhelperdllapi.h"
 
 
 namespace cppu
@@ -60,7 +61,7 @@ namespace cppu
     factory instance (::com::sun::star::lang::XSingleComponentFactory or
     ::com::sun::star::lang::XSingleComponentFactory)
 */
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
     ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
     ::rtl::OUString const & rImplName,
@@ -85,7 +86,7 @@ SAL_CALL loadSharedLibComponentFactory(
     factory instance (::com::sun::star::lang::XSingleComponentFactory or
     ::com::sun::star::lang::XSingleComponentFactory)
 */
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
     ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
     ::rtl::OUString const & rImplName,
@@ -105,7 +106,7 @@ SAL_CALL loadSharedLibComponentFactory(
     factory instance (::com::sun::star::lang::XSingleComponentFactory or
     ::com::sun::star::lang::XSingleComponentFactory)
 */
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL invokeStaticComponentFactory(
     oslGenericFunction pGetter,
     ::rtl::OUString const & rImplName,
@@ -127,7 +128,7 @@ SAL_CALL invokeStaticComponentFactory(
     @param xMgr service manager to be provided to the component
     @param xKey registry key to be provided to the component
 */
-void
+CPPUHELPER_DLLPUBLIC void
 SAL_CALL writeSharedLibComponentInfo(
     ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,

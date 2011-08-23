@@ -105,7 +105,7 @@ struct class_data
 /** ImplHelper
     @internal
 */
-::com::sun::star::uno::Any SAL_CALL ImplHelper_query(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL ImplHelper_query(
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
     void * that )
@@ -113,7 +113,7 @@ struct class_data
 /** ImplHelper
     @internal
 */
-::com::sun::star::uno::Any SAL_CALL ImplHelper_queryNoXInterface(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL ImplHelper_queryNoXInterface(
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
     void * that )
@@ -121,27 +121,30 @@ struct class_data
 /** ImplHelper
     @internal
 */
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL ImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+SAL_CALL ImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** ImplHelper
     @internal
 */
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL ImplInhHelper_getTypes(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+SAL_CALL ImplInhHelper_getTypes(
     class_data * cd,
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > const & rAddTypes )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** ImplHelper
     @internal
 */
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL ImplHelper_getImplementationId(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< sal_Int8 >
+SAL_CALL ImplHelper_getImplementationId(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
 /** WeakImplHelper
     @internal
 */
-::com::sun::star::uno::Any SAL_CALL WeakImplHelper_query(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakImplHelper_query(
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
     void * that,
@@ -150,14 +153,16 @@ struct class_data
 /** WeakImplHelper
     @internal
 */
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+SAL_CALL WeakImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
 /** WeakAggImplHelper
     @internal
 */
-::com::sun::star::uno::Any SAL_CALL WeakAggImplHelper_queryAgg(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any
+SAL_CALL WeakAggImplHelper_queryAgg(
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
     void * that,
@@ -166,7 +171,8 @@ struct class_data
 /** WeakAggImplHelper
     @internal
 */
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakAggImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+SAL_CALL WeakAggImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 

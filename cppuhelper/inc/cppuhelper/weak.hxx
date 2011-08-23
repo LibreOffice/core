@@ -33,6 +33,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/uno/XWeak.hpp>
+#include "cppuhelperdllapi.h"
 
 
 namespace cppu
@@ -49,7 +50,7 @@ class OWeakConnectionPoint;
     @derive
     Inherit from this class and delegate acquire()/ release() calls.
 */
-class OWeakObject : public ::com::sun::star::uno::XWeak
+class CPPUHELPER_DLLPUBLIC OWeakObject : public ::com::sun::star::uno::XWeak
 {
     /** @internal */
     friend class OWeakConnectionPoint;

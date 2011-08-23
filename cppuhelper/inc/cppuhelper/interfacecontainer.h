@@ -40,6 +40,7 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HXX_
 #include "com/sun/star/lang/DisposedException.hpp"
 #endif
+#include "cppuhelperdllapi.h"
 
 /** */ //for docpp
 namespace cppu
@@ -65,7 +66,7 @@ class OInterfaceContainerHelper;
 
   @see OInterfaceContainerHelper
  */
-class OInterfaceIteratorHelper
+class CPPUHELPER_DLLPUBLIC OInterfaceIteratorHelper
 {
 public:
     /**
@@ -123,7 +124,7 @@ private:
 
   @see OInterfaceIteratorHelper
  */
-class OInterfaceContainerHelper
+class CPPUHELPER_DLLPUBLIC OInterfaceContainerHelper
 {
 public:
     // these are here to force memory de/allocation to sal lib.
@@ -515,7 +516,7 @@ struct hashType_Impl
 /** Specialized class for key type com::sun::star::uno::Type,
     without explicit usage of STL symbols.
 */
-class OMultiTypeInterfaceContainerHelper
+class CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelper
 {
 public:
     // these are here to force memory de/allocation to sal lib.

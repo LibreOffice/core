@@ -30,6 +30,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/security/XAccessController.hpp>
+#include "cppuhelperdllapi.h"
 
 
 namespace cppu
@@ -37,7 +38,7 @@ namespace cppu
 
 /** Helper class retriving access controller singleton from component context.
 */
-class AccessControl
+class CPPUHELPER_DLLPUBLIC AccessControl
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::security::XAccessController > m_xController;
 

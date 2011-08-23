@@ -31,6 +31,7 @@
 #include <rtl/alloc.h>
 #include <rtl/uuid.h>
 #include <com/sun/star/uno/Sequence.hxx>
+#include "cppuhelperdllapi.h"
 
 
 namespace cppu
@@ -39,7 +40,7 @@ namespace cppu
 /** Helper class to implement ::com::sun::star::lang::XTypeProvider.  Construct a static object
     of this class with your UNO object's supported types.
 */
-class OTypeCollection
+class CPPUHELPER_DLLPUBLIC OTypeCollection
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > _aTypes;
 
@@ -188,7 +189,7 @@ public:
 /** Helper class to implement ::com::sun::star::lang::XTypeProvider.  Construct a static object
     of this class for your UNO object's implementation id.
 */
-class OImplementationId
+class CPPUHELPER_DLLPUBLIC OImplementationId
 {
     /** @internal */
     mutable ::com::sun::star::uno::Sequence< sal_Int8 > * _pSeq;
