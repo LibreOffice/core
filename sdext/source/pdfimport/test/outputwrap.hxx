@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 namespace pdfi
 {
 
-typedef ::cppu::WeakComponentImplHelper1<
+typedef ::cppu::WeakComponentImplHelper1< 
         com::sun::star::io::XOutputStream > OutputWrapBase;
 
     class OutputWrap : private cppu::BaseMutex, public OutputWrapBase
@@ -47,7 +47,7 @@ typedef ::cppu::WeakComponentImplHelper1<
 
     public:
 
-        explicit OutputWrap( const rtl::OUString& rURL ) : OutputWrapBase(m_aMutex), maFile(rURL)
+        explicit OutputWrap( const rtl::OUString& rURL ) : OutputWrapBase(m_aMutex), maFile(rURL) 
         {
             maFile.open(osl_File_OpenFlag_Create|OpenFlag_Write);
         }
@@ -70,6 +70,6 @@ typedef ::cppu::WeakComponentImplHelper1<
     };
 }
 #endif
-
+ 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

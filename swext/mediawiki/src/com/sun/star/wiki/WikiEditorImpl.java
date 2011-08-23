@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,23 +65,23 @@ import javax.net.ssl.SSLException;
 public final class WikiEditorImpl extends WeakBase
    implements com.sun.star.lang.XServiceInfo, XDispatchProvider, XDispatch, XInitialization
 {
-
+    
     private final XComponentContext m_xContext;
     private static final String m_implementationName = WikiEditorImpl.class.getName();
     private static final String[] m_serviceNames = {"com.sun.star.wiki.WikiEditor" };
-
-    // information needed for component registration
+    
+    // information needed for component registration 
     public static final String[] supportedServiceNames = {"com.sun.star.frame.ProtocolHandler"};
-    public static final Class implementationClass = WikiEditorImpl.class;
+    public static final Class implementationClass = WikiEditorImpl.class;    
     // protocol name that this protocol handler handles
     public static final String protocolName = "vnd.com.sun.star.wiki:";
 
     private Map m_statusListeners = new HashMap();
 
-
+    
     private XComponent xComp;
     private String sTempUrl;
-
+    
     private XFrame m_xFrame;
     private XModel m_xModel;
     private Settings m_aSettings;
@@ -95,7 +95,7 @@ public final class WikiEditorImpl extends WeakBase
         m_aSettings = Settings.getSettings( m_xContext );
     };
 
-    public static XSingleComponentFactory __getComponentFactory( String sImplementationName )
+    public static XSingleComponentFactory __getComponentFactory( String sImplementationName ) 
     {
         XSingleComponentFactory xFactory = null;
 
@@ -104,11 +104,11 @@ public final class WikiEditorImpl extends WeakBase
         else if ( sImplementationName.equals( WikiOptionsEventHandlerImpl.m_sImplementationName ) )
             xFactory = Factory.createComponentFactory( WikiOptionsEventHandlerImpl.class,
                                                        WikiOptionsEventHandlerImpl.m_pServiceNames );
-
+            
         return xFactory;
     }
 
-    public static boolean __writeRegistryServiceInfo( XRegistryKey xRegistryKey )
+    public static boolean __writeRegistryServiceInfo( XRegistryKey xRegistryKey ) 
     {
         boolean bResult = Factory.writeRegistryServiceInfo( m_implementationName,
                                                             m_serviceNames,
@@ -119,16 +119,16 @@ public final class WikiEditorImpl extends WeakBase
     }
 
     // com.sun.star.lang.XServiceInfo:
-    public String getImplementationName()
+    public String getImplementationName() 
     {
          return m_implementationName;
     }
 
-    public boolean supportsService( String sService )
+    public boolean supportsService( String sService ) 
     {
         int len = m_serviceNames.length;
 
-        for( int i=0; i < len; i++ )
+        for( int i=0; i < len; i++ ) 
         {
             if ( sService.equals( m_serviceNames[i] ))
                 return true;
@@ -136,22 +136,22 @@ public final class WikiEditorImpl extends WeakBase
         return false;
     }
 
-    public String[] getSupportedServiceNames()
+    public String[] getSupportedServiceNames() 
     {
         return m_serviceNames;
     }
 
-
+    
     private XSelectionSupplier m_sel;
     private XController m_ctrl;
     private boolean m_bInitialized;
-    public synchronized void initialize( Object[] args ) throws com.sun.star.uno.Exception
-    {
-        if ( m_bInitialized )
+    public synchronized void initialize( Object[] args ) throws com.sun.star.uno.Exception 
+    {        
+        if ( m_bInitialized ) 
         {
             //logger.log( Level.SEVERE, "Extension instance was initialized again" );
         }
-        if ( args.length > 0 )
+        if ( args.length > 0 ) 
         {
             m_bInitialized = true;
             m_xFrame = ( XFrame )UnoRuntime.queryInterface( XFrame.class, args[0] );
@@ -161,49 +161,49 @@ public final class WikiEditorImpl extends WeakBase
         }
     }
 
-
-
+    
+    
     public void dispatch(
-        final com.sun.star.util.URL aURL,
-        com.sun.star.beans.PropertyValue[] propertyValue )
+        final com.sun.star.util.URL aURL, 
+        com.sun.star.beans.PropertyValue[] propertyValue ) 
     {
         final com.sun.star.util.URL myURL = aURL;
         //logger.log( Level.INFO, "received dispatch request for: "+aURL.Complete );
-        if ( aURL.Protocol.compareTo( protocolName ) == 0 )
+        if ( aURL.Protocol.compareTo( protocolName ) == 0 ) 
         {
             /*
-            synchronized( this )
+            synchronized( this ) 
             {
                 if( m_bClosing ) return;
                 else m_bActive = true;
             }
              **/
-
-            try
+            
+            try 
             {
-                if ( myURL.Path.compareTo( "send" ) == 0 )
+                if ( myURL.Path.compareTo( "send" ) == 0 ) 
                 {
                     sendArticle();
                 }
-            } catch( java.lang.Throwable t )
+            } catch( java.lang.Throwable t ) 
             {
                 //logger.log( Level.WARNING, "exception while handeling dispatch", t );
             }
 
             /*
-            synchronized( this )
+            synchronized( this ) 
             {
                 m_bActive = false;
                 // if we became owner while we were active
                 // we are responsible for closing the m_xFrame now
                 if ( m_bOwner && m_xFrame != null )
                 {
-                    try
+                    try 
                     {
                         XCloseable xclose = ( XCloseable )UnoRuntime.queryInterface(
                             XCloseable.class, m_xFrame );
                         xclose.close( true );
-                    } catch ( CloseVetoException cve )
+                    } catch ( CloseVetoException cve ) 
                     {
                         logger.log( Level.SEVERE, "cannot close owned frame" );
                     }
@@ -212,50 +212,50 @@ public final class WikiEditorImpl extends WeakBase
                 }
             }
              */
-        }
+        }        
     }
 
-
+    
     public com.sun.star.frame.XDispatch queryDispatch(
-        com.sun.star.util.URL aURL,
-        String str,
-        int param )
+        com.sun.star.util.URL aURL, 
+        String str, 
+        int param ) 
     {
-            if ( aURL.Protocol.equals( protocolName ))
+            if ( aURL.Protocol.equals( protocolName )) 
             {
 
                 // by default, we are responsible
                 return this;
-            } else
+            } else 
             {
                 return null;
             }
     }
-
-    public XDispatch[] queryDispatches( DispatchDescriptor[] seqDescripts )
+    
+    public XDispatch[] queryDispatches( DispatchDescriptor[] seqDescripts ) 
     {
         int nCount = seqDescripts.length;
         XDispatch[] lDispatcher = new XDispatch[nCount];
 
         for( int i=0; i<nCount; ++i )
-            lDispatcher[i] = queryDispatch(
+            lDispatcher[i] = queryDispatch( 
                 seqDescripts[i].FeatureURL,
                 seqDescripts[i].FrameName,
                 seqDescripts[i].SearchFlags );
         return lDispatcher;
-   }
+   }        
 
 
     public void removeStatusListener(
-        com.sun.star.frame.XStatusListener xStatusListener,
-        com.sun.star.util.URL aURL )
+        com.sun.star.frame.XStatusListener xStatusListener, 
+        com.sun.star.util.URL aURL ) 
     {
     }
 
-
+    
     public void addStatusListener(
-        com.sun.star.frame.XStatusListener listener,
-        com.sun.star.util.URL url )
+        com.sun.star.frame.XStatusListener listener, 
+        com.sun.star.util.URL url ) 
     {
         String urlstring = url.Complete;
         m_statusListeners.put( urlstring, listener );
@@ -263,41 +263,41 @@ public final class WikiEditorImpl extends WeakBase
         callStatusListener( urlstring, listener );
     }
 
-    public void callStatusListeners()
+    public void callStatusListeners() 
     {
         Set entries = m_statusListeners.entrySet();
         Iterator iter = entries.iterator();
-        while ( iter.hasNext() )
+        while ( iter.hasNext() ) 
         {
             Map.Entry entry = ( Map.Entry ) iter.next();
             String uristring = ( String ) entry.getKey();
-            XStatusListener listener = ( XStatusListener ) entry.getValue();
-            callStatusListener( uristring, listener );
-        }
+            XStatusListener listener = ( XStatusListener ) entry.getValue();                                    
+            callStatusListener( uristring, listener ); 
+        }          
     }
-
-    public void callStatusListener( String uristring, XStatusListener listener )
+    
+    public void callStatusListener( String uristring, XStatusListener listener ) 
     {
-        try
+        try 
         {
-
+        
             URI uri = new URI( uristring );
 
             // check whether any blogs are live...
             setListenerState( listener, "command", false );
-        } catch ( URISyntaxException ex )
+        } catch ( URISyntaxException ex ) 
         {
             ex.printStackTrace();
         }
     }
 
-
-    private void setListenerState( XStatusListener listener, String urlstring, boolean state )
+        
+    private void setListenerState( XStatusListener listener, String urlstring, boolean state ) 
     {
         com.sun.star.util.URL url = new com.sun.star.util.URL();
         url.Complete = urlstring;
-        //listener.statusChanged( new FeatureStateEvent( this, url, "", state, false, null ));
-
+        //listener.statusChanged( new FeatureStateEvent( this, url, "", state, false, null ));       
+        
     }
 
     public void sendArticle()
@@ -305,7 +305,7 @@ public final class WikiEditorImpl extends WeakBase
         if ( m_xFrame != null )
         {
             WikiPropDialog aSendDialog = null;
-            try
+            try 
             {
                 if ( m_xModel == null )
                 {
@@ -318,8 +318,8 @@ public final class WikiEditorImpl extends WeakBase
                 {
                     // The related Wiki filter must be detected from the typename
                     String aServiceName = Helper.GetDocServiceName( m_xContext, m_xModel );
-                    m_aFilterName = Helper.GetFilterName( m_xContext, "MediaWiki", aServiceName );
-
+                    m_aFilterName = Helper.GetFilterName( m_xContext, "MediaWiki", aServiceName );                 
+                            
                     if ( m_aFilterName == null || m_aFilterName.length() == 0 )
                     {
                         Helper.ShowError( m_xContext,
@@ -351,7 +351,7 @@ public final class WikiEditorImpl extends WeakBase
             }
         }
     }
-
+    
     public boolean SendArticleImpl( WikiPropDialog aSendDialog, Hashtable aWikiSetting )
     {
         boolean bResult = false;
@@ -364,7 +364,7 @@ public final class WikiEditorImpl extends WeakBase
             {
                 // TODO: stop progress spinning
                 WikiArticle aArticle = new WikiArticle( m_xContext, aSendDialog.GetWikiTitle(), aWikiSetting, true, aSendDialog );
-
+                
                 boolean bAllowSending = true;
                 if ( !aArticle.NotExist() )
                 {
@@ -410,7 +410,7 @@ public final class WikiEditorImpl extends WeakBase
                         aDocInfo.put( "Url", aArticle.GetMainURL() );
                         aDocInfo.put( "CompleteUrl", aArticle.GetMainURL() + aArticle.GetTitle() );
                         m_aSettings.addWikiDoc( aDocInfo );
-                        m_aSettings.storeConfiguration();
+                        m_aSettings.storeConfiguration();    
                     }
                     else
                     {
@@ -469,8 +469,8 @@ public final class WikiEditorImpl extends WeakBase
                 }
             }
         }
-
+        
         return bResult;
     }
-
+    
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -225,7 +225,7 @@ PresenterController::~PresenterController (void)
 void PresenterController::disposing (void)
 {
     maInstances.erase(mxController->getFrame());
-
+ 
     if (mxMainWindow.is())
     {
         mxMainWindow->removeKeyListener(this);
@@ -242,7 +242,7 @@ void PresenterController::disposing (void)
     mpWindowManager = NULL;
     if (xWindowManagerComponent.is())
         xWindowManagerComponent->dispose();
-
+    
     if (mxController.is())
     {
         Reference<frame::XFrame> xFrame (mxController->getFrame());
@@ -294,7 +294,7 @@ void PresenterController::UpdateCurrentSlide (const sal_Int32 nOffset)
     GetSlides(nOffset);
     UpdatePaneTitles();
     UpdateViews();
-
+    
     // Update the accessibility object.
     if (IsAccessibilityActive())
     {
@@ -409,7 +409,7 @@ void PresenterController::UpdatePaneTitles (void)
     for (iPane=mpPaneContainer->maPanes.begin(); iPane!=mpPaneContainer->maPanes.end(); ++iPane)
     {
         OSL_ASSERT((*iPane).get() != NULL);
-
+        
         OUString sTemplate (IsAccessibilityActive()
             ? (*iPane)->msAccessibleTitleTemplate
             : (*iPane)->msTitleTemplate);
@@ -652,7 +652,7 @@ void PresenterController::DispatchUnoCommand (const OUString& rsCommand) const
 
     util::URL aURL;
     aURL.Complete = rsCommand;
-    mxUrlTransformer->parseStrict(aURL);
+    mxUrlTransformer->parseStrict(aURL); 
 
     Reference<frame::XDispatch> xDispatch (GetDispatch(aURL));
     if ( ! xDispatch.is())
@@ -668,7 +668,7 @@ Reference<css::frame::XDispatch> PresenterController::GetDispatch (const util::U
 {
     if ( ! mxController.is())
         return NULL;
-
+    
     Reference<frame::XDispatchProvider> xDispatchProvider (mxController->getFrame(), UNO_QUERY);
     if ( ! xDispatchProvider.is())
         return NULL;
@@ -824,7 +824,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
     sal_Int32 nType (0);
     if ( ! (rEvent.UserData >>= nType))
         return;
-
+    
     switch (nType)
     {
         case ResourceActivationEventType:
@@ -841,7 +841,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
                 {
                     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
                         mpPaneContainer->FindPaneId(xPane->getResourceId()));
-
+                                
                     // When there is a call out anchor location set then tell the
                     // window about it.
                     if (pDescriptor->mbHasCalloutAnchor)
@@ -1195,7 +1195,7 @@ void SAL_CALL PresenterController::mouseReleased (const css::awt::MouseEvent& rE
 {
     (void)rEvent;
 }
-
+    
 
 
 
@@ -1204,7 +1204,7 @@ void SAL_CALL PresenterController::mouseEntered (const css::awt::MouseEvent& rEv
 {
     (void)rEvent;
 }
-
+    
 
 
 
@@ -1218,7 +1218,7 @@ void SAL_CALL PresenterController::mouseExited (const css::awt::MouseEvent& rEve
 
 
 //----- XMouseMotionListener --------------------------------------------------
-
+    
 void SAL_CALL PresenterController::mouseMoved (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -1298,7 +1298,7 @@ void PresenterController::LoadTheme (const Reference<XPane>& rxPane)
 double PresenterController::GetSlideAspectRatio (void) const
 {
     double nSlideAspectRatio (28.0/21.0);
-
+    
     try
     {
         if (mxController.is())

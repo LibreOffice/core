@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ class WikiProtocolSocketFactory implements SecureProtocolSocketFactory
             {
                 new X509TrustManager() {
                     private X509TrustManager m_aOrgTrustManager;
-
+                
                     private X509TrustManager GetOrgTrustManager()
                     {
                         if ( m_aOrgTrustManager == null )
@@ -79,20 +79,20 @@ class WikiProtocolSocketFactory implements SecureProtocolSocketFactory
                                 throw new RuntimeException( "No access to the default trust manager!" );
                             }
                         }
-
+                        
                         return m_aOrgTrustManager;
                     }
-
+                    
                     public X509Certificate[] getAcceptedIssuers()
                     {
                         return GetOrgTrustManager().getAcceptedIssuers();
                     }
-
+                    
                     public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException
                     {
                         GetOrgTrustManager().checkClientTrusted( certs, authType );
                     }
-
+                    
                     public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException
                     {
                         if ( certs == null || certs.length == 0 )

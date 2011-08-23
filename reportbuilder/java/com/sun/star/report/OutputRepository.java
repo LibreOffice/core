@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public interface OutputRepository
     OutputStream createOutputStream(final String name, final String mimeType) throws IOException;
 
     /** allows to acces sub repositories inside this repository
-     *
+     * 
      * @param name describes the path to the sub repository
      * @param mimeType
      * @return the sub repository

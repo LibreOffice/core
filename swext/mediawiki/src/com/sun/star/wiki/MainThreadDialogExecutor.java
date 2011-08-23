@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ public class MainThreadDialogExecutor implements XCallback
         MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( aWikiDialog );
         return GetCallback( xContext, aExecutor );
     }
-
+ 
     static public boolean Execute( XComponentContext xContext, XDialog xDialog )
     {
         MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( xDialog );
@@ -86,7 +86,7 @@ public class MainThreadDialogExecutor implements XCallback
                     XMultiComponentFactory xFactory = xContext.getServiceManager();
                     if ( xFactory == null )
                         throw new com.sun.star.uno.RuntimeException();
-
+                    
                     XRequestCallback xRequest = (XRequestCallback)UnoRuntime.queryInterface(
                         XRequestCallback.class,
                         xFactory.createInstanceWithContext( "com.sun.star.awt.AsyncCallback", xContext ) );
@@ -114,7 +114,7 @@ public class MainThreadDialogExecutor implements XCallback
 
         return aExecutor.GetResult();
     }
-
+    
     private MainThreadDialogExecutor( WikiDialog aWikiDialog )
     {
         m_aWikiDialog = aWikiDialog;
@@ -141,7 +141,7 @@ public class MainThreadDialogExecutor implements XCallback
     {
         return m_bResult;
     }
-
+    
     public void notify( Object aData )
     {
         if ( m_aWikiDialog != null )
@@ -155,7 +155,7 @@ public class MainThreadDialogExecutor implements XCallback
                 try
                 {
                     m_xDialog.endExecute();
-                }
+                } 
                 catch( Exception e )
                 {
                     e.printStackTrace();
@@ -166,10 +166,10 @@ public class MainThreadDialogExecutor implements XCallback
         else if ( m_xMessageBox != null )
         {
             int nRes = m_xMessageBox.execute();
-            m_bResult = ( nRes == com.sun.star.awt.MessageBoxCommand.OK
+            m_bResult = ( nRes == com.sun.star.awt.MessageBoxCommand.OK 
                           || nRes == com.sun.star.awt.MessageBoxCommand.YES );
         }
-
+        
         m_bCalled = true;
     }
 };

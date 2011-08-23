@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -55,18 +55,18 @@ namespace connectivity
         using ::com::sun::star::sdbc::XResultSetMetaData;
 
         class OBoundParam;
-        typedef ::cppu::ImplHelper5<    ::com::sun::star::sdbc::XPreparedStatement,
+        typedef ::cppu::ImplHelper5<	::com::sun::star::sdbc::XPreparedStatement,
                                         ::com::sun::star::sdbc::XParameters,
                                         ::com::sun::star::sdbc::XPreparedBatchExecution,
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OPreparedStatement :  public OCommonStatement,
+        class OPreparedStatement :	public OCommonStatement,
                                     public OPreparedStatement_BASE
         {
         protected:
-            unsigned int        m_paramCount;   // number of placeholders
-            sal_Int32           m_nNumParams;   // Number of parameter markers for the prepared statement
+            unsigned int		m_paramCount;	// number of placeholders
+            sal_Int32			m_nNumParams;	// Number of parameter markers for the prepared statement
             Reference< XResultSetMetaData > m_xMetaData;
 
             void checkParameterIndex(sal_Int32 parameter);
@@ -80,7 +80,7 @@ namespace connectivity
             OPreparedStatement(OConnection* _pConnection, sql::PreparedStatement * cppPrepStmt);
 
             //XInterface
-            Any SAL_CALL queryInterface(const Type & rType) throw(RuntimeException);
+            Any SAL_CALL queryInterface(const Type & rType)	throw(RuntimeException);
             void SAL_CALL acquire() throw();
             void SAL_CALL release() throw();
 
@@ -89,7 +89,7 @@ namespace connectivity
                                                                                     throw(RuntimeException);
 
             // XPreparedStatement
-            Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery() throw(SQLException, RuntimeException);
+            Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery()	throw(SQLException, RuntimeException);
             sal_Int32 SAL_CALL executeUpdate() throw(SQLException, RuntimeException);
             sal_Bool SAL_CALL execute() throw(SQLException, RuntimeException);
             Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection() throw(SQLException, RuntimeException);
@@ -103,26 +103,26 @@ namespace connectivity
                                                 throw(SQLException, RuntimeException);
 
             // XParameters
-            void SAL_CALL setNull(sal_Int32 parameter, sal_Int32 sqlType)           throw(SQLException, RuntimeException);
+            void SAL_CALL setNull(sal_Int32 parameter, sal_Int32 sqlType)			throw(SQLException, RuntimeException);
 
             void SAL_CALL setObjectNull(sal_Int32 parameter, sal_Int32 sqlType, const OUString& typeName)
                                                                                     throw(SQLException, RuntimeException);
 
-            void SAL_CALL setBoolean(sal_Int32 parameter, sal_Bool x)               throw(SQLException, RuntimeException);
+            void SAL_CALL setBoolean(sal_Int32 parameter, sal_Bool x)				throw(SQLException, RuntimeException);
 
-            void SAL_CALL setByte(sal_Int32 parameter, sal_Int8 x)                  throw(SQLException, RuntimeException);
+            void SAL_CALL setByte(sal_Int32 parameter, sal_Int8 x)					throw(SQLException, RuntimeException);
 
-            void SAL_CALL setShort(sal_Int32 parameter, sal_Int16 x)                throw(SQLException, RuntimeException);
+            void SAL_CALL setShort(sal_Int32 parameter, sal_Int16 x)				throw(SQLException, RuntimeException);
 
-            void SAL_CALL setInt(sal_Int32 parameter, sal_Int32 x)                  throw(SQLException, RuntimeException);
+            void SAL_CALL setInt(sal_Int32 parameter, sal_Int32 x)					throw(SQLException, RuntimeException);
 
-            void SAL_CALL setLong(sal_Int32 parameter, sal_Int64 x)                 throw(SQLException, RuntimeException);
+            void SAL_CALL setLong(sal_Int32 parameter, sal_Int64 x)					throw(SQLException, RuntimeException);
 
-            void SAL_CALL setFloat(sal_Int32 parameter, float x)                    throw(SQLException, RuntimeException);
+            void SAL_CALL setFloat(sal_Int32 parameter, float x)					throw(SQLException, RuntimeException);
 
-            void SAL_CALL setDouble(sal_Int32 parameter, double x)                  throw(SQLException, RuntimeException);
+            void SAL_CALL setDouble(sal_Int32 parameter, double x)					throw(SQLException, RuntimeException);
 
-            void SAL_CALL setString(sal_Int32 parameter, const OUString& x)         throw(SQLException, RuntimeException);
+            void SAL_CALL setString(sal_Int32 parameter, const OUString& x)			throw(SQLException, RuntimeException);
 
             void SAL_CALL setBytes(sal_Int32 parameter, const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
                                                                                     throw(SQLException, RuntimeException);
@@ -141,7 +141,7 @@ namespace connectivity
             void SAL_CALL setCharacterStream(sal_Int32 parameter, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length)
                                                                                     throw(SQLException, RuntimeException);
 
-            void SAL_CALL setObject(sal_Int32 parameter, const Any& x)              throw(SQLException, RuntimeException);
+            void SAL_CALL setObject(sal_Int32 parameter, const Any& x)				throw(SQLException, RuntimeException);
 
             void SAL_CALL setObjectWithInfo(sal_Int32 parameter, const Any& x, sal_Int32 targetSqlType, sal_Int32 scale)
                                                                                     throw(SQLException, RuntimeException);
@@ -163,7 +163,7 @@ namespace connectivity
             // XPreparedBatchExecution
             void SAL_CALL addBatch() throw(SQLException, RuntimeException);
             void SAL_CALL clearBatch() throw(SQLException, RuntimeException);
-            ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch()    throw(SQLException, RuntimeException);
+            ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch()	throw(SQLException, RuntimeException);
 
             // XCloseable
             void SAL_CALL close() throw(SQLException, RuntimeException);
@@ -184,6 +184,6 @@ namespace connectivity
  * vim600: noet sw=4 ts=4 fdm=marker
  * vim<600: noet sw=4 ts=4
  */
-
+ 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

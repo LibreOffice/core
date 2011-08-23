@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,19 +44,19 @@
 namespace pdfi
 {
 
-void WriterXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* >::const_iterator&   )
-{
+void WriterXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* >::const_iterator&   ) 
+{ 
     if( elem.Children.empty() )
         return;
-
+    
     const char* pType = dynamic_cast<DrawElement*>(elem.Children.front()) ? "draw:a" : "text:a";
-
+    
     PropertyMap aProps;
     aProps[ USTR( "xlink:type" ) ] = USTR( "simple" );
     aProps[ USTR( "xlink:href" ) ] = elem.URI;
     aProps[ USTR( "office:target-frame-name" ) ] = USTR( "_blank" );
     aProps[ USTR( "xlink:show" ) ] = USTR( "new" );
-
+    
     m_rEmitContext.rEmitter.beginTag( pType, aProps );
     std::list< Element* >::iterator this_it =  elem.Children.begin();
     while( this_it !=elem.Children.end() && *this_it != &elem )
@@ -67,18 +67,18 @@ void WriterXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* 
     m_rEmitContext.rEmitter.endTag( pType );
 }
 
-void WriterXmlEmitter::visit( TextElement& elem, const std::list< Element* >::const_iterator&   )
+void WriterXmlEmitter::visit( TextElement& elem, const std::list< Element* >::const_iterator&   ) 
 {
     if( ! elem.Text.getLength() )
         return;
-
+    
     PropertyMap aProps;
     if( elem.StyleId != -1 )
     {
-        aProps[ rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text:style-name" ) ) ] =
+        aProps[ rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text:style-name" ) ) ] = 
             m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
-
+    
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
     m_rEmitContext.rEmitter.write( elem.Text.makeStringAndClear() );
     std::list< Element* >::iterator this_it =  elem.Children.begin();
@@ -87,7 +87,7 @@ void WriterXmlEmitter::visit( TextElement& elem, const std::list< Element* >::co
         (*this_it)->visitedBy( *this, this_it );
         this_it++;
     }
-
+    
     m_rEmitContext.rEmitter.endTag( "text:span" );
 }
 
@@ -102,23 +102,23 @@ void WriterXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* 
     if( elem.Type == elem.Headline )
         pTagType = "text:h";
     m_rEmitContext.rEmitter.beginTag( pTagType, aProps );
-
+    
     std::list< Element* >::iterator this_it =  elem.Children.begin();
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
         this_it++;
     }
-
+    
     m_rEmitContext.rEmitter.endTag( pTagType );
 }
 
-void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
-                                       PropertyMap&       rProps,
+void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem, 
+                                       PropertyMap&       rProps, 
                                        const EmitContext& rEmitContext )
 {
     double rel_x = rElem.x, rel_y = rElem.y;
-
+  
     // find anchor type by recursing though parents
     Element* pAnchor = rElem.Parent;
     while( pAnchor &&
@@ -148,7 +148,7 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
     rProps[ USTR( "draw:style-name" )] = rEmitContext.rStyles.getStyleName( rElem.StyleId );
     rProps[ USTR( "svg:width" ) ]   = convertPixelToUnitString( rElem.w );
     rProps[ USTR( "svg:height" ) ]  = convertPixelToUnitString( rElem.h );
-
+    
     const GraphicsContext& rGC =
         rEmitContext.rProcessor.getGraphicsContext( rElem.GCId );
     if( rGC.Transformation.isIdentity() )
@@ -163,12 +163,12 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
     {
         basegfx::B2DTuple aScale, aTranslation;
         double fRotate, fShearX;
-
+        
         rGC.Transformation.decompose( aScale, aTranslation, fRotate, fShearX );
-
+        
         rtl::OUStringBuffer aBuf( 256 );
 
-        // TODO(F2): general transformation case missing; if implemented, note
+        // TODO(F2): general transformation case missing; if implemented, note 
         // that ODF rotation is oriented the other way
 
         // build transformation string
@@ -197,36 +197,36 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
             aBuf.append( convertPixelToUnitString( rel_y ) );
             aBuf.appendAscii( " )" );
          }
-
+     
         rProps[ USTR( "draw:transform" ) ] = aBuf.makeStringAndClear();
     }
 }
 
-void WriterXmlEmitter::visit( FrameElement& elem, const std::list< Element* >::const_iterator&   )
-{
+void WriterXmlEmitter::visit( FrameElement& elem, const std::list< Element* >::const_iterator&   ) 
+{      
     if( elem.Children.empty() )
         return;
-
+    
     bool bTextBox = (dynamic_cast<ParagraphElement*>(elem.Children.front()) != NULL);
     PropertyMap aFrameProps;
     fillFrameProps( elem, aFrameProps, m_rEmitContext );
     m_rEmitContext.rEmitter.beginTag( "draw:frame", aFrameProps );
     if( bTextBox )
         m_rEmitContext.rEmitter.beginTag( "draw:text-box", PropertyMap() );
-
+    
     std::list< Element* >::iterator this_it =  elem.Children.begin();
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
         this_it++;
     }
-
+    
     if( bTextBox )
         m_rEmitContext.rEmitter.endTag( "draw:text-box" );
     m_rEmitContext.rEmitter.endTag( "draw:frame" );
 }
 
-void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >::const_iterator& )
+void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >::const_iterator& ) 
 {
     elem.updateGeometry();
     /* note:
@@ -240,44 +240,44 @@ void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >
     {
         basegfx::B2DPolygon b2dPolygon;
         b2dPolygon =  elem.PolyPoly.getB2DPolygon( i );
-
+        
         for ( sal_uInt32 j = 0; j< b2dPolygon.count(); j++ )
         {
             basegfx::B2DPoint point;
             basegfx::B2DPoint nextPoint;
             point = b2dPolygon.getB2DPoint( j );
-
+            
             basegfx::B2DPoint prevPoint;
             prevPoint = b2dPolygon.getPrevControlPoint( j ) ;
-
-            point.setX( convPx2mmPrec2( point.getX() )*100.0 );
+            
+            point.setX( convPx2mmPrec2( point.getX() )*100.0 ); 
             point.setY( convPx2mmPrec2( point.getY() )*100.0 );
-
+            
             if ( b2dPolygon.isPrevControlPointUsed( j ) )
             {
-                prevPoint.setX( convPx2mmPrec2( prevPoint.getX() )*100.0 );
+                prevPoint.setX( convPx2mmPrec2( prevPoint.getX() )*100.0 ); 
                 prevPoint.setY( convPx2mmPrec2( prevPoint.getY() )*100.0 );
             }
-
+            
             if ( b2dPolygon.isNextControlPointUsed( j ) )
             {
                 nextPoint = b2dPolygon.getNextControlPoint( j ) ;
-                nextPoint.setX( convPx2mmPrec2( nextPoint.getX() )*100.0 );
+                nextPoint.setX( convPx2mmPrec2( nextPoint.getX() )*100.0 ); 
                 nextPoint.setY( convPx2mmPrec2( nextPoint.getY() )*100.0 );
-            }
-
+            } 
+            
             b2dPolygon.setB2DPoint( j, point );
-
+            
             if ( b2dPolygon.isPrevControlPointUsed( j ) )
                 b2dPolygon.setPrevControlPoint( j , prevPoint ) ;
-
+            
             if ( b2dPolygon.isNextControlPointUsed( j ) )
                 b2dPolygon.setNextControlPoint( j , nextPoint ) ;
         }
-
+        
         elem.PolyPoly.setB2DPolygon( i, b2dPolygon );
     }
-
+    
     PropertyMap aProps;
     fillFrameProps( elem, aProps, m_rEmitContext );
     rtl::OUStringBuffer aBuf( 64 );
@@ -287,14 +287,14 @@ void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >
     aBuf.append( convPx2mmPrec2(elem.h)*100.0 );
     aProps[ USTR( "svg:viewBox" ) ] = aBuf.makeStringAndClear();
     aProps[ USTR( "svg:d" ) ]       = basegfx::tools::exportToSvgD( elem.PolyPoly );
-
+    
     m_rEmitContext.rEmitter.beginTag( "draw:path", aProps );
     m_rEmitContext.rEmitter.endTag( "draw:path" );
 }
 
-void WriterXmlEmitter::visit( ImageElement& elem, const std::list< Element* >::const_iterator& )
+void WriterXmlEmitter::visit( ImageElement& elem, const std::list< Element* >::const_iterator& ) 
 {
-    PropertyMap aImageProps;
+    PropertyMap aImageProps;    
     m_rEmitContext.rEmitter.beginTag( "draw:image", aImageProps );
     m_rEmitContext.rEmitter.beginTag( "office:binary-data", PropertyMap() );
     m_rEmitContext.rImages.writeBase64EncodedStream( elem.Image, m_rEmitContext);
@@ -314,12 +314,12 @@ void WriterXmlEmitter::visit( PageElement& elem, const std::list< Element* >::co
         this_it++;
     }
 }
-
+    
 void WriterXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >::const_iterator&)
 {
     m_rEmitContext.rEmitter.beginTag( "office:body", PropertyMap() );
     m_rEmitContext.rEmitter.beginTag( "office:text", PropertyMap() );
-
+    
     for( std::list< Element* >::iterator it = elem.Children.begin(); it != elem.Children.end(); ++it )
     {
         PageElement* pPage = dynamic_cast<PageElement*>(*it);
@@ -343,7 +343,7 @@ void WriterXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >
         if( dynamic_cast<DrawElement*>(*it) == NULL )
             (*it)->visitedBy( *this, it );
     }
-
+    
     m_rEmitContext.rEmitter.endTag( "office:text" );
     m_rEmitContext.rEmitter.endTag( "office:body" );
 }
@@ -374,12 +374,12 @@ void WriterXmlOptimizer::visit( PolyPolyElement& elem, const std::list< Element*
      *     the other is a fill
      */
     if( elem.Parent )
-    {
-        // find following PolyPolyElement in parent's children list
+    {    
+        // find following PolyPolyElement in parent's children list 
         std::list< Element* >::iterator this_it = elem.Parent->Children.begin();
         while( this_it != elem.Parent->Children.end() && *this_it != &elem )
             ++this_it;
-
+        
         if( this_it != elem.Parent->Children.end() )
         {
             std::list< Element* >::iterator next_it = this_it;
@@ -426,7 +426,7 @@ void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< Element
     optimizeTextElements( elem );
 
     elem.applyToChildren(*this);
-
+    
     if( elem.Parent && rParentIt != elem.Parent->Children.end() )
     {
         // find if there is a previous paragraph that might be a heading for this one
@@ -483,15 +483,15 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
     if( m_rProcessor.getStatusIndicator().is() )
         m_rProcessor.getStatusIndicator()->setValue( elem.PageNumber );
 
-    // resolve hyperlinks
+    // resolve hyperlinks   
     elem.resolveHyperlinks();
-
+    
     elem.resolveFontStyles( m_rProcessor ); // underlines and such
-
+    
     // FIXME: until hyperlinks and font effects are adjusted for
-    // geometrical search handle them before sorting
+    // geometrical search handle them before sorting    
     m_rProcessor.sortElements( &elem );
-
+    
     // find paragraphs in text
     ParagraphElement* pCurPara = NULL;
     std::list< Element* >::iterator page_element, next_page_element;
@@ -520,7 +520,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
                     fCurLineHeight = (fCurLineHeight*double(nCurLineElements) + pTestText->h)/double(nCurLineElements+1);
                     nCurLineElements++;
                 }
-            }
+            } 
             continue;
         }
 
@@ -531,7 +531,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
         if( pDraw )
         {
             // insert small drawing objects as character, else leave them page bound
-
+            
             bool bInsertToParagraph = false;
             // first check if this is either inside the paragraph
             if( pCurPara && pDraw->y < pCurPara->y + pCurPara->h )
@@ -574,14 +574,14 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
                     pDraw->isCharacter = true;
                 }
             }
-
+            
             if( ! bInsertToParagraph )
             {
                 pCurPara = NULL;
                 continue;
             }
         }
-
+        
         TextElement* pText = dynamic_cast<TextElement*>(*page_element);
         if( ! pText && pLink && ! pLink->Children.empty() )
             pText = dynamic_cast<TextElement*>(pLink->Children.front());
@@ -662,12 +662,12 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
     /* indicators for a header:
      *  - single line paragrah at top of page (  inside 15% page height)
      *  - at least linheight above the next paragr   aph
-     *
-     *  indicators for a footer likewise:
-     *  - single line paragraph at bottom of page (inside 15% page height)
-     *  - at least lineheight below the previous paragraph
+     *   
+     *  indicators for a footer likewise:    
+     *  - single line paragraph at bottom of page (inside 15% page height)   
+     *  - at least lineheight below the previous paragraph   
      */
-
+    
     // detect header
     // Note: the following assumes that the pages' chiuldren have been
     // sorted geometrically
@@ -696,7 +696,7 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
         }
         ++it;
     }
-
+    
     // detect footer
     std::list< Element* >::reverse_iterator rit = rElem.Children.rbegin();
     while( rit != rElem.Children.rend() )
@@ -732,7 +732,7 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
         OSL_ENSURE( 0, "empty paragraph optimized" );
         return;
     }
-
+    
     // concatenate child elements with same font id
     std::list< Element* >::iterator next = rParent.Children.begin();
     std::list< Element* >::iterator it = next++;
@@ -755,9 +755,9 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
             {
                 const GraphicsContext& rCurGC = m_rProcessor.getGraphicsContext( pCur->GCId );
                 const GraphicsContext& rNextGC = m_rProcessor.getGraphicsContext( pNext->GCId );
-
+                
                 // line and space optimization; works only in strictly horizontal mode
-
+                
                 if( !bRotatedFrame
                     && ! rCurGC.isRotatedOrSkewed()
                     && ! rNextGC.isRotatedOrSkewed()
@@ -850,7 +850,7 @@ void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element*
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext(elem.GCId );
     PropertyMap aProps;
     aProps[ USTR( "style:family" ) ] = USTR( "graphic" );
-
+    
     PropertyMap aGCProps;
 
     // TODO(F3): proper dash emulation
@@ -888,7 +888,7 @@ void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element*
     StyleContainer::Style aStyle( "style:style", aProps );
     StyleContainer::Style aSubStyle( "style:graphic-properties", aGCProps );
     aStyle.SubStyles.push_back( &aSubStyle );
-
+    
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
 }
 
@@ -897,13 +897,13 @@ void WriterXmlFinalizer::visit( HyperlinkElement&, const std::list< Element* >::
 }
 
 void WriterXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::const_iterator& )
-{
+{    
     const FontAttributes& rFont = m_rProcessor.getFont( elem.FontId );
     PropertyMap aProps;
     aProps[ USTR( "style:family" ) ] = USTR( "text" );
 
     PropertyMap aFontProps;
-
+    
     // family name
     aFontProps[ USTR( "fo:font-family" ) ] = rFont.familyName;
     // bold
@@ -943,7 +943,7 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::
     // color
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext( elem.GCId );
     aFontProps[ USTR( "fo:color" ) ]                 =  getColorString( rFont.isOutline ? rGC.LineColor : rGC.FillColor );
-
+    
     StyleContainer::Style aStyle( "style:style", aProps );
     StyleContainer::Style aSubStyle( "style:text-properties", aFontProps );
     aStyle.SubStyles.push_back( &aSubStyle );
@@ -951,9 +951,9 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::
 }
 
 void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element* >::const_iterator& rParentIt )
-{
+{    
     PropertyMap aParaProps;
-
+    
     if( elem.Parent )
     {
         // check for center alignement
@@ -962,7 +962,7 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
         double p_y = elem.Parent->y;
         double p_w = elem.Parent->w;
         double p_h = elem.Parent->h;
-
+        
         PageElement* pPage = dynamic_cast<PageElement*>(elem.Parent);
         if( pPage )
         {
@@ -994,7 +994,7 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
             aBuf.appendAscii( "mm" );
             aParaProps[ USTR( "fo:margin-left" ) ] = aBuf.makeStringAndClear();
         }
-
+        
         // check whether to leave some space to next paragraph
         // find wether there is a next paragraph
         std::list< Element* >::const_iterator it = rParentIt;
@@ -1012,7 +1012,7 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
             }
         }
     }
-
+    
     if( ! aParaProps.empty() )
     {
         PropertyMap aProps;
@@ -1030,16 +1030,16 @@ void WriterXmlFinalizer::visit( FrameElement& elem, const std::list< Element* >:
 {
     PropertyMap aProps;
     aProps[ USTR( "style:family" ) ] = USTR( "graphic" );
-
+    
     PropertyMap aGCProps;
 
     aGCProps[ USTR("draw:stroke") ] = USTR("none");
     aGCProps[ USTR("draw:fill") ] = USTR("none");
-
+    
     StyleContainer::Style aStyle( "style:style", aProps );
     StyleContainer::Style aSubStyle( "style:graphic-properties", aGCProps );
     aStyle.SubStyles.push_back( &aSubStyle );
-
+    
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
     elem.applyToChildren(*this);
 }
@@ -1049,7 +1049,7 @@ void WriterXmlFinalizer::visit( ImageElement&, const std::list< Element* >::cons
 }
 
 void WriterXmlFinalizer::setFirstOnPage( ParagraphElement&    rElem,
-                                         StyleContainer&      rStyles,
+                                         StyleContainer&      rStyles, 
                                          const rtl::OUString& rMasterPageName )
 {
     PropertyMap aProps;
@@ -1062,7 +1062,7 @@ void WriterXmlFinalizer::setFirstOnPage( ParagraphElement&    rElem,
 
     aProps[ USTR( "style:family" ) ] = USTR( "paragraph" );
     aProps[ USTR( "style:master-page-name" ) ] = rMasterPageName;
-
+    
     if( rElem.StyleId != -1 )
         rElem.StyleId = rStyles.setProperties( rElem.StyleId, aProps );
     else
@@ -1076,10 +1076,10 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
 {
     if( m_rProcessor.getStatusIndicator().is() )
         m_rProcessor.getStatusIndicator()->setValue( elem.PageNumber );
-
+    
     // transform from pixel to mm
     double page_width = convPx2mm( elem.w ), page_height = convPx2mm( elem.h );
-
+    
     // calculate page margins out of the relevant children (paragraphs)
     elem.TopMargin = elem.h, elem.BottomMargin = 0, elem.LeftMargin = elem.w, elem.RightMargin = 0;
     // first element should be a paragraphy
@@ -1104,7 +1104,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
         elem.TopMargin = elem.HeaderElement->y;
     if( elem.FooterElement && elem.FooterElement->y+elem.FooterElement->h > elem.h - elem.BottomMargin )
         elem.BottomMargin = elem.h - (elem.FooterElement->y + elem.FooterElement->h);
-
+    
     // transform margins to mm
     double left_margin     = convPx2mm( elem.LeftMargin );
     double right_margin    = convPx2mm( elem.RightMargin );
@@ -1118,14 +1118,14 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
         top_margin      = 10;
         bottom_margin   = 10;
     }
-
+    
     // round left/top margin to nearest mm
     left_margin     = rtl_math_round( left_margin, 0, rtl_math_RoundingMode_Floor );
     top_margin      = rtl_math_round( top_margin, 0, rtl_math_RoundingMode_Floor );
     // round (fuzzy) right/bottom margin to nearest cm
     right_margin    = rtl_math_round( right_margin, right_margin >= 10 ? -1 : 0, rtl_math_RoundingMode_Floor );
-    bottom_margin   = rtl_math_round( bottom_margin, bottom_margin >= 10 ? -1 : 0, rtl_math_RoundingMode_Floor );
-
+    bottom_margin   = rtl_math_round( bottom_margin, bottom_margin >= 10 ? -1 : 0, rtl_math_RoundingMode_Floor );    
+    
     // set reasonable default in case of way too large margins
     // e.g. no paragraph case
     if( left_margin > page_width/2.0 - 10 )
@@ -1136,7 +1136,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
         top_margin = 10;
     if( bottom_margin > page_height/2.0 - 10 )
         bottom_margin = 10;
-
+    
     // catch the weird cases
     if( left_margin < 0 )
         left_margin = 0;
@@ -1146,16 +1146,16 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
         top_margin = 0;
     if( bottom_margin < 0 )
         bottom_margin = 0;
-
+    
     // widely differing margins are unlikely to be correct
     if( right_margin > left_margin*1.5 )
         right_margin = left_margin;
-
+    
     elem.LeftMargin      = convmm2Px( left_margin );
     elem.RightMargin     = convmm2Px( right_margin );
     elem.TopMargin       = convmm2Px( top_margin );
     elem.BottomMargin    = convmm2Px( bottom_margin );
-
+    
     // get styles for paragraphs
     PropertyMap aPageProps;
     PropertyMap aPageLayoutProps;
@@ -1169,9 +1169,9 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     aPageLayoutProps[ USTR( "fo:margin-left" ) ]    = unitMMString( left_margin );
     aPageLayoutProps[ USTR( "fo:margin-right" ) ]   = unitMMString( right_margin );
     aPageLayoutProps[ USTR( "style:writing-mode" ) ]= USTR( "lr-tb" );
-
-    StyleContainer::Style aStyle( "style:page-layout", aPageProps);
-    StyleContainer::Style aSubStyle( "style:page-layout-properties", aPageLayoutProps);
+    
+    StyleContainer::Style aStyle( "style:page-layout", aPageProps);   
+    StyleContainer::Style aSubStyle( "style:page-layout-properties", aPageLayoutProps); 
     aStyle.SubStyles.push_back(&aSubStyle);
     sal_Int32 nPageStyle = m_rStyleContainer.impl_getStyleId( aStyle, false );
 
@@ -1195,12 +1195,12 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     }
     elem.StyleId = m_rStyleContainer.impl_getStyleId( aMPStyle,false );
 
-
+    
     rtl::OUString aMasterPageName = m_rStyleContainer.getStyleName( elem.StyleId );
 
     // create styles for children
     elem.applyToChildren(*this);
-
+    
     // no paragraph or other elements before the first paragraph
     if( ! pFirstPara )
     {
@@ -1212,7 +1212,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
 }
 
 void WriterXmlFinalizer::visit( DocumentElement& elem, const std::list< Element* >::const_iterator& )
-{
+{    
     elem.applyToChildren(*this);
 }
 
