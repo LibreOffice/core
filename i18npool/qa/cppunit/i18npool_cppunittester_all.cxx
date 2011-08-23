@@ -38,10 +38,12 @@
 #include "osl/module.h"
 #include "osl/module.hxx"
 #include "osl/thread.h"
+#include "rtl/bootstrap.hxx"
 #include "rtl/process.h"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/main.h"
 #include "sal/types.h"
@@ -134,7 +136,8 @@ SAL_IMPLEMENT_MAIN() {
         .append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("types.rdb")))
         .append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")))
         .append(sBrandLocation)
-        .append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("udkapi.rdb")));
+        .append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("udkapi.rdb")))
+        .toString();
     osl_setEnvironment(sTypes.pData, sTypesValue.pData);
 
     TestPlugInSignature plugs[] = {
