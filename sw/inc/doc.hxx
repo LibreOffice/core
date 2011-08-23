@@ -899,8 +899,9 @@ public:
     */
     virtual void DocInfoChgd();
     virtual const SwDocStat &GetDocStat() const;
+    virtual const SwDocStat &GetUpdatedDocStat();
     virtual void SetDocStat(const SwDocStat& rStat);
-    virtual void UpdateDocStat(SwDocStat& rStat);
+    virtual void UpdateDocStat();
 
     /** IDocumentState
     */

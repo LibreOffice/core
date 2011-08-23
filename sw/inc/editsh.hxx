@@ -374,7 +374,8 @@ public:
     void SetUndoNoResetModified();
 
     // Document - Statistics
-    void UpdateDocStat( SwDocStat& rStat );
+    void UpdateDocStat();
+    const SwDocStat &GetUpdatedDocStat();
 
     void    Insert(const SwTOXMark& rMark);
 

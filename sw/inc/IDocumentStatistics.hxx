@@ -46,9 +46,11 @@
     */
     virtual const SwDocStat &GetDocStat() const = 0;
 
+    virtual const SwDocStat &GetUpdatedDocStat() = 0;
+
     virtual void SetDocStat(const SwDocStat& rStat) = 0;
 
-    virtual void UpdateDocStat(SwDocStat& rStat) = 0;
+    virtual void UpdateDocStat() = 0;
 
 protected:
     virtual ~IDocumentStatistics() {};

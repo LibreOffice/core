@@ -187,9 +187,7 @@ void SwDocTest::testDocStat()
 
     CPPUNIT_ASSERT_MESSAGE("Should still be non-updated 0 count", m_pDoc->GetDocStat().nChar == 0);
 
-    SwDocStat aDocStat = m_pDoc->GetDocStat();
-    m_pDoc->UpdateDocStat(aDocStat);
-
+    SwDocStat aDocStat = m_pDoc->GetUpdatedDocStat();
     sal_uLong nLen = static_cast<sal_uLong>(sText.getLength());
 
     CPPUNIT_ASSERT_MESSAGE("Should now have updated count", aDocStat.nChar == nLen);

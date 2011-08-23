@@ -2020,15 +2020,13 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case  WID_DOC_PARA_COUNT     :
         case  WID_DOC_WORD_COUNT     :
         {
-            SwDocStat aStat(pDocShell->GetDoc()->GetDocStat());
-            if(aStat.bModified)
-                pDocShell->GetDoc()->UpdateDocStat( aStat );
+            const SwDocStat& rStat(pDocShell->GetDoc()->GetUpdatedDocStat());
             sal_Int32 nValue;
             switch(pEntry->nWID)
             {
-                case  WID_DOC_CHAR_COUNT     :nValue = aStat.nChar;break;
-                case  WID_DOC_PARA_COUNT     :nValue = aStat.nPara;break;
-                case  WID_DOC_WORD_COUNT     :nValue = aStat.nWord;break;
+                case  WID_DOC_CHAR_COUNT     :nValue = rStat.nChar;break;
+                case  WID_DOC_PARA_COUNT     :nValue = rStat.nPara;break;
+                case  WID_DOC_WORD_COUNT     :nValue = rStat.nWord;break;
             }
             aAny <<= nValue;
         }

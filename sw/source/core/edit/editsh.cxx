@@ -489,15 +489,23 @@ String SwEditShell::GetCurWord()
 }
 
 /****************************************************************************
- *           void SwEditShell::UpdateDocStat( SwDocStat& rStat )
+ *           void SwEditShell::UpdateDocStat()
  ****************************************************************************/
 
 
-void SwEditShell::UpdateDocStat( SwDocStat& rStat )
+void SwEditShell::UpdateDocStat( )
 {
     StartAllAction();
-    GetDoc()->UpdateDocStat( rStat );
+    GetDoc()->UpdateDocStat( );
     EndAllAction();
+}
+
+const SwDocStat& SwEditShell::GetUpdatedDocStat()
+{
+    StartAllAction();
+    const SwDocStat &rRet = GetDoc()->GetUpdatedDocStat();
+    EndAllAction();
+    return rRet;
 }
 
 // OPT: eddocinl.cxx

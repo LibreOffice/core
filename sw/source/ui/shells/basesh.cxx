@@ -603,8 +603,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             break;
         case FN_UPDATE_FIELDS:
             {
-                SwDocStat aDocStat;
-                rSh.UpdateDocStat(aDocStat);
+                rSh.UpdateDocStat();
                 rSh.EndAllTblBoxEdit();
                 rSh.ViewShell::UpdateFlds(sal_True);
 
