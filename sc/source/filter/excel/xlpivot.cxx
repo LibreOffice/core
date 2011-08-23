@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1015,7 +1015,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclPTViewEx9Info& rInfo )
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo )
 {
-    return rStrm
+    return rStrm 
         << EXC_PT_AUTOFMT_HEADER
         << rInfo.mbReport
         << EXC_PT_AUTOFMT_ZERO

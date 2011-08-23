@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-#define LINGUPROP_AUTOSPELL         "IsSpellAuto"
+#define LINGUPROP_AUTOSPELL			"IsSpellAuto"
 
 //------------------------------------------------------------------
 
@@ -54,8 +54,8 @@ using namespace com::sun::star;
 void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCtlLang,
                                     BOOL& rAutoSpell )
 {
-    //  use SvtLinguConfig instead of service LinguProperties to avoid
-    //  loading the linguistic component
+    //	use SvtLinguConfig instead of service LinguProperties to avoid
+    //	loading the linguistic component
     SvtLinguConfig aConfig;
 
     SvtLinguOptions aOptions;
@@ -70,8 +70,8 @@ void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCt
 // static
 void ScModule::SetAutoSpellProperty( BOOL bSet )
 {
-    //  use SvtLinguConfig instead of service LinguProperties to avoid
-    //  loading the linguistic component
+    //	use SvtLinguConfig instead of service LinguProperties to avoid
+    //	loading the linguistic component
     SvtLinguConfig aConfig;
 
     uno::Any aAny;

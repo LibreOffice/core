@@ -132,7 +132,7 @@ const ScSheetEvents& ScSheetEvents::operator=(const ScSheetEvents& rOther)
             if (rOther.mpScriptNames[nEvent])
                 mpScriptNames[nEvent] = new rtl::OUString(*rOther.mpScriptNames[nEvent]);
             else
-                mpScriptNames[nEvent] = NULL;
+                mpScriptNames[nEvent] = NULL;        
     }
     return *this;
 }

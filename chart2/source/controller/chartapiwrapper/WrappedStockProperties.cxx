@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
         DiagramHelper::tTemplateWithServiceName aTemplateAndService =
                 DiagramHelper::getTemplateForDiagram( xDiagram, xFactory );
 
-        uno::Reference< chart2::XChartTypeTemplate > xTemplate =
+        uno::Reference< chart2::XChartTypeTemplate > xTemplate = 
                 getNewTemplate( bNewValue, aTemplateAndService.second, xFactory );
 
         if(xTemplate.is())
@@ -192,7 +192,7 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTempla
 
     if(!xFactory.is())
         return xTemplate;
-
+    
     if( bNewValue ) //add volume
     {
         if( rCurrentTemplate.equals( C2U( "com.sun.star.chart2.template.StockLowHighClose" ) ) )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <stardiv/starcalc/test/XTestAddIn.hpp>
 
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#include <cppuhelper/implbase4.hxx>	// helper for implementations
 
 
 com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScTestAddIn_CreateInstance(
@@ -48,20 +48,20 @@ class ScTestAddIn : public cppu::WeakImplHelper4<
                         com::sun::star::lang::XServiceInfo >
 {
 private:
-    com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>  xAlphaResult;   //! Test
-    com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>  xNumResult;     //! Test
-    com::sun::star::lang::Locale                                            aFuncLoc;
+    com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>	xAlphaResult;	//! Test
+    com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>	xNumResult;		//! Test
+    com::sun::star::lang::Locale											aFuncLoc;
 
 public:
                             ScTestAddIn();
-    virtual                 ~ScTestAddIn();
+    virtual					~ScTestAddIn();
 
-//                          SMART_UNO_DECLARATION( ScTestAddIn, UsrObject );
-//  friend Reflection *     ScTestAddIn_getReflection();
-//  virtual BOOL            queryInterface( Uik, XInterfaceRef& );
-//  virtual XIdlClassRef    getIdlClass(void);
+//							SMART_UNO_DECLARATION( ScTestAddIn, UsrObject );
+//	friend Reflection *		ScTestAddIn_getReflection();
+//	virtual BOOL			queryInterface( Uik, XInterfaceRef& );
+//	virtual XIdlClassRef	getIdlClass(void);
 
-    static UString          getImplementationName_Static();
+    static UString			getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static();
 
                             // XAddIn

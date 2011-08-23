@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@
 
 //==================================================================
 
-ScSubTotalDlg::ScSubTotalDlg( Window*           pParent,
-                              const SfxItemSet* pArgSet ) :
+ScSubTotalDlg::ScSubTotalDlg( Window*			pParent,
+                              const SfxItemSet*	pArgSet ) :
         SfxTabDialog( pParent,
                       ScResId( RID_SCDLG_SUBTOTALS ),
                       pArgSet ),
-        aBtnRemove  ( this, ScResId( BTN_REMOVE ) )
+        aBtnRemove	( this, ScResId( BTN_REMOVE ) )
 {
     AddTabPage( PAGE_GROUP1,  ScTpSubTotalGroup1::Create,  0 );
     AddTabPage( PAGE_GROUP2,  ScTpSubTotalGroup2::Create,  0 );

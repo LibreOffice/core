@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChild(
     sal_Int32 nMenuCount = getMenuItemCount();
     if (nIndex < nMenuCount)
         return ScAccessibleFilterMenu::getAccessibleChild(nIndex);
-
+    
     nIndex -= nMenuCount;
     switch (nIndex)
     {
@@ -108,16 +108,16 @@ void ScAccessibleFilterTopWindow::setAccessibleChild(
         case LISTBOX:
             mxAccListBox = rAccessible;
         break;
-        case TOGGLE_ALL:
+        case TOGGLE_ALL: 
             mxAccToggleAll = rAccessible;
         break;
-        case SINGLE_ON_BTN:
+        case SINGLE_ON_BTN: 
             mxAccSingleOnBtn = rAccessible;
         break;
-        case SINGLE_OFF_BTN:
+        case SINGLE_OFF_BTN: 
             mxAccSingleOffBtn = rAccessible;
         break;
-        case OK_BTN:
+        case OK_BTN: 
             mxAccOkBtn = rAccessible;
         break;
         case CANCEL_BTN:

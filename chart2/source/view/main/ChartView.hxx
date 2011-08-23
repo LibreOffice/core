@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,9 +76,9 @@ class ChartView : public ::cppu::WeakImplHelper9<
         , ::com::sun::star::datatransfer::XTransferable
         ,::com::sun::star::lang::XUnoTunnel
         //::com::sun::star::lang::XComponent ???
-        //::com::sun::star::uno::XWeak          // implemented by WeakImplHelper(optional interface)
-        //::com::sun::star::uno::XInterface     // implemented by WeakImplHelper(optional interface)
-        //::com::sun::star::lang::XTypeProvider // implemented by WeakImplHelper
+        //::com::sun::star::uno::XWeak			// implemented by WeakImplHelper(optional interface)
+        //::com::sun::star::uno::XInterface		// implemented by WeakImplHelper(optional interface)
+        //::com::sun::star::lang::XTypeProvider	// implemented by WeakImplHelper
         ,::com::sun::star::util::XModifyListener
         ,::com::sun::star::util::XModeChangeBroadcaster
         ,::com::sun::star::util::XUpdatable
@@ -166,7 +166,7 @@ public:
     virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
+    
     //-----------------------------------------------------------------
     // ::com::sun::star::lang::XMultiServiceFactory
     //-----------------------------------------------------------------
@@ -238,7 +238,7 @@ private: //member
     bool volatile       m_bViewDirty; //states wether the view needs to be rebuild
     bool volatile       m_bInViewUpdate;
     bool volatile       m_bViewUpdatePending;
-    bool volatile       m_bRefreshAddIn;
+    bool volatile		m_bRefreshAddIn;       
 
     //better performance for big data
     ::com::sun::star::awt::Size m_aPageResolution;

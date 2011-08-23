@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh
         xRet = pDoc->GetForbiddenCharacters();
         if ( !xRet.is() )
         {
-            //  create an empty SvxForbiddenCharactersTable for SvxUnoForbiddenCharsTable,
-            //  so changes can be stored.
+            //	create an empty SvxForbiddenCharactersTable for SvxUnoForbiddenCharsTable,
+            //	so changes can be stored.
 
             xRet = new SvxForbiddenCharactersTable( pDoc->GetServiceManager() );
             pDoc->SetForbiddenCharacters( xRet );
@@ -78,7 +78,7 @@ void ScForbiddenCharsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // document gone
+        pDocShell = NULL;		// document gone
     }
 }
 

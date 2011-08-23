@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,16 +44,16 @@ class ScNamePasteDlg : public ModalDialog
     DECL_LINK( ListDblClickHdl, ListBox * );
 
 protected:
-    FixedText       aLabelText;
-    ListBox         aNameList;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
-    HelpButton      aHelpButton;
-    PushButton      aInsListButton;
+    FixedText		aLabelText;
+    ListBox			aNameList;
+    OKButton		aOKButton;
+    CancelButton	aCancelButton;
+    HelpButton		aHelpButton;
+    PushButton		aInsListButton;
 public:
     ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL bInsList=TRUE );
 
-    String          GetSelectedName() const;
+    String			GetSelectedName() const;
 };
 
 

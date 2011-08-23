@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1033,8 +1033,8 @@ void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
 
 // private --------------------------------------------------------------------
 
-/**
- * Convert Excel-encoded subtotal name to a Calc-encoded one.
+/** 
+ * Convert Excel-encoded subtotal name to a Calc-encoded one.  
  */
 static OUString lcl_convertExcelSubtotalName(const OUString& rName)
 {
@@ -1447,7 +1447,7 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     aGeometry.setPageFieldCount(maPTInfo.mnPageFields);
     aGeometry.setDataFieldCount(maPTInfo.mnDataFields);
 
-    // Excel includes data layout field in the row field count.  We need to
+    // Excel includes data layout field in the row field count.  We need to 
     // subtract it.
     bool bDataLayout = maPTInfo.mnDataFields > 1;
     aGeometry.setRowFieldCount(maPTInfo.mnRowFields - static_cast<sal_uInt32>(bDataLayout));

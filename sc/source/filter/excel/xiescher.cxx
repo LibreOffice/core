@@ -1453,10 +1453,10 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                     eWriteMode = csst::WritingMode_TB_RL;
                     switch( maTextData.maData.GetHorAlign() )
                     {
-                        case EXC_OBJ_HOR_LEFT:      eVerAlign = SDRTEXTVERTADJUST_TOP;      break;
+                        case EXC_OBJ_HOR_LEFT:      eVerAlign = SDRTEXTVERTADJUST_TOP;		break;
                         case EXC_OBJ_HOR_CENTER:    eVerAlign = SDRTEXTVERTADJUST_CENTER;   break;
-                        case EXC_OBJ_HOR_RIGHT:     eVerAlign = SDRTEXTVERTADJUST_BOTTOM;   break;
-                        case EXC_OBJ_HOR_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;    break;
+                        case EXC_OBJ_HOR_RIGHT:     eVerAlign = SDRTEXTVERTADJUST_BOTTOM;	break;
+                        case EXC_OBJ_HOR_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;	break;
                     }
                     MSO_Anchor eTextAnchor = (MSO_Anchor)rDffConv.GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
                     switch( eTextAnchor )
@@ -1473,9 +1473,9 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                         {
                             switch( maTextData.maData.GetVerAlign() )
                             {
-                                case EXC_OBJ_VER_TOP:       eHorAlign = SVX_ADJUST_RIGHT;   break;
-                                case EXC_OBJ_VER_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
-                                case EXC_OBJ_VER_BOTTOM:    eHorAlign = SVX_ADJUST_LEFT;    break;
+                                case EXC_OBJ_VER_TOP:       eHorAlign = SVX_ADJUST_RIGHT;	break;
+                                case EXC_OBJ_VER_CENTER:    eHorAlign = SVX_ADJUST_CENTER;	break;
+                                case EXC_OBJ_VER_BOTTOM:    eHorAlign = SVX_ADJUST_LEFT;	break;
                                 case EXC_OBJ_VER_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
                             }
                         }
@@ -1483,7 +1483,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                 }
                 break;
 
-                case EXC_OBJ_ORIENT_STACKED:    // PASSTHROUGH INTENDED
+                case EXC_OBJ_ORIENT_STACKED:	// PASSTHROUGH INTENDED
                 {
                     // sj: STACKED is not supported, maybe it can be optimized here a bit
                 }
@@ -1494,8 +1494,8 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                     {
                         case EXC_OBJ_HOR_LEFT:      eVerAlign = SDRTEXTVERTADJUST_BOTTOM;   break;
                         case EXC_OBJ_HOR_CENTER:    eVerAlign = SDRTEXTVERTADJUST_CENTER;   break;
-                        case EXC_OBJ_HOR_RIGHT:     eVerAlign = SDRTEXTVERTADJUST_TOP;      break;
-                        case EXC_OBJ_HOR_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;    break;
+                        case EXC_OBJ_HOR_RIGHT:     eVerAlign = SDRTEXTVERTADJUST_TOP;		break;
+                        case EXC_OBJ_HOR_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;	break;
                     }
                     MSO_Anchor eTextAnchor = (MSO_Anchor)rDffConv.GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
                     switch ( eTextAnchor )
@@ -1513,8 +1513,8 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                             switch( maTextData.maData.GetVerAlign() )
                             {
                                 case EXC_OBJ_VER_TOP:       eHorAlign = SVX_ADJUST_LEFT;   break;
-                                case EXC_OBJ_VER_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
-                                case EXC_OBJ_VER_BOTTOM:    eHorAlign = SVX_ADJUST_RIGHT;   break;
+                                case EXC_OBJ_VER_CENTER:    eHorAlign = SVX_ADJUST_CENTER;	break;
+                                case EXC_OBJ_VER_BOTTOM:    eHorAlign = SVX_ADJUST_RIGHT;	break;
                                 case EXC_OBJ_VER_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
                             }
                         }

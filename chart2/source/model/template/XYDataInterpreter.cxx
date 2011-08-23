@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
     Reference< data::XLabeledDataSequence > xCategories;
     // check for categories. If true, the the categories bet parked in the axis scale, but not used via setting the Axistype to Not CATEGORY
     bool bHasCategories = HasCategories( aArguments, aData );
-
+    
     // parse data
     bool bCategoriesUsed = false;
     for( sal_Int32 nDataIdx= 0; nDataIdx < aData.getLength(); ++nDataIdx )
@@ -164,7 +164,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
     throw (uno::RuntimeException)
 {
     InterpretedData aResult( aInterpretedData );
-
+    
     sal_Int32 i=0;
     Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
     const sal_Int32 nCount = aSeries.getLength();

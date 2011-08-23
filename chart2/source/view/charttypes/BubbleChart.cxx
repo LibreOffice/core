@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -249,7 +249,7 @@ void BubbleChart::createShapes()
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-
+        
         aZSlotIter = m_aZSlots.begin();
         for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; aZSlotIter++, nZ++ )
         {
@@ -289,7 +289,7 @@ void BubbleChart::createShapes()
 
                     if( !m_bShowNegativeValues && fBubbleSize<0.0 )
                         continue;
-
+                    
                     if( ::rtl::math::approxEqual( fBubbleSize, 0.0 ) || ::rtl::math::isNan(fBubbleSize) )
                         continue;
 
@@ -306,7 +306,7 @@ void BubbleChart::createShapes()
                     //transformation 3) -> 4)
                     drawing::Position3D aScenePosition( pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
 
-                    //better performance for big data
+                    //better performance for big data   
                     FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
                     pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                     if( !pSeries->isAttributedDataPoint(nIndex)
@@ -349,7 +349,7 @@ void BubbleChart::createShapes()
 
                             m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
                         }
-
+                     
                         //create data point label
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
                         {
@@ -359,7 +359,7 @@ void BubbleChart::createShapes()
                                         , aScenePosition.PositionZ+this->getTransformedDepth() );
 
                             sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
-
+                            
                             switch(nLabelPlacement)
                             {
                             case ::com::sun::star::chart::DataLabelPlacement::TOP:

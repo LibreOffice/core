@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,23 +39,23 @@
 
 class SC_DLLPUBLIC ScFilterOptions : public utl::ConfigItem
 {
-    BOOL        bWK3Flag;
-    double      fExcelColScale;
-    double      fExcelRowScale;
+    BOOL		bWK3Flag;
+    double		fExcelColScale;
+    double		fExcelRowScale;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
 
 public:
             ScFilterOptions();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
-    virtual void    Commit();
+    virtual void	Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+    virtual void	Commit();
 
-    BOOL        GetWK3Flag() const          { return bWK3Flag; }
-    double      GetExcelColScale() const    { return fExcelColScale; }
-    double      GetExcelRowScale() const    { return fExcelRowScale; }
+    BOOL		GetWK3Flag() const			{ return bWK3Flag; }
+    double		GetExcelColScale() const	{ return fExcelColScale; }
+    double		GetExcelRowScale() const	{ return fExcelRowScale; }
 
-    //  values are never modified by office
+    //	values are never modified by office
 };
 
 

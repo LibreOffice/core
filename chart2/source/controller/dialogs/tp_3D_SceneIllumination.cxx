@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -288,7 +288,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWin
                 , const uno::Reference< beans::XPropertySet > & xSceneProperties
                 , const uno::Reference< frame::XModel >& xChartModel
                 , XColorTable* pColorTable )
-                : TabPage           ( pWindow, SchResId( TP_3D_SCENEILLUMINATION ) )
+                : TabPage 	        ( pWindow, SchResId( TP_3D_SCENEILLUMINATION ) )
                 , m_aFT_LightSource( this, SchResId( FT_LIGHTSOURCE ) )
                 , m_aBtn_Light1( this, SchResId( BTN_LIGHT_1 ), 1 )
                 , m_aBtn_Light2( this, SchResId( BTN_LIGHT_2 ), 2 )
@@ -332,7 +332,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWin
     m_pLightSourceInfoList[7].pButton = &m_aBtn_Light8;
 
     fillControlsFromModel(0);
-
+    
     m_aBtn_Light1.SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
     m_aBtn_Light2.SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
     m_aBtn_Light3.SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
@@ -354,7 +354,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWin
     ClickLightSourceButtonHdl(&m_aBtn_Light2);
 
     //m_aDelyedModelChangeTimer.SetTimeout( 4*EDIT_UPDATEDATA_TIMEOUT );
-
+    
     m_aModelChangeListener.startListening( uno::Reference< util::XModifyBroadcaster >(m_xSceneProperties, uno::UNO_QUERY) );
 }
 
@@ -451,7 +451,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, void*, EMPTYARG )
     pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection8Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue());
 
     applyLightSourcesToModel();
-
+    
     return 0;
 }
 
@@ -463,7 +463,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, void*, EMPTYARG )
         LightButton* pButton = m_pLightSourceInfoList[nLightNumber].pButton;
         if(!pButton->IsChecked())
             ClickLightSourceButtonHdl(pButton);
-
+        
         applyLightSourcesToModel();
     }
     return 0;
@@ -593,37 +593,37 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
     aItemSet.Put(Svx3DLightcolor1Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(Svx3DLightOnOff1Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(Svx3DLightDirection1Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
-
+    
     pInfo = &m_pLightSourceInfoList[1];
     aItemSet.Put(Svx3DLightcolor2Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(Svx3DLightOnOff2Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(Svx3DLightDirection2Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
-
+    
     pInfo = &m_pLightSourceInfoList[2];
     aItemSet.Put(Svx3DLightcolor3Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(Svx3DLightOnOff3Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(Svx3DLightDirection3Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
-
+    
     pInfo = &m_pLightSourceInfoList[3];
     aItemSet.Put(Svx3DLightcolor4Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(Svx3DLightOnOff4Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(Svx3DLightDirection4Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
-
+    
     pInfo = &m_pLightSourceInfoList[4];
     aItemSet.Put(Svx3DLightcolor5Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(Svx3DLightOnOff5Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(Svx3DLightDirection5Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
-
+    
     pInfo = &m_pLightSourceInfoList[5];
     aItemSet.Put(Svx3DLightcolor6Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(Svx3DLightOnOff6Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(Svx3DLightDirection6Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
-
+    
     pInfo = &m_pLightSourceInfoList[6];
     aItemSet.Put(Svx3DLightcolor7Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(Svx3DLightOnOff7Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(Svx3DLightDirection7Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
-
+    
     pInfo = &m_pLightSourceInfoList[7];
     aItemSet.Put(Svx3DLightcolor8Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(Svx3DLightOnOff8Item(pInfo->aLightSource.bIsEnabled));

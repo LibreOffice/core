@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@
 class ScViewData;
 class ScDocument;
 
-#ifndef FLT_DATE_BEFORE
-#define FLT_DATE_BEFORE     0
-#define FLT_DATE_SINCE      1
-#define FLT_DATE_EQUAL      2
-#define FLT_DATE_NOTEQUAL   3
-#define FLT_DATE_BETWEEN    4
-#define FLT_DATE_SAVE       5
+#ifndef	FLT_DATE_BEFORE
+#define FLT_DATE_BEFORE		0
+#define FLT_DATE_SINCE		1
+#define FLT_DATE_EQUAL		2
+#define FLT_DATE_NOTEQUAL	3
+#define FLT_DATE_BETWEEN	4
+#define FLT_DATE_SAVE		5
 #endif
 
 //==================================================================
@@ -65,28 +65,28 @@ class ScHighlightChgDlg : public ScAnyRefDlg
 {
 private:
 
-    CheckBox                aHighlightBox;
+    CheckBox				aHighlightBox;
     FixedLine               aFlFilter;
-    SvxTPFilter             aFilterCtr;
-    CheckBox                aCbAccept;
-    CheckBox                aCbReject;
+    SvxTPFilter			 	aFilterCtr;
+    CheckBox				aCbAccept;
+    CheckBox				aCbReject;
 
-    OKButton                aOkButton;
-    CancelButton            aCancelButton;
-    HelpButton              aHelpButton;
+    OKButton				aOkButton;
+    CancelButton			aCancelButton;
+    HelpButton				aHelpButton;
 
-    formula::RefEdit                aEdAssign;
-    formula::RefButton              aRbAssign;
+    formula::RefEdit				aEdAssign;
+    formula::RefButton				aRbAssign;
 
-    ScViewData*             pViewData;
-    ScDocument*             pDoc;
-    ScRangeName             aLocalRangeName;
-    Selection               theCurSel;
-    Size                    MinSize;
-    ScRangeList             aRangeList;
-    ScChangeViewSettings    aChangeViewSet;
+    ScViewData*				pViewData;
+    ScDocument*				pDoc;
+    ScRangeName				aLocalRangeName;
+    Selection				theCurSel;
+    Size					MinSize;
+    ScRangeList				aRangeList;
+    ScChangeViewSettings	aChangeViewSet;
 
-    void                    Init();
+    void					Init();
 
     DECL_LINK( RefHandle, SvxTPFilter* );
     DECL_LINK(HighLightHandle, CheckBox*);
@@ -95,18 +95,18 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( BOOL bForced = FALSE );
+    virtual void	RefInputDone( BOOL bForced = FALSE );
 
 public:
                     ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                               ScViewData*      ptrViewData);
+                               ScViewData*		ptrViewData);
 
                     ~ScHighlightChgDlg();
 
-    virtual void    SetActive();
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL    Close();
-    virtual BOOL    IsRefInputMode() const;
+    virtual void	SetActive();
+    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual BOOL	Close();
+    virtual BOOL	IsRefInputMode() const;
 
 };
 

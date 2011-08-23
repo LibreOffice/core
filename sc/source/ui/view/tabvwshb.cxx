@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,12 +84,12 @@ using namespace com::sun::star;
 
 void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 {
-    //  wird aus dem Paint gerufen
+    //	wird aus dem Paint gerufen
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
 
-    //  #41412# wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
+    //	#41412# wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
 
     SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
     if ( !pClient )
@@ -102,7 +102,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 
         Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-        aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+        aScaleWidth.ReduceInaccurate(10);		// kompatibel zum SdrOle2Obj
         aScaleHeight.ReduceInaccurate(10);
         pClient->SetSizeScale(aScaleWidth,aScaleHeight);
 
@@ -126,9 +126,9 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     BOOL bErrorShown = FALSE;
 
     // linked objects aren't supported
-//  if ( xIPObj->IsLink() )
-//      nErr = xIPObj->DoVerb(nVerb);           // gelinkt -> ohne Client etc.
-//  else
+//	if ( xIPObj->IsLink() )
+//		nErr = xIPObj->DoVerb(nVerb);			// gelinkt -> ohne Client etc.
+//	else
     {
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
@@ -145,7 +145,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             if ( pClient->GetAspect() != embed::Aspects::MSOLE_ICON
               && ( xObj->getStatus( pClient->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE ) )
             {
-                //  scale must always be 1 - change VisArea if different from client size
+                //	scale must always be 1 - change VisArea if different from client size
 
                 if ( aDrawSize != aOleSize )
                 {
@@ -160,11 +160,11 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             }
             else
             {
-                //  calculate scale from client and VisArea size
+                //	calculate scale from client and VisArea size
 
                 Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
                 Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-                aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+                aScaleWidth.ReduceInaccurate(10);		// kompatibel zum SdrOle2Obj
                 aScaleHeight.ReduceInaccurate(10);
                 pClient->SetSizeScale(aScaleWidth,aScaleHeight);
             }
@@ -213,7 +213,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     if (nErr != ERRCODE_NONE && !bErrorShown)
         ErrorHandler::HandleError(nErr);
 
-    //! SetDocumentName sollte schon im Sfx passieren ???
+    //!	SetDocumentName sollte schon im Sfx passieren ???
     //TODO/LATER: how "SetDocumentName"?
     //xIPObj->SetDocumentName( GetViewData()->GetDocShell()->GetTitle() );
 
@@ -224,7 +224,7 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
 {
     SdrView* pView = GetSdrView();
     if (!pView)
-        return ERRCODE_SO_NOTIMPL;          // soll nicht sein
+        return ERRCODE_SO_NOTIMPL;			// soll nicht sein
 
     SdrOle2Obj* pOle2Obj = NULL;
     SdrGrafObj* pGrafObj = NULL;
@@ -276,7 +276,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         UpdateInputHandler();
     }
 
-    //  Rahmen fuer Chart einfuegen wird abgebrochen:
+    //	Rahmen fuer Chart einfuegen wird abgebrochen:
     FuPoor* pPoor = GetDrawFuncPtr();
     if ( pPoor && pPoor->GetSlotID() == SID_DRAW_CHART )
         GetViewData()->GetDispatcher().Execute(SID_DRAW_CHART, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
@@ -284,13 +284,13 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     MakeDrawLayer();
 
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
-    ScTabView*   pTabView  = GetViewData()->GetView();
-    Window*      pWin      = pTabView->GetActiveWin();
-    ScDrawView*  pView     = pTabView->GetScDrawView();
-    ScDocShell*  pDocSh    = GetViewData()->GetDocShell();
-    ScDocument*  pDoc      = pDocSh->GetDocument();
-//  SdrModel*    pDrModel  = pDocSh->MakeDrawLayer();
-    SdrModel*    pDrModel  = pView->GetModel();
+    ScTabView*	 pTabView  = GetViewData()->GetView();
+    Window* 	 pWin	   = pTabView->GetActiveWin();
+    ScDrawView*	 pView	   = pTabView->GetScDrawView();
+    ScDocShell*	 pDocSh	   = GetViewData()->GetDocShell();
+    ScDocument*	 pDoc	   = pDocSh->GetDocument();
+//	SdrModel*	 pDrModel  = pDocSh->MakeDrawLayer();
+    SdrModel*	 pDrModel  = pView->GetModel();
 
     switch ( nSlot )
     {
@@ -306,7 +306,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_INSERT_DIAGRAM:
             FuInsertChart(this, pWin, pView, pDrModel, rReq);
-//?         SC_MOD()->SetFunctionDlg( NULL );//XXX
+//?			SC_MOD()->SetFunctionDlg( NULL );//XXX
             break;
 
         case SID_INSERT_OBJECT:
@@ -321,7 +321,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_OBJECTRESIZE:
             {
-                //          Der Server moechte die Clientgrosse verandern
+                //			Der Server moechte die Clientgrosse verandern
 
                 SfxInPlaceClient* pClient = GetIPClient();
 
@@ -377,7 +377,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
                 if(pDescriptorItem)
                 {
-                    //! merge with ScViewFunc::PasteDataFormat (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE)?
+                    //!	merge with ScViewFunc::PasteDataFormat (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE)?
 
                     ScDrawView* pDrView = GetScDrawView();
                     SdrPageView* pPageView = pDrView ? pDrView->GetSdrPageView() : NULL;
@@ -471,7 +471,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                 break;
 
             case SID_INSERT_APPLET:
-                //  wenn SOLAR_JAVA nicht definiert ist, immer disablen
+                //	wenn SOLAR_JAVA nicht definiert ist, immer disablen
 #ifdef SOLAR_JAVA
                 if (bOle || bTabProt)
 #endif

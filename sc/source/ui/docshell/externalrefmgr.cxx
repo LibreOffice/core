@@ -1393,8 +1393,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
         // Only loop within the data area.
         SCCOL nDataCol1 = nCol1, nDataCol2 = nCol2;
         SCROW nDataRow1 = nRow1, nDataRow2 = nRow2;
-        bool bShrunk;
-        if (!pSrcDoc->ShrinkToUsedDataArea( bShrunk, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, false))
+        if (!pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2))
             // no data within specified range.
             continue;
 
@@ -1721,8 +1720,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
 
     SCCOL nDataCol1 = 0, nDataCol2 = MAXCOL;
     SCROW nDataRow1 = 0, nDataRow2 = MAXROW;
-    bool bData = pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2);
-    if (!bData || rCell.Col() < nDataCol1 || nDataCol2 < rCell.Col() || rCell.Row() < nDataRow1 || nDataRow2 < rCell.Row())
+    pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2);
+    if (rCell.Col() < nDataCol1 || nDataCol2 < rCell.Col() || rCell.Row() < nDataRow1 || nDataRow2 < rCell.Row())
     {
         // requested cell is outside the data area.  Don't even bother caching
         // this data, but add it to the cached range to prevent accessing the

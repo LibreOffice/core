@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "DragMethod_RotateDiagram.hxx"
@@ -95,11 +95,11 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
         {
             ThreeDHelper::getRotationFromDiagram( xDiagramProperties
                 , m_nInitialHorizontalAngleDegree, m_nInitialVerticalAngleDegree );
-
+            
             ThreeDHelper::getRotationAngleFromDiagram( xDiagramProperties
                 , m_fInitialXAngleRad, m_fInitialYAngleRad, m_fInitialZAngleRad );
-
-            if( ChartTypeHelper::isSupportingRightAngledAxes(
+            
+            if( ChartTypeHelper::isSupportingRightAngledAxes( 
                 DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
                 xDiagramProperties->getPropertyValue(C2U( "RightAngledAxes" )) >>= m_bRightAngledAxes;
             if(m_bRightAngledAxes)
@@ -214,7 +214,7 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
         ThreeDHelper::adaptRadAnglesForRightAngledAxes( fResultX, fResultY );
         aCurrentTransform.shearXY(fResultY,-(fResultX));
     }
-
+    
     if(m_aWireframePolyPolygon.count() && m_pScene)
     {
         const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(m_pScene->GetViewContact());

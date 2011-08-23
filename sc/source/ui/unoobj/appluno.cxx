@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 #include "inputopt.hxx"
 #include "printopt.hxx"
 #include "userlist.hxx"
-#include "sc.hrc"           // VAR_ARGS
+#include "sc.hrc"			// VAR_ARGS
 #include "unonames.hxx"
 #include "funcdesc.hxx"
 #include <com/sun/star/sheet/FunctionArgument.hpp>
@@ -128,22 +128,22 @@ extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_crea
 
 //------------------------------------------------------------------------
 
-//  Anzahl der Funktionen, die als zuletzt benutzt gespeichert werden
-//! Define mit funcpage.hxx und dwfunctr.hxx zusammenfassen !!!
+//	Anzahl der Funktionen, die als zuletzt benutzt gespeichert werden
+//!	Define mit funcpage.hxx und dwfunctr.hxx zusammenfassen !!!
 #define LRU_MAX 10
 
-//  Spezial-Werte fuer Zoom
-//! irgendwo zentral
-#define SC_ZOOMVAL_OPTIMAL      (-1)
-#define SC_ZOOMVAL_WHOLEPAGE    (-2)
-#define SC_ZOOMVAL_PAGEWIDTH    (-3)
+//	Spezial-Werte fuer Zoom
+//!	irgendwo zentral
+#define SC_ZOOMVAL_OPTIMAL		(-1)
+#define SC_ZOOMVAL_WHOLEPAGE	(-2)
+#define SC_ZOOMVAL_PAGEWIDTH	(-3)
 
-//  Anzahl der PropertyValues in einer Function-Description
-#define SC_FUNCDESC_PROPCOUNT   5
+//	Anzahl der PropertyValues in einer Function-Description
+#define SC_FUNCDESC_PROPCOUNT	5
 
 //------------------------------------------------------------------------
 
-//  alles ohne Which-ID, Map nur fuer PropertySetInfo
+//	alles ohne Which-ID, Map nur fuer PropertySetInfo
 
 static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
 {
@@ -174,9 +174,9 @@ static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
 
 //------------------------------------------------------------------------
 
-#define SCFUNCTIONLISTOBJ_SERVICE       "com.sun.star.sheet.FunctionDescriptions"
-#define SCRECENTFUNCTIONSOBJ_SERVICE    "com.sun.star.sheet.RecentFunctions"
-#define SCSPREADSHEETSETTINGS_SERVICE   "com.sun.star.sheet.GlobalSheetSettings"
+#define SCFUNCTIONLISTOBJ_SERVICE		"com.sun.star.sheet.FunctionDescriptions"
+#define SCRECENTFUNCTIONSOBJ_SERVICE	"com.sun.star.sheet.RecentFunctions"
+#define SCSPREADSHEETSETTINGS_SERVICE	"com.sun.star.sheet.GlobalSheetSettings"
 
 SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, "ScFunctionListObj", SCFUNCTIONLISTOBJ_SERVICE )
 SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, "ScRecentFunctionsObj", SCRECENTFUNCTIONSOBJ_SERVICE )
@@ -480,7 +480,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     return pRet;
 }
 
-}   // extern C
+}	// extern C
 
 //------------------------------------------------------------------------
 
@@ -493,7 +493,7 @@ ScSpreadsheetSettings::~ScSpreadsheetSettings()
 {
 }
 
-uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
+uno::Reference<uno::XInterface>	SAL_CALL ScSpreadsheetSettings_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
 {
     SolarMutexGuard aGuard;
@@ -615,9 +615,9 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             SvxZoomType eType = SVX_ZOOM_PERCENT;
             switch (nVal)
             {
-                case SC_ZOOMVAL_OPTIMAL:    eType = SVX_ZOOM_OPTIMAL;   break;
-                case SC_ZOOMVAL_WHOLEPAGE:  eType = SVX_ZOOM_WHOLEPAGE; break;
-                case SC_ZOOMVAL_PAGEWIDTH:  eType = SVX_ZOOM_PAGEWIDTH; break;
+                case SC_ZOOMVAL_OPTIMAL:	eType = SVX_ZOOM_OPTIMAL;	break;
+                case SC_ZOOMVAL_WHOLEPAGE:	eType = SVX_ZOOM_WHOLEPAGE;	break;
+                case SC_ZOOMVAL_PAGEWIDTH:	eType = SVX_ZOOM_PAGEWIDTH;	break;
             }
             aAppOpt.SetZoomType( eType );
         }
@@ -639,20 +639,20 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         uno::Sequence<rtl::OUString> aSeq;
         if ( pUserList && ( aValue >>= aSeq ) )
         {
-            //  es wird direkt die "lebende" Liste veraendert,
-            //  mehr tut ScGlobal::SetUserList auch nicht
+            //	es wird direkt die "lebende" Liste veraendert,
+            //	mehr tut ScGlobal::SetUserList auch nicht
 
-            pUserList->FreeAll();                   // alle Eintraege raus
+            pUserList->FreeAll();					// alle Eintraege raus
             USHORT nCount = (USHORT)aSeq.getLength();
             const rtl::OUString* pAry = aSeq.getConstArray();
             for (USHORT i=0; i<nCount; i++)
             {
                 String aEntry = pAry[i];
                 ScUserListData* pData = new ScUserListData(aEntry);
-                if (!pUserList->Insert(pData))      // hinten anhaengen
-                    delete pData;                   // sollte nicht vorkommen
+                if (!pUserList->Insert(pData))		// hinten anhaengen
+                    delete pData;					// sollte nicht vorkommen
             }
-            bSaveApp = TRUE;    // Liste wird mit den App-Optionen gespeichert
+            bSaveApp = TRUE;	// Liste wird mit den App-Optionen gespeichert
         }
     }
     else if (aString.EqualsAscii( SC_UNONAME_PRALLSH ))
@@ -664,9 +664,9 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     else if (aString.EqualsAscii( SC_UNONAME_PREMPTY ))
     {
         ScPrintOptions aPrintOpt(pScMod->GetPrintOptions());
-        aPrintOpt.SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );    // reversed
+        aPrintOpt.SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );	// reversed
         pScMod->SetPrintOptions( aPrintOpt );
-        SFX_APP()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );    // update previews
+        SFX_APP()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );	// update previews
     }
 
     if ( bSaveApp )
@@ -688,27 +688,27 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const rtl::OUString& 
     ScInputOptions aInpOpt = pScMod->GetInputOptions();
     // print options aren't loaded until needed
 
-    if (aString.EqualsAscii( SC_UNONAME_DOAUTOCP ))     ScUnoHelpFunctions::SetBoolInAny( aRet, aAppOpt.GetAutoComplete() );
-    else if (aString.EqualsAscii( SC_UNONAME_ENTERED )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetEnterEdit() );
-    else if (aString.EqualsAscii( SC_UNONAME_EXPREF ))  ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExpandRefs() );
-    else if (aString.EqualsAscii( SC_UNONAME_EXTFMT ))  ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExtendFormat() );
-    else if (aString.EqualsAscii( SC_UNONAME_LINKUPD )) aRet <<= (sal_Int16) aAppOpt.GetLinkMode();
-    else if (aString.EqualsAscii( SC_UNONAME_MARKHDR )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMarkHeader() );
-    else if (aString.EqualsAscii( SC_UNONAME_MOVESEL )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMoveSelection() );
+    if (aString.EqualsAscii( SC_UNONAME_DOAUTOCP ))		ScUnoHelpFunctions::SetBoolInAny( aRet, aAppOpt.GetAutoComplete() );
+    else if (aString.EqualsAscii( SC_UNONAME_ENTERED ))	ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetEnterEdit() );
+    else if (aString.EqualsAscii( SC_UNONAME_EXPREF ))	ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExpandRefs() );
+    else if (aString.EqualsAscii( SC_UNONAME_EXTFMT ))	ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExtendFormat() );
+    else if (aString.EqualsAscii( SC_UNONAME_LINKUPD ))	aRet <<= (sal_Int16) aAppOpt.GetLinkMode();
+    else if (aString.EqualsAscii( SC_UNONAME_MARKHDR ))	ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMarkHeader() );
+    else if (aString.EqualsAscii( SC_UNONAME_MOVESEL ))	ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMoveSelection() );
     else if (aString.EqualsAscii( SC_UNONAME_RANGEFIN )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetRangeFinder() );
     else if (aString.EqualsAscii( SC_UNONAME_USETABCOL )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetUseTabCol() );
     else if (aString.EqualsAscii( SC_UNONAME_PRMETRICS )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetTextWysiwyg() );
     else if (aString.EqualsAscii( SC_UNONAME_REPLWARN )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetReplaceCellsWarn() );
-    else if (aString.EqualsAscii( SC_UNONAME_METRIC ))  aRet <<= (sal_Int16) aAppOpt.GetAppMetric();
-    else if (aString.EqualsAscii( SC_UNONAME_MOVEDIR )) aRet <<= (sal_Int16) aInpOpt.GetMoveDir();
-    else if (aString.EqualsAscii( SC_UNONAME_STBFUNC )) aRet <<= (sal_Int16) aAppOpt.GetStatusFunc();
+    else if (aString.EqualsAscii( SC_UNONAME_METRIC ))	aRet <<= (sal_Int16) aAppOpt.GetAppMetric();
+    else if (aString.EqualsAscii( SC_UNONAME_MOVEDIR ))	aRet <<= (sal_Int16) aInpOpt.GetMoveDir();
+    else if (aString.EqualsAscii( SC_UNONAME_STBFUNC ))	aRet <<= (sal_Int16) aAppOpt.GetStatusFunc();
     else if (aString.EqualsAscii( SC_UNONAME_SCALE ))
     {
         INT16 nZoomVal = 0;
         switch ( aAppOpt.GetZoomType() )
         {
-            case SVX_ZOOM_PERCENT:   nZoomVal = aAppOpt.GetZoom();    break;
-            case SVX_ZOOM_OPTIMAL:   nZoomVal = SC_ZOOMVAL_OPTIMAL;   break;
+            case SVX_ZOOM_PERCENT:	 nZoomVal = aAppOpt.GetZoom();	  break;
+            case SVX_ZOOM_OPTIMAL:	 nZoomVal = SC_ZOOMVAL_OPTIMAL;	  break;
             case SVX_ZOOM_WHOLEPAGE: nZoomVal = SC_ZOOMVAL_WHOLEPAGE; break;
             case SVX_ZOOM_PAGEWIDTH: nZoomVal = SC_ZOOMVAL_PAGEWIDTH; break;
             default:
@@ -737,7 +737,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const rtl::OUString& 
     else if (aString.EqualsAscii( SC_UNONAME_PRALLSH ))
         ScUnoHelpFunctions::SetBoolInAny( aRet, pScMod->GetPrintOptions().GetAllSheets() );
     else if (aString.EqualsAscii( SC_UNONAME_PREMPTY ))
-        ScUnoHelpFunctions::SetBoolInAny( aRet, !pScMod->GetPrintOptions().GetSkipEmpty() );    // reversed
+        ScUnoHelpFunctions::SetBoolInAny( aRet, !pScMod->GetPrintOptions().GetSkipEmpty() );	// reversed
 
     return aRet;
 }
@@ -756,7 +756,7 @@ ScRecentFunctionsObj::~ScRecentFunctionsObj()
 
 // stuff for exService_...
 
-uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
+uno::Reference<uno::XInterface>	SAL_CALL ScRecentFunctionsObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
 {
     SolarMutexGuard aGuard;
@@ -808,14 +808,14 @@ void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
 
     USHORT* pFuncs = nCount ? new USHORT[nCount] : NULL;
     for (USHORT i=0; i<nCount; i++)
-        pFuncs[i] = (USHORT)pAry[i];        //! auf gueltige Werte testen?
+        pFuncs[i] = (USHORT)pAry[i];		//! auf gueltige Werte testen?
 
     ScModule* pScMod = SC_MOD();
     ScAppOptions aNewOpts(pScMod->GetAppOptions());
     aNewOpts.SetLRUFuncList(pFuncs, nCount);
     pScMod->SetAppOptions(aNewOpts);
 
-    pScMod->RecentFunctionsChanged();       // update function list child window
+    pScMod->RecentFunctionsChanged();		// update function list child window
 
     delete[] pFuncs;
 }
@@ -837,7 +837,7 @@ ScFunctionListObj::~ScFunctionListObj()
 
 // stuff for exService_...
 
-uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
+uno::Reference<uno::XInterface>	SAL_CALL ScFunctionListObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
 {
     SolarMutexGuard aGuard;
@@ -905,7 +905,7 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
                     String aArgDesc;
                     if (rDesc.ppDefArgDescs[i]) aArgDesc = *rDesc.ppDefArgDescs[i];
                     sheet::FunctionArgument aArgument;
-                    aArgument.Name        = aArgName;
+                    aArgument.Name		  = aArgName;
                     aArgument.Description = aArgDesc;
                     aArgument.IsOptional  = rDesc.pDefArgFlags[i].bOptional;
                     pArgAry[j++] = aArgument;
@@ -937,10 +937,10 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sal_Int
             }
         }
 
-        throw lang::IllegalArgumentException();         // not found
+        throw lang::IllegalArgumentException();			// not found
     }
     else
-        throw uno::RuntimeException();                  // should not happen
+        throw uno::RuntimeException();					// should not happen
 
 //    return uno::Sequence<beans::PropertyValue>(0);
 }
@@ -960,7 +960,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
         for (USHORT nIndex=0; nIndex<nCount; nIndex++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
-            //! Case-insensitiv ???
+            //!	Case-insensitiv ???
             if ( pDesc && pDesc->pFuncName && aNameStr == *pDesc->pFuncName )
             {
                 uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
@@ -969,10 +969,10 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
             }
         }
 
-        throw container::NoSuchElementException();      // not found
+        throw container::NoSuchElementException();		// not found
     }
     else
-        throw uno::RuntimeException();                  // should not happen
+        throw uno::RuntimeException();					// should not happen
 
 //    return uno::Any();
 }
@@ -1008,10 +1008,10 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
             }
         }
 
-        throw lang::IndexOutOfBoundsException();        // illegal index
+        throw lang::IndexOutOfBoundsException();		// illegal index
     }
     else
-        throw uno::RuntimeException();                  // should not happen
+        throw uno::RuntimeException();					// should not happen
 
 //    return uno::Any();
 }
@@ -1071,7 +1071,7 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const rtl::OUString& aName )
         for (USHORT nIndex=0; nIndex<nCount; nIndex++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
-            //! Case-insensitiv ???
+            //!	Case-insensitiv ???
             if ( pDesc && pDesc->pFuncName && aNameStr == *pDesc->pFuncName )
                 return TRUE;
         }

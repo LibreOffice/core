@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,13 +96,13 @@ inline OUString C2U(const char* s)
 //----------------------------------------------------------------------
 
 //
-//  Ole
+//	Ole
 //
 
 void __EXPORT ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
-    //  with the SnapVisArea call in SetVisAreaOrSize, it's safe to always
-    //  use both the size and position of the VisArea
+    //	with the SnapVisArea call in SetVisAreaOrSize, it's safe to always
+    //	use both the size and position of the VisArea
     SetVisAreaOrSize( rVisArea, TRUE );
 }
 
@@ -128,9 +128,9 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
         {
             if ( ( bNegativePage ? (aArea.Right() > 0) : (aArea.Left() < 0) ) || aArea.Top() < 0 )
             {
-                //  VisArea start position can't be negative.
-                //  Move the VisArea, otherwise only the upper left position would
-                //  be changed in SnapVisArea, and the size would be wrong.
+                //	VisArea start position can't be negative.
+                //	Move the VisArea, otherwise only the upper left position would
+                //	be changed in SnapVisArea, and the size would be wrong.
 
                 Point aNewPos( 0, Max( aArea.Top(), (long) 0 ) );
                 if ( bNegativePage )
@@ -155,10 +155,10 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
             aArea.SetPos( aOldVisArea.TopLeft() );
     }
 
-    //      hier Position anpassen!
+    //		hier Position anpassen!
 
-    //  #92248# when loading an ole object, the VisArea is set from the document's
-    //  view settings and must be used as-is (document content may not be complete yet).
+    //	#92248# when loading an ole object, the VisArea is set from the document's
+    //	view settings and must be used as-is (document content may not be complete yet).
     if ( !aDocument.IsImportingXML() )
         aDocument.SnapVisArea( aArea );
 
@@ -175,7 +175,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
     //TODO/LATER: formerly in SvInplaceObject
     SfxObjectShell::SetVisArea( aArea );
 
-    if (bIsInplace)                     // Zoom in der InPlace View einstellen
+    if (bIsInplace)						// Zoom in der InPlace View einstellen
     {
         ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
         if (pViewSh)
@@ -207,8 +207,8 @@ BOOL ScDocShell::IsOle()
 
 void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
 {
-    //  wenn's gar nicht Ole ist, kann man sich die Berechnungen sparen
-    //  (VisArea wird dann beim Save wieder zurueckgesetzt)
+    //	wenn's gar nicht Ole ist, kann man sich die Berechnungen sparen
+    //	(VisArea wird dann beim Save wieder zurueckgesetzt)
 
     if (GetCreateMode() == SFX_CREATE_MODE_STANDARD)
         return;
@@ -245,13 +245,13 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
 
     if (aNewArea != aOldArea)
     {
-        SetVisAreaOrSize( aNewArea, TRUE ); // hier muss auch der Start angepasst werden
+        SetVisAreaOrSize( aNewArea, TRUE );	// hier muss auch der Start angepasst werden
         bChange = TRUE;
     }
 }
 
 //
-//  Style-Krempel fuer Organizer etc.
+//	Style-Krempel fuer Organizer etc.
 //
 
 SfxStyleSheetBasePool* __EXPORT ScDocShell::GetStyleSheetPool()
@@ -260,9 +260,9 @@ SfxStyleSheetBasePool* __EXPORT ScDocShell::GetStyleSheetPool()
 }
 
 
-//  nach dem Laden von Vorlagen aus einem anderen Dokment (LoadStyles, Insert)
-//  muessen die SetItems (ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET) auf den richtigen
-//  Pool umgesetzt werden, bevor der Quell-Pool geloescht wird.
+//	nach dem Laden von Vorlagen aus einem anderen Dokment (LoadStyles, Insert)
+//	muessen die SetItems (ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET) auf den richtigen
+//	Pool umgesetzt werden, bevor der Quell-Pool geloescht wird.
 
 void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
 {
@@ -297,22 +297,22 @@ void __EXPORT ScDocShell::LoadStyles( SfxObjectShell &rSource )
     aDocument.StylesToNames();
 
     SfxObjectShell::LoadStyles(rSource);
-    lcl_AdjustPool( GetStyleSheetPool() );      // SetItems anpassen
+    lcl_AdjustPool( GetStyleSheetPool() );		// SetItems anpassen
 
     aDocument.UpdStlShtPtrsFrmNms();
 
     UpdateAllRowHeights();
 
-        //  Paint
+        //	Paint
 
     PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );
 }
 
 void ScDocShell::LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellStyles, BOOL bPageStyles )
 {
-    //  similar to LoadStyles, but with selectable behavior for XStyleLoader::loadStylesFromURL call
+    //	similar to LoadStyles, but with selectable behavior for XStyleLoader::loadStylesFromURL call
 
-    if ( !bCellStyles && !bPageStyles )     // nothing to do
+    if ( !bCellStyles && !bPageStyles )		// nothing to do
         return;
 
     ScStyleSheetPool* pSourcePool = rSource.GetDocument()->GetStyleSheetPool();
@@ -324,12 +324,12 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellS
     SfxStyleSheetIterator aIter( pSourcePool, eFamily );
     USHORT nSourceCount = aIter.Count();
     if ( nSourceCount == 0 )
-        return;                             // no source styles
+        return;								// no source styles
 
     ScStylePair* pStyles = new ScStylePair[ nSourceCount ];
     USHORT nFound = 0;
 
-    //  first create all new styles
+    //	first create all new styles
 
     SfxStyleSheetBase* pSourceStyle = aIter.First();
     while (pSourceStyle)
@@ -356,7 +356,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellS
         pSourceStyle = aIter.Next();
     }
 
-    //  then copy contents (after inserting all styles, for parent etc.)
+    //	then copy contents (after inserting all styles, for parent etc.)
 
     for ( USHORT i = 0; i < nFound; ++i )
     {
@@ -367,9 +367,9 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellS
         // follow is never used
     }
 
-    lcl_AdjustPool( GetStyleSheetPool() );      // adjust SetItems
+    lcl_AdjustPool( GetStyleSheetPool() );		// adjust SetItems
     UpdateAllRowHeights();
-    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );      // Paint
+    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );		// Paint
 
     delete[] pStyles;
 }
@@ -382,7 +382,7 @@ BOOL __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
     BOOL bRet = SfxObjectShell::Insert( rSource, nSourceIdx1, nSourceIdx2, nSourceIdx3,
                                             nIdx1, nIdx2, nIdx3, rIdxDeleted );
     if (bRet)
-        lcl_AdjustPool( GetStyleSheetPool() );      // SetItems anpassen
+        lcl_AdjustPool( GetStyleSheetPool() );		// SetItems anpassen
 
     return bRet;
 }
@@ -417,7 +417,7 @@ void ScDocShell::UpdateLinks()
                 if (!aNames.Insert(pData))
                     delete pData;
             }
-            else        // nicht mehr benutzt -> loeschen
+            else		// nicht mehr benutzt -> loeschen
             {
                 pTabLink->SetAddUndo(TRUE);
                 pLinkManager->Remove(k);
@@ -435,9 +435,9 @@ void ScDocShell::UpdateLinks()
             String aDocName = aDocument.GetLinkDoc(i);
             String aFltName = aDocument.GetLinkFlt(i);
             String aOptions = aDocument.GetLinkOpt(i);
-            ULONG nRefresh  = aDocument.GetLinkRefreshDelay(i);
+            ULONG nRefresh	= aDocument.GetLinkRefreshDelay(i);
             BOOL bThere = FALSE;
-            for (SCTAB j=0; j<i && !bThere; j++)                // im Dokument mehrfach?
+            for (SCTAB j=0; j<i && !bThere; j++)				// im Dokument mehrfach?
                 if (aDocument.IsLinked(j)
                         && aDocument.GetLinkDoc(j) == aDocName
                         && aDocument.GetLinkFlt(j) == aFltName
@@ -447,7 +447,7 @@ void ScDocShell::UpdateLinks()
                         // if it ain't.
                     bThere = TRUE;
 
-            if (!bThere)                                        // schon als Filter eingetragen?
+            if (!bThere)										// schon als Filter eingetragen?
             {
                 StrData* pData = new StrData(aDocName);
                 if (!aNames.Insert(pData))
@@ -479,7 +479,7 @@ BOOL ScDocShell::ReloadTabLinks()
         if (pBase->ISA(ScTableLink))
         {
             ScTableLink* pTabLink = (ScTableLink*)pBase;
-            pTabLink->SetPaint(FALSE);          //  Paint nur einmal am Ende
+            pTabLink->SetPaint(FALSE);			//	Paint nur einmal am Ende
             pTabLink->Update();
             pTabLink->SetPaint(TRUE);
             bAny = TRUE;
@@ -488,14 +488,14 @@ BOOL ScDocShell::ReloadTabLinks()
 
     if ( bAny )
     {
-        //  Paint nur einmal
+        //	Paint nur einmal
         PostPaint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB),
                                     PAINT_GRID | PAINT_TOP | PAINT_LEFT );
 
         SetDocumentModified();
     }
 
-    return TRUE;        //! Fehler erkennen
+    return TRUE;		//! Fehler erkennen
 }
 
 void ScDocShell::CheckConfigOptions()

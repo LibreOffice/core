@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ double SAL_CALL AnalysisAddIn::getEffect( double fNominal, sal_Int32 nPeriods ) 
     if( nPeriods < 1 || fNominal <= 0.0 )
         THROW_IAE;
 
-    double  fPeriods = nPeriods;
+    double	fPeriods = nPeriods;
 
     double fRet = pow( 1.0 + fNominal / fPeriods, fPeriods ) - 1.0;
     RETURN_FINITE( fRet );
@@ -234,14 +234,14 @@ double SAL_CALL AnalysisAddIn::getPricemat( constREFXPS& xOpt,
     if( fRate < 0.0 || fYield < 0.0 || nSettle >= nMat )
         THROW_IAE;
 
-    sal_Int32   nNullDate = GetNullDate( xOpt );
+    sal_Int32	nNullDate = GetNullDate( xOpt );
     sal_Int32   nBase = getDateMode( xOpt, rOB );
 
-    double      fIssMat = GetYearFrac( nNullDate, nIssue, nMat, nBase );
-    double      fIssSet = GetYearFrac( nNullDate, nIssue, nSettle, nBase );
-    double      fSetMat = GetYearFrac( nNullDate, nSettle, nMat, nBase );
+    double		fIssMat = GetYearFrac( nNullDate, nIssue, nMat, nBase );
+    double		fIssSet = GetYearFrac( nNullDate, nIssue, nSettle, nBase );
+    double		fSetMat = GetYearFrac( nNullDate, nSettle, nMat, nBase );
 
-    double      fRet = 1.0 + fIssMat * fRate;
+    double		fRet = 1.0 + fIssMat * fRate;
     fRet /= 1.0 + fSetMat * fYield;
     fRet -= fIssSet * fRate;
     fRet *= 100.0;
@@ -268,7 +268,7 @@ double SAL_CALL AnalysisAddIn::getNominal( double fRate, sal_Int32 nPeriods ) TH
     if( fRate <= 0.0 || nPeriods < 0 )
         THROW_IAE;
 
-    double  fPeriods = nPeriods;
+    double	fPeriods = nPeriods;
     double fRet = ( pow( fRate + 1.0, 1.0 / fPeriods ) - 1.0 ) * fPeriods;
     RETURN_FINITE( fRet );
 }
@@ -279,10 +279,10 @@ double SAL_CALL AnalysisAddIn::getDollarfr( double fDollarDec, sal_Int32 nFrac )
     if( nFrac <= 0 )
         THROW_IAE;
 
-    double  fInt;
-    double  fFrac = nFrac;
+    double	fInt;
+    double	fFrac = nFrac;
 
-    double  fRet = modf( fDollarDec, &fInt );
+    double	fRet = modf( fDollarDec, &fInt );
 
     fRet *= fFrac;
 
@@ -299,10 +299,10 @@ double SAL_CALL AnalysisAddIn::getDollarde( double fDollarFrac, sal_Int32 nFrac 
     if( nFrac <= 0 )
         THROW_IAE;
 
-    double  fInt;
-    double  fFrac = nFrac;
+    double	fInt;
+    double	fFrac = nFrac;
 
-    double  fRet = modf( fDollarFrac, &fInt );
+    double	fRet = modf( fDollarFrac, &fInt );
 
     fRet /= fFrac;
 
@@ -332,7 +332,7 @@ double SAL_CALL AnalysisAddIn::getYielddisc( constREFXPS& xOpt,
     if( fPrice <= 0.0 || fRedemp <= 0.0 || nSettle >= nMat )
         THROW_IAE;
 
-    sal_Int32   nNullDate = GetNullDate( xOpt );
+    sal_Int32	nNullDate = GetNullDate( xOpt );
 
     double fRet = ( fRedemp / fPrice ) - 1.0;
     fRet /= GetYearFrac( nNullDate, nSettle, nMat, getDateMode( xOpt, rOB ) );
@@ -358,7 +358,7 @@ double SAL_CALL AnalysisAddIn::getTbilleq( constREFXPS& xOpt,
 {
     nMat++;
 
-    sal_Int32   nDiff = GetDiffDate360( xOpt, nSettle, nMat, sal_True );
+    sal_Int32	nDiff = GetDiffDate360( xOpt, nSettle, nMat, sal_True );
 
     if( fDisc <= 0.0 || nSettle >= nMat || nDiff > 360 )
         THROW_IAE;
@@ -376,9 +376,9 @@ double SAL_CALL AnalysisAddIn::getTbillprice( constREFXPS& xOpt,
 
     nMat++;
 
-    double  fFraction = GetYearFrac( xOpt, nSettle, nMat, 0 );  // method: USA 30/360
+    double	fFraction = GetYearFrac( xOpt, nSettle, nMat, 0 );	// method: USA 30/360
 
-    double  fDummy;
+    double	fDummy;
     if( modf( fFraction, &fDummy ) == 0.0 )
         THROW_IAE;
 
@@ -390,13 +390,13 @@ double SAL_CALL AnalysisAddIn::getTbillprice( constREFXPS& xOpt,
 double SAL_CALL AnalysisAddIn::getTbillyield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice )
     THROWDEF_RTE_IAE
 {
-    sal_Int32   nDiff = GetDiffDate360( xOpt, nSettle, nMat, sal_True );
+    sal_Int32	nDiff = GetDiffDate360( xOpt, nSettle, nMat, sal_True );
     nDiff++;
 
     if( fPrice <= 0.0 || nSettle >= nMat || nDiff > 360 )
         THROW_IAE;
 
-    double      fRet = 100.0;
+    double		fRet = 100.0;
     fRet /= fPrice;
     fRet--;
     fRet /= double( nDiff );
@@ -572,13 +572,13 @@ double SAL_CALL AnalysisAddIn::getXnpv(
     aValList.Append( rValues );
     aDateList.Append( rDates );
 
-    sal_Int32           nNum = aValList.Count();
+    sal_Int32			nNum = aValList.Count();
 
     if( nNum != sal_Int32( aDateList.Count() ) || nNum < 2 )
         THROW_IAE;
 
-    double              fRet = 0.0;
-    double              fNull = *aDateList.Get( 0 );
+    double				fRet = 0.0;
+    double				fNull = *aDateList.Get( 0 );
     fRate++;
 
     for( sal_Int32 i = 0 ; i < nNum ; i++ )

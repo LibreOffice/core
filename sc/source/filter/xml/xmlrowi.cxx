@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,7 +133,7 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_TABLE_ROW_CELL:
-//      if( IsInsertCellPossible() )
+//		if( IsInsertCellPossible() )
         {
             bHasCell = sal_True;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
@@ -143,7 +143,7 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
         }
         break;
     case XML_TOK_TABLE_ROW_COVERED_CELL:
-//      if( IsInsertCellPossible() )
+//		if( IsInsertCellPossible() )
         {
             bHasCell = sal_True;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
@@ -172,7 +172,6 @@ void ScXMLTableRowContext::EndElement()
     sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentRow(rXMLImport.GetTables().GetCurrentRow());
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
-    ScDocument* pDoc = rXMLImport.GetDocument();
     if(xSheet.is())
     {
         sal_Int32 nFirstRow(nCurrentRow - nRepeatedRows + 1);
@@ -220,18 +219,10 @@ void ScXMLTableRowContext::EndElement()
                         bVisible = sal_False;
                         bFiltered = sal_True;
                     }
-
-                    // #i116164# call SetRowHidden/SetRowFiltered directly, so the tree doesn't have to be rebuilt
-                    // to compare with existing hidden flags.
-                    if (!bVisible && pDoc)
-                        pDoc->SetRowHidden((SCROW)nFirstRow, (SCROW)nCurrentRow, (SCTAB)nSheet, true);
-                    if (bFiltered && pDoc)
-                        pDoc->SetRowFiltered((SCROW)nFirstRow, (SCROW)nCurrentRow, (SCTAB)nSheet, true);
-
-                    //if (!bVisible)
-                    //    xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), uno::makeAny(bVisible));
-                    //if (bFiltered)
-                    //    xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), uno::makeAny(bFiltered));
+                    if (!bVisible)
+                        xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), uno::makeAny(bVisible));
+                    if (bFiltered)
+                        xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), uno::makeAny(bFiltered));
                 }
             }
         }

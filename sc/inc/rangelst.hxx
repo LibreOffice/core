@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,31 +46,31 @@ private:
 public:
                     ScRangeList() {}
                     ScRangeList( const ScRangeList& rList );
-    virtual         ~ScRangeList();
-    ScRangeList&    operator=(const ScRangeList& rList);
-    void            RemoveAll();
-    void            Append( const ScRange& rRange )
+    virtual 		~ScRangeList();
+    ScRangeList&	operator=(const ScRangeList& rList);
+    void			RemoveAll();
+    void			Append( const ScRange& rRange )
                     {
                         ScRangePtr pR = new ScRange( rRange );
                         Insert( pR, LIST_APPEND );
                     }
-    USHORT          Parse( const String&, ScDocument* = NULL,
+    USHORT			Parse( const String&, ScDocument* = NULL,
                            USHORT nMask = SCA_VALID,
                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                            sal_Unicode cDelimiter = 0 );
-    void            Format( String&, USHORT nFlags = 0, ScDocument* = NULL,
+    void 			Format( String&, USHORT nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                             sal_Unicode cDelimiter = 0 ) const;
-    void            Join( const ScRange&, BOOL bIsInList = FALSE );
-    BOOL            UpdateReference( UpdateRefMode, ScDocument*,
+    void			Join( const ScRange&, BOOL bIsInList = FALSE );
+    BOOL 			UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    ScRange*        Find( const ScAddress& ) const;
-    BOOL            operator==( const ScRangeList& ) const;
+    ScRange*		Find( const ScAddress& ) const;
+    BOOL			operator==( const ScRangeList& ) const;
     BOOL            operator!=( const ScRangeList& r ) const;
-    BOOL            Intersects( const ScRange& ) const;
-    BOOL            In( const ScRange& ) const;
-    ULONG           GetCellCount() const;
+    BOOL			Intersects( const ScRange& ) const;
+    BOOL			In( const ScRange& ) const;
+    ULONG			GetCellCount() const;
 };
 SV_DECL_IMPL_REF( ScRangeList );
 
@@ -84,22 +84,22 @@ private:
     using ScRangePairListBase::operator==;
 
 public:
-    virtual         ~ScRangePairList();
-    ScRangePairList*    Clone() const;
-    void            Append( const ScRangePair& rRangePair )
+    virtual 		~ScRangePairList();
+    ScRangePairList*	Clone() const;
+    void			Append( const ScRangePair& rRangePair )
                     {
                         ScRangePair* pR = new ScRangePair( rRangePair );
                         Insert( pR, LIST_APPEND );
                     }
-    void            Join( const ScRangePair&, BOOL bIsInList = FALSE );
-    BOOL            UpdateReference( UpdateRefMode, ScDocument*,
+    void			Join( const ScRangePair&, BOOL bIsInList = FALSE );
+    BOOL 			UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void            DeleteOnTab( SCTAB nTab );
-    ScRangePair*    Find( const ScAddress& ) const;
-    ScRangePair*    Find( const ScRange& ) const;
-    ScRangePair**   CreateNameSortedArray( ULONG& nCount, ScDocument* ) const;
-    BOOL            operator==( const ScRangePairList& ) const;
+    ScRangePair*	Find( const ScAddress& ) const;
+    ScRangePair*	Find( const ScRange& ) const;
+    ScRangePair**	CreateNameSortedArray( ULONG& nCount, ScDocument* ) const;
+    BOOL			operator==( const ScRangePairList& ) const;
 };
 SV_DECL_IMPL_REF( ScRangePairList );
 

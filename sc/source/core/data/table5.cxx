@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ using ::std::set;
 
 // STATIC DATA -----------------------------------------------------------
 
-#define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
+#define GET_SCALEVALUE(set,id) 	((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
 
 void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
@@ -71,14 +71,14 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     if ( pDocument->IsImportingXML() )
         return;
 
-    // pUserArea != NULL -> print area is specified.  We need to force-update
+    // pUserArea != NULL -> print area is specified.  We need to force-update 
     // the page breaks.
 
     if (!pUserArea)
     {
         if (!bPageSizeValid)
             return;
-
+    
         if (mbPageBreaksValid)
             return;
     }
@@ -110,7 +110,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         USHORT nAreaCount = GetPrintRangeCount();
         if ( nAreaCount > 1 )
         {
-            //  bei mehreren Bereichen nichts anzeigen:
+            //	bei mehreren Bereichen nichts anzeigen:
 
             for (nX=0; nX<MAXCOL; nX++)
                 RemoveColBreak(nX, true, false);
@@ -129,7 +129,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
                 nEndCol = pArea->aEnd.Col();
                 nEndRow = pArea->aEnd.Row();
             }
-        }           // sonst alles
+        }			// sonst alles
     }
 
     // get bSkipColBreaks/bSkipRowBreaks flags:
@@ -168,7 +168,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     long nPageSizeX = aPageSizeTwips.Width();
     long nPageSizeY = aPageSizeTwips.Height();
 
-        //  Anfang: Breaks loeschen
+        //	Anfang: Breaks loeschen
 
     for (nX=0; nX<nStartCol; nX++)
         RemoveColBreak(nX, true, false);
@@ -179,7 +179,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     if (nStartRow > 0)
         SetRowBreak(nStartRow, true, false);  // AREABREAK
 
-        //  Mittelteil: Breaks verteilen
+        //	Mittelteil: Breaks verteilen
 
     BOOL bRepeatCol = ( nRepeatStartX != SCCOL_REPEAT_NONE );
     BOOL bColFound = FALSE;
@@ -231,7 +231,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         long nThisY = 0;
         if (!bThisRowHidden)
         {
-            sal_uInt16 nTmp;
+            sal_uInt16 nTmp;    
             aIterHeights.getValue(nY, nTmp);
             nThisY = static_cast<long>(nTmp);
         }
@@ -287,7 +287,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             SCROW nLastCommon = ::std::min(nLastHidden, nLastHeight);
             if (nNextManualBreak >= 0)
                 nLastCommon = ::std::min(nLastCommon, nNextManualBreak-1);
-
+    
             if (nLastCommon > nY)
             {
                 long nMaxMultiple = static_cast<long>(nLastCommon - nY);
@@ -305,7 +305,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         nSizeY += nThisY;
     }
 
-        //  Ende: Breaks loeschen
+        //	Ende: Breaks loeschen
 
     if (nEndCol < MAXCOL)
     {
@@ -360,7 +360,7 @@ void ScTable::GetAllRowBreaks(set<SCROW>& rBreaks, bool bPage, bool bManual) con
 
     if (bManual)
     {
-        using namespace std;
+        using namespace std;    
         copy(maRowManualBreaks.begin(), maRowManualBreaks.end(), inserter(rBreaks, rBreaks.begin()));
     }
 }
@@ -436,7 +436,7 @@ void ScTable::RemoveRowBreak(SCROW nRow, bool bPage, bool bManual)
         maRowPageBreaks.erase(nRow);
 
     if (bManual)
-    {
+    {    
         maRowManualBreaks.erase(nRow);
         InvalidatePageBreaks();
     }
@@ -451,7 +451,7 @@ void ScTable::RemoveColBreak(SCCOL nCol, bool bPage, bool bManual)
         maColPageBreaks.erase(nCol);
 
     if (bManual)
-    {
+    {    
         maColManualBreaks.erase(nCol);
         InvalidatePageBreaks();
     }
@@ -466,7 +466,7 @@ void ScTable::SetRowBreak(SCROW nRow, bool bPage, bool bManual)
         maRowPageBreaks.insert(nRow);
 
     if (bManual)
-    {
+    {    
         maRowManualBreaks.insert(nRow);
         InvalidatePageBreaks();
     }
@@ -481,7 +481,7 @@ void ScTable::SetColBreak(SCCOL nCol, bool bPage, bool bManual)
         maColPageBreaks.insert(nCol);
 
     if (bManual)
-    {
+    {    
         maColManualBreaks.insert(nCol);
         InvalidatePageBreaks();
     }
@@ -543,7 +543,7 @@ bool ScTable::RowHidden(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
 
 bool ScTable::RowHidden(SCROW nRow, SCROW& rLastRow) const
 {
-    rLastRow = nRow;
+    rLastRow = nRow;    
     if (!ValidRow(nRow))
         return true;
 
@@ -573,7 +573,7 @@ bool ScTable::HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const
 
 bool ScTable::ColHidden(SCCOL nCol, SCCOL& rLastCol) const
 {
-    rLastCol = nCol;
+    rLastCol = nCol;    
     if (!ValidCol(nCol))
         return true;
 
@@ -1062,7 +1062,7 @@ Size ScTable::GetPageSize() const
     if ( bPageSizeValid )
         return aPageSizeTwips;
     else
-        return Size();  // leer
+        return Size();	// leer
 }
 
 void ScTable::SetRepeatArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow )
@@ -1087,9 +1087,9 @@ void ScTable::SetPageStyle( const String& rName )
 {
     if ( aPageStyle != rName )
     {
-        String                  aStrNew    = rName;
-        SfxStyleSheetBasePool*  pStylePool = pDocument->GetStyleSheetPool();
-        SfxStyleSheetBase*      pNewStyle  = pStylePool->Find( aStrNew, SFX_STYLE_FAMILY_PAGE );
+        String					aStrNew    = rName;
+        SfxStyleSheetBasePool*	pStylePool = pDocument->GetStyleSheetPool();
+        SfxStyleSheetBase*		pNewStyle  = pStylePool->Find( aStrNew, SFX_STYLE_FAMILY_PAGE );
 
         if ( !pNewStyle )
         {
@@ -1103,18 +1103,18 @@ void ScTable::SetPageStyle( const String& rName )
 
             if ( pOldStyle && pNewStyle )
             {
-                SfxItemSet&  rOldSet          = pOldStyle->GetItemSet();
-                SfxItemSet&  rNewSet          = pNewStyle->GetItemSet();
-                const USHORT nOldScale        = GET_SCALEVALUE(rOldSet,ATTR_PAGE_SCALE);
+                SfxItemSet&  rOldSet		  = pOldStyle->GetItemSet();
+                SfxItemSet&  rNewSet 		  = pNewStyle->GetItemSet();
+                const USHORT nOldScale		  = GET_SCALEVALUE(rOldSet,ATTR_PAGE_SCALE);
                 const USHORT nOldScaleToPages = GET_SCALEVALUE(rOldSet,ATTR_PAGE_SCALETOPAGES);
-                const USHORT nNewScale        = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALE);
+                const USHORT nNewScale		  = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALE);
                 const USHORT nNewScaleToPages = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALETOPAGES);
 
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
                     InvalidateTextWidth(NULL, NULL, FALSE, FALSE);
             }
 
-            if ( pNewStyle )            // auch ohne den alten (fuer UpdateStdNames)
+            if ( pNewStyle )			// auch ohne den alten (fuer UpdateStdNames)
                 aPageStyle = aStrNew;
 
             if (IsStreamValid())
@@ -1141,7 +1141,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
             if ( bNumFormatChanged )
                 pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
             if ( bBroadcast )
-            {   // nur bei CalcAsShown
+            {	// nur bei CalcAsShown
                 switch ( pCell->GetCellType() )
                 {
                     case CELLTYPE_VALUE :
@@ -1170,8 +1170,8 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
         for ( SCCOL nCol=nColStart; nCol<=nColEnd; nCol++ )
         {
             ScColumnIterator aIter( &aCol[nCol], nRowStart, nRowEnd );
-            ScBaseCell*      pCell = NULL;
-            SCROW            nRow  = nRowStart;
+            ScBaseCell*		 pCell = NULL;
+            SCROW			 nRow  = nRowStart;
 
             while ( aIter.Next( nRow, pCell ) )
             {
@@ -1179,7 +1179,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                 if ( bNumFormatChanged )
                     pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
                 if ( bBroadcast )
-                {   // nur bei CalcAsShown
+                {	// nur bei CalcAsShown
                     switch ( pCell->GetCellType() )
                     {
                         case CELLTYPE_VALUE :

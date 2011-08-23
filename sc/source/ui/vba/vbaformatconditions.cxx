@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,12 @@ ScVbaFormatConditions::ScVbaFormatConditions( const uno::Reference< XHelperInter
     mxStyles.set( xApp->getThisWorkbook()->Styles( uno::Any() ), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XCellRangeAddressable > xCellRange( mxRangeParent->getCellRange(), uno::UNO_QUERY_THROW );
     mxParentRangePropertySet.set( xCellRange, uno::UNO_QUERY_THROW );
-
+    
     table::CellRangeAddress rangeAddress = xCellRange->getRangeAddress();
     maCellAddress = table::CellAddress( rangeAddress.Sheet, rangeAddress.StartColumn,  rangeAddress.StartRow );
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     try
@@ -71,7 +71,7 @@ ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::Runti
         {
             uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry( mxSheetConditionalEntries->getByIndex(i), uno::UNO_QUERY_THROW );
             pStyles->Delete(xSheetConditionalEntry->getStyleName());
-            mxSheetConditionalEntries->removeByIndex(i);
+            mxSheetConditionalEntries->removeByIndex(i);           
         }
         notifyRange();
     }
@@ -81,24 +81,24 @@ ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::Runti
     }
 }
 
-uno::Type SAL_CALL
+uno::Type SAL_CALL 
 ScVbaFormatConditions::getElementType() throw (css::uno::RuntimeException)
 {
     return excel::XFormatCondition::static_type(0);
 }
 
 
-uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const uno::Any& aObject )
+uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const uno::Any& aObject ) 
 {
     uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry;
     aObject >>= xSheetConditionalEntry;
 
     uno::Reference< excel::XStyle > xStyle( xStyles->Item( uno::makeAny( xSheetConditionalEntry->getStyleName() ), uno::Any() ), uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XFormatCondition > xCondition = new ScVbaFormatCondition( xRangeParent, xContext,  xSheetConditionalEntry, xStyle, xFormatConditions, xRangeProps );
+    uno::Reference< excel::XFormatCondition > xCondition = new ScVbaFormatCondition( xRangeParent, xContext,  xSheetConditionalEntry, xStyle, xFormatConditions, xRangeProps ); 
     return uno::makeAny( xCondition );
 }
 
-uno::Any
+uno::Any 
 ScVbaFormatConditions::createCollectionObject(const uno::Any& aObject )
 {
     return xSheetConditionToFormatCondition( uno::Reference< XHelperInterface >( mxRangeParent, uno::UNO_QUERY_THROW ), mxContext, mxStyles, this, mxParentRangePropertySet, aObject );
@@ -129,21 +129,21 @@ public:
         }
 };
 
-uno::Reference< excel::XFormatCondition > SAL_CALL
+uno::Reference< excel::XFormatCondition > SAL_CALL 
 ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2 ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return Add( _nType, _aOperator, _aFormula1, _aFormula2, uno::Reference< excel::XStyle >() );
 }
 
-uno::Reference< excel::XFormatCondition >
+uno::Reference< excel::XFormatCondition > 
 ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2, const css::uno::Reference< excel::XStyle >& _xStyle  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // #TODO
-    // #FIXME
+    // #FIXME 
     // This method will NOT handle r1c1 formulas [*]and only assumes that
     // the formulas are _xlA1 based ( need to hook into calc work ths should
     // address this )
-    // [*] reason: getA1Formula method below is just a hook and just
+    // [*] reason: getA1Formula method below is just a hook and just 
     // returns whats it gets ( e.g. doesn't convert anything )
     uno::Reference< excel::XStyle > xStyle( _xStyle );
     uno::Reference< excel::XFormatCondition > xFormatCondition;
@@ -151,7 +151,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
     {
         rtl::OUString sStyleName;
         if ( !xStyle.is() )
-        {
+        {	
             sStyleName = getStyleName();
             xStyle = mxStyles->Add(sStyleName, uno::Any() );
         }
@@ -173,12 +173,12 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
         aPropertyValueVector.push_back( aProperty );
 
         if ( _aFormula1.hasValue() )
-        {
+        {        
             beans::PropertyValue aProp( FORMULA1, 0, uno::makeAny( getA1Formula( _aFormula1 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
         if ( _aFormula2.hasValue() )
-        {
+        {        
             beans::PropertyValue aProp( FORMULA2, 0, uno::makeAny( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
@@ -212,14 +212,14 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
 }
 
 
-uno::Reference< container::XEnumeration > SAL_CALL
+uno::Reference< container::XEnumeration > SAL_CALL 
 ScVbaFormatConditions::createEnumeration() throw (uno::RuntimeException)
 {
     return new EnumWrapper( m_xIndexAccess, mxRangeParent, mxContext, mxStyles, this, mxParentRangePropertySet  );
 }
 
 
-void
+void 
 ScVbaFormatConditions::notifyRange() throw ( script::BasicErrorException )
 {
     try
@@ -232,7 +232,7 @@ ScVbaFormatConditions::notifyRange() throw ( script::BasicErrorException )
     }
 }
 
-rtl::OUString
+rtl::OUString 
 ScVbaFormatConditions::getA1Formula(const css::uno::Any& _aFormula) throw ( script::BasicErrorException )
 {
     // #TODO, #FIXME hook-in proper formula conversion detection & logic
@@ -242,7 +242,7 @@ ScVbaFormatConditions::getA1Formula(const css::uno::Any& _aFormula) throw ( scri
     return sFormula;
 }
 
-rtl::OUString
+rtl::OUString 
 ScVbaFormatConditions::getStyleName()
 {
     ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
@@ -252,7 +252,7 @@ ScVbaFormatConditions::getStyleName()
     return ContainerUtilities::getUniqueName(sCellStyleNames, sStyleNamePrefix, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_") ));
 }
 
-void
+void 
 ScVbaFormatConditions::removeFormatCondition( const rtl::OUString& _sStyleName, sal_Bool _bRemoveStyle) throw ( script::BasicErrorException )
 {
     try
@@ -281,14 +281,14 @@ ScVbaFormatConditions::removeFormatCondition( const rtl::OUString& _sStyleName, 
     }
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaFormatConditions::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFormatConditions") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaFormatConditions::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

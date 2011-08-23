@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1222,7 +1222,7 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
 {
     rStrm.Ignore(12);
 
-    // feature type can be either 2 or 4.  If 2, this record stores flag for
+    // feature type can be either 2 or 4.  If 2, this record stores flag for 
     // enhanced protection, whereas if 4 it stores flag for smart tag.
     sal_uInt16 nFeatureType;
     rStrm >> nFeatureType;
@@ -1232,7 +1232,7 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
 
     rStrm.Ignore(1); // always 1
 
-    // The flag size specifies the size of bytes that follows that stores
+    // The flag size specifies the size of bytes that follows that stores 
     // feature data.  If -1 it depends on the feature type imported earlier.
     // For enhanced protection data, the size is always 4.  For the most xls
     // documents out there this value is almost always -1.
@@ -1241,7 +1241,7 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
     if (nFlagSize != -1)
         return;
 
-    // There are actually 4 bytes to read, but the upper 2 bytes currently
+    // There are actually 4 bytes to read, but the upper 2 bytes currently 
     // don't store any bits.
     sal_uInt16 nOptions;
     rStrm >> nOptions;

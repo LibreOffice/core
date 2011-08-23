@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,23 +72,23 @@ public:
                             SCTAB nTabNum,
                             BOOL bApp,
                             const String& rNewName);
-    virtual         ~ScUndoInsertTab();
+    virtual			~ScUndoInsertTab();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    String          sNewName;
-    SdrUndoAction*  pDrawUndo;
-    ULONG           nEndChangeAction;
-    SCTAB           nTab;
-    BOOL            bAppend;
+    String			sNewName;
+    SdrUndoAction*	pDrawUndo;
+    ULONG			nEndChangeAction;
+    SCTAB			nTab;
+    BOOL			bAppend;
 
-    void            SetChangeTrack();
+    void			SetChangeTrack();
 };
 
 class ScUndoInsertTables : public ScSimpleUndo
@@ -100,52 +100,52 @@ public:
                             SCTAB nTabNum,
                             BOOL bApp,
                             SvStrings *pNewNameList);
-    virtual         ~ScUndoInsertTables();
+    virtual			~ScUndoInsertTables();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
 
-    SdrUndoAction*  pDrawUndo;
-    SvStrings*      pNameList;
-    ULONG           nStartChangeAction;
-    ULONG           nEndChangeAction;
-    SCTAB           nTab;
-    BOOL            bAppend;
+    SdrUndoAction*	pDrawUndo;
+    SvStrings*		pNameList;
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
+    SCTAB			nTab;
+    BOOL			bAppend;
 
-    void            SetChangeTrack();
+    void			SetChangeTrack();
 };
 
 
-class ScUndoDeleteTab: public ScMoveUndo    // Draw vom Move fuer geloeschte Tabelle
+class ScUndoDeleteTab: public ScMoveUndo	// Draw vom Move fuer geloeschte Tabelle
 {
 public:
                     TYPEINFO();
                     ScUndoDeleteTab(
                             ScDocShell* pNewDocShell,
-                            const SvShorts &theTabs,        //SCTAB nNewTab,
+                            const SvShorts &theTabs,		//SCTAB nNewTab,
                             ScDocument* pUndoDocument,
                             ScRefUndoData* pRefData );
-    virtual         ~ScUndoDeleteTab();
+    virtual			~ScUndoDeleteTab();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SvShorts    theTabs;
-    ULONG           nStartChangeAction;
-    ULONG           nEndChangeAction;
+    SvShorts	theTabs;
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
 
-    void            SetChangeTrack();
+    void			SetChangeTrack();
 };
 
 
@@ -158,19 +158,19 @@ public:
                             SCTAB nT,
                             const String& rOldName,
                             const String& rNewName);
-    virtual         ~ScUndoRenameTab();
+    virtual			~ScUndoRenameTab();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SCTAB   nTab;
-    String  sOldName;
-    String  sNewName;
+    SCTAB	nTab;
+    String	sOldName;
+    String	sNewName;
 
     void DoChange( SCTAB nTab, const String& rName ) const;
 };
@@ -183,18 +183,18 @@ public:
                     ScUndoMoveTab( ScDocShell* pNewDocShell,
                                   const SvShorts &aOldTab,
                                   const SvShorts &aNewTab);
-    virtual         ~ScUndoMoveTab();
+    virtual			~ScUndoMoveTab();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SvShorts    theOldTabs;
-    SvShorts    theNewTabs;
+    SvShorts	theOldTabs;
+    SvShorts	theNewTabs;
 
     void DoChange( BOOL bUndo ) const;
 };
@@ -208,19 +208,19 @@ public:
                                   const SvShorts &aOldTab,
                                   const SvShorts &aNewTab);
 
-    virtual         ~ScUndoCopyTab();
+    virtual			~ScUndoCopyTab();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SdrUndoAction*  pDrawUndo;
-    SvShorts    theOldTabs;
-    SvShorts    theNewTabs;
+    SdrUndoAction*	pDrawUndo;
+    SvShorts	theOldTabs;
+    SvShorts	theNewTabs;
 
     void DoChange() const;
 };
@@ -244,7 +244,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-virtual String  GetComment() const;
+virtual String	GetComment() const;
 
 private:
     ScUndoTabColorInfo::List aTabColorList;
@@ -263,23 +263,23 @@ public:
                             const String& rN, const String& rC,
                             const Color& rCol, USHORT nF,
                             const ScMarkData& rMark );
-    virtual         ~ScUndoMakeScenario();
+    virtual			~ScUndoMakeScenario();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SCTAB       nSrcTab;
-    SCTAB       nDestTab;
-    String      aName;
-    String      aComment;
-    Color       aColor;
-    USHORT      nFlags;
-    ScMarkData  aMarkData;
+    SCTAB		nSrcTab;
+    SCTAB		nDestTab;
+    String		aName;
+    String		aComment;
+    Color		aColor;
+    USHORT		nFlags;
+    ScMarkData	aMarkData;
     SdrUndoAction* pDrawUndo;
 };
 
@@ -292,21 +292,21 @@ public:
                             ScDocShell* pShell,
                             SCTAB nNewTab, SCTAB nNewCount,
                             BOOL bNewLink );
-    virtual         ~ScUndoImportTab();
+    virtual			~ScUndoImportTab();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SCTAB       nTab;
-    SCTAB       nCount;
-    BOOL        bLink;
-    ScDocument* pRedoDoc;
-    SdrUndoAction*  pDrawUndo;
+    SCTAB		nTab;
+    SCTAB		nCount;
+    BOOL		bLink;
+    ScDocument*	pRedoDoc;
+    SdrUndoAction*	pDrawUndo;
 
     void DoChange() const;
 };
@@ -316,27 +316,27 @@ class ScUndoRemoveLink : public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoRemoveLink(               // vor dem Loeschen aufrufen!
+                    ScUndoRemoveLink(				// vor dem Loeschen aufrufen!
                             ScDocShell* pShell,
                             const String& rDoc );
-    virtual         ~ScUndoRemoveLink();
+    virtual			~ScUndoRemoveLink();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    String  aDocName;
-    String  aFltName;
-    String  aOptions;
-    ULONG   nRefreshDelay;
-    USHORT  nCount;
-    SCTAB*  pTabs;
-    BYTE*   pModes;
-    String* pTabNames;
+    String	aDocName;
+    String	aFltName;
+    String	aOptions;
+    ULONG	nRefreshDelay;
+    USHORT	nCount;
+    SCTAB*	pTabs;
+    BYTE*	pModes;
+    String*	pTabNames;
 
     void DoChange( BOOL bLink ) const;
 };
@@ -349,18 +349,18 @@ public:
                     ScUndoShowHideTab(
                             ScDocShell* pShell,
                             SCTAB nNewTab, BOOL bNewShow );
-    virtual         ~ScUndoShowHideTab();
+    virtual			~ScUndoShowHideTab();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SCTAB   nTab;
-    BOOL    bShow;
+    SCTAB	nTab;
+    BOOL	bShow;
 
     void DoChange( BOOL bShow ) const;
 };
@@ -373,19 +373,19 @@ class ScUndoDocProtect : public ScSimpleUndo
 {
 public:
                     ScUndoDocProtect(ScDocShell* pShell, ::std::auto_ptr<ScDocProtection> pProtectSettings);
-    virtual         ~ScUndoDocProtect();
+    virtual			~ScUndoDocProtect();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
     ::std::auto_ptr<ScDocProtection> mpProtectSettings;
 
-    void    DoProtect(bool bProtect);
+    void	DoProtect(bool bProtect);
 };
 
 // ============================================================================
@@ -395,22 +395,22 @@ private:
 class ScUndoTabProtect : public ScSimpleUndo
 {
 public:
-                    ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab,
+                    ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab, 
                                      ::std::auto_ptr<ScTableProtection> pProtectSettings);
-    virtual         ~ScUndoTabProtect();
+    virtual			~ScUndoTabProtect();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
     SCTAB   mnTab;
     ::std::auto_ptr<ScTableProtection> mpProtectSettings;
 
-    void    DoProtect(bool bProtect);
+    void	DoProtect(bool bProtect);
 };
 
 
@@ -420,19 +420,19 @@ public:
                     TYPEINFO();
                     ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
                                         ScPrintRangeSaver* pOld, ScPrintRangeSaver* pNew );
-    virtual         ~ScUndoPrintRange();
+    virtual			~ScUndoPrintRange();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SCTAB               nTab;
-    ScPrintRangeSaver*  pOldRanges;
-    ScPrintRangeSaver*  pNewRanges;
+    SCTAB				nTab;
+    ScPrintRangeSaver*	pOldRanges;
+    ScPrintRangeSaver*	pNewRanges;
 
     void DoChange( BOOL bUndo );
 };
@@ -449,25 +449,25 @@ public:
                             const Color& rOCol, const Color& rNCol,
                             USHORT nOF, USHORT nNF );
 
-    virtual         ~ScUndoScenarioFlags();
+    virtual			~ScUndoScenarioFlags();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SCTAB   nTab;
-    String  aOldName;
-    String  aNewName;
-    String  aOldComment;
-    String  aNewComment;
-    Color   aOldColor;
-    Color   aNewColor;
-    USHORT  nOldFlags;
-    USHORT  nNewFlags;
+    SCTAB	nTab;
+    String	aOldName;
+    String	aNewName;
+    String	aOldComment;
+    String	aNewComment;
+    Color	aOldColor;
+    Color	aNewColor;
+    USHORT	nOldFlags;
+    USHORT	nNewFlags;
 };
 
 
@@ -479,21 +479,21 @@ public:
                             ScDocShell* pNewDocShell, const String& rPN,
                             const String& rON, const String& rNN );
 
-    virtual         ~ScUndoRenameObject();
+    virtual			~ScUndoRenameObject();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    String  aPersistName;       // to find object (works only for OLE objects)
-    String  aOldName;
-    String  aNewName;
+    String	aPersistName;		// to find object (works only for OLE objects)
+    String	aOldName;
+    String	aNewName;
 
-    SdrObject*  GetObject();
+    SdrObject*	GetObject();
 };
 
 
@@ -502,18 +502,18 @@ class ScUndoLayoutRTL : public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, BOOL bNewRTL );
-    virtual         ~ScUndoLayoutRTL();
+    virtual			~ScUndoLayoutRTL();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SCTAB   nTab;
-    BOOL    bRTL;
+    SCTAB	nTab;
+    BOOL	bRTL;
 
     void DoChange( BOOL bNew );
 };

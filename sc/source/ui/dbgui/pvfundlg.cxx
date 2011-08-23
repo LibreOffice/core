@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -833,7 +833,7 @@ short ScDPShowDetailDlg::Execute()
 
 String ScDPShowDetailDlg::GetDimensionName() const
 {
-    // Look up the internal dimension name which may be different from the
+    // Look up the internal dimension name which may be different from the 
     // displayed field name.
     String aSelectedName = maLbDims.GetSelectEntry();
     DimNameIndexMap::const_iterator itr = maNameIndexMap.find(aSelectedName);

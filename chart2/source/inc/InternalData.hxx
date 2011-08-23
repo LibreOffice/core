@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ public:
 
     ::std::vector< ::rtl::OUString > getComplexColumnLabel( sal_Int32 nColumnIndex ) const;
     ::std::vector< ::rtl::OUString > getComplexRowLabel( sal_Int32 nRowIndex ) const;
-
+    
     void swapRowWithNext( sal_Int32 nRowIndex );
     void swapColumnWithNext( sal_Int32 nColumnIndex );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,21 +34,21 @@
 
 class ScRTFExport : public ScExportBase
 {
-    ULONG*              pCellX;     // kumulierte Zellbreiten einer Tabelle
+    ULONG*				pCellX;		// kumulierte Zellbreiten einer Tabelle
 
-    void                WriteTab( SCTAB nTab );
-    void                WriteRow( SCTAB nTab, SCROW nRow );
-    void                WriteCell( SCTAB nTab,  SCROW nRow, SCCOL nCol );
+    void				WriteTab( SCTAB nTab );
+    void				WriteRow( SCTAB nTab, SCROW nRow );
+    void				WriteCell( SCTAB nTab,	SCROW nRow, SCCOL nCol );
 
 public:
 
                         ScRTFExport( SvStream&, ScDocument*, const ScRange& );
-    virtual             ~ScRTFExport();
+    virtual				~ScRTFExport();
 
-    ULONG               Write();
+    ULONG 				Write();
 };
 
 
-#endif  // SC_RTFEXP_HXX
+#endif	// SC_RTFEXP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

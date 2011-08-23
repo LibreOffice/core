@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <ooo/vba/excel/XPivotTables.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
+ 
 #include "excelvbahelper.hxx"
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
@@ -57,8 +57,8 @@ public:
     // XPivotTables
 
     // ScVbaPivotTables_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
-
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ); 
+    
     virtual rtl::OUString& getServiceImplName();
 
 };

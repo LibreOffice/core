@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -184,8 +184,8 @@ const ScOutlineEntry* ScOutlineWindow::GetOutlineEntry( size_t nLevel, size_t nE
 
 bool ScOutlineWindow::IsHidden( SCCOLROW nColRowIndex ) const
 {
-    return mbHoriz ?
-        GetDoc().ColHidden(static_cast<SCCOL>(nColRowIndex), GetTab()) :
+    return mbHoriz ? 
+        GetDoc().ColHidden(static_cast<SCCOL>(nColRowIndex), GetTab()) : 
         GetDoc().RowHidden(static_cast<SCROW>(nColRowIndex), GetTab());
 }
 

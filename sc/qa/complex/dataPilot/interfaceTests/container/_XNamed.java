@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public class _XNamed {
     /**
      * The object that is testsed.
      */
-    public XNamed oObj = null;
+    public XNamed oObj = null;    
 
     /**
      * The test parameters
@@ -65,7 +65,7 @@ public class _XNamed {
      * The log writer
      */
     private LogWriter log = null;
-
+    
     /**
      * Constructor: gets the object to test, a logger and the test parameters
      * @param xObj The test object

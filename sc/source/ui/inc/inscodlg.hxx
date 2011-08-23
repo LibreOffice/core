@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,68 +40,68 @@
 class ScInsertContentsDlg : public ModalDialog
 {
 public:
-            ScInsertContentsDlg( Window*        pParent,
-                                 USHORT         nCheckDefaults = 0,
-                                 const String*  pStrTitle = NULL );
+            ScInsertContentsDlg( Window*		pParent,
+                                 USHORT  		nCheckDefaults = 0,
+                                 const String*	pStrTitle = NULL );
             ~ScInsertContentsDlg();
 
-    USHORT      GetInsContentsCmdBits() const;
-    USHORT      GetFormulaCmdBits() const;
-    BOOL        IsSkipEmptyCells() const {return aBtnSkipEmptyCells.IsChecked();}
-    BOOL        IsTranspose() const {return aBtnTranspose.IsChecked();}
-    BOOL        IsLink() const {return aBtnLink.IsChecked();}
-    InsCellCmd  GetMoveMode();
+    USHORT		GetInsContentsCmdBits() const;
+    USHORT		GetFormulaCmdBits() const;
+    BOOL		IsSkipEmptyCells() const {return aBtnSkipEmptyCells.IsChecked();}
+    BOOL 		IsTranspose() const {return aBtnTranspose.IsChecked();}
+    BOOL 		IsLink() const {return aBtnLink.IsChecked();}
+    InsCellCmd	GetMoveMode();
 
-    void    SetOtherDoc( BOOL bSet );
-    void    SetFillMode( BOOL bSet );
-    void    SetChangeTrack( BOOL bSet );
-    void    SetCellShiftDisabled( int nDisable );
+    void	SetOtherDoc( BOOL bSet );
+    void	SetFillMode( BOOL bSet );
+    void	SetChangeTrack( BOOL bSet );
+    void	SetCellShiftDisabled( int nDisable );
 
 private:
     FixedLine       aFlFrame;
-    CheckBox        aBtnInsAll;
-    CheckBox        aBtnInsStrings;
-    CheckBox        aBtnInsNumbers;
-    CheckBox        aBtnInsDateTime;
-    CheckBox        aBtnInsFormulas;
-    CheckBox        aBtnInsNotes;
-    CheckBox        aBtnInsAttrs;
-    CheckBox        aBtnInsObjects;
+    CheckBox		aBtnInsAll;
+    CheckBox		aBtnInsStrings;
+    CheckBox		aBtnInsNumbers;
+    CheckBox		aBtnInsDateTime;
+    CheckBox		aBtnInsFormulas;
+    CheckBox		aBtnInsNotes;
+    CheckBox		aBtnInsAttrs;
+    CheckBox		aBtnInsObjects;
 
     FixedLine       aFlSep1;
     FixedLine       aFlOptions;
-    CheckBox        aBtnSkipEmptyCells;
-    CheckBox        aBtnTranspose;
-    CheckBox        aBtnLink;
+    CheckBox		aBtnSkipEmptyCells;
+    CheckBox		aBtnTranspose;
+    CheckBox		aBtnLink;
 
     FixedLine       aFlOperation;
-    RadioButton     aRbNoOp;
-    RadioButton     aRbAdd;
-    RadioButton     aRbSub;
-    RadioButton     aRbMul;
-    RadioButton     aRbDiv;
+    RadioButton 	aRbNoOp;
+    RadioButton 	aRbAdd;
+    RadioButton 	aRbSub;
+    RadioButton 	aRbMul;
+    RadioButton 	aRbDiv;
 
     FixedLine       aFlSep2;
     FixedLine       aFlMove;
-    RadioButton     aRbMoveNone;
-    RadioButton     aRbMoveDown;
-    RadioButton     aRbMoveRight;
+    RadioButton 	aRbMoveNone;
+    RadioButton 	aRbMoveDown;
+    RadioButton 	aRbMoveRight;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
-    BOOL            bOtherDoc;
-    BOOL            bFillMode;
-    BOOL            bChangeTrack;
-    BOOL            bMoveDownDisabled;
-    BOOL            bMoveRightDisabled;
+    BOOL			bOtherDoc;
+    BOOL			bFillMode;
+    BOOL			bChangeTrack;
+    BOOL			bMoveDownDisabled;
+    BOOL			bMoveRightDisabled;
 
-    static BOOL     bPreviousAllCheck;
-    static USHORT   nPreviousChecks;
-    static USHORT   nPreviousChecks2;
-    static USHORT   nPreviousFormulaChecks;
-    static USHORT   nPreviousMoveMode;          // enum InsCellCmd
+    static BOOL		bPreviousAllCheck;
+    static USHORT	nPreviousChecks;
+    static USHORT	nPreviousChecks2;
+    static USHORT	nPreviousFormulaChecks;
+    static USHORT	nPreviousMoveMode;			// enum InsCellCmd
 
     void DisableChecks( BOOL bInsAllChecked = TRUE );
     void TestModes();

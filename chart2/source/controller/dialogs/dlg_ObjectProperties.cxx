@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -419,7 +419,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             if( aCJKOptions.IsAsianTypographyEnabled() )
                 AddTabPage(RID_SVXPAGE_PARA_ASIAN, String(SchResId(STR_PAGE_ASIAN)));
-
+            
             break;
 
         case OBJECTTYPE_AXIS:
