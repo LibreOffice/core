@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ private:
     TkResMgr() { }
     ~TkResMgr() { }
 
-    // we'll instantiate one static member of the following class,
+    // we'll instantiate one static member of the following class, 
     // which in it's dtor ensures that m_pSimpleResMgr will be deleted
     class EnsureDelete
     {

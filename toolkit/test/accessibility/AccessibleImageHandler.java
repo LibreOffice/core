@@ -8,7 +8,7 @@ class AccessibleImageHandler extends NodeHandler
 {
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
-        XAccessibleImage xImage =
+        XAccessibleImage xImage = 
             (XAccessibleImage) UnoRuntime.queryInterface (
                 XAccessibleImage.class, xContext);
         if (xImage != null)
@@ -40,7 +40,7 @@ class AccessibleImageHandler extends NodeHandler
             XAccessibleImage xImage = getImage ((AccTreeNode)aParent);
             if (xImage != null)
                 return new StringNode (
-                    "Image: " +
+                    "Image: " + 
                     xImage.getAccessibleImageDescription() + " (" +
                     xImage.getAccessibleImageWidth() + "x" +
                     xImage.getAccessibleImageHeight() + ")",

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -296,26 +296,26 @@ sal_IsLocalDisplay( Display *pDisplay )
         return sal_IsDisplayNumber( pDisplayString + 1 );
 
     // check for fixed token which all mean localhost:x.y
-    const char  pLocal[]    = "localhost:";
-    const int   nLocalLen   = sizeof(pLocal) - 1;
+    const char  pLocal[]	= "localhost:";
+    const int   nLocalLen 	= sizeof(pLocal) - 1;
     if ( strncmp(pDisplayString, pLocal, nLocalLen) == 0 )
         return sal_IsDisplayNumber( pDisplayString + nLocalLen );
 
-    const char  pUnix[]     = "unix:";
-    const int   nUnixLen    = sizeof(pUnix) - 1;
-    if ( strncmp(pDisplayString, pUnix,      nUnixLen)      == 0 )
+    const char  pUnix[]		= "unix:";
+    const int   nUnixLen 	= sizeof(pUnix) - 1;
+    if ( strncmp(pDisplayString, pUnix, 	 nUnixLen)      == 0 )
         return sal_IsDisplayNumber( pDisplayString + nUnixLen );
 
     const char  pLoopback[] = "127.0.0.1:";
     const int   nLoopbackLen= sizeof(pLoopback) - 1;
-    if ( strncmp(pDisplayString, pLoopback,  nLoopbackLen)  == 0 )
+    if ( strncmp(pDisplayString, pLoopback,	 nLoopbackLen)  == 0 )
         return sal_IsDisplayNumber( pDisplayString + nLoopbackLen );
 
     // compare local hostname to displaystring, both may be ip address or
     // hostname
     BOOL  bEqual = FALSE;
-    char *pDisplayHost  = strdup(  pDisplayString );
-    char *pPtr          = strrchr( pDisplayHost, ':' );
+    char *pDisplayHost 	= strdup(  pDisplayString );
+    char *pPtr 			= strrchr( pDisplayHost, ':' );
 
     if( pPtr != NULL )
     {
@@ -353,25 +353,25 @@ extern "C" srv_vendor_t
 sal_GetServerVendor( Display *p_display )
 {
     typedef struct {
-        srv_vendor_t    e_vendor;   // vendor as enum
-        const char      *p_name;    // vendor name as returned by VendorString()
-        unsigned int    n_len;  // number of chars to compare
+        srv_vendor_t	e_vendor;	// vendor as enum
+        const char		*p_name;	// vendor name as returned by VendorString()
+        unsigned int	n_len;	// number of chars to compare
     } vendor_t;
 
     const vendor_t p_vendorlist[] = {
-        { vendor_xfree,       "The XFree86 Project, Inc",        13 },
-        { vendor_sun,         "Sun Microsystems, Inc.",          10 },
-        { vendor_attachmate,  "Attachmate Corporation",          10 },
+        { vendor_xfree,       "The XFree86 Project, Inc", 		 13	},
+        { vendor_sun,         "Sun Microsystems, Inc.", 		 10	},
+        { vendor_attachmate,  "Attachmate Corporation", 		 10	},
         { vendor_excursion,
             "DECWINDOWS DigitalEquipmentCorporation, eXcursion", 42 },
-        { vendor_hp,          "Hewlett-Packard Company",         17 },
+        { vendor_hp,          "Hewlett-Packard Company", 		 17 },
         { vendor_hummingbird, "Hummingbird Communications Ltd.", 11 },
         { vendor_ibm,         "International Business Machines", 24 },
         { vendor_sgi,         "Silicon Graphics",                 9 },
-        { vendor_sco,         "The Santa Cruz Operation",        16 },
-        { vendor_xinside,     "X Inside Inc.",                   10 },
+        { vendor_sco,         "The Santa Cruz Operation", 		 16 },
+        { vendor_xinside,     "X Inside Inc.", 					 10	},
         // allways the last entry: vendor_none to indicate eol
-        { vendor_none,        NULL,                               0 },
+        { vendor_none, 	  	  NULL,								  0 },
     };
 
 #ifdef _USE_PRINT_EXTENSION_
@@ -687,8 +687,8 @@ void SalDisplay::initScreen( int nScreen ) const
     rSD.m_bInit = true;
 
     XVisualInfo aVI;
-    Colormap    aColMap;
-
+    Colormap	aColMap;
+    
     if( SalDisplay::BestVisual( pDisp_, nScreen, aVI ) ) // DefaultVisual
         aColMap = DefaultColormap( pDisp_, nScreen );
     else
@@ -703,7 +703,7 @@ void SalDisplay::initScreen( int nScreen ) const
     rSD.m_aRoot = RootWindow( pDisp_, nScreen );
     rSD.m_aVisual = SalVisual( &aVI );
     rSD.m_aColormap = SalColormap( this, aColMap, nScreen );
-
+    
     // we're interested in configure notification of root windows
     InitRandR( rSD.m_aRoot );
 
@@ -746,9 +746,9 @@ void SalDisplay::initScreen( int nScreen ) const
         XGCValues values;
         values.graphics_exposures   = False;
         values.fill_style           = FillOpaqueStippled;
-        values.background           = (1<<rSD.m_aVisual.GetDepth())-1;
-        values.foreground           = 0;
-
+        values.background       	= (1<<rSD.m_aVisual.GetDepth())-1;
+        values.foreground       	= 0;
+    
         rSD.m_aCopyGC       = XCreateGC( pDisp_,
                                          rSD.m_aRefWindow,
                                          GCGraphicsExposures
@@ -780,13 +780,13 @@ void SalDisplay::initScreen( int nScreen ) const
                                          | GCForeground
                                          | GCBackground,
                                          &values );
-
+    
         XSetFunction( pDisp_, rSD.m_aAndInvertedGC,  GXandInverted );
         XSetFunction( pDisp_, rSD.m_aAndGC,          GXand );
         // #44556# PowerPC Solaris 2.5 (XSun 3500) Bug: GXor = GXnop
         //XSetFunction( pDisp_, pOrGC_,         GXor );
         XSetFunction( pDisp_, rSD.m_aOrGC,           GXxor );
-
+    
         if( 1 == rSD.m_aVisual.GetDepth() )
         {
             XSetFunction( pDisp_, rSD.m_aCopyGC, GXcopyInverted );
@@ -819,11 +819,11 @@ void SalDisplay::Init()
     nProperties_        = PROPERTY_DEFAULT;
     hEventGuard_        = NULL;
     m_pFontCache        = NULL;
-    mpFontList          = (XlfdStorage*)NULL;
-    mpFactory           = (AttributeProvider*)NULL;
-    m_pCapture          = NULL;
-    m_bXinerama         = false;
-
+    mpFontList			= (XlfdStorage*)NULL;
+    mpFactory  			= (AttributeProvider*)NULL;
+    m_pCapture			= NULL;
+    m_bXinerama			= false;
+    
     int nDisplayScreens = ScreenCount( pDisp_ );
     m_aScreens = std::vector<ScreenData>(nDisplayScreens);
 
@@ -859,9 +859,9 @@ void SalDisplay::Init()
     X11SalBitmap::ImplCreateCache();
 
     hEventGuard_    = osl_createMutex();
-    bLocal_         = FALSE; /* dont care, initialize later by
+    bLocal_ 		= FALSE; /* dont care, initialize later by
                                 calling SalDisplay::IsLocal() */
-    mbLocalIsValid  = FALSE; /* bLocal_ is not yet initialized */
+    mbLocalIsValid 	= FALSE; /* bLocal_ is not yet initialized */
 
     // - - - - - - - - - - Synchronize - - - - - - - - - - - - -
     if( getenv( "SAL_SYNCHRONIZE" ) )
@@ -1115,7 +1115,7 @@ USHORT SalDisplay::GetIndicatorState() const
 String SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
 {
     String aRet;
-
+    
     // return an empty string for keysyms that are not bound to
     // any key code
     XLIB_KeyCode aKeyCode = XKeysymToKeycode( GetDisplay(), nKeySym );
@@ -1159,7 +1159,7 @@ void SalDisplay::ModifierMapping()
     nMod1KeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, Mod1MapIndex );
     // Auf Sun-Servern und SCO-Severn beruecksichtigt XLookupString
     // nicht den NumLock Modifier.
-    if(     (GetServerVendor() == vendor_sun)
+    if( 	(GetServerVendor() == vendor_sun)
         ||  (GetServerVendor() == vendor_sco) )
     {
         XLIB_KeyCode aNumLock = XKeysymToKeycode( pDisp_, XK_Num_Lock );
@@ -1259,13 +1259,13 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
             break;
 
         #if !defined (SunXK_Undo)
-            #define SunXK_Stop      0x0000FF69  // XK_Cancel
-            #define SunXK_Props     0x1005FF70
-            #define SunXK_Front     0x1005FF71
-            #define SunXK_Copy      0x1005FF72
-            #define SunXK_Open      0x1005FF73
-            #define SunXK_Paste     0x1005FF74
-            #define SunXK_Cut       0x1005FF75
+            #define SunXK_Stop		0x0000FF69	// XK_Cancel
+            #define SunXK_Props		0x1005FF70
+            #define SunXK_Front		0x1005FF71
+            #define SunXK_Copy		0x1005FF72
+            #define SunXK_Open		0x1005FF73
+            #define SunXK_Paste		0x1005FF74
+            #define SunXK_Cut		0x1005FF75
         #endif
 
         case KEY_REPEAT:
@@ -1772,8 +1772,8 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
                                     unsigned char    *pPrintable,
                                     int              *pLen,
                                     KeySym           *pUnmodifiedKeySym,
-                                    Status           *pStatusReturn,
-                                    XIC              aInputContext ) const
+                                    Status			 *pStatusReturn,
+                                    XIC 			 aInputContext ) const
 {
     KeySym nKeySym = 0;
     memset( pPrintable, 0, *pLen );
@@ -2324,9 +2324,9 @@ bool SalDisplay::DispatchInternalEvent()
     {
         if( m_aUserEvents.begin() != m_aUserEvents.end() )
         {
-            pFrame  = m_aUserEvents.front().m_pFrame;
-            pData   = m_aUserEvents.front().m_pData;
-            nEvent  = m_aUserEvents.front().m_nEvent;
+            pFrame	= m_aUserEvents.front().m_pFrame;
+            pData	= m_aUserEvents.front().m_pData;
+            nEvent	= m_aUserEvents.front().m_nEvent;
 
             m_aUserEvents.pop_front();
         }
@@ -2469,7 +2469,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
             return pFrame->Dispatch( pEvent );
         }
     }
-
+    
     // dispatch to salobjects
     X11SalObject::Dispatch( pEvent );
 
@@ -2887,9 +2887,9 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
         nGreenShift_    = sal_Shift( green_mask );
         nBlueShift_     = sal_Shift( blue_mask );
 
-        nRedBits_       = sal_significantBits( red_mask );
-        nGreenBits_     = sal_significantBits( green_mask );
-        nBlueBits_      = sal_significantBits( blue_mask );
+        nRedBits_		= sal_significantBits( red_mask );
+        nGreenBits_		= sal_significantBits( green_mask );
+        nBlueBits_		= sal_significantBits( blue_mask );
 
         if( GetDepth() == 24 )
             if( red_mask == 0xFF0000 )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@
 #include <xdictionary.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
-//  ----------------------------------------------------
-//  class BreakIterator_CJK
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class BreakIterator_CJK
+//	----------------------------------------------------
 class BreakIterator_CJK : public BreakIterator_Unicode
 {
 public:
@@ -49,9 +49,9 @@ public:
     Boundary SAL_CALL getWordBoundary( const rtl::OUString& Text, sal_Int32 nPos,
             const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection )
             throw(com::sun::star::uno::RuntimeException);
-    LineBreakResults SAL_CALL getLineBreak( const rtl::OUString& Text, sal_Int32 nStartPos,
-        const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
-        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
+    LineBreakResults SAL_CALL getLineBreak( const rtl::OUString& Text, sal_Int32 nStartPos, 
+        const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos, 
+        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions ) 
         throw(com::sun::star::uno::RuntimeException);
 
 protected:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,31 +51,31 @@ namespace cairocanvas
     public:
         SpriteCanvasHelper();
 
-        void init( ::canvas::SpriteRedrawManager& rManager,
+        void init( ::canvas::SpriteRedrawManager& rManager, 
                    SpriteCanvas&                  rOwningSpriteCanvas,
                    const ::basegfx::B2ISize&      rSize );
-
+    
         /// Dispose all internal references
         void disposing();
 
         // XSpriteCanvas
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XAnimatedSprite >        createSpriteFromAnimation(
+        ::com::sun::star::uno::Reference< 
+              ::com::sun::star::rendering::XAnimatedSprite > 		createSpriteFromAnimation( 
                 const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimation >& animation );
 
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XAnimatedSprite >        createSpriteFromBitmaps(
-                const ::com::sun::star::uno::Sequence<
-                      ::com::sun::star::uno::Reference<
-                            ::com::sun::star::rendering::XBitmap > >& animationBitmaps,
+        ::com::sun::star::uno::Reference< 
+              ::com::sun::star::rendering::XAnimatedSprite > 		createSpriteFromBitmaps( 
+                const ::com::sun::star::uno::Sequence< 
+                      ::com::sun::star::uno::Reference< 
+                            ::com::sun::star::rendering::XBitmap > >& animationBitmaps, 
                 sal_Int8                                              interpolationMode );
-
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XCustomSprite >      createCustomSprite(
+    
+        ::com::sun::star::uno::Reference< 
+              ::com::sun::star::rendering::XCustomSprite > 		createCustomSprite( 
                 const ::com::sun::star::geometry::RealSize2D& spriteSize );
-
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XSprite >                createClonedSprite(
+    
+        ::com::sun::star::uno::Reference< 
+              ::com::sun::star::rendering::XSprite > 				createClonedSprite( 
                 const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >& original );
 
         /** Actually perform the screen update
@@ -119,21 +119,21 @@ namespace cairocanvas
             All info necessary, should rMoveStart be partially or
             fully outside the outdev
          */
-        void scrollUpdate( const ::basegfx::B2DRange&                           rMoveStart,
-                           const ::basegfx::B2DRange&                           rMoveEnd,
-                           const ::canvas::SpriteRedrawManager::UpdateArea&     rUpdateArea );
+        void scrollUpdate( const ::basegfx::B2DRange& 							rMoveStart, 
+                           const ::basegfx::B2DRange& 							rMoveEnd,
+                           const ::canvas::SpriteRedrawManager::UpdateArea& 	rUpdateArea );
 
         void opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                           const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
+                           const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );                    
 
         void genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
+                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );                    
 
     private:
         ::cairo::SurfaceSharedPtr getCompositingSurface( const ::basegfx::B2ISize& rNeededSize );
 
         /// Set from the SpriteCanvas: instance coordinating sprite redraw
-        ::canvas::SpriteRedrawManager*  mpRedrawManager;
+        ::canvas::SpriteRedrawManager*	mpRedrawManager;
 
         /// Set from the init method. used to generate sprites
         SpriteCanvas*                   mpOwningSpriteCanvas;

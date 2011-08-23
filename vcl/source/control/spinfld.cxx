@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ BOOL ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonVa
         // there is just no useful native support for spinfields with dropdown
         !(pWin->GetStyle() & WB_DROPDOWN) )
     {
-        if( pWin->IsNativeControlSupported(CTRL_SPINBOX, rSpinbuttonValue.mnUpperPart) &&
+        if( pWin->IsNativeControlSupported(CTRL_SPINBOX, rSpinbuttonValue.mnUpperPart) && 
             pWin->IsNativeControlSupported(CTRL_SPINBOX, rSpinbuttonValue.mnLowerPart) )
         {
             // only paint the embedded spin buttons, all buttons are painted at once
@@ -121,7 +121,7 @@ BOOL ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonVa
             {
                 aSize = aContent.GetSize();
             }
-
+            
             Rectangle aRgn( aPt, aSize );
             bNativeOK = pBorder->DrawNativeControl( CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn, CTRL_STATE_ENABLED,
                         rSpinbuttonValue, rtl::OUString() );
@@ -297,15 +297,15 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
 
 void SpinField::ImplInitSpinFieldData()
 {
-    mpEdit          = NULL;
-    mbSpin          = FALSE;
-    mbRepeat        = FALSE;
-    mbUpperIn       = FALSE;
-    mbLowerIn       = FALSE;
-    mbInitialUp     = FALSE;
-    mbInitialDown   = FALSE;
-    mbNoSelect      = FALSE;
-    mbInDropDown    = FALSE;
+    mpEdit			= NULL;
+    mbSpin			= FALSE;
+    mbRepeat		= FALSE;
+    mbUpperIn		= FALSE;
+    mbLowerIn		= FALSE;
+    mbInitialUp 	= FALSE;
+    mbInitialDown	= FALSE;
+    mbNoSelect		= FALSE;
+    mbInDropDown	= FALSE;
 }
 
 // --------------------------------------------------------------------
@@ -317,11 +317,11 @@ void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
     if ( nWinStyle & (WB_SPIN|WB_DROPDOWN) )
     {
         mbSpin = TRUE;
-
+        
         // Some themes want external spin buttons, therefore the main
         // spinfield should not overdraw the border between its encapsulated
         // edit field and the spin buttons
-        if ( (nWinStyle & WB_SPIN) && ImplUseNativeBorder( nWinStyle ) )
+        if ( (nWinStyle & WB_SPIN) && ImplUseNativeBorder( nWinStyle ) ) 
         {
             SetBackground();
             mpEdit = new Edit( this, WB_NOBORDER );
@@ -425,13 +425,13 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
     {
         if ( maUpperRect.IsInside( rMEvt.GetPosPixel() ) )
         {
-            mbUpperIn   = TRUE;
+            mbUpperIn	= TRUE;
             mbInitialUp = TRUE;
             Invalidate( maUpperRect );
         }
         else if ( maLowerRect.IsInside( rMEvt.GetPosPixel() ) )
         {
-            mbLowerIn    = TRUE;
+            mbLowerIn	 = TRUE;
             mbInitialDown = TRUE;
             Invalidate( maLowerRect );
         }
@@ -644,7 +644,7 @@ void SpinField::Paint( const Rectangle& rRect )
 {
     if ( mbSpin )
     {
-        BOOL    bEnable = IsEnabled();
+        BOOL	bEnable = IsEnabled();
         ImplDrawSpinButton( this, maUpperRect, maLowerRect,
                             mbUpperIn, mbLowerIn, bEnable, bEnable );
     }
@@ -719,12 +719,12 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
             // use the full extent of the control
             Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
-            bNativeRegionOK =
+            bNativeRegionOK = 
                 pWin->GetNativeControlRegion(CTRL_SPINBOX, PART_BUTTON_UP,
                     aArea, 0, aControlValue, rtl::OUString(), aBound, aContentUp) &&
                 pWin->GetNativeControlRegion(CTRL_SPINBOX, PART_BUTTON_DOWN,
                     aArea, 0, aControlValue, rtl::OUString(), aBound, aContentDown);
-
+                    
             if( bNativeRegionOK )
             {
                 // convert back from border space to local coordinates
@@ -771,7 +771,7 @@ void SpinField::Resize()
             ImplControlValue aControlValue;
             Point aPoint;
             Rectangle aContent, aBound;
-
+    
             // use the full extent of the control
             Window *pBorder = GetWindow( WINDOW_BORDER );
             Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );

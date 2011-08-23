@@ -92,13 +92,13 @@ class InternalResMgr
     friend class SimpleResMgr;
     friend class ResMgrContainer;
 
-    ImpContent *                    pContent;
-    UINT32                          nOffCorrection;
-    BYTE *                          pStringBlock;
-    SvStream *                      pStm;
-    BOOL                            bEqual2Content;
-    UINT32                          nEntries;
-    OUString                        aFileName;
+    ImpContent *			        pContent;
+    UINT32					        nOffCorrection;
+    BYTE *					        pStringBlock;
+    SvStream *				        pStm;
+    BOOL					        bEqual2Content;
+    UINT32					        nEntries;
+    OUString				        aFileName;
     OUString                        aPrefix;
     OUString                        aResName;
     bool                            bSingular;
@@ -110,15 +110,15 @@ class InternalResMgr
                                             const OUString& aResName,
                                             const com::sun::star::lang::Locale& rLocale );
                             ~InternalResMgr();
-    BOOL                    Create();
+    BOOL					Create();
 
-    BOOL                    IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
-    void *                  LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
+    BOOL					IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
+    void *					LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                                            void **pResHandle );
 public:
-    void                    FreeGlobalRes( void *, void * );
+    void					FreeGlobalRes( void *, void * );
 
-    SvStream *              GetBitmapStream( sal_uInt32 nResId );
+    SvStream *				GetBitmapStream( sal_uInt32 nResId );
 };
 
 // =======================================================================
@@ -663,7 +663,7 @@ BOOL InternalResMgr::Create()
         OSL_ENSURE( bEqual2Content, "resource structure wrong" );
         if( !bSorted )
             ::std::sort(pContent,pContent+nEntries,ImpContentLessCompare());
-            //  qsort( pContent, nEntries, sizeof( ImpContent ), Compare );
+            //	qsort( pContent, nEntries, sizeof( ImpContent ), Compare );
 
         bDone = TRUE;
     }
@@ -696,7 +696,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
     // Anfang der Strings suchen
     sal_uInt64 nValue = ((sal_uInt64(nRT) << 32) | nId);
     ImpContent* pEnd = (pContent + nEntries);
-    ImpContent* pFind = ::std::lower_bound( pContent,
+    ImpContent* pFind = ::std::lower_bound(	pContent,
                                             pEnd,
                                             nValue,
                                             ImpContentMixLessCompare());

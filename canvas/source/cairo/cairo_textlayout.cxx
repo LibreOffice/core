@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@
 # include "cairo_xlib_cairo.hxx"
 # include <cairo-ft.h>
 #else
-# error Native API needed.
+# error Native API needed. 
 #endif
 
 using namespace ::cairo;
@@ -79,7 +79,7 @@ namespace cairocanvas
     namespace
     {
         void setupLayoutMode( OutputDevice& rOutDev,
-                              sal_Int8      nTextDirection )
+                              sal_Int8		nTextDirection )	
         {
             // TODO(P3): avoid if already correctly set
             ULONG nLayoutMode;
@@ -113,11 +113,11 @@ namespace cairocanvas
         }
     }
 
-    TextLayout::TextLayout( const rendering::StringContext&     aText,
-                            sal_Int8                            nDirection,
-                            sal_Int64                           /*nRandomSeed*/,
-                            const CanvasFont::Reference&        rFont,
-                            const SurfaceProviderRef&           rRefDevice ) :
+    TextLayout::TextLayout( const rendering::StringContext& 	aText, 
+                            sal_Int8                        	nDirection, 
+                            sal_Int64                       	/*nRandomSeed*/,
+                            const CanvasFont::Reference&      	rFont,
+                            const SurfaceProviderRef&			rRefDevice ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
         maLogicalAdvancements(),
@@ -126,7 +126,7 @@ namespace cairocanvas
         mnTextDirection( nDirection )
     {
     }
-
+    
     TextLayout::~TextLayout()
     {
     }
@@ -229,7 +229,7 @@ namespace cairocanvas
         return 0.0;
     }
 
-    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& /*aNextLayouts*/,
+    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& /*aNextLayouts*/, 
                                                  double /*nSize*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -246,7 +246,7 @@ namespace cairocanvas
         return rendering::TextHit();
     }
 
-    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 /*nInsertionIndex*/,
+    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 /*nInsertionIndex*/, 
                                                     sal_Bool /*bExcludeLigatures*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -255,8 +255,8 @@ namespace cairocanvas
         return rendering::Caret();
     }
 
-    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 /*nStartIndex*/,
-                                                          sal_Int32 /*nCaretAdvancement*/,
+    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 /*nStartIndex*/, 
+                                                          sal_Int32 /*nCaretAdvancement*/, 
                                                           sal_Bool /*bExcludeLigatures*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -265,7 +265,7 @@ namespace cairocanvas
         return 0;
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 /*nStartIndex*/,
+    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 /*nStartIndex*/, 
                                                                                               sal_Int32 /*nEndIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -274,7 +274,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 /*nStartIndex*/,
+    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 /*nStartIndex*/, 
                                                                                                sal_Int32 /*nEndIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -311,12 +311,12 @@ namespace cairocanvas
 
         return maText;
     }
-
+  
     void TextLayout::useFont( Cairo* pCairo )
     {
     rendering::FontRequest aFontRequest = mpFont->getFontRequest();
     rendering::FontInfo aFontInfo = aFontRequest.FontDescription;
-
+    
     cairo_select_font_face( pCairo, ::rtl::OUStringToOString( aFontInfo.FamilyName, RTL_TEXTENCODING_UTF8 ), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL );
     cairo_set_font_size( pCairo, aFontRequest.CellSize );
     }
@@ -386,7 +386,7 @@ namespace cairocanvas
                            const rendering::ViewState&   viewState,
                            const rendering::RenderState& renderState ) const
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::osl::MutexGuard aGuard( m_aMutex );        
         SystemTextLayoutData aSysLayoutData;
 #if (defined CAIRO_HAS_WIN32_SURFACE) && (OSL_DEBUG_LEVEL > 1)
         LOGFONTW logfont;
@@ -395,11 +395,11 @@ namespace cairocanvas
 
         // TODO(P2): cache that
         ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
-
+        
         if( maLogicalAdvancements.getLength() )
         {
             setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
-
+            
             // TODO(F3): ensure correct length and termination for DX
             // array (last entry _must_ contain the overall width)
         }
@@ -459,11 +459,11 @@ namespace cairocanvas
                 return true;
             }
         }
-
+        
         if (aSysLayoutData.rGlyphData.empty()) return false; //??? false?
-
+        
         /**
-         * Setup platform independent glyph vector into cairo-based glyphs vector.
+         * Setup platform independent glyph vector into cairo-based glyphs vector. 
          **/
 
         // Loop through the fonts used and render the matching glyphs for each
@@ -598,7 +598,7 @@ namespace cairocanvas
                 );
 
             cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
-
+            
             //faux bold
             if (rSysFontData.bFakeBold) {
                 double bold_dx = 0.5 * sqrt( 0.7 * aFont.GetHeight() );
@@ -653,10 +653,10 @@ namespace cairocanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
-                                       const uno::Sequence< double >&   inputOffsets,
-                                       const rendering::ViewState&      viewState,
-                                       const rendering::RenderState&    renderState     ) const
+    void TextLayout::setupTextOffsets( sal_Int32*						outputOffsets,
+                                       const uno::Sequence< double >& 	inputOffsets,
+                                       const rendering::ViewState& 		viewState,
+                                       const rendering::RenderState& 	renderState		) const
     {
         ENSURE_OR_THROW( outputOffsets!=NULL,
                           "TextLayout::setupTextOffsets offsets NULL" );
@@ -691,7 +691,7 @@ namespace cairocanvas
     {
         uno::Sequence< ::rtl::OUString > aRet(1);
         aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-
+        
         return aRet;
     }
 }

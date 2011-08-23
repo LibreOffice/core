@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,38 +35,38 @@
 #include <vcl/salbmp.hxx>
 
 // --------------
-// - SalBitmap  -
+// - SalBitmap	-
 // --------------
 
-struct  BitmapBuffer;
-class   BitmapColor;
-class   BitmapPalette;
-class   SalGraphics;
+struct	BitmapBuffer;
+class	BitmapColor;
+class	BitmapPalette;
+class	SalGraphics;
 
 class WinSalBitmap : public SalBitmap
 {
 private:
 
-    Size                maSize;
-    HGLOBAL             mhDIB;
-    HBITMAP             mhDDB;
-    USHORT              mnBitCount;
+    Size				maSize;
+    HGLOBAL 			mhDIB;
+    HBITMAP 			mhDDB;
+    USHORT				mnBitCount;
 
 public:
 
-    HGLOBAL             ImplGethDIB() const { return mhDIB; }
-    HBITMAP             ImplGethDDB() const { return mhDDB; }
+    HGLOBAL 			ImplGethDIB() const { return mhDIB; }
+    HBITMAP 			ImplGethDDB() const { return mhDDB; }
 
-    static HGLOBAL      ImplCreateDIB( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal );
-    static HANDLE       ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB );
-    static USHORT       ImplGetDIBColorCount( HGLOBAL hDIB );
-    static void         ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
+    static HGLOBAL		ImplCreateDIB( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal );
+    static HANDLE		ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB );
+    static USHORT		ImplGetDIBColorCount( HGLOBAL hDIB );
+    static void 		ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
                                              const Size& rSizePixel, bool bRLE4 );
 
 public:
 
                         WinSalBitmap();
-    virtual             ~WinSalBitmap();
+    virtual				~WinSalBitmap();
 
 public:
 
@@ -84,7 +84,7 @@ public:
     virtual Size                GetSize() const { return maSize; }
     virtual USHORT              GetBitCount() const { return mnBitCount; }
 
-    virtual BitmapBuffer*       AcquireBuffer( bool bReadOnly );
+    virtual BitmapBuffer*		AcquireBuffer( bool bReadOnly );
     virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
     virtual bool                GetSystemData( BitmapSystemData& rData );
 };

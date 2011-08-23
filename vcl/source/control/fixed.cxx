@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,21 +38,21 @@
 
 // =======================================================================
 
-#define FIXEDLINE_TEXT_BORDER    4
+#define FIXEDLINE_TEXT_BORDER	 4
 
-#define FIXEDTEXT_VIEW_STYLE    (WB_3DLOOK |                        \
-                                 WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                 WB_TOP | WB_VCENTER | WB_BOTTOM |  \
-                                 WB_WORDBREAK | WB_NOLABEL |        \
+#define FIXEDTEXT_VIEW_STYLE	(WB_3DLOOK |						\
+                                 WB_LEFT | WB_CENTER | WB_RIGHT |	\
+                                 WB_TOP | WB_VCENTER | WB_BOTTOM |	\
+                                 WB_WORDBREAK | WB_NOLABEL |		\
                                  WB_INFO | WB_PATHELLIPSIS)
-#define FIXEDLINE_VIEW_STYLE    (WB_3DLOOK | WB_NOLABEL)
-#define FIXEDBITMAP_VIEW_STYLE  (WB_3DLOOK |                        \
-                                 WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                 WB_TOP | WB_VCENTER | WB_BOTTOM |  \
+#define FIXEDLINE_VIEW_STYLE	(WB_3DLOOK | WB_NOLABEL)
+#define FIXEDBITMAP_VIEW_STYLE	(WB_3DLOOK |						\
+                                 WB_LEFT | WB_CENTER | WB_RIGHT |	\
+                                 WB_TOP | WB_VCENTER | WB_BOTTOM |	\
                                  WB_SCALE)
-#define FIXEDIMAGE_VIEW_STYLE   (WB_3DLOOK |                        \
-                                 WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                 WB_TOP | WB_VCENTER | WB_BOTTOM |  \
+#define FIXEDIMAGE_VIEW_STYLE	(WB_3DLOOK |						\
+                                 WB_LEFT | WB_CENTER | WB_RIGHT |	\
+                                 WB_TOP | WB_VCENTER | WB_BOTTOM |	\
                                  WB_SCALE)
 
 // =======================================================================
@@ -60,8 +60,8 @@
 static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
                           const Size& rObjSize, const Size& rWinSize )
 {
-    long    nX;
-    long    nY;
+    long	nX;
+    long	nY;
 
     if ( nStyle & WB_LEFT )
         nX = 0;
@@ -229,10 +229,10 @@ void FixedText::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                           bool bFillLayout
                           ) const
 {
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    WinBits                 nWinStyle = GetStyle();
-    XubString               aText( GetText() );
-    USHORT                  nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+    const StyleSettings&	rStyleSettings = GetSettings().GetStyleSettings();
+    WinBits 				nWinStyle = GetStyle();
+    XubString				aText( GetText() );
+    USHORT					nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
     Point                   aPos = rPos;
 
     if ( nWinStyle & WB_EXTRAOFFSET )
@@ -284,9 +284,9 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 {
     ImplInitSettings( TRUE, TRUE, TRUE );
 
-    Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
-    Font        aFont = GetDrawPixelFont( pDev );
+    Point		aPos  = pDev->LogicToPixel( rPos );
+    Size		aSize = pDev->LogicToPixel( rSize );
+    Font		aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -348,7 +348,7 @@ void FixedText::StateChanged( StateChangedType nType )
             Invalidate();
         }
     }
-    else if ( (nType == STATE_CHANGE_ZOOM)  ||
+    else if ( (nType == STATE_CHANGE_ZOOM)	||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
         ImplInitSettings( TRUE, FALSE, FALSE );
@@ -495,11 +495,11 @@ void FixedLine::ImplInitSettings( BOOL bFont,
 
 void FixedLine::ImplDraw( bool bLayout )
 {
-    Size                    aOutSize = GetOutputSizePixel();
-    String                  aText = GetText();
-    WinBits                 nWinStyle = GetStyle();
-    MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String*                 pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    Size					aOutSize = GetOutputSizePixel();
+    String					aText = GetText();
+    WinBits 				nWinStyle = GetStyle();
+    MetricVector*			pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String*					pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
     DecorationView aDecoView( this );
     if ( !aText.Len() || (nWinStyle & WB_VERT) )
@@ -523,8 +523,8 @@ void FixedLine::ImplDraw( bool bLayout )
     }
     else
     {
-        USHORT      nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
-        Rectangle   aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
+        USHORT		nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
+        Rectangle	aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
         if ( !IsEnabled() )
@@ -617,7 +617,7 @@ void FixedLine::StateChanged( StateChangedType nType )
              (GetStyle() & FIXEDLINE_VIEW_STYLE) )
             Invalidate();
     }
-    else if ( (nType == STATE_CHANGE_ZOOM)  ||
+    else if ( (nType == STATE_CHANGE_ZOOM)	||
               (nType == STATE_CHANGE_STYLE) ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
@@ -807,9 +807,9 @@ void FixedBitmap::Paint( const Rectangle& )
 void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                         ULONG nFlags )
 {
-    Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
-    Rectangle   aRect( aPos, aSize );
+    Point		aPos  = pDev->LogicToPixel( rPos );
+    Size		aSize = pDev->LogicToPixel( rSize );
+    Rectangle	aRect( aPos, aSize );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -1059,9 +1059,9 @@ void FixedImage::UserDraw( const UserDrawEvent& )
 void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                        ULONG nFlags )
 {
-    Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
-    Rectangle   aRect( aPos, aSize );
+    Point		aPos  = pDev->LogicToPixel( rPos );
+    Size		aSize = pDev->LogicToPixel( rSize );
+    Rectangle	aRect( aPos, aSize );
 
     pDev->Push();
     pDev->SetMapMode();

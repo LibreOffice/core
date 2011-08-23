@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,16 +41,16 @@
 
 struct ImplCursorData
 {
-    AutoTimer       maTimer;            // Timer
-    Point           maPixPos;           // Pixel-Position
-    Point           maPixRotOff;        // Pixel-Offset-Position
-    Size            maPixSize;          // Pixel-Size
-    long            mnPixSlant;         // Pixel-Slant
-    short           mnOrientation;      // Pixel-Orientation
-    unsigned char   mnDirection;        // indicates writing direction
-    USHORT          mnStyle;            // Cursor-Style
-    BOOL            mbCurVisible;       // Ist Cursor aktuell sichtbar
-    Window*         mpWindow;           // Zugeordnetes Windows
+    AutoTimer		maTimer;			// Timer
+    Point			maPixPos;			// Pixel-Position
+    Point			maPixRotOff;		// Pixel-Offset-Position
+    Size			maPixSize;			// Pixel-Size
+    long			mnPixSlant; 		// Pixel-Slant
+    short			mnOrientation;		// Pixel-Orientation
+    unsigned char	mnDirection;		// indicates writing direction
+    USHORT			mnStyle;			// Cursor-Style
+    BOOL			mbCurVisible;		// Ist Cursor aktuell sichtbar
+    Window* 		mpWindow;			// Zugeordnetes Windows
 };
 
 // =======================================================================
@@ -58,7 +58,7 @@ struct ImplCursorData
 static void ImplCursorInvert( ImplCursorData* pData )
 {
     Window* pWindow  = pData->mpWindow;
-    BOOL    bMapMode = pWindow->IsMapModeEnabled();
+    BOOL	bMapMode = pWindow->IsMapModeEnabled();
     pWindow->EnableMapMode( FALSE );
     USHORT nInvertStyle;
     if ( pData->mnStyle & CURSOR_SHADOW )
@@ -95,10 +95,10 @@ static void ImplCursorInvert( ImplCursorData* pData )
                     // left-to-right
                     pAry[0] = aPoly.GetPoint( 0 );
                     pAry[1] = aPoly.GetPoint( 1 );
-                    pAry[2] = pAry[1];
+                    pAry[2] = pAry[1]; 
                     pAry[2].X() += delta;
                     pAry[3] =  pAry[1];
-                    pAry[3].Y() += delta;
+                    pAry[3].Y() += delta; 
                     pAry[4] = aPoly.GetPoint( 2 );
                     pAry[5] = aPoly.GetPoint( 3 );
                     pAry[6] = aPoly.GetPoint( 4 );
@@ -110,8 +110,8 @@ static void ImplCursorInvert( ImplCursorData* pData )
                     pAry[1] = aPoly.GetPoint( 1 );
                     pAry[2] = aPoly.GetPoint( 2 );
                     pAry[3] = aPoly.GetPoint( 3 );
-                    pAry[4] = pAry[0];
-                    pAry[4].Y() += delta;
+                    pAry[4] = pAry[0]; 
+                    pAry[4].Y() += delta; 
                     pAry[5] =  pAry[0];
                     pAry[5].X() -= delta;
                     pAry[6] = aPoly.GetPoint( 4 );
@@ -135,13 +135,13 @@ void Cursor::ImplDraw()
 {
     if ( mpData && mpData->mpWindow && !mpData->mbCurVisible )
     {
-        Window* pWindow         = mpData->mpWindow;
-        mpData->maPixPos        = pWindow->LogicToPixel( maPos );
-        mpData->maPixSize       = pWindow->LogicToPixel( maSize );
-        mpData->mnPixSlant      = pWindow->LogicToPixel( Size( mnSlant, 0 ) ).Width();
-        mpData->mnOrientation   = mnOrientation;
-        mpData->mnDirection     = mnDirection;
-        long nOffsetY           = pWindow->LogicToPixel( Size( 0, mnOffsetY ) ).Height();
+        Window* pWindow 		= mpData->mpWindow;
+        mpData->maPixPos		= pWindow->LogicToPixel( maPos );
+        mpData->maPixSize		= pWindow->LogicToPixel( maSize );
+        mpData->mnPixSlant		= pWindow->LogicToPixel( Size( mnSlant, 0 ) ).Width();
+        mpData->mnOrientation	= mnOrientation;
+        mpData->mnDirection	    = mnDirection;
+        long nOffsetY			= pWindow->LogicToPixel( Size( 0, mnOffsetY ) ).Height();
 
         // Position um den Offset korrigieren
         mpData->maPixPos.Y() -= nOffsetY;
@@ -198,8 +198,8 @@ void Cursor::ImplShow( BOOL bDrawDirect )
                 mpData->maTimer.SetTimeoutHdl( LINK( this, Cursor, ImplTimerHdl ) );
             }
 
-            mpData->mpWindow    = pWindow;
-            mpData->mnStyle     = mnStyle;
+            mpData->mpWindow	= pWindow;
+            mpData->mnStyle 	= mnStyle;
             if ( bDrawDirect )
                 ImplDraw();
 
@@ -262,14 +262,14 @@ IMPL_LINK( Cursor, ImplTimerHdl, AutoTimer*, EMPTYARG )
 
 Cursor::Cursor()
 {
-    mpData          = NULL;
-    mpWindow        = NULL;
-    mnSlant         = 0;
-    mnOffsetY       = 0;
-    mnOrientation   = 0;
-    mnDirection     = 0;
-    mnStyle         = 0;
-    mbVisible       = FALSE;
+    mpData			= NULL;
+    mpWindow		= NULL;
+    mnSlant 		= 0;
+    mnOffsetY		= 0;
+    mnOrientation	= 0;
+    mnDirection 	= 0;
+    mnStyle 		= 0;
+    mbVisible		= FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -278,13 +278,13 @@ Cursor::Cursor( const Cursor& rCursor ) :
     maSize( rCursor.maSize ),
     maPos( rCursor.maPos )
 {
-    mpData          = NULL;
-    mpWindow        = NULL;
-    mnSlant         = rCursor.mnSlant;
-    mnOrientation   = rCursor.mnOrientation;
-    mnDirection     = rCursor.mnDirection;
-    mnStyle         = 0;
-    mbVisible       = rCursor.mbVisible;
+    mpData			= NULL;
+    mpWindow		= NULL;
+    mnSlant 		= rCursor.mnSlant;
+    mnOrientation	= rCursor.mnOrientation;
+    mnDirection 	= rCursor.mnDirection;
+    mnStyle 		= 0;
+    mbVisible		= rCursor.mbVisible;
 }
 
 // -----------------------------------------------------------------------
@@ -436,12 +436,12 @@ void Cursor::SetDirection( unsigned char nNewDirection )
 
 Cursor& Cursor::operator=( const Cursor& rCursor )
 {
-    maPos           = rCursor.maPos;
-    maSize          = rCursor.maSize;
-    mnSlant         = rCursor.mnSlant;
-    mnOrientation   = rCursor.mnOrientation;
-    mnDirection     = rCursor.mnDirection;
-    mbVisible       = rCursor.mbVisible;
+    maPos			= rCursor.maPos;
+    maSize			= rCursor.maSize;
+    mnSlant 		= rCursor.mnSlant;
+    mnOrientation	= rCursor.mnOrientation;
+    mnDirection 	= rCursor.mnDirection;
+    mbVisible		= rCursor.mbVisible;
     ImplNew();
 
     return *this;
@@ -451,12 +451,12 @@ Cursor& Cursor::operator=( const Cursor& rCursor )
 
 BOOL Cursor::operator==( const Cursor& rCursor ) const
 {
-    if ( (maPos         == rCursor.maPos)           &&
-         (maSize        == rCursor.maSize)          &&
-         (mnSlant       == rCursor.mnSlant)         &&
-         (mnOrientation == rCursor.mnOrientation)   &&
-         (mnDirection   == rCursor.mnDirection)     &&
-         (mbVisible     == rCursor.mbVisible) )
+    if ( (maPos 		== rCursor.maPos)			&&
+         (maSize		== rCursor.maSize)			&&
+         (mnSlant		== rCursor.mnSlant) 		&&
+         (mnOrientation == rCursor.mnOrientation)	&&
+         (mnDirection   == rCursor.mnDirection)	    &&
+         (mbVisible 	== rCursor.mbVisible) )
         return TRUE;
     else
         return FALSE;

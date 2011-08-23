@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class SvpElement
     protected:
     SvpElement();
     virtual ~SvpElement();
-    public:
+    public:    
     virtual const basebmp::BitmapDeviceSharedPtr& getDevice() const = 0;
 
     static sal_uInt32 getBitCountFromScanlineFormat( sal_Int32 nFormat );

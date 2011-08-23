@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,15 @@ struct DialogImpl;
 class VCL_DLLPUBLIC Dialog : public SystemWindow
 {
 private:
-    Window*         mpDialogParent;
-    Dialog*         mpPrevExecuteDlg;
+    Window* 		mpDialogParent;
+    Dialog* 		mpPrevExecuteDlg;
     DialogImpl*     mpDialogImpl;
-    long            mnMousePositioned;
-    BOOL            mbInExecute;
-    BOOL            mbOldSaveBack;
-    BOOL            mbInClose;
-    BOOL            mbModalMode;
-    sal_Int8        mnCancelClose;  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
+    long			mnMousePositioned;
+    BOOL			mbInExecute;
+    BOOL			mbOldSaveBack;
+    BOOL			mbInClose;
+    BOOL			mbModalMode;
+    sal_Int8		mnCancelClose;  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
@@ -75,24 +75,24 @@ public:
 
 protected:
                     Dialog( WindowType nType );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void	Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
 
 public:
                     Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
                     Dialog( Window* pParent, const ResId& rResId );
     virtual         ~Dialog();
 
-    virtual long    Notify( NotifyEvent& rNEvt );
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual long	Notify( NotifyEvent& rNEvt );
+    virtual void	StateChanged( StateChangedType nStateChange );
+    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual BOOL    Close();
+    virtual BOOL	Close();
 
-    virtual short   Execute();
-    BOOL            IsInExecute() const { return mbInExecute; }
+    virtual short	Execute();
+    BOOL			IsInExecute() const { return mbInExecute; }
 
-    sal_Int8        GetCloseFlag() const { return mnCancelClose; }  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
-    void            SetCloseFlag( sal_Int8 nCancel ) { mnCancelClose = nCancel; }  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
+    sal_Int8		GetCloseFlag() const { return mnCancelClose; }  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
+    void			SetCloseFlag( sal_Int8 nCancel ) { mnCancelClose = nCancel; }  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
 
     ////////////////////////////////////////
     // Dialog::Execute replacement API
@@ -109,17 +109,17 @@ public:
     // Dialog::Execute replacement API
     ////////////////////////////////////////
 
-    void            EndDialog( long nResult = 0 );
-    static void     EndAllDialogs( Window* pParent=NULL );
+    void			EndDialog( long nResult = 0 );
+    static void		EndAllDialogs( Window* pParent=NULL );
 
     void            GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
 
-    void            SetModalInputMode( BOOL bModal );
-    void            SetModalInputMode( BOOL bModal, BOOL bSubModalDialogs );
-    BOOL            IsModalInputMode() const { return mbModalMode; }
+    void			SetModalInputMode( BOOL bModal );
+    void			SetModalInputMode( BOOL bModal, BOOL bSubModalDialogs );
+    BOOL			IsModalInputMode() const { return mbModalMode; }
 
-    void            GrabFocusToFirstControl();
+    void			GrabFocusToFirstControl();
 };
 
 // ------------------
@@ -149,15 +149,15 @@ public:
 
 private:
     using Window::Show;
-    void            Show( BOOL bVisible = TRUE );
+    void			Show( BOOL bVisible = TRUE );
     using Window::Hide;
-    void            Hide();
+    void			Hide();
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         ModalDialog (const ModalDialog &);
     SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &);
 };
 
-#endif  // _SV_DIALOG_HXX
+#endif	// _SV_DIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

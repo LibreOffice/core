@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define INCLUDED_SVTOOLS_MISCOPT_HXX
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include "svtools/svtdllapi.h"
@@ -40,12 +40,12 @@
 #include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
-//  forward declarations
+//	forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
+    @short			forward declaration to our private date container implementation
+    @descr			We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
@@ -54,47 +54,47 @@ class SvtMiscOptions_Impl;
 class Link;
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          collect informations about misc group
+    @short			collect informations about misc group
     @descr          -
 
-    @implements     -
-    @base           -
+    @implements		-
+    @base			-
 
-    @ATTENTION      This class is partially threadsafe.
+    @ATTENTION		This class is partially threadsafe.
 
-    @devstatus      ready to use
+    @devstatus		ready to use
 *//*-*************************************************************************************************************/
 
 class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      standard constructor and destructor
-            @descr      This will initialize an instance with default values.
+            @short		standard constructor and destructor
+            @descr		This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
                         at create and decrease it at delete time - but all instances use the same data container!
                         He is implemented as a static member ...
 
-            @seealso    member m_nRefCount
-            @seealso    member m_pDataContainer
+            @seealso	member m_nRefCount
+            @seealso	member m_pDataContainer
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
          SvtMiscOptions();
@@ -104,7 +104,7 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         void RemoveListenerLink( const Link& rLink );
 
         //---------------------------------------------------------------------------------------------------------
-        //  interface
+        //	interface
         //---------------------------------------------------------------------------------------------------------
 
         sal_Bool    UseSystemFileDialog() const;
@@ -154,29 +154,29 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         sal_Bool    IsExperimentalMode() const;
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
+            @short		return a reference to a static mutex
+            @descr		These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     A reference to a static mutex member.
+            @param		-
+            @return		A reference to a static mutex member.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         SVT_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -189,11 +189,11 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtMiscOptions_Impl* m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                m_nRefCount         ;   /// internal ref count mechanism
+        static SvtMiscOptions_Impl*	m_pDataContainer	;	/// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32				m_nRefCount			;	/// internal ref count mechanism
 
-};      // class SvtMiscOptions
+};		// class SvtMiscOptions
 
-#endif  // #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
+#endif	// #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

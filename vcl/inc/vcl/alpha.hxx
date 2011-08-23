@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,25 +58,25 @@ public:
                             AlphaMask( const Size& rSizePixel, BYTE* pEraseTransparency = NULL );
                             ~AlphaMask();
 
-    AlphaMask&              operator=( const Bitmap& rBitmap );
-    AlphaMask&              operator=( const AlphaMask& rAlphaMask ) { return (AlphaMask&) Bitmap::operator=( rAlphaMask ); }
-    BOOL                    operator!() const { return Bitmap::operator!(); }
-    BOOL                    operator==( const AlphaMask& rAlphaMask ) const { return Bitmap::operator==( rAlphaMask ); }
-    BOOL                    operator!=( const AlphaMask& rAlphaMask ) const { return Bitmap::operator!=( rAlphaMask ); }
+    AlphaMask&				operator=( const Bitmap& rBitmap );
+    AlphaMask&				operator=( const AlphaMask& rAlphaMask ) { return (AlphaMask&) Bitmap::operator=( rAlphaMask ); }
+    BOOL					operator!() const { return Bitmap::operator!(); }
+    BOOL					operator==( const AlphaMask& rAlphaMask ) const { return Bitmap::operator==( rAlphaMask ); }
+    BOOL					operator!=( const AlphaMask& rAlphaMask ) const { return Bitmap::operator!=( rAlphaMask ); }
 
-    const MapMode&          GetPrefMapMode() const { return Bitmap::GetPrefMapMode(); }
-    void                    SetPrefMapMode( const MapMode& rMapMode ) { Bitmap::SetPrefMapMode( rMapMode ); }
+    const MapMode&			GetPrefMapMode() const { return Bitmap::GetPrefMapMode(); }
+    void					SetPrefMapMode( const MapMode& rMapMode ) { Bitmap::SetPrefMapMode( rMapMode ); }
 
-    const Size&             GetPrefSize() const { return Bitmap::GetPrefSize(); }
-    void                    SetPrefSize( const Size& rSize ) { Bitmap::SetPrefSize( rSize ); }
+    const Size&				GetPrefSize() const { return Bitmap::GetPrefSize(); }
+    void					SetPrefSize( const Size& rSize ) { Bitmap::SetPrefSize( rSize ); }
 
-    Size                    GetSizePixel() const { return Bitmap::GetSizePixel(); }
-    void                    SetSizePixel( const Size& rNewSize ) { Bitmap::SetSizePixel( rNewSize ); }
+    Size					GetSizePixel() const { return Bitmap::GetSizePixel(); }
+    void					SetSizePixel( const Size& rNewSize ) { Bitmap::SetSizePixel( rNewSize ); }
 
-    ULONG                   GetSizeBytes() const { return Bitmap::GetSizeBytes(); }
-    ULONG                   GetChecksum() const { return Bitmap::GetChecksum(); }
+    ULONG					GetSizeBytes() const { return Bitmap::GetSizeBytes(); }
+    ULONG					GetChecksum() const { return Bitmap::GetChecksum(); }
 
-    Bitmap                  GetBitmap() const;
+    Bitmap					GetBitmap() const;
 
 public:
 
@@ -96,14 +96,14 @@ public:
 
 public:
 
-    BitmapReadAccess*       AcquireReadAccess() { return Bitmap::AcquireReadAccess(); }
-    BitmapWriteAccess*      AcquireWriteAccess() { return Bitmap::AcquireWriteAccess(); }
-    void                    ReleaseAccess( BitmapReadAccess* pAccess );
+    BitmapReadAccess*		AcquireReadAccess() { return Bitmap::AcquireReadAccess(); }
+    BitmapWriteAccess*		AcquireWriteAccess() { return Bitmap::AcquireWriteAccess(); }
+    void					ReleaseAccess( BitmapReadAccess* pAccess );
 
 public:
 
-    BOOL                    Read( SvStream& rIStm, BOOL bFileHeader = TRUE ) { return Bitmap::Read( rIStm, bFileHeader ); }
-    BOOL                    Write( SvStream& rOStm, BOOL bCompressed = TRUE, BOOL bFileHeader = TRUE ) const { return Bitmap::Write( rOStm, bCompressed, bFileHeader ); }
+    BOOL					Read( SvStream& rIStm, BOOL bFileHeader = TRUE ) { return Bitmap::Read( rIStm, bFileHeader ); }
+    BOOL					Write( SvStream& rOStm, BOOL bCompressed = TRUE, BOOL bFileHeader = TRUE ) const { return Bitmap::Write( rOStm, bCompressed, bFileHeader ); }
 
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );

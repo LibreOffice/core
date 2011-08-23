@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ struct PrintAccessoryViewState
 {
     bool        bNeedRestart;
     sal_Int32   nLastPage;
-
+    
     PrintAccessoryViewState()
     : bNeedRestart( false ), nLastPage( 0 ) {}
 };
@@ -61,7 +61,7 @@ struct PrintAccessoryViewState
 @interface AquaPrintAccessoryView : NSObject
 {
 }
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController withState: (PrintAccessoryViewState*)pState;
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController withState: (PrintAccessoryViewState*)pState; 
 @end
 
 

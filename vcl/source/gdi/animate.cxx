@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@ ULONG Animation::mnAnimCount = 0UL;
 
 ULONG AnimationBitmap::GetChecksum() const
 {
-    sal_uInt32  nCrc = aBmpEx.GetChecksum();
-    SVBT32      aBT32;
+    sal_uInt32	nCrc = aBmpEx.GetChecksum();
+    SVBT32		aBT32;
 
     UInt32ToSVBT32( aPosPix.X(), aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
@@ -90,13 +90,13 @@ ULONG AnimationBitmap::GetChecksum() const
 // -------------
 
 Animation::Animation() :
-    mnLoopCount         ( 0 ),
-    mnLoops             ( 0 ),
-    mnPos               ( 0 ),
-    meCycleMode         ( CYCLE_NORMAL ),
-    mbIsInAnimation     ( FALSE ),
-    mbLoopTerminated    ( FALSE ),
-    mbIsWaiting         ( FALSE )
+    mnLoopCount 		( 0 ),
+    mnLoops 			( 0 ),
+    mnPos				( 0 ),
+    meCycleMode 		( CYCLE_NORMAL ),
+    mbIsInAnimation 	( FALSE ),
+    mbLoopTerminated	( FALSE ),
+    mbIsWaiting 		( FALSE )
 {
     DBG_CTOR( Animation, NULL );
     maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
@@ -106,14 +106,14 @@ Animation::Animation() :
 // -----------------------------------------------------------------------
 
 Animation::Animation( const Animation& rAnimation ) :
-    maBitmapEx          ( rAnimation.maBitmapEx ),
-    maGlobalSize        ( rAnimation.maGlobalSize ),
-    mnLoopCount         ( rAnimation.mnLoopCount ),
-    mnPos               ( rAnimation.mnPos ),
-    meCycleMode         ( rAnimation.meCycleMode ),
-    mbIsInAnimation     ( FALSE ),
-    mbLoopTerminated    ( rAnimation.mbLoopTerminated ),
-    mbIsWaiting         ( rAnimation.mbIsWaiting )
+    maBitmapEx			( rAnimation.maBitmapEx ),
+    maGlobalSize		( rAnimation.maGlobalSize ),
+    mnLoopCount 		( rAnimation.mnLoopCount ),
+    mnPos				( rAnimation.mnPos ),
+    meCycleMode 		( rAnimation.meCycleMode ),
+    mbIsInAnimation 	( FALSE ),
+    mbLoopTerminated	( rAnimation.mbLoopTerminated ),
+    mbIsWaiting 		( rAnimation.mbIsWaiting )
 {
     DBG_CTOR( Animation, NULL );
 
@@ -169,7 +169,7 @@ Animation& Animation::operator=( const Animation& rAnimation )
 BOOL Animation::operator==( const Animation& rAnimation ) const
 {
     const ULONG nCount = maList.Count();
-    BOOL        bRet = FALSE;
+    BOOL		bRet = FALSE;
 
     if( rAnimation.maList.Count() == nCount &&
         rAnimation.maBitmapEx == maBitmapEx &&
@@ -197,7 +197,7 @@ BOOL Animation::operator==( const Animation& rAnimation ) const
 BOOL Animation::IsEqual( const Animation& rAnimation ) const
 {
     const ULONG nCount = maList.Count();
-    BOOL        bRet = FALSE;
+    BOOL		bRet = FALSE;
 
     if( rAnimation.maList.Count() == nCount &&
         rAnimation.maBitmapEx.IsEqual( maBitmapEx ) &&
@@ -248,9 +248,9 @@ void Animation::Clear()
 
 BOOL Animation::IsTransparent() const
 {
-    Point       aPoint;
-    Rectangle   aRect( aPoint, maGlobalSize );
-    BOOL        bRet = FALSE;
+    Point		aPoint;
+    Rectangle	aRect( aPoint, maGlobalSize );
+    BOOL		bRet = FALSE;
 
     // Falls irgendein 'kleines' Bildchen durch den Hintergrund
     // ersetzt werden soll, muessen wir 'transparent' sein, um
@@ -292,8 +292,8 @@ ULONG Animation::GetSizeBytes() const
 
 ULONG Animation::GetChecksum() const
 {
-    SVBT32      aBT32;
-    sal_uInt32  nCrc = GetBitmapEx().GetChecksum();
+    SVBT32		aBT32;
+    sal_uInt32	nCrc = GetBitmapEx().GetChecksum();
 
     UInt32ToSVBT32( maList.Count(), aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
@@ -336,8 +336,8 @@ BOOL Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDe
         if( ( pOut->GetOutDevType() == OUTDEV_WINDOW ) && !mbLoopTerminated &&
             ( ANIMATION_TIMEOUT_ON_CLICK != ( (AnimationBitmap*) maList.GetObject( mnPos ) )->nWait ) )
         {
-            ImplAnimView*   pView;
-            ImplAnimView*   pMatch = NULL;
+            ImplAnimView*	pView;
+            ImplAnimView*	pMatch = NULL;
 
             for( pView = (ImplAnimView*) mpViewList->First(); pView; pView = (ImplAnimView*) mpViewList->Next() )
             {
@@ -455,8 +455,8 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
 
     if( nAnimCount )
     {
-        ImplAnimView*   pView;
-        BOOL            bGlobalPause = TRUE;
+        ImplAnimView*	pView;
+        BOOL			bGlobalPause = TRUE;
 
         if( maNotifyLink.IsSet() )
         {
@@ -510,7 +510,7 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
             }
         }
         else
-            bGlobalPause = FALSE;
+            bGlobalPause = FALSE; 
 
         if( !mpViewList->Count() )
             Stop();
@@ -579,8 +579,8 @@ BOOL Animation::Insert( const AnimationBitmap& rStepBmp )
 
     if( !IsInAnimation() )
     {
-        Point       aPoint;
-        Rectangle   aGlobalRect( aPoint, maGlobalSize );
+        Point		aPoint;
+        Rectangle	aGlobalRect( aPoint, maGlobalSize );
 
         maGlobalSize = aGlobalRect.Union( Rectangle( rStepBmp.aPosPix, rStepBmp.aSizePix ) ).GetSize();
         maList.Insert( new AnimationBitmap( rStepBmp ), LIST_APPEND );
@@ -713,7 +713,7 @@ BOOL Animation::Mirror( ULONG nMirrorFlags )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
-    BOOL    bRet;
+    BOOL	bRet;
 
     if( !IsInAnimation() && maList.Count() )
     {
@@ -829,8 +829,8 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
 
     if( nCount )
     {
-        const ByteString    aDummyStr;
-        const UINT32        nDummy32 = 0UL;
+        const ByteString	aDummyStr;
+        const UINT32		nDummy32 = 0UL;
 
         // Falls keine BitmapEx gesetzt wurde, schreiben wir
         // einfach die erste Bitmap der Animation
@@ -844,8 +844,8 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
 
         for( USHORT i = 0; i < nCount; i++ )
         {
-            const AnimationBitmap&  rAnimBmp = rAnimation.Get( i );
-            const UINT16            nRest = nCount - i - 1;
+            const AnimationBitmap&	rAnimBmp = rAnimation.Get( i );
+            const UINT16			nRest = nCount - i - 1;
 
             // AnimationBitmap schreiben
             rOStm << rAnimBmp.aBmpEx;
@@ -856,11 +856,11 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             rOStm << (UINT16) rAnimBmp.eDisposal;
             rOStm << (BYTE) rAnimBmp.bUserInput;
             rOStm << (UINT32) rAnimation.mnLoopCount;
-            rOStm << nDummy32;  // unbenutzt
-            rOStm << nDummy32;  // unbenutzt
-            rOStm << nDummy32;  // unbenutzt
+            rOStm << nDummy32;	// unbenutzt
+            rOStm << nDummy32;	// unbenutzt
+            rOStm << nDummy32;	// unbenutzt
             rOStm << aDummyStr; // unbenutzt
-            rOStm << nRest;     // Anzahl der Strukturen, die noch _folgen_
+            rOStm << nRest; 	// Anzahl der Strukturen, die noch _folgen_
         }
     }
 
@@ -871,11 +871,11 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
 
 SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
 {
-    Bitmap  aBmp;
-    ULONG   nStmPos = rIStm.Tell();
-    UINT32  nAnimMagic1, nAnimMagic2;
-    USHORT  nOldFormat = rIStm.GetNumberFormatInt();
-    BOOL    bReadAnimations = FALSE;
+    Bitmap	aBmp;
+    ULONG	nStmPos = rIStm.Tell();
+    UINT32	nAnimMagic1, nAnimMagic2;
+    USHORT	nOldFormat = rIStm.GetNumberFormatInt();
+    BOOL	bReadAnimations = FALSE;
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nStmPos = rIStm.Tell();
@@ -905,11 +905,11 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
     if( bReadAnimations )
     {
         AnimationBitmap aAnimBmp;
-        BitmapEx        aBmpEx;
-        ByteString      aDummyStr;
-        UINT32          nTmp32;
-        UINT16          nTmp16;
-        BYTE            cTmp;
+        BitmapEx		aBmpEx;
+        ByteString		aDummyStr;
+        UINT32			nTmp32;
+        UINT16			nTmp16;
+        BYTE			cTmp;
 
         do
         {
@@ -921,11 +921,11 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
             rIStm >> nTmp16; aAnimBmp.eDisposal = ( Disposal) nTmp16;
             rIStm >> cTmp; aAnimBmp.bUserInput = (BOOL) cTmp;
             rIStm >> nTmp32; rAnimation.mnLoopCount = (USHORT) nTmp32;
-            rIStm >> nTmp32;    // unbenutzt
-            rIStm >> nTmp32;    // unbenutzt
-            rIStm >> nTmp32;    // unbenutzt
+            rIStm >> nTmp32;	// unbenutzt
+            rIStm >> nTmp32;	// unbenutzt
+            rIStm >> nTmp32;	// unbenutzt
             rIStm >> aDummyStr; // unbenutzt
-            rIStm >> nTmp16;    // Rest zu lesen
+            rIStm >> nTmp16;	// Rest zu lesen
 
             rAnimation.Insert( aAnimBmp );
         }

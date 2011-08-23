@@ -74,7 +74,7 @@ class ToolbarMenuEntry
 public:
     ToolbarMenu& mrMenu;
 
-    int mnEntryId;
+    int	mnEntryId;
     MenuItemBits mnBits;
     Size maSize;
 
@@ -254,8 +254,8 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    EventListenerVector    mxEventListeners;
-    ::osl::Mutex           maMutex;
+    EventListenerVector	   mxEventListeners;
+    ::osl::Mutex		   maMutex;
     ToolbarMenuEntry*      mpParent;
 
     /** Tell all listeners that the object is dying.  This callback is
@@ -271,12 +271,12 @@ struct ToolbarMenu_Impl
     ToolbarMenu& mrMenu;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              mxFrame;
-    rtl::Reference< svt::FrameStatusListener >                                       mxStatusListener;
+    rtl::Reference< svt::FrameStatusListener >										 mxStatusListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceManager;
-    rtl::Reference< ToolbarMenuAcc >                                                 mxAccessible;
+    rtl::Reference< ToolbarMenuAcc >												 mxAccessible;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxOldSelection;
 
-    ToolbarMenuEntryVector  maEntryVector;
+    ToolbarMenuEntryVector	maEntryVector;
 
     int mnCheckPos;
     int mnImagePos;
@@ -288,7 +288,7 @@ struct ToolbarMenu_Impl
 
     Size maSize;
 
-    Link            maSelectHdl;
+    Link			maSelectHdl;
 
     ToolbarMenu_Impl( ToolbarMenu& rMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
     ~ToolbarMenu_Impl();

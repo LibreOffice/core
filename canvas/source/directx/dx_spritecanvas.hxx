@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,11 +65,11 @@ namespace dxcanvas
                                               ::com::sun::star::awt::XWindowListener,
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
-                                              ::com::sun::star::lang::XServiceName >    WindowGraphicDeviceBase_Base;
+                                              ::com::sun::star::lang::XServiceName >	WindowGraphicDeviceBase_Base;
     typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
                                                    SpriteDeviceHelper,
                                                    ::osl::MutexGuard,
-                                                   ::cppu::OWeakObject >    SpriteCanvasBase_Base;
+                                                   ::cppu::OWeakObject > 	SpriteCanvasBase_Base;
     /** Mixin SpriteSurface
 
         Have to mixin the SpriteSurface before deriving from
@@ -95,7 +95,7 @@ namespace dxcanvas
     typedef ::canvas::SpriteCanvasBase< SpriteCanvasBaseSpriteSurface_Base,
                                         SpriteCanvasHelper,
                                         ::osl::MutexGuard,
-                                        ::cppu::OWeakObject >           SpriteCanvasBaseT;
+                                        ::cppu::OWeakObject >			SpriteCanvasBaseT;
 
     /** Product of this component's factory.
 

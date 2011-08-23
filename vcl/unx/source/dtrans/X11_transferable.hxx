@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ namespace x11 {
         ::com::sun::star::datatransfer::XTransferable >
     {
         ::osl::Mutex m_aMutex;
-
-        SelectionManager&               m_rManager;
-        Reference< XInterface >         m_xCreator;
-        Atom                m_aSelection;
+    
+        SelectionManager&				m_rManager;
+        Reference< XInterface >			m_xCreator;
+        Atom				m_aSelection;	
     public:
         X11Transferable( SelectionManager& rManager, const Reference< XInterface >& xCreator, Atom selection = None );
         virtual ~X11Transferable();
@@ -53,16 +53,16 @@ namespace x11 {
          * XTransferable
          */
 
-        virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-            throw(::com::sun::star::datatransfer::UnsupportedFlavorException,
-                  ::com::sun::star::io::IOException,
+        virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) 
+            throw(::com::sun::star::datatransfer::UnsupportedFlavorException, 
+                  ::com::sun::star::io::IOException, 
                   ::com::sun::star::uno::RuntimeException
                   );
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) 
             throw(::com::sun::star::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
+        virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) 
             throw(::com::sun::star::uno::RuntimeException);
     };
 

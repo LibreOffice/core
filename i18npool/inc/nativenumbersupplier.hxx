@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //      ----------------------------------------------------
 //      class NativeNumberSupplier
 //      ----------------------------------------------------
-class NativeNumberSupplier : public cppu::WeakImplHelper2
+class NativeNumberSupplier : public cppu::WeakImplHelper2 
 <
         com::sun::star::i18n::XNativeNumberSupplier,
         com::sun::star::lang::XServiceInfo
@@ -53,24 +53,24 @@ public:
                 const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
                 throw (::com::sun::star::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL isValidNatNum( const ::com::sun::star::lang::Locale& aLocale,
+        virtual sal_Bool SAL_CALL isValidNatNum( const ::com::sun::star::lang::Locale& aLocale, 
                 sal_Int16 nNativeNumberMode )
                 throw (::com::sun::star::uno::RuntimeException);
 
         virtual ::com::sun::star::i18n::NativeNumberXmlAttributes SAL_CALL convertToXmlAttributes(
-                const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
+                const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) 
                 throw (::com::sun::star::uno::RuntimeException);
 
-        virtual sal_Int16 SAL_CALL convertFromXmlAttributes(
+        virtual sal_Int16 SAL_CALL convertFromXmlAttributes( 
                 const ::com::sun::star::i18n::NativeNumberXmlAttributes& aAttr )
                 throw (::com::sun::star::uno::RuntimeException);
 
         //XServiceInfo
-        virtual rtl::OUString SAL_CALL getImplementationName()
+        virtual rtl::OUString SAL_CALL getImplementationName() 
                 throw( com::sun::star::uno::RuntimeException );
-        virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+        virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) 
                 throw( com::sun::star::uno::RuntimeException );
-        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() 
                 throw( com::sun::star::uno::RuntimeException );
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
@@ -87,7 +87,7 @@ private:
         sal_Bool useOffset;
 };
 
-} } } }
+} } } } 
 
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,40 +43,40 @@
 class SalSound
 {
 private:
-
-    static HMODULE      mhMCILib;
-    static ULONG        mnSoundState;
-    static void*        mpMCIFnc;
-    SALSOUNDPROC        mpProc;
-    void*               mpInst;
-    ULONG               mnStartTime;
-    ULONG               mnPlayLen;
-    HWND                mhSoundWnd;
-    USHORT              mnDeviceId;
-    BOOL                mbLoop;
-    BOOL                mbPaused;
+                        
+    static HMODULE		mhMCILib;
+    static ULONG		mnSoundState;
+    static void*		mpMCIFnc;
+    SALSOUNDPROC		mpProc;
+    void*				mpInst;
+    ULONG				mnStartTime;
+    ULONG				mnPlayLen;
+    HWND				mhSoundWnd;
+    USHORT				mnDeviceId;
+    BOOL				mbLoop;
+    BOOL				mbPaused;
 
 public:
 
     void                ImplSetError( ULONG nMciErr );
-    void                ImplNotify( SoundNotification eNotification, ULONG nError );
+    void				ImplNotify( SoundNotification eNotification, ULONG nError );
 
-public:
-
+public:					
+                        
                         SalSound();
                         ~SalSound();
 
-    BOOL                Create();
-    static void         Release();
-    static BOOL         IsValid() { return( SOUND_STATE_VALID == SalSound::mnSoundState ); }
+    BOOL				Create();
+    static void			Release();
+    static BOOL			IsValid() { return( SOUND_STATE_VALID == SalSound::mnSoundState ); } 
 
-    BOOL                Init( SalFrame* pFrame, const String& rSoundName, ULONG& rSoundLen );
-    BOOL                Init( SalFrame* pFrame, const BYTE* pSound, ULONG nDataLen, ULONG& rSoundLen );
-    void                Play( ULONG nStartTime, ULONG nPlayTime, BOOL bLoop );
-    void                Stop();
-    void                Pause();
+    BOOL				Init( SalFrame* pFrame, const String& rSoundName, ULONG& rSoundLen );
+    BOOL				Init( SalFrame* pFrame, const BYTE* pSound, ULONG nDataLen, ULONG& rSoundLen );
+    void				Play( ULONG nStartTime, ULONG nPlayTime, BOOL bLoop );
+    void				Stop();
+    void				Pause();
 
-    void                SetNotifyProc( void* pInst, SALSOUNDPROC pProc )
+    void				SetNotifyProc( void* pInst, SALSOUNDPROC pProc ) 
                             { mpInst = pInst; mpProc = pProc; }
 };
 

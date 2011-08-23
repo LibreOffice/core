@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public:
                                   BOOL bOwnClass, Atom nConsId );
     sal_uInt32          Size();
 
-    virtual void    SetToDefault( const RSCINST & rInst );
+    virtual void	SetToDefault( const RSCINST & rInst );
     BOOL            IsDefault( const RSCINST & rInst );
     BOOL            IsDefault( const RSCINST & rInst, Atom nConstId );
 

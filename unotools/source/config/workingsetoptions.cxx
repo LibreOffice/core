@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,147 +39,147 @@
 #include <itemholder1.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl					;
+using namespace ::rtl					;
+using namespace ::osl					;
+using namespace ::com::sun::star::uno	;
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_WORKINGSET             OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/WorkingSet"))
-#define DEFAULT_WINDOWLIST              Sequence< OUString >()
+#define	ROOTNODE_WORKINGSET				OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/WorkingSet"))
+#define	DEFAULT_WINDOWLIST				Sequence< OUString >()
 
-#define PROPERTYNAME_WINDOWLIST         OUString(RTL_CONSTASCII_USTRINGPARAM("WindowList"       ))
+#define	PROPERTYNAME_WINDOWLIST			OUString(RTL_CONSTASCII_USTRINGPARAM("WindowList"		))
 
-#define PROPERTYHANDLE_WINDOWLIST       0
+#define	PROPERTYHANDLE_WINDOWLIST		0
 
-#define PROPERTYCOUNT                   1
+#define	PROPERTYCOUNT					1
 
 //_________________________________________________________________________________________________________________
-//  private declarations!
+//	private declarations!
 //_________________________________________________________________________________________________________________
 
 class SvtWorkingSetOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
          SvtWorkingSetOptions_Impl();
         ~SvtWorkingSetOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
+        //	overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
+            @short		called for notify of configmanager
+            @descr		These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
-            @seealso    baseclass ConfigItem
+            @seealso	baseclass ConfigItem
 
-            @param      "seqPropertyNames" is the list of properties which should be updated.
-            @return     -
+            @param		"seqPropertyNames" is the list of properties which should be updated.
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
         /*-****************************************************************************************************//**
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
+            @short		write changes to configuration
+            @descr		These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
 
-            @seealso    baseclass ConfigItem
+            @seealso	baseclass ConfigItem
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
-        //  public interface
+        //	public interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      access method to get internal values
-            @descr      These method give us a chance to regulate acces to ouer internal values.
+            @short		access method to get internal values
+            @descr		These method give us a chance to regulate acces to ouer internal values.
                         It's not used in the moment - but it's possible for the feature!
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
-        Sequence< OUString >    GetWindowList(                                              ) const ;
-        void                    SetWindowList( const Sequence< OUString >&  seqWindowList   )       ;
+        Sequence< OUString >	GetWindowList(												) const	;
+        void					SetWindowList( const Sequence< OUString >&	seqWindowList	)		;
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short      return list of key names of ouer configuration management which represent oue module tree
-            @descr      These methods return a static const list of key names. We need it to get needed values from our
+            @short		return list of key names of ouer configuration management which represent oue module tree
+            @descr		These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     A list of needed configuration keys is returned.
+            @param		-
+            @return		A list of needed configuration keys is returned.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > GetPropertyNames();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
-        Sequence< OUString >    m_seqWindowList     ;
+        Sequence< OUString >	m_seqWindowList		;
 };
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtWorkingSetOptions_Impl::SvtWorkingSetOptions_Impl()
     // Init baseclasses first
-    :   ConfigItem          ( ROOTNODE_WORKINGSET   )
+    :	ConfigItem			( ROOTNODE_WORKINGSET	)
     // Init member then.
-    ,   m_seqWindowList     ( DEFAULT_WINDOWLIST    )
+    ,	m_seqWindowList		( DEFAULT_WINDOWLIST	)
 {
     // Use our static list of configuration keys to get his values.
-    Sequence< OUString >    seqNames    = GetPropertyNames  (           );
-    Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
+    Sequence< OUString >	seqNames	= GetPropertyNames	(			);
+    Sequence< Any >			seqValues	= GetProperties		( seqNames	);
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
@@ -195,7 +195,7 @@ SvtWorkingSetOptions_Impl::SvtWorkingSetOptions_Impl()
         DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtWorkingSetOptions_Impl::SvtWorkingSetOptions_Impl()\nInvalid property value detected!\n" );
         switch( nProperty )
         {
-            case PROPERTYHANDLE_WINDOWLIST      :   {
+            case PROPERTYHANDLE_WINDOWLIST		:	{
                                                         DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtWorkingSetOptions_Impl::SvtWorkingSetOptions_Impl()\nWho has changed the value type of \"Office.Common\\WorkingSet\\WindowList\"?" );
                                                         seqValues[nProperty] >>= m_seqWindowList;
                                                     }
@@ -209,7 +209,7 @@ SvtWorkingSetOptions_Impl::SvtWorkingSetOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtWorkingSetOptions_Impl::~SvtWorkingSetOptions_Impl()
 {
@@ -221,7 +221,7 @@ SvtWorkingSetOptions_Impl::~SvtWorkingSetOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtWorkingSetOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
@@ -246,19 +246,19 @@ void SvtWorkingSetOptions_Impl::Notify( const Sequence< OUString >& seqPropertyN
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtWorkingSetOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
-    Sequence< OUString >    seqNames    = GetPropertyNames  ();
-    sal_Int32               nCount      = seqNames.getLength();
-    Sequence< Any >         seqValues   ( nCount );
+    Sequence< OUString >	seqNames	= GetPropertyNames	();
+    sal_Int32				nCount		= seqNames.getLength();
+    Sequence< Any >			seqValues	( nCount );
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
         switch( nProperty )
         {
-            case PROPERTYHANDLE_WINDOWLIST      :   {
+            case PROPERTYHANDLE_WINDOWLIST		:	{
                                                         seqValues[nProperty] <<= m_seqWindowList;
                                                     }
                                                     break;
@@ -269,7 +269,7 @@ void SvtWorkingSetOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 Sequence< OUString > SvtWorkingSetOptions_Impl::GetWindowList() const
 {
@@ -277,7 +277,7 @@ Sequence< OUString > SvtWorkingSetOptions_Impl::GetWindowList() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtWorkingSetOptions_Impl::SetWindowList( const Sequence< OUString >& seqWindowList )
 {
@@ -286,14 +286,14 @@ void SvtWorkingSetOptions_Impl::SetWindowList( const Sequence< OUString >& seqWi
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtWorkingSetOptions_Impl::GetPropertyNames()
 {
     // Build static list of configuration key names.
     static const OUString pProperties[] =
     {
-        PROPERTYNAME_WINDOWLIST ,
+        PROPERTYNAME_WINDOWLIST	,
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -302,15 +302,15 @@ Sequence< OUString > SvtWorkingSetOptions_Impl::GetPropertyNames()
 }
 
 //*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//	initialize static member
+//	DON'T DO IT IN YOUR HEADER!
+//	see definition for further informations
 //*****************************************************************************************************************
-SvtWorkingSetOptions_Impl*  SvtWorkingSetOptions::m_pDataContainer  = NULL  ;
-sal_Int32                   SvtWorkingSetOptions::m_nRefCount       = 0     ;
+SvtWorkingSetOptions_Impl*	SvtWorkingSetOptions::m_pDataContainer	= NULL	;
+sal_Int32					SvtWorkingSetOptions::m_nRefCount		= 0		;
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtWorkingSetOptions::SvtWorkingSetOptions()
 {
@@ -327,7 +327,7 @@ SvtWorkingSetOptions::SvtWorkingSetOptions()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtWorkingSetOptions::~SvtWorkingSetOptions()
 {
@@ -345,7 +345,7 @@ SvtWorkingSetOptions::~SvtWorkingSetOptions()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 Sequence< OUString > SvtWorkingSetOptions::GetWindowList() const
 {
@@ -354,7 +354,7 @@ Sequence< OUString > SvtWorkingSetOptions::GetWindowList() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtWorkingSetOptions::SetWindowList( const Sequence< OUString >& seqWindowList )
 {
@@ -363,7 +363,7 @@ void SvtWorkingSetOptions::SetWindowList( const Sequence< OUString >& seqWindowL
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Mutex& SvtWorkingSetOptions::GetOwnStaticMutex()
 {

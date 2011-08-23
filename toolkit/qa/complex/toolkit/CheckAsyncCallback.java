@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,14 +88,14 @@ public class CheckAsyncCallback extends ComplexTestCase {
         try {
             xMSF = (XMultiServiceFactory)param.getMSF();
             SOfficeFactory xSOF = SOfficeFactory.getFactory(xMSF);
-
+            
             XRequestCallback xAsyncCallback = null;
-
-            XInterface xIfc = (XInterface)xMSF.createInstance(
+        
+            XInterface xIfc = (XInterface)xMSF.createInstance( 
                                 "com.sun.star.awt.AsyncCallback" );
             xAsyncCallback = (XRequestCallback)
                 UnoRuntime.queryInterface(XRequestCallback.class,xIfc);
-
+            
             testObject=xAsyncCallback;
         }
         catch(com.sun.star.uno.Exception e) {
@@ -114,7 +114,7 @@ public class CheckAsyncCallback extends ComplexTestCase {
                                 new _XRequestCallback(testObject, log, xMSF );
         assure("failed: XRequestCallback::addCallback", _xRequestCallback._addCallback());
     }
-
+    
     public void checkCallback() {
         getTestObject();
         log.println("*** Now testing asynchronous callback service ***");

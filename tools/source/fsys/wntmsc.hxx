@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ typedef struct
 #define PATHDELIMITER   ";"
 #define DEFSTYLE        FSYS_STYLE_NTFS
 #define MKDIR( p )      mkdir( p )
-#define CMP_LOWER(s)    ( ByteString(s).ToLowerAscii() )
+#define CMP_LOWER(s) 	( ByteString(s).ToLowerAscii() )
 
 #define START_DRV 'a'
 

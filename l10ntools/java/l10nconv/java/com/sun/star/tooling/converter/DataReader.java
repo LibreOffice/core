@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,14 +33,14 @@ import java.util.*;
  * Gets Line counting from LineNumberReader all Converter Reader classes inherit
  * from this.
  * The abstract parent class of all converter reader classes
- *
+ * 
  * @author Christian Schmidt
  */
 abstract public class DataReader extends LineNumberReader {
 
     /**
      * Creates a new instance of DataReader
-     *
+     * 
      * @param isr
      *            InputStreamReader used as Source for this class
      */
@@ -49,22 +49,22 @@ abstract public class DataReader extends LineNumberReader {
     }
 
     /**
-
+     
      * @throws java.io.IOException
      * @throws ConverterException
-     *
+     * 
      * TODO this should no longer use an array as return type better a Map
-     *
+     *  
      */
     /**
      * The next block of the SDF file is reviewed and the Line including the
      * source language and the Line including the target Language are given back
      * in an array
-     *
-     *
+     * 
+     * 
      * @return    A Map including the source language
-     *            and the target Language content are given back
-     *
+     *            and the target Language content are given back 
+     * 
      * @throws java.io.IOException
      * @throws ConverterException
      */

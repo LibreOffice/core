@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,8 +67,8 @@
 #include <glib-2.0/glib.h>
 #endif
 
-KDEXLib::KDEXLib() :
-    SalXLib(),  m_bStartupDone(false), m_pApplication(0),
+KDEXLib::KDEXLib() : 
+    SalXLib(),	m_bStartupDone(false), m_pApplication(0),
     m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 ),
     eventLoopType( LibreOfficeEventLoop )
 {
@@ -88,13 +88,13 @@ KDEXLib::KDEXLib() :
 KDEXLib::~KDEXLib()
 {
     delete m_pApplication;
-
+    
     // free the faked cmdline arguments no longer needed by KApplication
     for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
     {
         free( m_pFreeCmdLineArgs[i] );
     }
-
+    
     delete [] m_pFreeCmdLineArgs;
     delete [] m_pAppCmdLineArgs;
 }
@@ -115,7 +115,7 @@ void KDEXLib::Init()
             ki18n( "LibreOffice is an office suite.\n" ),
             "http://libreoffice.org",
             "libreoffice@lists.freedesktop.org" );
-
+            
     kAboutData->addAuthor( ki18n( "Jan Holesovsky" ),
             ki18n( "Original author and maintainer of the KDE NWF." ),
             "kendy@artax.karlin.mff.cuni.cz",
@@ -126,7 +126,7 @@ void KDEXLib::Init()
     kAboutData->addAuthor( ki18n("Eric Bischoff"),
             ki18n( "Accessibility fixes, porting to KDE 4." ),
             "bischoff@kde.org" );
-
+            
     //kAboutData->setProgramIconName("OpenOffice");
 
     m_nFakeCmdLineArgs = 2;
@@ -178,7 +178,7 @@ void KDEXLib::Init()
 
     Display* pDisp = QX11Info::display();
     SalKDEDisplay *pSalDisplay = new SalKDEDisplay(pDisp);
-
+    
     pInputMethod->CreateMethod( pDisp );
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
     pSalDisplay->SetInputMethod( pInputMethod );

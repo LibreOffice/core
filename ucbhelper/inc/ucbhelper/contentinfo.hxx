@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,14 +60,14 @@ class PropertySetInfo :
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::beans::XPropertySetInfo
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+    com::sun::star::uno::Reference<	com::sun::star::lang::XMultiServiceFactory >
                                 m_xSMgr;
-    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >
+    com::sun::star::uno::Reference<	com::sun::star::ucb::XCommandEnvironment >
                                 m_xEnv;
     com::sun::star::uno::Sequence< com::sun::star::beans::Property >*
                                 m_pProps;
-    osl::Mutex                  m_aMutex;
-    ContentImplHelper*          m_pContent;
+    osl::Mutex					m_aMutex;
+    ContentImplHelper*			m_pContent;
 
 private:
     sal_Bool queryProperty( const rtl::OUString& rName,
@@ -120,14 +120,14 @@ class CommandProcessorInfo :
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::ucb::XCommandInfo
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+    com::sun::star::uno::Reference<	com::sun::star::lang::XMultiServiceFactory >
                                 m_xSMgr;
-    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >
+    com::sun::star::uno::Reference<	com::sun::star::ucb::XCommandEnvironment >
                                 m_xEnv;
     com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >*
                                 m_pCommands;
-    osl::Mutex                  m_aMutex;
-    ContentImplHelper*          m_pContent;
+    osl::Mutex					m_aMutex;
+    ContentImplHelper*			m_pContent;
 
 private:
     sal_Bool queryCommand( const rtl::OUString& rName,

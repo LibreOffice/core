@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@ double Line::GetLength() const
 
 BOOL Line::Intersection( const Line& rLine, Point& rIntersection ) const
 {
-    double  fX, fY;
-    BOOL    bRet;
+    double	fX, fY;
+    BOOL	bRet;
 
     if( Intersection( rLine, fX, fY ) )
     {
@@ -217,9 +217,9 @@ double Line::GetDistance( const double& rPtX, const double& rPtY ) const
     {
         const double    fDistX = maEnd.X() - maStart.X();
         const double    fDistY = maEnd.Y() - maStart.Y();
-        const double    fACX = maStart.X() - rPtX;
-        const double    fACY = maStart.Y() - rPtY;
-        const double    fL2 = fDistX * fDistX + fDistY * fDistY;
+        const double	fACX = maStart.X() - rPtX;
+        const double	fACY = maStart.Y() - rPtY;
+        const double	fL2 = fDistX * fDistX + fDistY * fDistY;
         const double    fR = ( fACY * -fDistY - fACX * fDistX ) / fL2;
         const double    fS = ( fACY * fDistX - fACX * fDistY ) / fL2;
 
@@ -228,7 +228,7 @@ double Line::GetDistance( const double& rPtX, const double& rPtY ) const
             fDist = hypot( maStart.X() - rPtX, maStart.Y() - rPtY );
 
             if( fS < 0.0 )
-                fDist *= -1.0;
+                fDist *= -1.0; 
         }
         else if( fR <= 1.0 )
             fDist = fS * sqrt( fL2 );
@@ -237,7 +237,7 @@ double Line::GetDistance( const double& rPtX, const double& rPtY ) const
             fDist = hypot( maEnd.X() - rPtX, maEnd.Y() - rPtY );
 
             if( fS < 0.0 )
-                fDist *= -1.0;
+                fDist *= -1.0; 
         }
     }
     else
@@ -312,12 +312,12 @@ void Line::Enum( const Link& rEnumLink )
     {
         const long  nDX = labs( maEnd.X() - maStart.X() );
         const long  nDY = labs( maEnd.Y() - maStart.Y() );
-        const long  nStartX = maStart.X();
-        const long  nStartY = maStart.Y();
-        const long  nEndX = maEnd.X();
-        const long  nEndY = maEnd.Y();
-        const long  nXInc = ( nStartX < nEndX ) ? 1L : -1L;
-        const long  nYInc = ( nStartY < nEndY ) ? 1L : -1L;
+        const long	nStartX = maStart.X();
+        const long	nStartY = maStart.Y();
+        const long	nEndX = maEnd.X();
+        const long	nEndY = maEnd.Y();	
+        const long	nXInc = ( nStartX < nEndX ) ? 1L : -1L;
+        const long	nYInc = ( nStartY < nEndY ) ? 1L : -1L;
 
         if( nDX >= nDY )
         {

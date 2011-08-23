@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
             // Get info for additional properties.
             //////////////////////////////////////////////////////////////
 
-            uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
+            uno::Reference< com::sun::star::ucb::XPersistentPropertySet > 
                 xSet ( m_pContent->getAdditionalPropertySet( sal_False ) );
 
             if ( xSet.is() )
@@ -148,7 +148,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
                         m_pProps->realloc( nPos + nAddProps );
 
                         beans::Property* pProps = m_pProps->getArray();
-                        const beans::Property* pAddProps
+                        const beans::Property* pAddProps 
                             = rAddProps.getConstArray();
 
                         for ( sal_Int32 n = 0; n < nAddProps; ++n, ++nPos )
@@ -163,7 +163,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 
 //=========================================================================
 // virtual
-beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
+beans::Property SAL_CALL PropertySetInfo::getPropertyByName( 
         const rtl::OUString& aName )
     throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
@@ -176,7 +176,7 @@ beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
 
 //=========================================================================
 // virtual
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
+sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( 
         const rtl::OUString& Name )
     throw( uno::RuntimeException )
 {
@@ -273,7 +273,7 @@ XTYPEPROVIDER_IMPL_2( CommandProcessorInfo,
 //=========================================================================
 
 // virtual
-uno::Sequence< com::sun::star::ucb::CommandInfo > SAL_CALL
+uno::Sequence< com::sun::star::ucb::CommandInfo > SAL_CALL 
 CommandProcessorInfo::getCommands()
     throw( uno::RuntimeException )
 {
@@ -290,8 +290,8 @@ CommandProcessorInfo::getCommands()
             {
                 uno::Sequence< com::sun::star::ucb::CommandInfo > aCmds
                     = m_pContent->getCommands( m_xEnv );
-                m_pCommands
-                    = new uno::Sequence< com::sun::star::ucb::CommandInfo >(
+                m_pCommands 
+                    = new uno::Sequence< com::sun::star::ucb::CommandInfo >( 
                         aCmds );
             }
             catch ( uno::RuntimeException const & )
@@ -300,8 +300,8 @@ CommandProcessorInfo::getCommands()
             }
             catch ( uno::Exception const & )
             {
-                m_pCommands
-                    = new uno::Sequence< com::sun::star::ucb::CommandInfo >(
+                m_pCommands 
+                    = new uno::Sequence< com::sun::star::ucb::CommandInfo >( 
                         0 );
             }
         }
@@ -311,10 +311,10 @@ CommandProcessorInfo::getCommands()
 
 //=========================================================================
 // virtual
-com::sun::star::ucb::CommandInfo SAL_CALL
+com::sun::star::ucb::CommandInfo SAL_CALL 
 CommandProcessorInfo::getCommandInfoByName(
         const rtl::OUString& Name )
-    throw( com::sun::star::ucb::UnsupportedCommandException,
+    throw( com::sun::star::ucb::UnsupportedCommandException, 
            uno::RuntimeException )
 {
     com::sun::star::ucb::CommandInfo aInfo;
@@ -326,9 +326,9 @@ CommandProcessorInfo::getCommandInfoByName(
 
 //=========================================================================
 // virtual
-com::sun::star::ucb::CommandInfo SAL_CALL
+com::sun::star::ucb::CommandInfo SAL_CALL 
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
-    throw( com::sun::star::ucb::UnsupportedCommandException,
+    throw( com::sun::star::ucb::UnsupportedCommandException, 
            uno::RuntimeException )
 {
     com::sun::star::ucb::CommandInfo aInfo;
@@ -340,7 +340,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 
 //=========================================================================
 // virtual
-sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
+sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName( 
        const rtl::OUString& Name )
     throw( uno::RuntimeException )
 {
@@ -372,7 +372,7 @@ void CommandProcessorInfo::reset()
 
 
 //=========================================================================
-sal_Bool CommandProcessorInfo::queryCommand(
+sal_Bool CommandProcessorInfo::queryCommand( 
     const rtl::OUString& rName,
     com::sun::star::ucb::CommandInfo& rCommand )
 {
@@ -380,7 +380,7 @@ sal_Bool CommandProcessorInfo::queryCommand(
 
     getCommands();
 
-    const com::sun::star::ucb::CommandInfo* pCommands
+    const com::sun::star::ucb::CommandInfo* pCommands 
         = m_pCommands->getConstArray();
     sal_Int32 nCount = m_pCommands->getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -397,7 +397,7 @@ sal_Bool CommandProcessorInfo::queryCommand(
 }
 
 //=========================================================================
-sal_Bool CommandProcessorInfo::queryCommand(
+sal_Bool CommandProcessorInfo::queryCommand( 
     sal_Int32 nHandle,
     com::sun::star::ucb::CommandInfo& rCommand )
 {
@@ -405,7 +405,7 @@ sal_Bool CommandProcessorInfo::queryCommand(
 
     getCommands();
 
-    const com::sun::star::ucb::CommandInfo* pCommands
+    const com::sun::star::ucb::CommandInfo* pCommands 
         = m_pCommands->getConstArray();
     sal_Int32 nCount = m_pCommands->getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )

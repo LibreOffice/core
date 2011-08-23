@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace utl
     class OComponentResModuleImpl
     {
     private:
-        ResMgr*         m_pRessources;
+        ResMgr*		    m_pRessources;
         bool            m_bInitialized;
         ::rtl::OString  m_sResFilePrefix;
 
@@ -73,7 +73,7 @@ namespace utl
 
         /** retrieves our resource manager
         */
-        ResMgr* getResManager();
+        ResMgr*	getResManager();
 
     private:
         OComponentResModuleImpl();                                              // never implemented
@@ -89,7 +89,7 @@ namespace utl
     }
 
     //--------------------------------------------------------------------
-    ResMgr* OComponentResModuleImpl::getResManager()
+    ResMgr*	OComponentResModuleImpl::getResManager()
     {
         if ( !m_pRessources && !m_bInitialized )
         {
@@ -97,10 +97,10 @@ namespace utl
             ByteString aMgrName = m_sResFilePrefix;
 
             m_pRessources = ResMgr::CreateResMgr( aMgrName.GetBuffer() );
-            OSL_ENSURE( m_pRessources,
+            OSL_ENSURE( m_pRessources, 
                     ( ByteString( "OModuleImpl::getResManager: could not create the resource manager (file name: " )
-                +=  aMgrName
-                +=  ByteString( ")!" ) ).GetBuffer() );
+                +=	aMgrName
+                +=	ByteString( ")!" ) ).GetBuffer() );
 
             m_bInitialized = sal_True;
         }
@@ -123,7 +123,7 @@ namespace utl
     }
 
     //-------------------------------------------------------------------------
-    ResMgr* OComponentResourceModule::getResManager()
+    ResMgr*	OComponentResourceModule::getResManager()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_pImpl->getResManager();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ class KDEXLib : public QObject, public SalXLib
         void startTimeoutTimerSignal();
         void startUserEventTimerSignal();
         void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
-
+        
     public:
         KDEXLib();
         virtual ~KDEXLib();
@@ -87,7 +87,7 @@ class KDEXLib : public QObject, public SalXLib
         virtual void StopTimer();
         virtual void Wakeup();
         virtual void PostUserEvent();
-
+            
         void doStartup();
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,8 +105,8 @@ using namespace vcl_sal;
 
 struct WMAdaptorProtocol
 {
-    const char* pProtocol;
-    int             nProtocol;
+    const char*	pProtocol;
+    int				nProtocol;
 };
 
 
@@ -196,7 +196,7 @@ static int compareProtocol( const void* pLeft, const void* pRight )
 
 WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
 {
-    WMAdaptor*          pAdaptor    = NULL;
+    WMAdaptor*			pAdaptor	= NULL;
 
     // try a NetWM
     pAdaptor = new NetWMAdaptor( pSalDisplay );
@@ -242,11 +242,11 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         m_nWinGravity( StaticGravity ),
         m_nInitWinGravity( StaticGravity )
 {
-    Atom                aRealType   = None;
-    int                 nFormat     = 8;
-    unsigned long       nItems      = 0;
-    unsigned long       nBytesLeft  = 0;
-    unsigned char*  pProperty   = NULL;
+    Atom				aRealType	= None;
+    int					nFormat		= 8;
+    unsigned long		nItems		= 0;
+    unsigned long		nBytesLeft	= 0;
+    unsigned char*	pProperty	= NULL;
 
     // default desktops
     m_nDesktops = 1;
@@ -428,12 +428,12 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
     // currently all _NET WMs do transient like expected
     m_bTransientBehaviour = true;
 
-    Atom                aRealType   = None;
-    int                 nFormat     = 8;
-    unsigned long       nItems      = 0;
-    unsigned long       nBytesLeft  = 0;
-    unsigned char*  pProperty   = NULL;
-    bool                bNetWM      = false;
+    Atom				aRealType	= None;
+    int					nFormat		= 8;
+    unsigned long		nItems		= 0;
+    unsigned long		nBytesLeft	= 0;
+    unsigned char*	pProperty	= NULL;
+    bool				bNetWM		= false;
 
     initAtoms();
 
@@ -487,7 +487,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                     // #i80971# protect against invalid atoms
                     if( pAtomNames[i] == NULL )
                         continue;
-
+                    
                     int nProtocol = -1;
                     WMAdaptorProtocol aSearch;
                     aSearch.pProtocol = pAtomNames[i];
@@ -622,18 +622,18 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
     // currently all Gnome WMs do transient like expected
     m_bTransientBehaviour = true;
 
-    Atom                aRealType   = None;
-    int                 nFormat     = 8;
-    unsigned long       nItems      = 0;
-    unsigned long       nBytesLeft  = 0;
-    unsigned char*  pProperty   = NULL;
+    Atom				aRealType	= None;
+    int					nFormat		= 8;
+    unsigned long		nItems		= 0;
+    unsigned long		nBytesLeft	= 0;
+    unsigned char*	pProperty	= NULL;
 
     initAtoms();
 
     // check for GnomeWM
     if( m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ WIN_PROTOCOLS ] )
     {
-        XLIB_Window         aWMChild    = None;
+        XLIB_Window			aWMChild	= None;
         if( XGetWindowProperty( m_pDisplay,
                                 m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ],
@@ -743,7 +743,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                     // #i80971# protect against invalid atoms
                     if( pAtomNames[i] == NULL )
                         continue;
-
+                    
                     int nProtocol = -1;
                     WMAdaptorProtocol aSearch;
                     aSearch.pProtocol = pAtomNames[i];
@@ -827,16 +827,16 @@ GnomeWMAdaptor::~GnomeWMAdaptor()
  */
 bool WMAdaptor::getNetWmName()
 {
-    Atom                aRealType   = None;
-    int                 nFormat     = 8;
-    unsigned long       nItems      = 0;
-    unsigned long       nBytesLeft  = 0;
-    unsigned char*  pProperty   = NULL;
-    bool                bNetWM      = false;
+    Atom				aRealType	= None;
+    int					nFormat		= 8;
+    unsigned long		nItems		= 0;
+    unsigned long		nBytesLeft	= 0;
+    unsigned char*	pProperty	= NULL;
+    bool				bNetWM		= false;
 
     if( m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ NET_WM_NAME ] )
     {
-        XLIB_Window         aWMChild = None;
+        XLIB_Window			aWMChild = None;
         if( XGetWindowProperty( m_pDisplay,
                                 m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
@@ -1009,8 +1009,8 @@ void WMAdaptor::initAtoms()
     // get basic atoms
     for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAtomTab ); i++ )
         m_aWMAtoms[ aAtomTab[i].nProtocol ] = XInternAtom( m_pDisplay, aAtomTab[i].pProtocol, False );
-    m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
-    m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
+    m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]	= XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
+    m_aWMAtoms[ NET_WM_NAME ]				= XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
 }
 
 /*
@@ -1021,7 +1021,7 @@ void NetWMAdaptor::initAtoms()
 {
     WMAdaptor::initAtoms();
 
-    m_aWMAtoms[ NET_SUPPORTED ]             = XInternAtom( m_pDisplay, "_NET_SUPPORTED", True );
+    m_aWMAtoms[ NET_SUPPORTED ]				= XInternAtom( m_pDisplay, "_NET_SUPPORTED", True );
 }
 
 /*
@@ -1032,8 +1032,8 @@ void GnomeWMAdaptor::initAtoms()
 {
     WMAdaptor::initAtoms();
 
-    m_aWMAtoms[ WIN_PROTOCOLS ]             = XInternAtom( m_pDisplay, "_WIN_PROTOCOLS", True );
-    m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_WIN_SUPPORTING_WM_CHECK", True );
+    m_aWMAtoms[ WIN_PROTOCOLS ]				= XInternAtom( m_pDisplay, "_WIN_PROTOCOLS", True );
+    m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ]	= XInternAtom( m_pDisplay, "_WIN_SUPPORTING_WM_CHECK", True );
 }
 
 /*
@@ -1045,7 +1045,7 @@ void GnomeWMAdaptor::initAtoms()
 void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
 {
     ByteString aTitle( rWMName, osl_getThreadTextEncoding() );
-
+    
     if( ! rWMName.Len() && m_aWMName.EqualsAscii( "Dtwm" ) )
         aTitle = " ";
 
@@ -1072,7 +1072,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
         static const char* pLang = getenv( "LANG" );
         aWMLocale = pLang ? pLang : "C";
     }
-
+    
     static bool bTrustXmb = true;
     #ifdef SOLARIS
     /* #i64273# there are some weird cases when using IIIMP on Solaris
@@ -1120,10 +1120,10 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
                                    &aProp );
     }
 
-    unsigned char* pData    = aProp.nitems ? aProp.value : (unsigned char*)aTitle.GetBuffer();
-    Atom nType              = aProp.nitems ? aProp.encoding : XA_STRING;
-    int nFormat             = aProp.nitems ? aProp.format : 8;
-    int nBytes              = aProp.nitems ? aProp.nitems : aTitle.Len();
+    unsigned char* pData	= aProp.nitems ? aProp.value : (unsigned char*)aTitle.GetBuffer();
+    Atom nType				= aProp.nitems ? aProp.encoding : XA_STRING;
+    int nFormat				= aProp.nitems ? aProp.format : 8;
+    int nBytes				= aProp.nitems ? aProp.nitems : aTitle.Len();
     const SystemEnvData* pEnv = pFrame->GetSystemData();
     XChangeProperty( m_pDisplay,
                      (XLIB_Window)pEnv->aShellWindow,
@@ -1251,8 +1251,8 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
             /*
              *  for maximizing use NorthWestGravity (including decoration)
              */
-            XSizeHints  hints;
-            long        supplied;
+            XSizeHints	hints;
+            long		supplied;
             bool bHint = false;
             if( XGetWMNormalHints( m_pDisplay,
                                    pFrame->GetShellWindow(),
@@ -1341,8 +1341,8 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
             /*
              *  for maximizing use NorthWestGravity (including decoration)
              */
-            XSizeHints  hints;
-            long        supplied;
+            XSizeHints	hints;
+            long		supplied;
             bool bHint = false;
             if( XGetWMNormalHints( m_pDisplay,
                                    pFrame->GetShellWindow(),
@@ -1401,13 +1401,13 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
 /*
  *  WMAdaptor::setFrameDecoration
  *  sets _MOTIF_WM_HINTS
- *       WM_TRANSIENT_FOR
+ *		 WM_TRANSIENT_FOR
  */
 
 void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pReferenceFrame ) const
 {
-    pFrame->meWindowType        = eType;
-    pFrame->mnDecorationFlags   = nDecorationFlags;
+    pFrame->meWindowType		= eType;
+    pFrame->mnDecorationFlags	= nDecorationFlags;
 
     if( ! pFrame->mbFullScreen )
     {
@@ -1417,13 +1417,13 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
             long input_mode;
             unsigned long status;
         } aHint;
-
+    
         aHint.flags = 15; /* flags for functions, decoration, input mode and status */
         aHint.deco = 0;
         aHint.func = 1L << 2;
         aHint.status = 0;
         aHint.input_mode = 0;
-
+    
         // evaluate decoration flags
         if( nDecorationFlags & decoration_All )
             aHint.deco = 1, aHint.func = 1;
@@ -1451,7 +1451,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
             default:
                 break;
         }
-
+    
         // set the hint
         XChangeProperty( m_pDisplay,
                          pFrame->GetShellWindow(),
@@ -1462,7 +1462,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
                          (unsigned char*)&aHint,
                          5 );
     }
-
+     
     // set transientFor hint
     /*  #91030# dtwm will not map a dialogue if the transient
      *  window is iconified. This is deemed undesireable because
@@ -1491,7 +1491,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
  *  sets _MOTIF_WM_HINTS
  *       _NET_WM_WINDOW_TYPE
  *       _NET_WM_STATE
- *       WM_TRANSIENT_FOR
+ *		 WM_TRANSIENT_FOR
  */
 
 void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pReferenceFrame ) const
@@ -1658,8 +1658,8 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
             pFrame->maRestorePosSize = aRestore;
 
         pFrame->SetPosSize( aTarget );
-        pFrame->nWidth_     = aTarget.GetWidth();
-        pFrame->nHeight_    = aTarget.GetHeight();
+        pFrame->nWidth_		= aTarget.GetWidth();
+        pFrame->nHeight_	= aTarget.GetHeight();
         XRaiseWindow( m_pDisplay,
                       pFrame->GetShellWindow()
                       );
@@ -1673,8 +1673,8 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
     {
         pFrame->SetPosSize( pFrame->maRestorePosSize );
         pFrame->maRestorePosSize = Rectangle();
-        pFrame->nWidth_             = rGeom.nWidth;
-        pFrame->nHeight_            = rGeom.nHeight;
+        pFrame->nWidth_ 			= rGeom.nWidth;
+        pFrame->nHeight_			= rGeom.nHeight;
         if( m_aWMName.EqualsAscii( "Dtwm" ) && pFrame->bMapped_ )
         {
             pFrame->maGeometry.nX += rGeom.nLeftDecoration;
@@ -1703,16 +1703,16 @@ void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bV
         {
             // window already mapped, send WM a message
             XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = bHorizontal ? 1 : 0;
-            aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ];
-            aEvent.xclient.data.l[2]    = bHorizontal == bVertical ? m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ] : 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
+            aEvent.type					= ClientMessage;
+            aEvent.xclient.display		= m_pDisplay;
+            aEvent.xclient.window		= pFrame->GetShellWindow();
+            aEvent.xclient.message_type	= m_aWMAtoms[ NET_WM_STATE ];
+            aEvent.xclient.format		= 32;
+            aEvent.xclient.data.l[0]	= bHorizontal ? 1 : 0;
+            aEvent.xclient.data.l[1]	= m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ];
+            aEvent.xclient.data.l[2]	= bHorizontal == bVertical ? m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ] : 0;
+            aEvent.xclient.data.l[3]	= 0;
+            aEvent.xclient.data.l[4]	= 0;
             XSendEvent( m_pDisplay,
                         m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
@@ -1768,18 +1768,18 @@ void GnomeWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool 
         {
              // window already mapped, send WM a message
             XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ WIN_STATE ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = (1<<2)|(1<<3);
-            aEvent.xclient.data.l[1]    =
+            aEvent.type					= ClientMessage;
+            aEvent.xclient.display		= m_pDisplay;
+            aEvent.xclient.window		= pFrame->GetShellWindow();
+            aEvent.xclient.message_type	= m_aWMAtoms[ WIN_STATE ];
+            aEvent.xclient.format		= 32;
+            aEvent.xclient.data.l[0]	= (1<<2)|(1<<3);
+            aEvent.xclient.data.l[1]	=
                 (bVertical ? (1<<2) : 0)
                 | (bHorizontal ? (1<<3) : 0);
-            aEvent.xclient.data.l[2]    = 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
+            aEvent.xclient.data.l[2]	= 0;
+            aEvent.xclient.data.l[3]	= 0;
+            aEvent.xclient.data.l[4]	= 0;
             XSendEvent( m_pDisplay,
                         m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
@@ -1844,16 +1844,16 @@ void NetWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const
         {
             // window already mapped, send WM a message
             XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = bEnable ? 1 : 0;
-            aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
-            aEvent.xclient.data.l[2]    = 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
+            aEvent.type					= ClientMessage;
+            aEvent.xclient.display		= m_pDisplay;
+            aEvent.xclient.window		= pFrame->GetShellWindow();
+            aEvent.xclient.message_type	= m_aWMAtoms[ NET_WM_STATE ];
+            aEvent.xclient.format		= 32;
+            aEvent.xclient.data.l[0]	= bEnable ? 1 : 0;
+            aEvent.xclient.data.l[1]	= m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
+            aEvent.xclient.data.l[2]	= 0;
+            aEvent.xclient.data.l[3]	= 0;
+            aEvent.xclient.data.l[4]	= 0;
             XSendEvent( m_pDisplay,
                         m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
@@ -1878,16 +1878,16 @@ void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) cons
         {
             // window already mapped, send WM a message
             XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ WIN_LAYER ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = bEnable ? 6 : 4;
-            aEvent.xclient.data.l[1]    = 0;
-            aEvent.xclient.data.l[2]    = 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
+            aEvent.type					= ClientMessage;
+            aEvent.xclient.display		= m_pDisplay;
+            aEvent.xclient.window		= pFrame->GetShellWindow();
+            aEvent.xclient.message_type	= m_aWMAtoms[ WIN_LAYER ];
+            aEvent.xclient.format		= 32;
+            aEvent.xclient.data.l[0]	= bEnable ? 6 : 4;
+            aEvent.xclient.data.l[1]	= 0;
+            aEvent.xclient.data.l[2]	= 0;
+            aEvent.xclient.data.l[3]	= 0;
+            aEvent.xclient.data.l[4]	= 0;
             XSendEvent( m_pDisplay,
                         m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
@@ -2106,16 +2106,16 @@ void NetWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
         {
             // window already mapped, send WM a message
             XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = bToShaded ? 1 : 0;
-            aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_SHADED ];
-            aEvent.xclient.data.l[2]    = 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
+            aEvent.type					= ClientMessage;
+            aEvent.xclient.display		= m_pDisplay;
+            aEvent.xclient.window		= pFrame->GetShellWindow();
+            aEvent.xclient.message_type	= m_aWMAtoms[ NET_WM_STATE ];
+            aEvent.xclient.format		= 32;
+            aEvent.xclient.data.l[0]	= bToShaded ? 1 : 0;
+            aEvent.xclient.data.l[1]	= m_aWMAtoms[ NET_WM_STATE_SHADED ];
+            aEvent.xclient.data.l[2]	= 0;
+            aEvent.xclient.data.l[3]	= 0;
+            aEvent.xclient.data.l[4]	= 0;
             XSendEvent( m_pDisplay,
                         m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
@@ -2143,16 +2143,16 @@ void GnomeWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
         {
             // window already mapped, send WM a message
             XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ WIN_STATE ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = (1<<5);
-            aEvent.xclient.data.l[1]    = bToShaded ? (1<<5) : 0;
-            aEvent.xclient.data.l[2]    = 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
+            aEvent.type					= ClientMessage;
+            aEvent.xclient.display		= m_pDisplay;
+            aEvent.xclient.window		= pFrame->GetShellWindow();
+            aEvent.xclient.message_type	= m_aWMAtoms[ WIN_STATE ];
+            aEvent.xclient.format		= 32;
+            aEvent.xclient.data.l[0]	= (1<<5);
+            aEvent.xclient.data.l[1]	= bToShaded ? (1<<5) : 0;
+            aEvent.xclient.data.l[2]	= 0;
+            aEvent.xclient.data.l[3]	= 0;
+            aEvent.xclient.data.l[4]	= 0;
             XSendEvent( m_pDisplay,
                         m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
@@ -2195,16 +2195,16 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
         {
             // window already mapped, send WM a message
             XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = bFullScreen ? 1 : 0;
-            aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ];
-            aEvent.xclient.data.l[2]    = 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
+            aEvent.type					= ClientMessage;
+            aEvent.xclient.display		= m_pDisplay;
+            aEvent.xclient.window		= pFrame->GetShellWindow();
+            aEvent.xclient.message_type	= m_aWMAtoms[ NET_WM_STATE ];
+            aEvent.xclient.format		= 32;
+            aEvent.xclient.data.l[0]	= bFullScreen ? 1 : 0;
+            aEvent.xclient.data.l[1]	= m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ];
+            aEvent.xclient.data.l[2]	= 0;
+            aEvent.xclient.data.l[3]	= 0;
+            aEvent.xclient.data.l[4]	= 0;
             XSendEvent( m_pDisplay,
                         m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
@@ -2266,11 +2266,11 @@ int WMAdaptor::getCurrentWorkArea() const
     int nCurrent = -1;
     if( m_aWMAtoms[ NET_CURRENT_DESKTOP ] )
     {
-        Atom                aRealType   = None;
-        int                 nFormat     = 8;
-        unsigned long       nItems      = 0;
-        unsigned long       nBytesLeft  = 0;
-        unsigned char*  pProperty   = NULL;
+        Atom				aRealType	= None;
+        int					nFormat		= 8;
+        unsigned long		nItems		= 0;
+        unsigned long		nBytesLeft	= 0;
+        unsigned char*	pProperty	= NULL;
         if( XGetWindowProperty( m_pDisplay,
                                 m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 m_aWMAtoms[ NET_CURRENT_DESKTOP ],
@@ -2305,11 +2305,11 @@ int WMAdaptor::getWindowWorkArea( XLIB_Window aWindow ) const
     int nCurrent = -1;
     if( m_aWMAtoms[ NET_WM_DESKTOP ] )
     {
-        Atom                aRealType   = None;
-        int                 nFormat     = 8;
-        unsigned long       nItems      = 0;
-        unsigned long       nBytesLeft  = 0;
-        unsigned char*  pProperty   = NULL;
+        Atom				aRealType	= None;
+        int					nFormat		= 8;
+        unsigned long		nItems		= 0;
+        unsigned long		nBytesLeft	= 0;
+        unsigned char*	pProperty	= NULL;
         if( XGetWindowProperty( m_pDisplay,
                                 aWindow,
                                 m_aWMAtoms[ NET_WM_DESKTOP ],
@@ -2345,16 +2345,16 @@ void WMAdaptor::switchToWorkArea( int nWorkArea ) const
     if( m_aWMAtoms[ NET_CURRENT_DESKTOP ] )
     {
         XEvent aEvent;
-        aEvent.type                 = ClientMessage;
-        aEvent.xclient.display      = m_pDisplay;
-        aEvent.xclient.window       = m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() );
-        aEvent.xclient.message_type = m_aWMAtoms[ NET_CURRENT_DESKTOP ];
-        aEvent.xclient.format       = 32;
-        aEvent.xclient.data.l[0]    = nWorkArea;
-        aEvent.xclient.data.l[1]    = 0;
-        aEvent.xclient.data.l[2]    = 0;
-        aEvent.xclient.data.l[3]    = 0;
-        aEvent.xclient.data.l[4]    = 0;
+        aEvent.type					= ClientMessage;
+        aEvent.xclient.display		= m_pDisplay;
+        aEvent.xclient.window		= m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() );
+        aEvent.xclient.message_type	= m_aWMAtoms[ NET_CURRENT_DESKTOP ];
+        aEvent.xclient.format		= 32;
+        aEvent.xclient.data.l[0]	= nWorkArea;
+        aEvent.xclient.data.l[1]	= 0;
+        aEvent.xclient.data.l[2]	= 0;
+        aEvent.xclient.data.l[3]	= 0;
+        aEvent.xclient.data.l[4]	= 0;
         XSendEvent( m_pDisplay,
                     m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                     False,
@@ -2414,7 +2414,7 @@ void NetWMAdaptor::setFrameStruts( X11SalFrame* pFrame,
     nData[11]= bottom_end_x;
     Atom aProperty = None;
     int nSetData = 0;
-
+    
     if( m_aWMAtoms[NET_WM_STRUT_PARTIAL] )
     {
         aProperty = m_aWMAtoms[NET_WM_STRUT_PARTIAL];

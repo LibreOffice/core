@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ class ImpSvtData
 {
 public:
     SfxItemDesruptorList_Impl * pItemDesruptList;
-    ResMgr *        pResMgr;
-    ResMgr *        pPatchResMgr;
+    ResMgr *		pResMgr;
+    ResMgr *		pPatchResMgr;
 
 private:
     ImpSvtData():

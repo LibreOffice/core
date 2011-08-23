@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,19 +52,19 @@ namespace comphelper
     */
     class OInteractionSelect
     {
-        sal_Bool    m_bSelected : 1;    /// indicates if the select event occured
+        sal_Bool	m_bSelected : 1;	/// indicates if the select event occured
 
     protected:
         OInteractionSelect() : m_bSelected(sal_False) { }
 
     public:
         /// determines whether or not this handler was selected
-        sal_Bool    wasSelected() const { return m_bSelected; }
+        sal_Bool	wasSelected() const { return m_bSelected; }
         /// resets the state to "not selected", so you may reuse the handler
-        void        reset() { m_bSelected = sal_False; }
+        void		reset() { m_bSelected = sal_False; }
 
     protected:
-        void    implSelected() { m_bSelected = sal_True; }
+        void	implSelected() { m_bSelected = sal_True; }
     };
 
     //=========================================================================
@@ -95,22 +95,22 @@ namespace comphelper
     //=========================================================================
     //= OInteractionApprove
     //=========================================================================
-    typedef OInteraction< ::com::sun::star::task::XInteractionApprove > OInteractionApprove;
+    typedef OInteraction< ::com::sun::star::task::XInteractionApprove >	OInteractionApprove;
 
     //=========================================================================
     //= OInteractionDispprove
     //=========================================================================
-    typedef OInteraction< ::com::sun::star::task::XInteractionDisapprove >  OInteractionDisapprove;
+    typedef OInteraction< ::com::sun::star::task::XInteractionDisapprove >	OInteractionDisapprove;
 
     //=========================================================================
     //= OInteractionAbort
     //=========================================================================
-    typedef OInteraction< ::com::sun::star::task::XInteractionAbort >   OInteractionAbort;
+    typedef OInteraction< ::com::sun::star::task::XInteractionAbort >	OInteractionAbort;
 
     //=========================================================================
     //= OInteractionRetry
     //=========================================================================
-    typedef OInteraction< ::com::sun::star::task::XInteractionRetry >   OInteractionRetry;
+    typedef OInteraction< ::com::sun::star::task::XInteractionRetry >	OInteractionRetry;
 
     //=========================================================================
     //= OInteractionPassword
@@ -138,17 +138,17 @@ namespace comphelper
     //=========================================================================
     //= OInteractionRequest
     //=========================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionRequest
-                                    >   OInteractionRequest_Base;
+    typedef ::cppu::WeakImplHelper1	<	::com::sun::star::task::XInteractionRequest
+                                    >	OInteractionRequest_Base;
     /** implements an interaction request (<type scope="com.sun.star.task">XInteractionRequest</type>)<p/>
         at run time, you can freely add any interaction continuation objects
     */
     class COMPHELPER_DLLPUBLIC OInteractionRequest : public OInteractionRequest_Base
     {
         ::com::sun::star::uno::Any
-                    m_aRequest;         /// the request we represent
+                    m_aRequest;			/// the request we represent
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
-                    m_aContinuations;   /// all registered continuations
+                    m_aContinuations;	/// all registered continuations
 
     public:
         OInteractionRequest(const ::com::sun::star::uno::Any& _rRequestDescription);
@@ -163,7 +163,7 @@ namespace comphelper
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations(  ) throw(::com::sun::star::uno::RuntimeException);
     };
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // _COMPHELPER_INTERACTION_HXX_

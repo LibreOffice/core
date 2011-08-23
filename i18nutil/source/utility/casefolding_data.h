@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -857,10 +857,10 @@ static Mapping CaseMappingExtra[] = {
 };
 
 /* Following code need special handling
-    0x0069, 0x00CC, 0x00CD, 0x0128, 0x012E, 0x0130, 0x0049, 0x004A, 0x0307, 0x03A3,
+    0x0069, 0x00CC, 0x00CD, 0x0128, 0x012E, 0x0130, 0x0049, 0x004A, 0x0307, 0x03A3, 
 */
 
-} } } }
+} } } } 
 
 #endif
 

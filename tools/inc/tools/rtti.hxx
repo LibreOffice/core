@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ typedef void* (*TypeId)();
 // On-Demand-faehige persistent-TypeId Version
 
 #define TYPEINFO_ID(id) \
-        static  TypeId StaticType() { return (TypeId) ( id | 0xF000000L ); } \
+        static	TypeId StaticType() { return (TypeId) ( id | 0xF000000L ); } \
         static  BOOL   IsOf( TypeId aSameOrSuperType ); \
         virtual TypeId Type() const; \
         virtual BOOL   IsA( TypeId aSameOrSuperType ) const

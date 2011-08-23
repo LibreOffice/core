@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -181,7 +181,7 @@ BOOL DirEntry::ToAbs()
 String DirEntry::GetVolume() const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
+    
     String aRet;
     const DirEntry *pTop = ImpGetTopPtr();
     ByteString aName = ByteString( pTop->aName ).ToLowerAscii();
@@ -266,7 +266,7 @@ USHORT DirReader_Impl::Init()
             sDrive[0] = c;
             sRoot[0] = c;
             DirEntry* pDrive = new DirEntry( sDrive, FSYS_FLAG_VOLUME, FSYS_STYLE_HOST );
-            if ( pDir->aNameMask.Matches( String( ByteString(sDrive), osl_getThreadTextEncoding()))
+            if ( pDir->aNameMask.Matches( String( ByteString(sDrive), osl_getThreadTextEncoding())) 
                 && aDriveMap[c-'a'].nKind != FSYS_KIND_UNKNOWN )
             {
                 if ( pDir->pStatLst ) //Status fuer Sort gewuenscht?
@@ -314,8 +314,8 @@ USHORT DirReader_Impl::Read()
         {
             DirEntryFlag eFlag =
                     0 == strcmp( pDosEntry->d_name, "." ) ? FSYS_FLAG_CURRENT
-                :   0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
-                :   FSYS_FLAG_NORMAL;
+                :	0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
+                :	FSYS_FLAG_NORMAL;
             DirEntry *pTemp = new DirEntry( ByteString(pDosEntry->d_name), eFlag, FSYS_STYLE_UNX );
             if ( pParent )
                 pTemp->ImpChangeParent( new DirEntry( *pParent ), FALSE);
@@ -655,10 +655,10 @@ void CreateDriveMapImpl()
     aDriveMap[2].nKind = FSYS_KIND_FIXED;
     aDriveMap[2].nStyle = FSYS_STYLE_FAT;
 #else
-    FSQBUFFER_  aBuf;
+    FSQBUFFER_	aBuf;
     ULONG       nBufLen;
     APIRET      nRet;
-    USHORT      nDrive;
+    USHORT 		nDrive;
 
     // disable error-boxes for hard-errors
     DosError(FERR_DISABLEHARDERR);
@@ -802,7 +802,7 @@ FSysPathStyle DirEntry::GetPathStyle( const String &rDevice )
 |*
 |*    Beschreibung
 |*    Ersterstellung    TPF 26.02.1999
-|*    Letzte Aenderung
+|*    Letzte Aenderung  
 |*
 *************************************************************************/
 
@@ -810,7 +810,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
 {
     if (eFormatter==FSYS_STYLE_HOST)
     {
-        if  (GetPathStyle(GetDevice().GetName()) == FSYS_STYLE_UNX)
+        if 	(GetPathStyle(GetDevice().GetName()) == FSYS_STYLE_UNX)
         {
             return TRUE;
         }
@@ -821,7 +821,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
     }
     else
     {
-        BOOL isCaseSensitive = FALSE;           // ich bin unter OS2, also ist der default im Zweifelsfall case insensitiv
+        BOOL isCaseSensitive = FALSE;			// ich bin unter OS2, also ist der default im Zweifelsfall case insensitiv
         switch ( eFormatter )
         {
             case FSYS_STYLE_MAC:
@@ -843,7 +843,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
                 }
             default:
                 {
-                    isCaseSensitive = FALSE;    // ich bin unter OS2, also ist der default im Zweifelsfall case insensitiv
+                    isCaseSensitive = FALSE;	// ich bin unter OS2, also ist der default im Zweifelsfall case insensitiv
                     break;
                 }
         }

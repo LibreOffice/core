@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,24 +30,24 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-static const sal_Int16 NumberChar_HalfWidth     = 0;
-static const sal_Int16 NumberChar_FullWidth     = 1;
-static const sal_Int16 NumberChar_Lower_zh  = 2;
-static const sal_Int16 NumberChar_Upper_zh  = 3;
-static const sal_Int16 NumberChar_Upper_zh_TW   = 4;
-static const sal_Int16 NumberChar_Modern_ja     = 5;
+static const sal_Int16 NumberChar_HalfWidth 	= 0;
+static const sal_Int16 NumberChar_FullWidth 	= 1;
+static const sal_Int16 NumberChar_Lower_zh 	= 2;
+static const sal_Int16 NumberChar_Upper_zh 	= 3;
+static const sal_Int16 NumberChar_Upper_zh_TW 	= 4;
+static const sal_Int16 NumberChar_Modern_ja 	= 5;
 static const sal_Int16 NumberChar_Traditional_ja= 6;
-static const sal_Int16 NumberChar_Lower_ko  = 7;
-static const sal_Int16 NumberChar_Upper_ko  = 8;
-static const sal_Int16 NumberChar_Hangul_ko     = 9;
-static const sal_Int16 NumberChar_Indic_ar  = 10;
+static const sal_Int16 NumberChar_Lower_ko 	= 7;
+static const sal_Int16 NumberChar_Upper_ko 	= 8;
+static const sal_Int16 NumberChar_Hangul_ko 	= 9;
+static const sal_Int16 NumberChar_Indic_ar 	= 10;
 static const sal_Int16 NumberChar_EastIndic_ar  = 11;
-static const sal_Int16 NumberChar_Indic_hi  = 12;
-static const sal_Int16 NumberChar_th        = 13;
-static const sal_Int16 NumberChar_Count     = 14;
+static const sal_Int16 NumberChar_Indic_hi 	= 12;
+static const sal_Int16 NumberChar_th 		= 13;
+static const sal_Int16 NumberChar_Count 	= 14;
 
 static const sal_Unicode NumberChar[][10] = {
-//  0   1   2   3   4   5   6   7   8   9
+//	0	1	2	3	4	5	6	7	8	9
     { 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, 0x0039 }, // Half Width (Ascii)
     { 0xFF10, 0xFF11, 0xFF12, 0xFF13, 0xFF14, 0xFF15, 0xFF16, 0xFF17, 0xFF18, 0xFF19 }, // Full Width
     { 0x3007, 0x4E00, 0x4E8c, 0x4E09, 0x56DB, 0x4E94, 0x516D, 0x4E03, 0x516B, 0x4E5D }, // Chinese Lower
@@ -64,28 +64,28 @@ static const sal_Unicode NumberChar[][10] = {
     { 0x0E50, 0x0E51, 0x0E52, 0x0E53, 0x0E54, 0x0E55, 0x0E56, 0x0E57, 0x0E58, 0x0E59 }  // Thai
 };
 
-#define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0] // 0x0030
-#define NUMBER_ONE      NumberChar[NumberChar_HalfWidth][1]     // 0x0031
-#define NUMBER_NINE     NumberChar[NumberChar_HalfWidth][9]     // 0x0039
+#define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0]	// 0x0030
+#define NUMBER_ONE  	NumberChar[NumberChar_HalfWidth][1]     // 0x0031
+#define NUMBER_NINE  	NumberChar[NumberChar_HalfWidth][9]     // 0x0039
 #define NUMBER_DECIMAL  DecimalChar[0]
-#define NUMBER_MINUS    MinusChar[0]
-#define isNumber(n)     ( NUMBER_ZERO <= n && n <= NUMBER_NINE )
-#define isDecimal(n)    ( n == NUMBER_DECIMAL )
-#define isMinus(n)  ( n == NUMBER_MINUS )
+#define NUMBER_MINUS  	MinusChar[0]
+#define isNumber(n) 	( NUMBER_ZERO <= n && n <= NUMBER_NINE )
+#define isDecimal(n) 	( n == NUMBER_DECIMAL )
+#define isMinus(n) 	( n == NUMBER_MINUS )
 
-const sal_Int16 Multiplier_Lower_zh     = 0;
-const sal_Int16 Multiplier_Upper_zh     = 1;
-const sal_Int16 Multiplier_Lower_zh_TW  = 2;
-const sal_Int16 Multiplier_Upper_zh_TW  = 3;
-const sal_Int16 Multiplier_Hangul_ko    = 4;
-const sal_Int16 Multiplier_Modern_ja    = 5;
+const sal_Int16 Multiplier_Lower_zh 	= 0;
+const sal_Int16 Multiplier_Upper_zh 	= 1;
+const sal_Int16 Multiplier_Lower_zh_TW 	= 2;
+const sal_Int16 Multiplier_Upper_zh_TW 	= 3;
+const sal_Int16 Multiplier_Hangul_ko 	= 4;
+const sal_Int16 Multiplier_Modern_ja 	= 5;
 const sal_Int16 Multiplier_Traditional_ja = 6;
-const sal_Int16 Multiplier_Count    = 7;
+const sal_Int16 Multiplier_Count	= 7;
 
-const sal_Int16 ExponentCount_CJK   = 6;
+const sal_Int16 ExponentCount_CJK 	= 6;
 
 
-const sal_Int16 ExponentCount_short_CJK     = 2;
+const sal_Int16 ExponentCount_short_CJK 	= 2;
 
 
 } } } }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut)
 }
 
 //-------------------------------------------------------------------------
-sal_Bool    operator ==(const starutil::DateTime& _rLeft, const starutil::DateTime& _rRight)
+sal_Bool	operator ==(const starutil::DateTime& _rLeft, const starutil::DateTime& _rRight)
 {
     return ( _rLeft.HundredthSeconds == _rRight.HundredthSeconds) &&
     ( _rLeft.Seconds == _rRight.Seconds) &&
@@ -100,7 +100,7 @@ sal_Bool    operator ==(const starutil::DateTime& _rLeft, const starutil::DateTi
 }
 
 //-------------------------------------------------------------------------
-sal_Bool    operator ==(const starutil::Date& _rLeft, const starutil::Date& _rRight)
+sal_Bool	operator ==(const starutil::Date& _rLeft, const starutil::Date& _rRight)
 {
     return ( _rLeft.Day == _rRight.Day) &&
     ( _rLeft.Month == _rRight.Month) &&
@@ -108,7 +108,7 @@ sal_Bool    operator ==(const starutil::Date& _rLeft, const starutil::Date& _rRi
 }
 
 //-------------------------------------------------------------------------
-sal_Bool    operator ==(const starutil::Time& _rLeft, const starutil::Time& _rRight)
+sal_Bool	operator ==(const starutil::Time& _rLeft, const starutil::Time& _rRight)
 {
     return ( _rLeft.HundredthSeconds == _rRight.HundredthSeconds) &&
     ( _rLeft.Seconds == _rRight.Seconds) &&
@@ -117,7 +117,7 @@ sal_Bool    operator ==(const starutil::Time& _rLeft, const starutil::Time& _rRi
 }
 
 //.........................................................................
-}   // namespace utl
+}	// namespace utl
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

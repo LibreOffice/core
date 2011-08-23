@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,19 +51,19 @@ TargetDropContext::~TargetDropContext()
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
-void SAL_CALL TargetDropContext::acceptDrop( sal_Int8 dropOperation )
+void SAL_CALL TargetDropContext::acceptDrop( sal_Int8 dropOperation ) 
         throw( RuntimeException)
 {
     m_pDropTarget->_acceptDrop( dropOperation, static_cast<XDropTargetDropContext*>( this) );
 }
 
-void SAL_CALL TargetDropContext::rejectDrop( )
+void SAL_CALL TargetDropContext::rejectDrop( ) 
         throw( RuntimeException)
 {
     m_pDropTarget->_rejectDrop(  static_cast<XDropTargetDropContext*>( this) );
 }
-
-void SAL_CALL TargetDropContext::dropComplete( sal_Bool success )
+ 
+void SAL_CALL TargetDropContext::dropComplete( sal_Bool success ) 
         throw( RuntimeException)
 {
     m_pDropTarget->_dropComplete( success, static_cast<XDropTargetDropContext*>( this) );

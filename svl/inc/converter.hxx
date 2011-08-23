@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ class SvDbaseConverter
 {
 public:
     SVL_DLLPUBLIC static INT32 ConvertPrecisionToDbase(INT32 _nLen, INT32 _nScale);
-    SVL_DLLPUBLIC static INT32 ConvertPrecisionToOdbc(INT32 _nLen, INT32 _nScale);
+    SVL_DLLPUBLIC static INT32 ConvertPrecisionToOdbc(INT32 _nLen, INT32 _nScale);	
 };
 
 #endif //_CONVERTER_HXX_

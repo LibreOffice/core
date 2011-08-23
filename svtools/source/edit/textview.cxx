@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,25 +71,25 @@
 
 using namespace ::com::sun::star;
 
-class TETextDataObject :    public ::com::sun::star::datatransfer::XTransferable,
+class TETextDataObject :	public ::com::sun::star::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
 
 {
 private:
-    String          maText;
-    SvMemoryStream  maHTMLStream;
+    String			maText;
+    SvMemoryStream	maHTMLStream;
 
-public:
+public:	
                     TETextDataObject( const String& rText );
                     ~TETextDataObject();
 
-    String&         GetText() { return maText; }
-    SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
-
+    String&			GetText() { return maText; }
+    SvMemoryStream&	GetHTMLStream() { return maHTMLStream; }
+        
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::datatransfer::XTransferable
     ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -104,7 +104,7 @@ TETextDataObject::TETextDataObject( const String& rText ) : maText( rText )
 TETextDataObject::~TETextDataObject()
 {
 }
-
+        
 // uno::XInterface
 uno::Any TETextDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
 {
@@ -196,7 +196,7 @@ struct ImpTextView
 // -------------------------------------------------------------------------
 // (+) class TextView
 // -------------------------------------------------------------------------
-TextView::TextView( TextEngine* pEng, Window* pWindow ) :
+TextView::TextView( TextEngine* pEng, Window* pWindow ) : 
     mpImpl(new ImpTextView)
 {
     pWindow->EnableRTL( FALSE );
@@ -215,7 +215,7 @@ TextView::TextView( TextEngine* pEng, Window* pWindow ) :
     mpImpl->mbClickedInSelection = FALSE;
     mpImpl->mbSupportProtectAttribute = FALSE;
     mpImpl->mbCursorAtEndOfLine = false;
-//  mbInSelection = FALSE;
+//	mbInSelection = FALSE;
 
     mpImpl->mnTravelXPos = TRAVEL_X_DONTKNOW;
 
@@ -302,7 +302,7 @@ TextSelection&      TextView::GetSelection()
 
 void TextView::DeleteSelected()
 {
-//  HideSelection();
+//	HideSelection();
 
     mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_DELETE );
     TextPaM aPaM = mpImpl->mpTextEngine->ImpDeleteText( mpImpl->maSelection );
@@ -362,8 +362,8 @@ void TextView::ImpPaint( const Rectangle& rRect, BOOL bUseVirtDev )
 
         BOOL bVDevValid = TRUE;
         Size aOutSz( pVDev->GetOutputSizePixel() );
-        if ( (  aOutSz.Width() < rRect.GetWidth() ) ||
-             (  aOutSz.Height() < rRect.GetHeight() ) )
+        if ( (	aOutSz.Width() < rRect.GetWidth() ) ||
+             (	aOutSz.Height() < rRect.GetHeight() ) )
         {
             bVDevValid = pVDev->SetOutputSizePixel( rRect.GetSize() );
         }
@@ -394,7 +394,7 @@ void TextView::ImpPaint( const Rectangle& rRect, BOOL bUseVirtDev )
         ImpPaint( pVDev, aStartPos, &aTmpRec, NULL, pDrawSelection );
         mpImpl->mpWindow->DrawOutDev( rRect.TopLeft(), rRect.GetSize(),
                                 Point(0,0), rRect.GetSize(), *pVDev );
-//      ShowSelection();
+//		ShowSelection();
         if ( mpImpl->mbHighlightSelection )
             ImpHighlight( mpImpl->maSelection );
     }
@@ -403,7 +403,7 @@ void TextView::ImpPaint( const Rectangle& rRect, BOOL bUseVirtDev )
         Point aStartPos = ImpGetOutputStartPos( mpImpl->maStartDocPos );
         ImpPaint( mpImpl->mpWindow, aStartPos, &rRect, NULL, pDrawSelection );
 
-//      ShowSelection();
+//		ShowSelection();
         if ( mpImpl->mbHighlightSelection )
             ImpHighlight( mpImpl->maSelection );
     }
@@ -553,10 +553,10 @@ void TextView::EraseVirtualDevice()
 
 BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
 {
-    BOOL bDone      = TRUE;
-    BOOL bModified  = FALSE;
-    BOOL bMoved     = FALSE;
-    BOOL bEndKey    = FALSE;    // spezielle CursorPosition
+    BOOL bDone 		= TRUE;
+    BOOL bModified	= FALSE;
+    BOOL bMoved		= FALSE;
+    BOOL bEndKey	= FALSE;	// spezielle CursorPosition
     BOOL bAllowIdle = TRUE;
 
     // Um zu pruefen ob durch irgendeine Aktion mModified, das lokale
@@ -604,7 +604,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
             }
             break;
 
-            default:    // wird dann evtl. unten bearbeitet.
+            default:	// wird dann evtl. unten bearbeitet.
                         eFunc = KEYFUNC_DONTKNOW;
         }
     }
@@ -642,7 +642,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                 {
                     aCurSel = ImpMoveCursor( rKeyEvent );
                     if ( aCurSel.HasRange() ) {
-                        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
+                        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection()); 
                         Copy( aSelection );
                     }
                     bMoved = TRUE;
@@ -692,13 +692,13 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                     if(mpImpl->mbSupportProtectAttribute)
                     {
                         //expand selection to include all protected content - if there is any
-                        const TextCharAttrib* pStartAttr = mpImpl->mpTextEngine->FindCharAttrib(
-                                    TextPaM(mpImpl->maSelection.GetStart().GetPara(),
-                                    mpImpl->maSelection.GetStart().GetIndex()),
+                        const TextCharAttrib* pStartAttr = mpImpl->mpTextEngine->FindCharAttrib( 
+                                    TextPaM(mpImpl->maSelection.GetStart().GetPara(), 
+                                    mpImpl->maSelection.GetStart().GetIndex()), 
                                     TEXTATTR_PROTECTED );
-                        const TextCharAttrib* pEndAttr = mpImpl->mpTextEngine->FindCharAttrib(
-                                    TextPaM(mpImpl->maSelection.GetEnd().GetPara(),
-                                    mpImpl->maSelection.GetEnd().GetIndex()),
+                        const TextCharAttrib* pEndAttr = mpImpl->mpTextEngine->FindCharAttrib( 
+                                    TextPaM(mpImpl->maSelection.GetEnd().GetPara(), 
+                                    mpImpl->maSelection.GetEnd().GetIndex()), 
                                     TEXTATTR_PROTECTED );
                         if(pStartAttr && pStartAttr->GetStart() < mpImpl->maSelection.GetStart().GetIndex())
                         {
@@ -708,7 +708,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                         {
                             mpImpl->maSelection.GetEnd().GetIndex() = pEndAttr->GetEnd();
                         }
-                    }
+                    }            
                     aCurSel = ImpDelete( nDel, nMode );
                     mpImpl->mpTextEngine->UndoActionEnd( TEXTUNDO_DELETE );
                     bModified = TRUE;
@@ -818,17 +818,17 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
     mpImpl->mbClickedInSelection = FALSE;
     mpImpl->mnTravelXPos = TRAVEL_X_DONTKNOW;
     mpImpl->mpSelEngine->SelMouseButtonUp( rMouseEvent );
-    if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
+    if ( rMouseEvent.IsMiddle() && !IsReadOnly() && 
          ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
     {
-        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
+        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection()); 
         Paste( aSelection );
         if ( mpImpl->mpTextEngine->IsModified() )
             mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
     }
     else if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
     {
-        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
+        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection()); 
         Copy( aSelection );
     }
 }
@@ -856,7 +856,7 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
         {
             HideSelection();
             ImpSetSelection( mpImpl->maSelection.GetEnd() );
-            SetCursorAtPoint( rMouseEvent.GetPosPixel() );  // Wird von SelectionEngine bei MOD2 nicht gesetzt
+            SetCursorAtPoint( rMouseEvent.GetPosPixel() );	// Wird von SelectionEngine bei MOD2 nicht gesetzt
         }
 
         if ( rMouseEvent.GetClicks() == 2 )
@@ -874,13 +874,13 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
                 if(mpImpl->mbSupportProtectAttribute)
                 {
                     //expand selection to include all protected content - if there is any
-                    const TextCharAttrib* pStartAttr = mpImpl->mpTextEngine->FindCharAttrib(
-                                TextPaM(aNewSel.GetStart().GetPara(),
-                                (USHORT)aBoundary.startPos),
+                    const TextCharAttrib* pStartAttr = mpImpl->mpTextEngine->FindCharAttrib( 
+                                TextPaM(aNewSel.GetStart().GetPara(), 
+                                (USHORT)aBoundary.startPos), 
                                 TEXTATTR_PROTECTED );
-                    const TextCharAttrib* pEndAttr = mpImpl->mpTextEngine->FindCharAttrib(
-                                TextPaM(aNewSel.GetEnd().GetPara(),
-                                (USHORT)aBoundary.endPos),
+                    const TextCharAttrib* pEndAttr = mpImpl->mpTextEngine->FindCharAttrib( 
+                                TextPaM(aNewSel.GetEnd().GetPara(), 
+                                (USHORT)aBoundary.endPos), 
                                 TEXTATTR_PROTECTED );
                     if(pStartAttr && pStartAttr->GetStart() < aNewSel.GetStart().GetIndex())
                     {
@@ -889,8 +889,8 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
                     if(pEndAttr && pEndAttr->GetEnd() > aNewSel.GetEnd().GetIndex())
                     {
                         aNewSel.GetEnd().GetIndex() = pEndAttr->GetEnd();
-                    }
-                }
+                    }            
+                }            
                 ImpSetSelection( aNewSel );
                 ShowSelection();
                 ShowCursor( TRUE, TRUE );
@@ -941,13 +941,13 @@ void TextView::Command( const CommandEvent& rCEvt )
             TEParaPortion* pPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetPara() );
             pPortion->MarkSelectionInvalid( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetIndex(), 0 );
 
-            BOOL bInsertMode = !mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite;
+            BOOL bInsertMode = !mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite; 
 
             delete mpImpl->mpTextEngine->mpIMEInfos;
             mpImpl->mpTextEngine->mpIMEInfos = NULL;
 
             mpImpl->mpTextEngine->FormatAndUpdate( this );
-
+            
             SetInsertMode( bInsertMode );
 
             if ( mpImpl->mpTextEngine->IsModified() )
@@ -1017,7 +1017,7 @@ void TextView::Command( const CommandEvent& rCEvt )
             TextSelection aNewSel = TextPaM( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetPara(), mpImpl->mpTextEngine->mpIMEInfos->aPos.GetIndex()+pData->GetCursorPos() );
             SetSelection( aNewSel );
             SetInsertMode( !pData->IsCursorOverwrite() );
-
+            
             if ( pData->IsCursorVisible() )
                 ShowCursor();
             else
@@ -1030,19 +1030,19 @@ void TextView::Command( const CommandEvent& rCEvt )
         {
             TextPaM aPaM( GetSelection().GetEnd() );
             Rectangle aR1 = mpImpl->mpTextEngine->PaMtoEditCursor( aPaM );
-
+            
             USHORT nInputEnd = mpImpl->mpTextEngine->mpIMEInfos->aPos.GetIndex() + mpImpl->mpTextEngine->mpIMEInfos->nLen;
-
+            
             if ( !mpImpl->mpTextEngine->IsFormatted() )
                 mpImpl->mpTextEngine->FormatDoc();
-
+            
             TEParaPortion* pParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
             USHORT nLine = pParaPortion->GetLineNumber( aPaM.GetIndex(), sal_True );
             TextLine* pLine = pParaPortion->GetLines().GetObject( nLine );
             if ( pLine && ( nInputEnd > pLine->GetEnd() ) )
                 nInputEnd = pLine->GetEnd();
             Rectangle aR2 = mpImpl->mpTextEngine->PaMtoEditCursor( TextPaM( aPaM.GetPara(), nInputEnd ) );
-
+            
             long nWidth = aR2.Left()-aR1.Right();
             aR1.Move( -GetStartDocPos().X(), -GetStartDocPos().Y() );
             GetWindow()->SetCursorRect( &aR1, nWidth );
@@ -1161,7 +1161,7 @@ void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
 
 void TextView::Copy()
 {
-    uno::Reference<datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
+    uno::Reference<datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard()); 
     Copy( aClipboard );
 }
 
@@ -1199,7 +1199,7 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                         bWasTruncated = ImplTruncateNewText( aText );
                     InsertNewText( aText, FALSE );
                     mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
-
+                    
                     if( bWasTruncated )
                         Edit::ShowTruncationWarning( mpImpl->mpWindow );
                 }
@@ -1213,7 +1213,7 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
 
 void TextView::Paste()
 {
-    uno::Reference<datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
+    uno::Reference<datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard()); 
     Paste( aClipboard );
 }
 
@@ -1270,21 +1270,21 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
     bool bSelect = aTranslatedKeyEvent.GetKeyCode().IsShift();
     switch ( nCode )
     {
-        case KEY_UP:        aPaM = CursorUp( aPaM );
+        case KEY_UP:		aPaM = CursorUp( aPaM );
                             break;
-        case KEY_DOWN:      aPaM = CursorDown( aPaM );
+        case KEY_DOWN:		aPaM = CursorDown( aPaM );
                             break;
-        case KEY_HOME:      aPaM = bCtrl ? CursorStartOfDoc() : CursorStartOfLine( aPaM );
+        case KEY_HOME:		aPaM = bCtrl ? CursorStartOfDoc() : CursorStartOfLine( aPaM );
                             break;
-        case KEY_END:       aPaM = bCtrl ? CursorEndOfDoc() : CursorEndOfLine( aPaM );
+        case KEY_END:		aPaM = bCtrl ? CursorEndOfDoc() : CursorEndOfLine( aPaM );
                             break;
-        case KEY_PAGEUP:    aPaM = bCtrl ? CursorStartOfDoc() : PageUp( aPaM );
+        case KEY_PAGEUP:	aPaM = bCtrl ? CursorStartOfDoc() : PageUp( aPaM );
                             break;
-        case KEY_PAGEDOWN:  aPaM = bCtrl ? CursorEndOfDoc() : PageDown( aPaM );
+        case KEY_PAGEDOWN:	aPaM = bCtrl ? CursorEndOfDoc() : PageDown( aPaM );
                             break;
-        case KEY_LEFT:      aPaM = bCtrl ? CursorWordLeft( aPaM ) : CursorLeft( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
+        case KEY_LEFT:		aPaM = bCtrl ? CursorWordLeft( aPaM ) : CursorLeft( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
                             break;
-        case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
+        case KEY_RIGHT: 	aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
                             break;
         case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
                             bSelect = true; // fallthrough intentional
@@ -1362,13 +1362,13 @@ void TextView::InsertText( const XubString& rStr, BOOL bSelect )
 
 void TextView::InsertNewText( const rtl::OUString& rStr, BOOL bSelect )
 {
-//  HideSelection();
+//	HideSelection();
     mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_INSERT );
 
     /* #i87633#
     break inserted text into chunks that fit into the underlying String
     based API (which has a maximum length of 65534 elements
-
+    
     note: this will of course still cause problems for lines longer than those
     65534 elements, but those cases will hopefully be few.
     In the long run someone should switch the TextEngine to OUString instead of String
@@ -1379,11 +1379,11 @@ void TextView::InsertNewText( const rtl::OUString& rStr, BOOL bSelect )
     {
         sal_Int32 nChunkLen = nLen > 65534 ? 65534 : nLen;
         String aChunk( rStr.copy( nPos, nChunkLen ) );
-
+        
         TextSelection aNewSel( mpImpl->maSelection );
-
+    
         TextPaM aPaM = mpImpl->mpTextEngine->ImpInsertText( mpImpl->maSelection, aChunk );
-
+    
         if ( bSelect )
         {
             aNewSel.Justify();
@@ -1393,7 +1393,7 @@ void TextView::InsertNewText( const rtl::OUString& rStr, BOOL bSelect )
         {
             aNewSel = aPaM;
         }
-
+        
         ImpSetSelection( aNewSel );
         nLen -= nChunkLen;
         nPos += nChunkLen;
@@ -1406,7 +1406,7 @@ void TextView::InsertNewText( const rtl::OUString& rStr, BOOL bSelect )
 /*
 void TextView::InsertText( const XubString& rStr, BOOL bSelect )
 {
-//  HideSelection();
+//	HideSelection();
 
     TextSelection aNewSel( mpImpl->maSelection );
 
@@ -1423,7 +1423,7 @@ void TextView::InsertText( const XubString& rStr, BOOL bSelect )
     {
         aNewSel = aPaM;
     }
-
+    
     ImpSetSelection( aNewSel );
 
     mpImpl->mpTextEngine->FormatAndUpdate( this );
@@ -1553,7 +1553,7 @@ TextPaM TextView::ImpDelete( BYTE nMode, BYTE nDelMode )
             // #i63506# startPos is -1 when the paragraph starts with a tab
             aEndPaM.GetIndex() = (aBoundary.startPos >= 0) ? (USHORT)aBoundary.startPos : 0;
         }
-        else    // DELMODE_RESTOFCONTENT
+        else	// DELMODE_RESTOFCONTENT
         {
             if ( aEndPaM.GetIndex() != 0 )
                 aEndPaM.GetIndex() = 0;
@@ -1578,7 +1578,7 @@ TextPaM TextView::ImpDelete( BYTE nMode, BYTE nDelMode )
             i18n::Boundary aBoundary = xBI->nextWord( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
             aEndPaM.GetIndex() = (USHORT)aBoundary.startPos;
         }
-        else    // DELMODE_RESTOFCONTENT
+        else	// DELMODE_RESTOFCONTENT
         {
             TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aEndPaM.GetPara() );
             if ( aEndPaM.GetIndex() < pNode->GetText().Len() )
@@ -1613,7 +1613,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
 
     TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( rPaM.GetPara() );
     USHORT nLine = pPPortion->GetLineNumber( rPaM.GetIndex(), FALSE );
-    if ( nLine )    // gleicher Absatz
+    if ( nLine )	// gleicher Absatz
     {
         USHORT nCharPos = mpImpl->mpTextEngine->GetCharPos( rPaM.GetPara(), nLine-1, nX );
         aPaM.GetIndex() = nCharPos;
@@ -1624,7 +1624,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
         if ( aPaM.GetIndex() && ( aPaM.GetIndex() == pLine->GetEnd() ) )
             aPaM.GetIndex()--;
     }
-    else if ( rPaM.GetPara() )  // vorheriger Absatz
+    else if ( rPaM.GetPara() )	// vorheriger Absatz
     {
         aPaM.GetPara()--;
         pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
@@ -1696,7 +1696,7 @@ TextPaM TextView::CursorEndOfLine( const TextPaM& rPaM )
     TextLine* pLine = pPPortion->GetLines().GetObject( nLine );
     aPaM.GetIndex() = pLine->GetEnd();
 
-    if ( pLine->GetEnd() > pLine->GetStart() )  // Leerzeile
+    if ( pLine->GetEnd() > pLine->GetStart() )	// Leerzeile
     {
         xub_Unicode cLastChar = pPPortion->GetNode()->GetText().GetChar((USHORT)(aPaM.GetIndex()-1) );
         if ( ( cLastChar == ' ' ) && ( aPaM.GetIndex() != pPPortion->GetNode()->GetText().Len() ) )
@@ -1782,16 +1782,16 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
 
     TextPaM aPaM( mpImpl->maSelection.GetEnd() );
     Rectangle aEditCursor = mpImpl->mpTextEngine->PaMtoEditCursor( aPaM, bSpecial );
-
+    
     // Remember that we placed the cursor behind the last character of a line
     mpImpl->mbCursorAtEndOfLine = false;
     if( bSpecial )
     {
         TEParaPortion* pParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
-        mpImpl->mbCursorAtEndOfLine =
+        mpImpl->mbCursorAtEndOfLine = 
             pParaPortion->GetLineNumber( aPaM.GetIndex(), TRUE ) != pParaPortion->GetLineNumber( aPaM.GetIndex(), FALSE );
     }
-
+    
     if ( !IsInsertMode() && !mpImpl->maSelection.HasRange() )
     {
         TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
@@ -1809,7 +1809,7 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
             {
                 if ( mpImpl->mpTextEngine->IsRightToLeft() )
                 {
-
+                    
                 }
                 aEditCursor.Right() += pTextPortion->GetWidth();
             }
@@ -1866,9 +1866,9 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
 
         // X kann durch das 'bischen mehr' falsch sein:
 //      ULONG nMaxTextWidth = mpImpl->mpTextEngine->GetMaxTextWidth();
-//      if ( !nMaxTextWidth || ( nMaxTextWidth > 0x7FFFFFFF ) )
-//          nMaxTextWidth = 0x7FFFFFFF;
-//      long nMaxX = (long)nMaxTextWidth - aOutSz.Width();
+//		if ( !nMaxTextWidth || ( nMaxTextWidth > 0x7FFFFFFF ) )
+//			nMaxTextWidth = 0x7FFFFFFF;
+//		long nMaxX = (long)nMaxTextWidth - aOutSz.Width();
         long nMaxX = mpImpl->mpTextEngine->CalcTextWidth() - aOutSz.Width();
         if ( nMaxX < 0 )
             nMaxX = 0;
@@ -1937,7 +1937,7 @@ BOOL TextView::SetCursorAtPoint( const Point& rPosPixel )
 BOOL TextView::IsSelectionAtPoint( const Point& rPosPixel )
 {
 //  if ( !Rectangle( Point(), mpImpl->mpWindow->GetOutputSizePixel() ).IsInside( rPosPixel ) && !mbInSelection )
-//      return FALSE;
+//		return FALSE;
 
     Point aDocPos = GetDocPos( rPosPixel );
     TextPaM aPaM = mpImpl->mpTextEngine->GetPaM( aDocPos, FALSE );
@@ -2033,19 +2033,19 @@ BOOL TextView::Write( SvStream& rOutput )
 bool TextView::ImplTruncateNewText( rtl::OUString& rNewText ) const
 {
     bool bTruncated = false;
-
+    
     if( rNewText.getLength() > 65534 ) // limit to String API
     {
         rNewText = rNewText.copy( 0, 65534 );
         bTruncated = true;
     }
-
+    
     ULONG nMaxLen = mpImpl->mpTextEngine->GetMaxTextLen();
     // 0 means unlimited, there is just the String API limit handled above
     if( nMaxLen != 0 )
     {
         ULONG nCurLen = mpImpl->mpTextEngine->GetTextLen();
-
+    
         sal_uInt32 nNewLen = rNewText.getLength();
         if ( nCurLen + nNewLen > nMaxLen )
         {
@@ -2187,14 +2187,14 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
         if ( ImplCheckTextLen( aText ) )
             ImpSetSelection( mpImpl->mpTextEngine->ImpInsertText( mpImpl->mpDDInfo->maDropPos, aText ) );
         if(mpImpl->mbSupportProtectAttribute)
-        {
-            mpImpl->mpTextEngine->SetAttrib( TextAttribProtect(),
-                aTempStart.GetPara(),
-                aTempStart.GetIndex(),
+        {        
+            mpImpl->mpTextEngine->SetAttrib( TextAttribProtect(), 
+                aTempStart.GetPara(), 
+                aTempStart.GetIndex(), 
                 mpImpl->maSelection.GetEnd().GetIndex(), FALSE );
         }
 
-        if ( aPrevSel.HasRange() &&
+        if ( aPrevSel.HasRange() && 
                 !mpImpl->mbSupportProtectAttribute && // don't remove currently selected element
                 (( rDTDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) || !bStarterOfDD) )
         {
@@ -2282,16 +2282,16 @@ void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDr
         // Scroll?
         // No, I will not receive events for this...
     }
-*/
+*/	
 
     sal_Bool bProtected = sal_False;
     if(mpImpl->mbSupportProtectAttribute)
     {
-        const TextCharAttrib* pStartAttr = mpImpl->mpTextEngine->FindCharAttrib(
-                    mpImpl->mpDDInfo->maDropPos,
+        const TextCharAttrib* pStartAttr = mpImpl->mpTextEngine->FindCharAttrib( 
+                    mpImpl->mpDDInfo->maDropPos, 
                     TEXTATTR_PROTECTED );
-        bProtected = pStartAttr != 0 &&
-                pStartAttr->GetStart() != mpImpl->mpDDInfo->maDropPos.GetIndex() &&
+        bProtected = pStartAttr != 0 &&  
+                pStartAttr->GetStart() != mpImpl->mpDDInfo->maDropPos.GetIndex() && 
                 pStartAttr->GetEnd() != mpImpl->mpDDInfo->maDropPos.GetIndex();
     }
     // Don't drop in selection or in read only engine
@@ -2395,9 +2395,9 @@ void __EXPORT TextSelFunctionSet::BeginDrag()
 
 void __EXPORT TextSelFunctionSet::CreateAnchor()
 {
-//  TextSelection aSel( mpView->GetSelection() );
-//  aSel.GetStart() = aSel.GetEnd();
-//  mpView->SetSelection( aSel );
+//	TextSelection aSel( mpView->GetSelection() );
+//	aSel.GetStart() = aSel.GetEnd();
+//	mpView->SetSelection( aSel );
 
     // Es darf kein ShowCursor folgen:
     mpView->HideSelection();
@@ -2428,37 +2428,37 @@ void __EXPORT TextSelFunctionSet::DestroyAnchor()
 {
     // Nur bei Mehrfachselektion
 }
-TextEngine*         TextView::GetTextEngine() const
+TextEngine*         TextView::GetTextEngine() const 
 { return mpImpl->mpTextEngine; }
-Window*             TextView::GetWindow() const
+Window*             TextView::GetWindow() const 
 { return mpImpl->mpWindow; }
-void                TextView::EnableCursor( BOOL bEnable )
+void                TextView::EnableCursor( BOOL bEnable )    
 { mpImpl->mbCursorEnabled = bEnable; }
-BOOL                TextView::IsCursorEnabled() const
+BOOL                TextView::IsCursorEnabled() const         
 { return mpImpl->mbCursorEnabled; }
-void                TextView::SetStartDocPos( const Point& rPos )
+void                TextView::SetStartDocPos( const Point& rPos ) 
 { mpImpl->maStartDocPos = rPos; }
-const Point&        TextView::GetStartDocPos() const
+const Point&        TextView::GetStartDocPos() const  
 { return mpImpl->maStartDocPos; }
-void                TextView::SetAutoIndentMode( BOOL bAutoIndent )
+void                TextView::SetAutoIndentMode( BOOL bAutoIndent )   
 { mpImpl->mbAutoIndent = bAutoIndent; }
-BOOL                TextView::IsAutoIndentMode() const
+BOOL                TextView::IsAutoIndentMode() const                
 { return mpImpl->mbAutoIndent; }
-BOOL                TextView::IsReadOnly() const
+BOOL                TextView::IsReadOnly() const      
 { return mpImpl->mbReadOnly; }
-void                TextView::SetAutoScroll( BOOL bAutoScroll )
+void                TextView::SetAutoScroll( BOOL bAutoScroll )   
 { mpImpl->mbAutoScroll = bAutoScroll; }
-BOOL                TextView::IsAutoScroll() const
+BOOL                TextView::IsAutoScroll() const                
 { return mpImpl->mbAutoScroll; }
-BOOL                TextView::IsPaintSelection() const
+BOOL                TextView::IsPaintSelection() const 
 { return mpImpl->mbPaintSelection; }
-BOOL                TextView::IsHighlightSelection() const
+BOOL                TextView::IsHighlightSelection() const 
 { return mpImpl->mbHighlightSelection; }
-BOOL                TextView::HasSelection() const
+BOOL                TextView::HasSelection() const 
 { return mpImpl->maSelection.HasRange(); }
-BOOL                TextView::IsInsertMode() const
+BOOL                TextView::IsInsertMode() const 
 { return mpImpl->mbInsertMode; }
-void                TextView::SupportProtectAttribute(sal_Bool bSupport)
+void                TextView::SupportProtectAttribute(sal_Bool bSupport) 
 { mpImpl->mbSupportProtectAttribute = bSupport;}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

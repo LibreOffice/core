@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ struct ImplMoreButtonData
 void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
 {
     mpMBData     = new ImplMoreButtonData;
-    mnDelta      = 0;
-    meUnit       = MAP_PIXEL;
-    mbState      = FALSE;
+    mnDelta 	 = 0;
+    meUnit		 = MAP_PIXEL;
+    mbState 	 = FALSE;
 
     mpMBData->mpItemList = NULL;
 
@@ -147,10 +147,10 @@ MoreButton::~MoreButton()
 
 void MoreButton::Click()
 {
-    Window*     pParent = GetParent();
-    Size        aSize( pParent->GetSizePixel() );
-    Window*     pWindow = (mpMBData->mpItemList) ? mpMBData->mpItemList->First() : NULL;
-    long        nDeltaPixel = LogicToPixel( Size( 0, mnDelta ), meUnit ).Height();
+    Window* 	pParent = GetParent();
+    Size		aSize( pParent->GetSizePixel() );
+    Window* 	pWindow = (mpMBData->mpItemList) ? mpMBData->mpItemList->First() : NULL;
+    long		nDeltaPixel = LogicToPixel( Size( 0, mnDelta ), meUnit ).Height();
 
     // Status aendern
     mbState = !mbState;

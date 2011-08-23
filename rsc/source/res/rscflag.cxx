@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -384,7 +384,7 @@ void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                           RscTypCont *, sal_uInt32, BOOL )
 {
-    INT32   lVal = 0;
+    INT32	lVal = 0;
     sal_uInt32  i = 0, Flag = 0, nIndex = 0;
 
     Flag = 1;

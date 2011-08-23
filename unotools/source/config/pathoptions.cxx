@@ -67,30 +67,30 @@ using namespace com::sun::star::lang;
 
 // define ----------------------------------------------------------------
 
-#define SEARCHPATH_DELIMITER            ';'
+#define SEARCHPATH_DELIMITER			';'
 
-#define ASCII_STR(s)                    OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
+#define ASCII_STR(s)					OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 
-#define SIGN_STARTVARIABLE              ASCII_STR("$(")
-#define SIGN_ENDVARIABLE                ASCII_STR(")")
+#define	SIGN_STARTVARIABLE				ASCII_STR("$(")
+#define	SIGN_ENDVARIABLE				ASCII_STR(")")
 
 // Supported variables by the old SvtPathOptions implementation
-#define SUBSTITUTE_INST                 "$(inst)"
-#define SUBSTITUTE_PROG                 "$(prog)"
-#define SUBSTITUTE_USER                 "$(user)"
+#define	SUBSTITUTE_INST					"$(inst)"
+#define	SUBSTITUTE_PROG					"$(prog)"
+#define	SUBSTITUTE_USER					"$(user)"
 #define SUBSTITUTE_INSTPATH             "$(instpath)"
 #define SUBSTITUTE_PROGPATH             "$(progpath)"
 #define SUBSTITUTE_USERPATH             "$(userpath)"
-#define SUBSTITUTE_INSTURL              "$(insturl)"
-#define SUBSTITUTE_PROGURL              "$(progurl)"
-#define SUBSTITUTE_USERURL              "$(userurl)"
-#define SUBSTITUTE_PATH                 "$(path)"
-//#define   SUBSTITUTE_LANG                 "$(lang)"
-#define SUBSTITUTE_LANGID               "$(langid)"
-#define SUBSTITUTE_VLANG                "$(vlang)"
-#define SUBSTITUTE_WORKDIRURL           "$(workdirurl)"
+#define	SUBSTITUTE_INSTURL				"$(insturl)"
+#define	SUBSTITUTE_PROGURL				"$(progurl)"
+#define	SUBSTITUTE_USERURL				"$(userurl)"
+#define	SUBSTITUTE_PATH					"$(path)"
+//#define	SUBSTITUTE_LANG					"$(lang)"
+#define	SUBSTITUTE_LANGID				"$(langid)"
+#define	SUBSTITUTE_VLANG				"$(vlang)"
+#define	SUBSTITUTE_WORKDIRURL			"$(workdirurl)"
 
-#define STRPOS_NOTFOUND                 -1
+#define STRPOS_NOTFOUND					-1
 
 struct OUStringHashCode
 {
@@ -106,7 +106,7 @@ enum VarNameProperty
     VAR_NEEDS_FILEURL
 };
 
-class NameToHandleMap : public ::std::hash_map< ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > >
+class NameToHandleMap : public ::std::hash_map<	::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > >
 {
     public:
         inline void free() { NameToHandleMap().swap( *this ); }
@@ -130,14 +130,14 @@ class SvtPathOptions_Impl
 {
     private:
         // Local variables to return const references
-        std::vector< String >               m_aPathArray;
-        Reference< XFastPropertySet >       m_xPathSettings;
-        Reference< XStringSubstitution >    m_xSubstVariables;
+        std::vector< String >				m_aPathArray;
+        Reference< XFastPropertySet >		m_xPathSettings;
+        Reference< XStringSubstitution >	m_xSubstVariables;
         mutable EnumToHandleMap             m_aMapEnumToPropHandle;
-        VarNameToEnumMap                    m_aMapVarNamesToEnum;
+        VarNameToEnumMap					m_aMapVarNamesToEnum;
 
-        ::com::sun::star::lang::Locale                      m_aLocale;
-        String                              m_aEmptyString;
+        ::com::sun::star::lang::Locale 						m_aLocale;
+        String								m_aEmptyString;
         mutable ::osl::Mutex                m_aMutex;
 
     public:
@@ -146,60 +146,60 @@ class SvtPathOptions_Impl
         // get the pathes, not const because of using a mutex
         const String&   GetPath( SvtPathOptions::Pathes );
         const String&   GetAddinPath() { return GetPath( SvtPathOptions::PATH_ADDIN ); }
-        const String&   GetAutoCorrectPath() { return GetPath( SvtPathOptions::PATH_AUTOCORRECT ); }
-        const String&   GetAutoTextPath() { return GetPath( SvtPathOptions::PATH_AUTOTEXT ); }
-        const String&   GetBackupPath() { return GetPath( SvtPathOptions::PATH_BACKUP ); }
-        const String&   GetBasicPath() { return GetPath( SvtPathOptions::PATH_BASIC ); }
-        const String&   GetBitmapPath() { return GetPath( SvtPathOptions::PATH_BITMAP ); }
-        const String&   GetConfigPath() { return GetPath( SvtPathOptions::PATH_CONFIG ); }
-        const String&   GetDictionaryPath() { return GetPath( SvtPathOptions::PATH_DICTIONARY ); }
-        const String&   GetFavoritesPath() { return GetPath( SvtPathOptions::PATH_FAVORITES ); }
-        const String&   GetFilterPath() { return GetPath( SvtPathOptions::PATH_FILTER ); }
-        const String&   GetGalleryPath() { return GetPath( SvtPathOptions::PATH_GALLERY ); }
-        const String&   GetGraphicPath() { return GetPath( SvtPathOptions::PATH_GRAPHIC ); }
-        const String&   GetHelpPath() { return GetPath( SvtPathOptions::PATH_HELP ); }
-        const String&   GetLinguisticPath() { return GetPath( SvtPathOptions::PATH_LINGUISTIC ); }
-        const String&   GetModulePath() { return GetPath( SvtPathOptions::PATH_MODULE ); }
-        const String&   GetPalettePath() { return GetPath( SvtPathOptions::PATH_PALETTE ); }
-        const String&   GetPluginPath() { return GetPath( SvtPathOptions::PATH_PLUGIN ); }
-        const String&   GetStoragePath() { return GetPath( SvtPathOptions::PATH_STORAGE ); }
-        const String&   GetTempPath() { return GetPath( SvtPathOptions::PATH_TEMP ); }
-        const String&   GetTemplatePath() { return GetPath( SvtPathOptions::PATH_TEMPLATE ); }
-        const String&   GetUserConfigPath() { return GetPath( SvtPathOptions::PATH_USERCONFIG ); }
-        const String&   GetWorkPath() { return GetPath( SvtPathOptions::PATH_WORK ); }
+        const String&	GetAutoCorrectPath() { return GetPath( SvtPathOptions::PATH_AUTOCORRECT ); }
+        const String&	GetAutoTextPath() { return GetPath( SvtPathOptions::PATH_AUTOTEXT ); }
+        const String&	GetBackupPath() { return GetPath( SvtPathOptions::PATH_BACKUP ); }
+        const String&	GetBasicPath() { return GetPath( SvtPathOptions::PATH_BASIC ); }
+        const String&	GetBitmapPath() { return GetPath( SvtPathOptions::PATH_BITMAP ); }
+        const String&	GetConfigPath() { return GetPath( SvtPathOptions::PATH_CONFIG ); }
+        const String&	GetDictionaryPath() { return GetPath( SvtPathOptions::PATH_DICTIONARY ); }
+        const String&	GetFavoritesPath() { return GetPath( SvtPathOptions::PATH_FAVORITES ); }
+        const String&	GetFilterPath() { return GetPath( SvtPathOptions::PATH_FILTER ); }
+        const String&	GetGalleryPath() { return GetPath( SvtPathOptions::PATH_GALLERY ); }
+        const String&	GetGraphicPath() { return GetPath( SvtPathOptions::PATH_GRAPHIC ); }
+        const String&	GetHelpPath() { return GetPath( SvtPathOptions::PATH_HELP ); }
+        const String&	GetLinguisticPath() { return GetPath( SvtPathOptions::PATH_LINGUISTIC ); }
+        const String&	GetModulePath() { return GetPath( SvtPathOptions::PATH_MODULE ); }
+        const String&	GetPalettePath() { return GetPath( SvtPathOptions::PATH_PALETTE ); }
+        const String&	GetPluginPath() { return GetPath( SvtPathOptions::PATH_PLUGIN ); }
+        const String&	GetStoragePath() { return GetPath( SvtPathOptions::PATH_STORAGE ); }
+        const String&	GetTempPath() { return GetPath( SvtPathOptions::PATH_TEMP ); }
+        const String&	GetTemplatePath() { return GetPath( SvtPathOptions::PATH_TEMPLATE ); }
+        const String&	GetUserConfigPath() { return GetPath( SvtPathOptions::PATH_USERCONFIG ); }
+        const String&	GetWorkPath() { return GetPath( SvtPathOptions::PATH_WORK ); }
         const String&   GetUIConfigPath() { return GetPath( SvtPathOptions::PATH_UICONFIG ); }
         const String&   GetFingerprintPath() { return GetPath( SvtPathOptions::PATH_FINGERPRINT ); }
 
         // set the pathes
         void            SetPath( SvtPathOptions::Pathes, const String& rNewPath );
         void            SetAddinPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_ADDIN, rPath ); }
-        void            SetAutoCorrectPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOCORRECT, rPath ); }
-        void            SetAutoTextPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOTEXT, rPath ); }
-        void            SetBackupPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_BACKUP, rPath ); }
-        void            SetBasicPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_BASIC, rPath ); }
-        void            SetBitmapPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_BITMAP, rPath ); }
-        void            SetConfigPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_CONFIG, rPath ); }
-        void            SetDictionaryPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_DICTIONARY, rPath ); }
-        void            SetFavoritesPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_FAVORITES, rPath ); }
-        void            SetFilterPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_FILTER, rPath ); }
-        void            SetGalleryPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_GALLERY, rPath ); }
-        void            SetGraphicPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_GRAPHIC, rPath ); }
-        void            SetHelpPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_HELP, rPath ); }
-        void            SetLinguisticPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_LINGUISTIC, rPath ); }
-        void            SetModulePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_MODULE, rPath ); }
-        void            SetPalettePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_PALETTE, rPath ); }
-        void            SetPluginPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_PLUGIN, rPath ); }
-        void            SetStoragePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_STORAGE, rPath ); }
-        void            SetTempPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_TEMP, rPath ); }
-        void            SetTemplatePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_TEMPLATE, rPath ); }
-        void            SetUserConfigPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_USERCONFIG, rPath ); }
-        void            SetWorkPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_WORK, rPath ); }
+        void			SetAutoCorrectPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOCORRECT, rPath ); }
+        void			SetAutoTextPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOTEXT, rPath ); }
+        void			SetBackupPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_BACKUP, rPath ); }
+        void			SetBasicPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_BASIC, rPath ); }
+        void			SetBitmapPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_BITMAP, rPath ); }
+        void			SetConfigPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_CONFIG, rPath ); }
+        void			SetDictionaryPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_DICTIONARY, rPath ); }
+        void			SetFavoritesPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_FAVORITES, rPath ); }
+        void			SetFilterPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_FILTER, rPath ); }
+        void			SetGalleryPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_GALLERY, rPath ); }
+        void			SetGraphicPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_GRAPHIC, rPath ); }
+        void			SetHelpPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_HELP, rPath ); }
+        void			SetLinguisticPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_LINGUISTIC, rPath ); }
+        void			SetModulePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_MODULE, rPath ); }
+        void			SetPalettePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_PALETTE, rPath ); }
+        void			SetPluginPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_PLUGIN, rPath ); }
+        void			SetStoragePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_STORAGE, rPath ); }
+        void			SetTempPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_TEMP, rPath ); }
+        void			SetTemplatePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_TEMPLATE, rPath ); }
+        void			SetUserConfigPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_USERCONFIG, rPath ); }
+        void			SetWorkPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_WORK, rPath ); }
 
-        rtl::OUString   SubstVar( const rtl::OUString& rVar );
-        rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
-        rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
+        rtl::OUString	SubstVar( const rtl::OUString& rVar );
+        rtl::OUString	SubstituteAndConvert( const rtl::OUString& rPath );
+        rtl::OUString	UsePathVariables( const rtl::OUString& rPath );
 
-        ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
+        ::com::sun::star::lang::Locale	GetLocale() const { return m_aLocale; }
 
         BOOL            IsPathReadonly(SvtPathOptions::Pathes ePath)const;
 };
@@ -212,50 +212,50 @@ static sal_Int32 nRefCount = 0;
 // functions -------------------------------------------------------------
 struct PropertyStruct
 {
-    const char*             pPropName;  // The ascii name of the Office path
-    SvtPathOptions::Pathes  ePath;      // The enum value used by SvtPathOptions
+    const char*				pPropName;	// The ascii name of the Office path
+    SvtPathOptions::Pathes	ePath;		// The enum value used by SvtPathOptions
 };
 
 struct VarNameAttribute
 {
-    const char*             pVarName;       // The name of the path variable
-    VarNameProperty         eVarProperty;   // Which return value is needed by this path variable
+    const char*				pVarName;		// The name of the path variable
+    VarNameProperty			eVarProperty;	// Which return value is needed by this path variable
 };
 
 static PropertyStruct aPropNames[] =
 {
-    { "Addin",          SvtPathOptions::PATH_ADDIN          },
-    { "AutoCorrect",    SvtPathOptions::PATH_AUTOCORRECT    },
-    { "AutoText",       SvtPathOptions::PATH_AUTOTEXT       },
-    { "Backup",         SvtPathOptions::PATH_BACKUP         },
-    { "Basic",          SvtPathOptions::PATH_BASIC          },
-    { "Bitmap",         SvtPathOptions::PATH_BITMAP         },
-    { "Config",         SvtPathOptions::PATH_CONFIG         },
-    { "Dictionary",     SvtPathOptions::PATH_DICTIONARY     },
-    { "Favorite",       SvtPathOptions::PATH_FAVORITES      },
-    { "Filter",         SvtPathOptions::PATH_FILTER         },
-    { "Gallery",        SvtPathOptions::PATH_GALLERY        },
-    { "Graphic",        SvtPathOptions::PATH_GRAPHIC        },
-    { "Help",           SvtPathOptions::PATH_HELP           },
-    { "Linguistic",     SvtPathOptions::PATH_LINGUISTIC     },
-    { "Module",         SvtPathOptions::PATH_MODULE         },
-    { "Palette",        SvtPathOptions::PATH_PALETTE        },
-    { "Plugin",         SvtPathOptions::PATH_PLUGIN         },
-    { "Storage",        SvtPathOptions::PATH_STORAGE        },
-    { "Temp",           SvtPathOptions::PATH_TEMP           },
-    { "Template",       SvtPathOptions::PATH_TEMPLATE       },
-    { "UserConfig",     SvtPathOptions::PATH_USERCONFIG     },
-    { "Work",           SvtPathOptions::PATH_WORK           },
-    { "UIConfig",       SvtPathOptions::PATH_UICONFIG       },
-    { "Fingerprint",    SvtPathOptions::PATH_FINGERPRINT    }
+    { "Addin",			SvtPathOptions::PATH_ADDIN			},
+    { "AutoCorrect",	SvtPathOptions::PATH_AUTOCORRECT	},
+    { "AutoText",		SvtPathOptions::PATH_AUTOTEXT		},
+    { "Backup",			SvtPathOptions::PATH_BACKUP			},
+    { "Basic",			SvtPathOptions::PATH_BASIC			},
+    { "Bitmap",			SvtPathOptions::PATH_BITMAP			},
+    { "Config",			SvtPathOptions::PATH_CONFIG			},
+    { "Dictionary",		SvtPathOptions::PATH_DICTIONARY		},
+    { "Favorite",		SvtPathOptions::PATH_FAVORITES		},
+    { "Filter",			SvtPathOptions::PATH_FILTER			},
+    { "Gallery",		SvtPathOptions::PATH_GALLERY		},
+    { "Graphic",		SvtPathOptions::PATH_GRAPHIC		},
+    { "Help",			SvtPathOptions::PATH_HELP			},
+    { "Linguistic",		SvtPathOptions::PATH_LINGUISTIC		},
+    { "Module",			SvtPathOptions::PATH_MODULE			},
+    { "Palette",		SvtPathOptions::PATH_PALETTE		},
+    { "Plugin",			SvtPathOptions::PATH_PLUGIN			},
+    { "Storage",		SvtPathOptions::PATH_STORAGE		},
+    { "Temp",			SvtPathOptions::PATH_TEMP			},
+    { "Template",		SvtPathOptions::PATH_TEMPLATE		},
+    { "UserConfig",		SvtPathOptions::PATH_USERCONFIG		},
+    { "Work",           SvtPathOptions::PATH_WORK			},
+    { "UIConfig",       SvtPathOptions::PATH_UICONFIG		},
+    { "Fingerprint",    SvtPathOptions::PATH_FINGERPRINT	}
 };
 
 static VarNameAttribute aVarNameAttribute[] =
 {
-    { SUBSTITUTE_INSTPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(instpath)
-    { SUBSTITUTE_PROGPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(progpath)
-    { SUBSTITUTE_USERPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(userpath)
-    { SUBSTITUTE_PATH,      VAR_NEEDS_SYSTEM_PATH },    // $(path)
+    { SUBSTITUTE_INSTPATH,	VAR_NEEDS_SYSTEM_PATH },	// $(instpath)
+    { SUBSTITUTE_PROGPATH,	VAR_NEEDS_SYSTEM_PATH },	// $(progpath)
+    { SUBSTITUTE_USERPATH,	VAR_NEEDS_SYSTEM_PATH },	// $(userpath)
+    { SUBSTITUTE_PATH,		VAR_NEEDS_SYSTEM_PATH },	// $(path)
 };
 
 // class SvtPathOptions_Impl ---------------------------------------------
@@ -269,12 +269,12 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 
     try
     {
-        OUString    aPathValue;
-        String      aResult;
-        sal_Int32   nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
+        OUString 	aPathValue;
+        String		aResult;
+        sal_Int32	nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
 
         // Substitution is done by the service itself using the substition service
-        Any         a = m_xPathSettings->getFastPropertyValue( nHandle );
+        Any 		a = m_xPathSettings->getFastPropertyValue( nHandle );
         a >>= aPathValue;
         if( ePath == SvtPathOptions::PATH_ADDIN     ||
             ePath == SvtPathOptions::PATH_FILTER    ||
@@ -325,9 +325,9 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Pathes ePath, const String& r
 
     if ( ePath < SvtPathOptions::PATH_COUNT )
     {
-        String      aResult;
-        OUString    aNewValue;
-        Any         a;
+        String 		aResult;
+        OUString	aNewValue;
+        Any			a;
 
         switch ( ePath )
         {
@@ -385,8 +385,8 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
     BOOL bConvertLocal = FALSE;
 
     // Search for first occure of "$(...".
-    sal_Int32 nPosition = aWorkText.indexOf( SIGN_STARTVARIABLE );  // = first position of "$(" in string
-    sal_Int32 nLength   = 0;                                        // = count of letters from "$(" to ")" in string
+    sal_Int32 nPosition	= aWorkText.indexOf( SIGN_STARTVARIABLE );	// = first position of "$(" in string
+    sal_Int32 nLength	= 0;										// = count of letters from "$(" to ")" in string
 
     // Have we found any variable like "$(...)"?
     if ( nPosition != STRPOS_NOTFOUND )
@@ -429,7 +429,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
             if ( nPosition != STRPOS_NOTFOUND )
             {
                 // Yes; Get length of found variable. If no ")" was found - nLength must set to 0!
-                nLength = 0;
+                nLength	= 0;
                 sal_Int32 nEndPosition = aWorkText.indexOf( SIGN_ENDVARIABLE, nPosition );
                 if ( nEndPosition != STRPOS_NOTFOUND )
                     nLength = nEndPosition - nPosition + 1;
@@ -506,8 +506,8 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
 
         if ( pIter != aTempHashMap.end() )
         {
-            sal_Int32 nHandle   = pIter->second;
-            sal_Int32 nEnum     = aPropNames[i].ePath;
+            sal_Int32 nHandle	= pIter->second;
+            sal_Int32 nEnum		= aPropNames[i].ePath;
             m_aMapEnumToPropHandle.insert( EnumToHandleMap::value_type( nEnum, nHandle ));
         }
     }
@@ -948,30 +948,30 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
             String aPath;
             switch ( ePath )
             {
-                case PATH_ADDIN:        aPath = GetAddinPath();         break;
-                case PATH_AUTOCORRECT:  aPath = GetAutoCorrectPath();   break;
-                case PATH_AUTOTEXT:     aPath = GetAutoTextPath();      break;
-                case PATH_BACKUP:       aPath = GetBackupPath();        break;
-                case PATH_BASIC:        aPath = GetBasicPath();         break;
-                case PATH_BITMAP:       aPath = GetBitmapPath();        break;
-                case PATH_CONFIG:       aPath = GetConfigPath();        break;
-                case PATH_DICTIONARY:   aPath = GetDictionaryPath();    break;
-                case PATH_FAVORITES:    aPath = GetFavoritesPath();     break;
-                case PATH_FILTER:       aPath = GetFilterPath();        break;
-                case PATH_GALLERY:      aPath = GetGalleryPath();       break;
-                case PATH_GRAPHIC:      aPath = GetGraphicPath();       break;
-                case PATH_HELP:         aPath = GetHelpPath();          break;
-                case PATH_LINGUISTIC:   aPath = GetLinguisticPath();    break;
-                case PATH_MODULE:       aPath = GetModulePath();        break;
-                case PATH_PALETTE:      aPath = GetPalettePath();       break;
-                case PATH_PLUGIN:       aPath = GetPluginPath();        break;
-                case PATH_STORAGE:      aPath = GetStoragePath();       break;
-                case PATH_TEMP:         aPath = GetTempPath();          break;
-                case PATH_TEMPLATE:     aPath = GetTemplatePath();      break;
-                case PATH_WORK:         aPath = GetWorkPath();          break;
+                case PATH_ADDIN:		aPath = GetAddinPath();			break;
+                case PATH_AUTOCORRECT:	aPath = GetAutoCorrectPath();	break;
+                case PATH_AUTOTEXT:		aPath = GetAutoTextPath();		break;
+                case PATH_BACKUP:		aPath = GetBackupPath();		break;
+                case PATH_BASIC:		aPath = GetBasicPath();			break;
+                case PATH_BITMAP:		aPath = GetBitmapPath();		break;
+                case PATH_CONFIG:		aPath = GetConfigPath();		break;
+                case PATH_DICTIONARY:	aPath = GetDictionaryPath();	break;
+                case PATH_FAVORITES:	aPath = GetFavoritesPath();		break;
+                case PATH_FILTER:		aPath = GetFilterPath();		break;
+                case PATH_GALLERY:		aPath = GetGalleryPath();		break;
+                case PATH_GRAPHIC:		aPath = GetGraphicPath();		break;
+                case PATH_HELP:			aPath = GetHelpPath();			break;
+                case PATH_LINGUISTIC:	aPath = GetLinguisticPath();	break;
+                case PATH_MODULE:		aPath = GetModulePath();		break;
+                case PATH_PALETTE:		aPath = GetPalettePath();		break;
+                case PATH_PLUGIN:		aPath = GetPluginPath();		break;
+                case PATH_STORAGE:		aPath = GetStoragePath();		break;
+                case PATH_TEMP:			aPath = GetTempPath();			break;
+                case PATH_TEMPLATE:		aPath = GetTemplatePath();		break;
+                case PATH_WORK:			aPath = GetWorkPath();			break;
                 case PATH_UICONFIG:     aPath = GetUIConfigPath();      break;
                 case PATH_FINGERPRINT:  aPath = GetFingerprintPath();    break;
-                case PATH_USERCONFIG:/*-Wall???*/           break;
+                case PATH_USERCONFIG:/*-Wall???*/			break;
                 case PATH_COUNT: /*-Wall???*/ break;
             }
 
@@ -1039,14 +1039,14 @@ void SvtPathOptions::SetPath( SvtPathOptions::Pathes ePath, const String& rNewPa
 
 class PathService : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XConfigManager, ::com::sun::star::lang::XServiceInfo >
 {
-    virtual ::rtl::OUString SAL_CALL    getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL           supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString	SAL_CALL	getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL			supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
                                         getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL    substituteVariables( const ::rtl::OUString& sText ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               addPropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               removePropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               flush(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL	substituteVariables( const ::rtl::OUString& sText ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL				addPropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL				removePropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL				flush(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 // class PathService -----------------------------------------------------

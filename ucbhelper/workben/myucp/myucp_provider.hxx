@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@ namespace myucp {
 // create instances of the provider. Prefix with reversed company domain name.
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME \
                 "com.sun.star.ucb.MyContentProvider"
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH  34
+#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH	34
 
 // URL scheme. This is the scheme the provider will be able to create
 // contents for. The UCB will select the provider ( i.e. in order to create
 // contents ) according to this scheme.
 #define MYUCP_URL_SCHEME \
                 "vnd.sun.star.myucp"
-#define MYUCP_URL_SCHEME_LENGTH 18
+#define MYUCP_URL_SCHEME_LENGTH	18
 
 // UCB Content Type.
 #define MYUCP_CONTENT_TYPE \

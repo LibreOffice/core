@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,15 +50,15 @@ class Image;
 
 class SalYieldMutex : public vcl::SolarMutexObject
 {
-    ULONG                                       mnCount;
+    ULONG										mnCount;
     oslThreadIdentifier                         mnThreadId;
 
 public:
                                                 SalYieldMutex();
-    virtual void                                acquire();
-    virtual void                                release();
-    virtual sal_Bool                            tryToAcquire();
-    ULONG                                       GetAcquireCount() const { return mnCount; }
+    virtual void								acquire();
+    virtual void								release();
+    virtual sal_Bool							tryToAcquire();
+    ULONG										GetAcquireCount() const { return mnCount; }
     oslThreadIdentifier                         GetThreadId() const { return mnThreadId; }
 };
 
@@ -85,14 +85,14 @@ class AquaSalInstance : public SalInstance
         AquaSalFrame*   mpFrame;
         void*           mpData;
         USHORT          mnType;
-
+        
         SalUserEvent( AquaSalFrame* pFrame, void* pData, USHORT nType ) :
             mpFrame( pFrame ), mpData( pData ), mnType( nType )
         {}
     };
-
+    
 public:
-    SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
+    SalYieldMutex*		                    mpSalYieldMutex;		// Sal-Yield-Mutex
     rtl::OUString                           maDefaultPrinter;
     oslThreadIdentifier                     maMainThread;
     bool                                    mbWaitingYield;
@@ -103,47 +103,47 @@ public:
 
     typedef std::list<const ApplicationEvent*> AppEventList;
     static AppEventList aAppEventList;
-
+    
 public:
     AquaSalInstance();
     virtual ~AquaSalInstance();
 
     virtual SalSystem*      CreateSystem();
     virtual void            DestroySystem(SalSystem*);
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, ULONG nStyle );
-    virtual void            DestroyFrame( SalFrame* pFrame );
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
-    virtual void            DestroyObject( SalObject* pObject );
-    virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
+    virtual SalFrame*      	CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
+    virtual SalFrame*      	CreateFrame( SalFrame* pParent, ULONG nStyle );
+    virtual void			DestroyFrame( SalFrame* pFrame );
+    virtual SalObject*		CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
+    virtual void			DestroyObject( SalObject* pObject );
+    virtual SalVirtualDevice*	CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
                                                      USHORT nBitCount, const SystemGraphicsData *pData );
-    virtual void            DestroyVirtualDevice( SalVirtualDevice* pDevice );
+    virtual void			DestroyVirtualDevice( SalVirtualDevice* pDevice );
 
-    virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+    virtual SalInfoPrinter*	CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData );
-    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter );
-    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter );
-    virtual void            DestroyPrinter( SalPrinter* pPrinter );
-    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
-    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
-    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
+    virtual void			DestroyInfoPrinter( SalInfoPrinter* pPrinter );
+    virtual SalPrinter*		CreatePrinter( SalInfoPrinter* pInfoPrinter );
+    virtual void			DestroyPrinter( SalPrinter* pPrinter );
+    virtual void			GetPrinterQueueInfo( ImplPrnQueueList* pList );
+    virtual void			GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
+    virtual void			DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
     virtual String             GetDefaultPrinter();
-    virtual SalTimer*           CreateSalTimer();
-    virtual SalI18NImeStatus*   CreateI18NImeStatus();
-    virtual SalSystem*          CreateSalSystem();
-    virtual SalBitmap*          CreateSalBitmap();
+    virtual SalTimer*			CreateSalTimer();
+    virtual SalI18NImeStatus*	CreateI18NImeStatus();
+    virtual SalSystem*			CreateSalSystem();
+    virtual SalBitmap*			CreateSalBitmap();
     virtual osl::SolarMutex*    GetYieldMutex();
-    virtual ULONG               ReleaseYieldMutex();
-    virtual void                AcquireYieldMutex( ULONG nCount );
-    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual bool                AnyInput( USHORT nType );
-    virtual SalMenu*            CreateMenu( BOOL bMenuBar );
-    virtual void                DestroyMenu( SalMenu* );
-    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData );
-    virtual void                DestroyMenuItem( SalMenuItem* );
+    virtual ULONG				ReleaseYieldMutex();
+    virtual void				AcquireYieldMutex( ULONG nCount );
+    virtual void				Yield( bool bWait, bool bHandleAllCurrentEvents );
+    virtual bool				AnyInput( USHORT nType );
+    virtual SalMenu*			CreateMenu( BOOL bMenuBar );
+    virtual void				DestroyMenu( SalMenu* );
+    virtual SalMenuItem*		CreateMenuItem( const SalItemParams* pItemData );
+    virtual void				DestroyMenuItem( SalMenuItem* );
     virtual SalSession*         CreateSalSession();
-    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
+    virtual void*				GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
     virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
     virtual void            SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
     virtual void            SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
@@ -155,31 +155,31 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
 
     static void handleAppDefinedEvent( NSEvent* pEvent );
-
+    
     // check whether a particular string is passed on the command line
     // this is needed to avoid duplicate open events through a) command line and b) NSApp's openFile
     static bool isOnCommandLine( const rtl::OUString& );
-
+    
     void wakeupYield();
 
  public:
     friend class AquaSalFrame;
-
+    
     void PostUserEvent( AquaSalFrame* pFrame, USHORT nType, void* pData );
     void delayedSettingsChanged( bool bInvalidate );
-
+    
     bool isNSAppThread() const;
-
+    
     void startedPrintJob() { mnActivePrintJobs++; }
     void endedPrintJob() { mnActivePrintJobs--; }
-
+    
     // event subtypes for NSApplicationDefined events
     static const short AppExecuteSVMain   = 0x7fff;
     static const short AppEndLoopEvent    = 1;
     static const short AppStartTimerEvent = 10;
     static const short AppleRemoteEvent   = 15;
     static const short YieldWakeupEvent   = 20;
-
+    
     static NSMenu* GetDynamicDockMenu();
 };
 

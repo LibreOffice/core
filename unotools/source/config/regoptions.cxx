@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,20 +57,20 @@ namespace utl
     static sal_Int32 lcl_convertString2Date( const ::rtl::OUString& _rStringRep )
     {
         sal_Int32 nDateIntRep = 0;
-        if ( _rStringRep.getLength() == 2 + 1 + 2 + 1 + 4 ) // DD.MM.YYYY
+        if ( _rStringRep.getLength() == 2 + 1 + 2 + 1 + 4 )	// DD.MM.YYYY
         {
             // validate the string
             sal_Bool bValid = sal_True;
 
             const sal_Unicode* pStringRep = _rStringRep.getStr();
             sal_Int32 nLen = _rStringRep.getLength();
-            for (   sal_Int32 nPos = 0;
+            for	(	sal_Int32 nPos = 0;
                     bValid && ( nPos < nLen );
                     ++nPos, ++pStringRep
                 )
             {
                 if ( ( 2 == nPos ) || ( 5 == nPos ) )
-                    bValid = '.' == *pStringRep;        // the number separators
+                    bValid = '.' == *pStringRep;		// the number separators
                 else
                     bValid = ( *pStringRep >= '0' ) && ( *pStringRep <= '9' );
             }
@@ -79,9 +79,9 @@ namespace utl
             if ( bValid )
             {
                 Date aDate;
-                aDate.SetDay    ( (USHORT)_rStringRep.copy( 0, 2 ).toInt32( ) );
-                aDate.SetMonth  ( (USHORT)_rStringRep.copy( 3, 2 ).toInt32( ) );
-                aDate.SetYear   ( (USHORT)_rStringRep.copy( 6, 4 ).toInt32( ) );
+                aDate.SetDay	( (USHORT)_rStringRep.copy( 0, 2 ).toInt32( ) );
+                aDate.SetMonth	( (USHORT)_rStringRep.copy( 3, 2 ).toInt32( ) );
+                aDate.SetYear	( (USHORT)_rStringRep.copy( 6, 4 ).toInt32( ) );
                 nDateIntRep = aDate.GetDate();
             }
         }
@@ -96,7 +96,7 @@ namespace utl
         ::rtl::OUString sLeanToken = ::rtl::OUString::valueOf( _nToken );
         // check length
         if ( sLeanToken.getLength() < _nDigits )
-        {   // fill
+        {	// fill
             OSL_ENSURE( _nDigits <= 4, "lcl_fillToken: invalid digit number!" );
             _rToken = ::rtl::OUString( "0000", _nDigits - sLeanToken.getLength(), RTL_TEXTENCODING_ASCII_US );
             _rToken += sLeanToken;
@@ -136,11 +136,11 @@ namespace utl
     }
 
     //--------------------------------------------------------------------
-    #define DECLARE_STATIC_LAZY_USTRING( name ) \
-    static const ::rtl::OUString& lcl_get##name##Name() \
-    {   \
-        static const ::rtl::OUString sName = ::rtl::OUString::createFromAscii( #name ); \
-        return sName;   \
+    #define DECLARE_STATIC_LAZY_USTRING( name )	\
+    static const ::rtl::OUString& lcl_get##name##Name()	\
+    {	\
+        static const ::rtl::OUString sName = ::rtl::OUString::createFromAscii( #name );	\
+        return sName;	\
     }
 
     DECLARE_STATIC_LAZY_USTRING( ReminderDate );
@@ -154,47 +154,47 @@ namespace utl
     class RegOptionsImpl
     {
     private:
-        OConfigurationTreeRoot  m_aRegistrationNode;        // the configuration node we need to access our persistent data
+        OConfigurationTreeRoot	m_aRegistrationNode;		// the configuration node we need to access our persistent data
 
-        String                  m_sRegistrationURL;         // the URL to use when doing an online registration
-        Date                    m_aReminderDate;            // the reminder date as found in the configuration
-        sal_Int32               m_nDialogCounter;           // the dialog counter - see getDialogPermission
-        sal_Bool                m_bShowMenuItem;            // the flag indicating if the registration menu item is allowed
+        String					m_sRegistrationURL;			// the URL to use when doing an online registration
+        Date					m_aReminderDate;			// the reminder date as found in the configuration
+        sal_Int32				m_nDialogCounter;			// the dialog counter - see getDialogPermission
+        sal_Bool				m_bShowMenuItem;			// the flag indicating if the registration menu item is allowed
 
-        static  RegOptionsImpl* s_pSingleInstance;          // the one and only instance of this class
-        static  sal_Int32       s_nInstanceCount;           // reference counter for the instances
-        static  sal_Bool        s_bThisSessionDone;         // the flag indicating if for this session, everything beeing relevant has already been done
+        static	RegOptionsImpl*	s_pSingleInstance;			// the one and only instance of this class
+        static	sal_Int32		s_nInstanceCount;			// reference counter for the instances
+        static	sal_Bool		s_bThisSessionDone;			// the flag indicating if for this session, everything beeing relevant has already been done
 
     private:
         RegOptionsImpl( );
 
-        static  ::osl::Mutex&   getStaticMutex();           // get the mutex used to protect the static members of this class
+        static	::osl::Mutex&	getStaticMutex();			// get the mutex used to protect the static members of this class
 
-        void                    commit( );
+        void					commit( );
         sal_Int32               getBuildId() const;
 
     private:
-        RegOptions::DialogPermission    implGetDialogPermission( ) const;
+        RegOptions::DialogPermission	implGetDialogPermission( ) const;
 
     public:
-        static RegOptionsImpl*  registerClient( );
-        static void             revokeClient( );
+        static RegOptionsImpl*	registerClient( );
+        static void				revokeClient( );
 
-        inline sal_Bool         hasURL( ) const             { return ( 0 != m_sRegistrationURL.Len() ); }
-        inline sal_Bool         allowMenu( ) const          { return hasURL() && m_bShowMenuItem; }
-        inline String           getRegistrationURL( ) const { return m_sRegistrationURL; }
+        inline sal_Bool			hasURL( ) const				{ return ( 0 != m_sRegistrationURL.Len() ); }
+        inline sal_Bool			allowMenu( ) const			{ return hasURL() && m_bShowMenuItem; }
+        inline String			getRegistrationURL( ) const	{ return m_sRegistrationURL; }
 
-        RegOptions::DialogPermission    getDialogPermission( ) const;
-        void                            markSessionDone( );
+        RegOptions::DialogPermission	getDialogPermission( ) const;
+        void							markSessionDone( );
         void                            activateReminder( sal_Int32 _nDaysFromNow );
         void                            removeReminder();
         bool                            hasReminderDateCome() const;
     };
 
     //--------------------------------------------------------------------
-    RegOptionsImpl* RegOptionsImpl::s_pSingleInstance = NULL;
-    sal_Bool        RegOptionsImpl::s_bThisSessionDone = sal_False;
-    sal_Int32       RegOptionsImpl::s_nInstanceCount = 0;
+    RegOptionsImpl*	RegOptionsImpl::s_pSingleInstance = NULL;
+    sal_Bool		RegOptionsImpl::s_bThisSessionDone = sal_False;
+    sal_Int32		RegOptionsImpl::s_nInstanceCount = 0;
 
     //--------------------------------------------------------------------
     ::osl::Mutex& RegOptionsImpl::getStaticMutex()
@@ -253,8 +253,8 @@ namespace utl
 
     //--------------------------------------------------------------------
     RegOptionsImpl::RegOptionsImpl( )
-        :m_nDialogCounter   ( 0 )
-        ,m_bShowMenuItem    ( sal_False )
+        :m_nDialogCounter	( 0 )
+        ,m_bShowMenuItem	( sal_False )
     {
         // create the config node for all our registration information
         m_aRegistrationNode = OConfigurationTreeRoot::createWithServiceFactory(
@@ -298,7 +298,7 @@ namespace utl
             if ( 1 == m_nDialogCounter )
             {
                 if ( m_aReminderDate.IsValid( ) )
-                {   // valid reminder date
+                {	// valid reminder date
                     // assume remind later
                     eResult = RegOptions::dpRemindLater;
                     // and check if we reached the reminder date
@@ -306,16 +306,16 @@ namespace utl
                         eResult = RegOptions::dpThisSession;
                 }
                 else
-                    eResult = RegOptions::dpThisSession;    // execute in this session
+                    eResult = RegOptions::dpThisSession;	// execute in this session
             }
             else
-                eResult = RegOptions::dpNotThisSession;     // first trigger session not reached
+                eResult = RegOptions::dpNotThisSession;		// first trigger session not reached
 
             // a last check ....
-            if  (   ( s_bThisSessionDone )                  // this session is already marked as "done"
-                &&  ( RegOptions::dpThisSession == eResult )// but without this, the state would be "now"
+            if	(	( s_bThisSessionDone )					// this session is already marked as "done"
+                &&	( RegOptions::dpThisSession == eResult )// but without this, the state would be "now"
                 )
-                eResult = RegOptions::dpDisabled;           // -> change state to "disabled"
+                eResult = RegOptions::dpDisabled;			// -> change state to "disabled"
         }
 
         return eResult;
@@ -338,7 +338,7 @@ namespace utl
         OSL_ENSURE( _nDaysFromNow > 0, "RegOptionsImpl::activateReminder: invalid argument!" );
 
         // calc the reminder
-        m_aReminderDate = Date() + _nDaysFromNow;   // today (default ctor) + days
+        m_aReminderDate = Date() + _nDaysFromNow;	// today (default ctor) + days
 
         // remember the date
         m_aRegistrationNode.setNodeValue(
@@ -440,7 +440,7 @@ namespace utl
             s_bThisSessionDone = sal_True;
 
             if ( RegOptions::dpRemindLater == eOldPermission )
-            {   // no action required. If we shall remind later, the counter is already at 1, we should not change this,
+            {	// no action required. If we shall remind later, the counter is already at 1, we should not change this,
                 // as the next smaller number (which is 0 :) means that the dialog would be disabled
                 OSL_ENSURE( 1 == m_nDialogCounter, "RegOptionsImpl::markSessionDone: invalid session counter (1)!" );
             }
@@ -520,7 +520,7 @@ namespace utl
     {
         /// we cache this setting, 'cause it is needed very often
         static sal_Bool bKnowMenuPermission = sal_False;
-        static sal_Bool bAllowMenu          = sal_False;
+        static sal_Bool bAllowMenu			= sal_False;
 
         if ( !bKnowMenuPermission )
         {

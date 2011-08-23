@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <svimpicn.hxx>
 #include <svtools/svlbitm.hxx>
 
-#define ICNVW_BLOCK_ENTRYINS    0x0001
+#define ICNVW_BLOCK_ENTRYINS	0x0001
 
 SvIcnVwDataEntry::SvIcnVwDataEntry()
     : nIcnVwFlags(0),eTextMode(ShowTextDontKnow)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ namespace canvas
             }
         }
     }
-
+    
     //////////////////////////////////////////////////////////////////////////////////
     // SurfaceProxy::setColorBufferDirty
     //////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +129,7 @@ namespace canvas
 
     bool SurfaceProxy::draw( double                         fAlpha,
                              const ::basegfx::B2DPoint&     rPos,
-                             const ::basegfx::B2DRange&     rArea,
+                             const ::basegfx::B2DRange&		rArea,
                              const ::basegfx::B2DHomMatrix& rTransform )
     {
         ::std::for_each( maSurfaceList.begin(),
@@ -154,7 +154,7 @@ namespace canvas
                              const ::basegfx::B2DHomMatrix&   rTransform )
     {
         const ::basegfx::B2DPolygon& rTriangulatedPolygon(
-            ::basegfx::triangulator::triangulate(rClipPoly));
+            ::basegfx::triangulator::triangulate(rClipPoly)); 
 
 #if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
         // dump polygons
@@ -164,7 +164,7 @@ namespace canvas
                        basegfx::tools::exportToSvgD( rClipPoly ),
                        RTL_TEXTENCODING_ASCII_US).getStr(),
                    rtl::OUStringToOString(
-                       basegfx::tools::exportToSvgD(
+                       basegfx::tools::exportToSvgD( 
                            basegfx::B2DPolyPolygon(rTriangulatedPolygon) ),
                        RTL_TEXTENCODING_ASCII_US).getStr() );
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public:
 
 
     // following 4 methods are implemented in collatorImpl.
-    sal_Int32 SAL_CALL loadDefaultCollator( const lang::Locale&,  sal_Int32)
+    sal_Int32 SAL_CALL loadDefaultCollator( const lang::Locale&,  sal_Int32) 
         throw(com::sun::star::uno::RuntimeException) {throw com::sun::star::uno::RuntimeException();}
     void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const rtl::OUString&, const lang::Locale&,
         const com::sun::star::uno::Sequence< sal_Int32 >&) throw(com::sun::star::uno::RuntimeException) {throw com::sun::star::uno::RuntimeException();}

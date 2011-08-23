@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,10 +163,10 @@ namespace comphelper
             //
             // if ( !m_rBHelper.bDisposed )
             // {
-            //   acquire(); // to prevent duplicate dtor calls
+            //   acquire();	// to prevent duplicate dtor calls
             //   dispose();
             // }
-
+            
         m_xInner.clear();
     }
 
@@ -174,9 +174,9 @@ namespace comphelper
     void SAL_CALL OComponentProxyAggregationHelper::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         if ( _rSource.Source == m_xInner )
-        {   // it's our inner context which is dying -> dispose ourself
+        {	// it's our inner context which is dying -> dispose ourself
             if ( !m_rBHelper.bDisposed && !m_rBHelper.bInDispose )
-            {   // (if necessary only, of course)
+            {	// (if necessary only, of course)
                 dispose();
             }
         }
@@ -243,7 +243,7 @@ namespace comphelper
     {
         if ( !rBHelper.bDisposed )
         {
-            acquire();  // to prevent duplicate dtor calls
+            acquire();	// to prevent duplicate dtor calls
             dispose();
         }
     }
@@ -272,7 +272,7 @@ namespace comphelper
 
 
 //.............................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

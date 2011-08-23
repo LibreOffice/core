@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_rsc.hxx"
 /****************** I N C L U D E S **************************************/
 // C and C++ Includes.
-#include <ctype.h>      // isdigit(), isalpha()
+#include <ctype.h>		// isdigit(), isalpha()
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -52,11 +52,11 @@ using namespace rtl;
 
 /*************************************************************************
 |*
-|*    RscTypCont :: RscTypCont
+|*	  RscTypCont :: RscTypCont
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
+|*	  Beschreibung		RES.DOC
+|*	  Ersterstellung	MM 22.03.90
+|*	  Letzte Aenderung	MM 27.06.90
 |*
 *************************************************************************/
 RscTypCont :: RscTypCont( RscError * pErrHdl,
@@ -145,7 +145,7 @@ ByteString RscTypCont::ChangeLanguage( const ByteString& rNewLang )
         aCountry = aLang.getToken( 0, '-', nIndex );
     if( nIndex != -1 )
         aVariant = aLang.copy( nIndex );
-
+    
     bool bAppendEnUsFallback =
         ! (rNewLang.EqualsIgnoreCaseAscii( "en-US" ) ||
            rNewLang.EqualsIgnoreCaseAscii( "x-no-translate" ) );
@@ -159,7 +159,7 @@ ByteString RscTypCont::ChangeLanguage( const ByteString& rNewLang )
     {
         aLangFallbacks.push_back(getLangIdAndShortenLocale( this, aLg, aCountry, aVariant ) );
     } while( aLg.getLength() );
-
+    
     if( bAppendEnUsFallback )
     {
         aLg = "en";
@@ -183,11 +183,11 @@ Atom RscTypCont::AddLanguage( const char* pLang )
 
 /*************************************************************************
 |*
-|*    RscTypCont :: ~RscTypCont
+|*	  RscTypCont :: ~RscTypCont
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
+|*	  Beschreibung		RES.DOC
+|*	  Ersterstellung	MM 22.03.90
+|*	  Letzte Aenderung	MM 27.06.90
 |*
 *************************************************************************/
 void DestroyNode( RscTop * pRscTop, ObjNode * pObjNode ){
@@ -232,7 +232,7 @@ void Pre_dtorTree( RscTop * pRscTop ){
 }
 
 RscTypCont :: ~RscTypCont(){
-    RscTop  *       pRscTmp;
+    RscTop	*		pRscTmp;
     RscSysEntry   * pSysEntry;
 
     // Alle Unterbaeume loeschen
@@ -283,7 +283,7 @@ void RscTypCont::ClearSysNames()
 
 //=======================================================================
 RscTop * RscTypCont::SearchType( Atom nId )
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Sucht eine Basistyp nId;
 */
@@ -291,9 +291,9 @@ RscTop * RscTypCont::SearchType( Atom nId )
     if( nId == InvalidAtom )
         return NULL;
 
-#define ELSE_IF( a )                \
-    else if( a.GetId() == nId ) \
-        return &a;                  \
+#define ELSE_IF( a )				\
+    else if( a.GetId() == nId )	\
+        return &a;					\
 
     if( aBool.GetId() == nId )
         return &aBool;
@@ -329,11 +329,11 @@ RscTop * RscTypCont::SearchType( Atom nId )
 
 /*************************************************************************
 |*
-|*    RscTypCont :: Search
+|*	  RscTypCont :: Search
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
+|*	  Beschreibung		RES.DOC
+|*	  Ersterstellung	MM 22.03.90
+|*	  Letzte Aenderung	MM 27.06.90
 |*
 *************************************************************************/
 RscTop * RscTypCont :: Search( Atom nRT ){
@@ -342,7 +342,7 @@ RscTop * RscTypCont :: Search( Atom nRT ){
 
 CLASS_DATA RscTypCont :: Search( Atom nRT, const RscId & rId ){
     ObjNode *pObjNode;
-    RscTop  *pRscTop;
+    RscTop	*pRscTop;
 
     if( NULL != (pRscTop = Search( nRT )) ){
         if( NULL != (pObjNode = pRscTop->GetObjNode( rId )) ){
@@ -354,16 +354,16 @@ CLASS_DATA RscTypCont :: Search( Atom nRT, const RscId & rId ){
 
 /*************************************************************************
 |*
-|*    RscTypCont :: Delete()
+|*	  RscTypCont :: Delete()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 10.07.91
-|*    Letzte Aenderung  MM 10.07.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 10.07.91
+|*	  Letzte Aenderung	MM 10.07.91
 |*
 *************************************************************************/
 void RscTypCont :: Delete( Atom nRT, const RscId & rId ){
-    ObjNode *   pObjNode;
-    RscTop  *   pRscTop;
+    ObjNode *	pObjNode;
+    RscTop	*	pRscTop;
 
     if( NULL != (pRscTop = Search( nRT )) ){
         if( NULL != (pObjNode = pRscTop->GetObjNode()) ){
@@ -387,18 +387,18 @@ void RscTypCont :: Delete( Atom nRT, const RscId & rId ){
 
 /*************************************************************************
 |*
-|*    RscTypCont :: PutSysName()
+|*	  RscTypCont :: PutSysName()
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
+|*	  Beschreibung		RES.DOC
+|*	  Ersterstellung	MM 22.03.90
+|*	  Letzte Aenderung	MM 27.06.90
 |*
 *************************************************************************/
 sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
                                  sal_uInt32 nConst, sal_uInt32 nId, BOOL bFirst )
 {
-    RscSysEntry *   pSysEntry;
-    BOOL            bId1 = FALSE;
+    RscSysEntry *	pSysEntry;
+    BOOL			bId1 = FALSE;
 
     pSysEntry = aSysLst.First();
     while( pSysEntry )
@@ -435,11 +435,11 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
 
 /*************************************************************************
 |*
-|*    RscTypCont :: WriteInc
+|*	  RscTypCont :: WriteInc
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 21.06.90
-|*    Letzte Aenderung  MM 21.06.90
+|*	  Beschreibung		RES.DOC
+|*	  Ersterstellung	MM 21.06.90
+|*	  Letzte Aenderung	MM 21.06.90
 |*
 *************************************************************************/
 void RscTypCont :: WriteInc( FILE * fOutput, ULONG lFileKey )
@@ -462,8 +462,8 @@ void RscTypCont :: WriteInc( FILE * fOutput, ULONG lFileKey )
     }
     else
     {
-        RscDepend *     pDep;
-        RscFile   *     pFile;
+        RscDepend * 	pDep;
+        RscFile   * 	pFile;
 
         pFName = aFileTab.Get( lFileKey );
         if( pFName )
@@ -489,11 +489,11 @@ void RscTypCont :: WriteInc( FILE * fOutput, ULONG lFileKey )
 
 /*************************************************************************
 |*
-|*    RscTypCont :: Methoden die ueber all Knoten laufen
+|*	  RscTypCont :: Methoden die ueber all Knoten laufen
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 09.12.91
+|*	  Beschreibung		RES.DOC
+|*	  Ersterstellung	MM 22.03.90
+|*	  Letzte Aenderung	MM 09.12.91
 |*
 *************************************************************************/
 
@@ -501,11 +501,11 @@ class RscEnumerateObj
 {
 friend class RscEnumerateRef;
 private:
-    ERRTYPE     aError;     // Enthaelt den ersten Fehler
+    ERRTYPE 	aError; 	// Enthaelt den ersten Fehler
     RscTypCont* pTypCont;
-    FILE *      fOutput;    // AusgabeDatei
-    ULONG       lFileKey;   // Welche src-Datei
-    RscTop *    pClass;
+    FILE *		fOutput;	// AusgabeDatei
+    ULONG		lFileKey;	// Welche src-Datei
+    RscTop *	pClass;
 
     DECL_LINK( CallBackWriteRc, ObjNode * );
     DECL_LINK( CallBackWriteSrc, ObjNode * );
@@ -543,16 +543,16 @@ public:
 
 /*************************************************************************
 |*
-|*    RscEnumerateObj :: CallBackWriteRc
+|*	  RscEnumerateObj :: CallBackWriteRc
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 09.12.91
+|*	  Letzte Aenderung	MM 09.12.91
 |*
 *************************************************************************/
 IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
 {
-    RscWriteRc      aMem( pTypCont->GetByteOrder() );
+    RscWriteRc		aMem( pTypCont->GetByteOrder() );
 
     aError = pClass->WriteRcHeader( RSCINST( pClass, pObjNode->GetRscObj() ),
                                      aMem, pTypCont,
@@ -566,11 +566,11 @@ IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
 
 /*************************************************************************
 |*
-|*    RscEnumerateObj :: CallBackWriteSrc
+|*	  RscEnumerateObj :: CallBackWriteSrc
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 09.12.91
+|*	  Letzte Aenderung	MM 09.12.91
 |*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
@@ -587,11 +587,11 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 
 /*************************************************************************
 |*
-|*    RscEnumerateObj :: CallBackWriteCxx
+|*	  RscEnumerateObj :: CallBackWriteCxx
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 09.12.91
+|*	  Letzte Aenderung	MM 09.12.91
 |*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteCxx, ObjNode *, pObjNode )
@@ -606,11 +606,11 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteCxx, ObjNode *, pObjNode )
 
 /*************************************************************************
 |*
-|*    RscEnumerateObj :: CallBackWriteHxx
+|*	  RscEnumerateObj :: CallBackWriteHxx
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 09.12.91
+|*	  Letzte Aenderung	MM 09.12.91
 |*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteHxx, ObjNode *, pObjNode )
@@ -625,21 +625,21 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteHxx, ObjNode *, pObjNode )
 
 /*************************************************************************
 |*
-|*    RscEnumerateObj :: WriteRcFile
+|*	  RscEnumerateObj :: WriteRcFile
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 09.12.91
+|*	  Letzte Aenderung	MM 09.12.91
 |*
 *************************************************************************/
 void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut ){
     // Definition der Struktur, aus denen die Resource aufgebaut ist
     /*
     struct RSHEADER_TYPE{
-        sal_uInt32          nId;        // Identifier der Resource
-        sal_uInt32          nRT;        // Resource Typ
-        sal_uInt32          nGlobOff;   // Globaler Offset
-        sal_uInt32          nLocalOff;  // Lokaler Offset
+        sal_uInt32			nId;		// Identifier der Resource
+        sal_uInt32			nRT;		// Resource Typ
+        sal_uInt32			nGlobOff;	// Globaler Offset
+        sal_uInt32			nLocalOff;	// Lokaler Offset
     } aHeader;
     */
 
@@ -679,7 +679,7 @@ void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut ){
 class RscEnumerateRef
 {
 private:
-    RscTop *        pRoot;
+    RscTop *		pRoot;
 
     DECL_LINK( CallBackWriteRc, RscTop * );
     DECL_LINK( CallBackWriteSrc, RscTop * );
@@ -695,7 +695,7 @@ public:
             {
                 aEnumObj.pTypCont = pTC;
                 aEnumObj.fOutput  = fOutput;
-                pRoot             = pR;
+                pRoot			  = pR;
             }
     ERRTYPE WriteRc()
     {
@@ -731,13 +731,13 @@ public:
         return aEnumObj.aError;
     }
 
-    void    WriteSyntax()
+    void	WriteSyntax()
             {
                 pRoot->EnumNodes( LINK( this, RscEnumerateRef,
                                         CallBackWriteSyntax ) );
             }
 
-    void    WriteRcCtor()
+    void	WriteRcCtor()
             {
                 pRoot->EnumNodes( LINK( this, RscEnumerateRef,
                                         CallBackWriteRcCtor ) );
@@ -746,11 +746,11 @@ public:
 
 /*************************************************************************
 |*
-|*    RscRscEnumerateRef :: CallBack...
+|*	  RscRscEnumerateRef :: CallBack...
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 09.12.91
+|*	  Letzte Aenderung	MM 09.12.91
 |*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteRc, RscTop *, pRef )
@@ -794,17 +794,17 @@ IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteRcCtor, RscTop *, pRef )
 
 /*************************************************************************
 |*
-|*    RscTypCont :: WriteRc
+|*	  RscTypCont :: WriteRc
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 22.07.91
+|*	  Beschreibung		RES.DOC
+|*	  Ersterstellung	MM 22.03.90
+|*	  Letzte Aenderung	MM 22.07.91
 |*
 *************************************************************************/
 
 ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 {
-    ERRTYPE       aError;
+    ERRTYPE 	  aError;
     RscEnumerateRef aEnumRef( this, pRoot, rContext.fOutput );
 
     aIdTranslator.clear();
@@ -817,23 +817,23 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
     RscWriteRc aMem( nByteOrder );
     aVersion.pClass->WriteRcHeader( aVersion, aMem, this, RscId( RSCVERSION_ID ), 0, TRUE );
     aEnumRef.aEnumObj.WriteRcFile( aMem, rContext.fOutput );
-
+        
     return aError;
 }
 
 /*************************************************************************
 |*
-|*    RscTypCont :: WriteSrc
+|*	  RscTypCont :: WriteSrc
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
+|*	  Beschreibung		RES.DOC
+|*	  Ersterstellung	MM 22.03.90
+|*	  Letzte Aenderung	MM 27.06.90
 |*
 *************************************************************************/
 void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
                              CharSet /*nCharSet*/, BOOL bName )
 {
-    RscFile     *   pFName;
+    RscFile 	*	pFName;
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
 
     unsigned char aUTF8BOM[3] = { 0xef, 0xbb, 0xbf };
@@ -881,11 +881,11 @@ void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
 
 /*************************************************************************
 |*
-|*    RscTypCont :: WriteHxx
+|*	  RscTypCont :: WriteHxx
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.05.91
-|*    Letzte Aenderung  MM 30.05.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 30.05.91
+|*	  Letzte Aenderung	MM 30.05.91
 |*
 *************************************************************************/
 ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, ULONG nFileKey )
@@ -926,11 +926,11 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, ULONG nFileKey )
     fprintf( fOutput, "#include <svtools/svmedit.hxx>\n" );
 
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
-    ERRTYPE         aError;
+    ERRTYPE 		aError;
 
     if( NOFILE_INDEX == nFileKey )
     {
-        RscFile     *   pFName;
+        RscFile 	*	pFName;
 
         pFName = aFileTab.First();
         while( pFName  )
@@ -947,18 +947,18 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, ULONG nFileKey )
 
 /*************************************************************************
 |*
-|*    RscTypCont :: WriteCxx
+|*	  RscTypCont :: WriteCxx
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.05.91
-|*    Letzte Aenderung  MM 30.05.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 30.05.91
+|*	  Letzte Aenderung	MM 30.05.91
 |*
 *************************************************************************/
 ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, ULONG nFileKey,
                               const ByteString & rHxxName )
 {
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
-    ERRTYPE         aError;
+    ERRTYPE 		aError;
     fprintf( fOutput, "#include <string.h>\n" );
     WriteInc( fOutput, nFileKey );
     if( rHxxName.Len() )
@@ -967,7 +967,7 @@ ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, ULONG nFileKey,
 
     if( NOFILE_INDEX == nFileKey )
     {
-        RscFile     *   pFName;
+        RscFile 	*	pFName;
 
         pFName = aFileTab.First();
         while( pFName  )
@@ -984,11 +984,11 @@ ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, ULONG nFileKey,
 
 /*************************************************************************
 |*
-|*    RscTypCont :: WriteSyntax
+|*	  RscTypCont :: WriteSyntax
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.05.91
-|*    Letzte Aenderung  MM 30.05.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 30.05.91
+|*	  Letzte Aenderung	MM 30.05.91
 |*
 *************************************************************************/
 void RscTypCont::WriteSyntax( FILE * fOutput )
@@ -1011,11 +1011,11 @@ void RscTypCont::WriteRcCtor
 
 /*************************************************************************
 |*
-|*    RscTypCont :: Delete()
+|*	  RscTypCont :: Delete()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 09.12.91
+|*	  Letzte Aenderung	MM 09.12.91
 |*
 *************************************************************************/
 class RscDel
@@ -1050,11 +1050,11 @@ void RscTypCont :: Delete( ULONG lFileKey ){
 
 /*************************************************************************
 |*
-|*    RscTypCont :: MakeConsistent()
+|*	  RscTypCont :: MakeConsistent()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 23.09.91
-|*    Letzte Aenderung  MM 23.09.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 23.09.91
+|*	  Letzte Aenderung	MM 23.09.91
 |*
 *************************************************************************/
 BOOL IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop,

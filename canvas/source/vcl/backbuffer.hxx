@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,16 +50,16 @@ namespace vclcanvas
             chosen. When true, the buffer will be monochrome, i.e. one
             bit deep.
          */
-        BackBuffer( const OutputDevice& rRefDevice,
-                    bool                bMonochromeBuffer=false );
-
-        virtual OutputDevice&       getOutDev();
-        virtual const OutputDevice& getOutDev() const;
-
+        BackBuffer( const OutputDevice& rRefDevice, 
+                    bool 				bMonochromeBuffer=false );
+        
+        virtual OutputDevice& 		getOutDev();
+        virtual const OutputDevice&	getOutDev() const;
+        
         void setSize( const ::Size& rNewSize );
-
+        
     private:
-        ::canvas::vcltools::VCLObject<VirtualDevice>    maVDev;
+        ::canvas::vcltools::VCLObject<VirtualDevice>	maVDev;            
     };
 
     typedef ::boost::shared_ptr< BackBuffer > BackBufferSharedPtr;

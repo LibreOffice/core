@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,23 +42,23 @@ public class SdfEntity implements Cloneable{
     private String quickhelptext= new String("");
     private String title        = new String("");
     private String date         = new String("");
-
-    public static int PROJECT_POS       = 0;
-    public static int SOURCE_FILE_POS   = 1;
-    public static int DUMMY1_POS        = 2;
-    public static int RESOURCE_TYPE_POS = 3;
-    public static int GID_POS           = 4;
-    public static int LID_POS           = 5;
-    public static int HELPID_POS        = 6;
-    public static int PLATFORM_POS      = 7;
-    public static int DUMMY2_POS        = 8;
-    public static int LANGID_POS        = 9;
-    public static int TEXT_POS          = 10;
-    public static int HELPTEXT_POS      = 11;
-    public static int QUICKHELPTEXT_POS = 12;
-    public static int TITLE_POS         = 13;
-    public static int DATE_POS          = 14;
-
+    
+    public static int PROJECT_POS 		= 0;
+    public static int SOURCE_FILE_POS	= 1;
+    public static int DUMMY1_POS		= 2;
+    public static int RESOURCE_TYPE_POS	= 3;
+    public static int GID_POS			= 4;
+    public static int LID_POS			= 5;
+    public static int HELPID_POS		= 6;
+    public static int PLATFORM_POS		= 7;
+    public static int DUMMY2_POS		= 8;
+    public static int LANGID_POS		= 9;
+    public static int TEXT_POS			= 10;
+    public static int HELPTEXT_POS		= 11;
+    public static int QUICKHELPTEXT_POS	= 12;
+    public static int TITLE_POS			= 13;
+    public static int DATE_POS			= 14;
+    
     public Object clone()
     {
         try
@@ -79,42 +79,42 @@ public class SdfEntity implements Cloneable{
     }
     public SdfEntity(String project, String source_file, String dummy1, String resource_type, String gid, String lid, String helpid, String platform, String dummy2, String langid, String text, String helptext, String quickhelptext, String title , String date) {
         super();
-        this.project        = project;
-        this.source_file    = source_file;
-        this.dummy1         = dummy1;
-        this.resource_type  = resource_type;
-        this.gid            = gid;
-        this.lid            = lid;
-        this.helpid         = helpid;
-        this.platform       = platform;
-        this.dummy2         = dummy2;
-        this.langid         = langid;
-        this.text           = text;
-        this.helptext       = helptext;
-        this.quickhelptext  = quickhelptext;
-        this.title          = title;
-        this.date           = date;
+        this.project 		= project;
+        this.source_file 	= source_file;
+        this.dummy1 		= dummy1;
+        this.resource_type 	= resource_type;
+        this.gid 			= gid;
+        this.lid 			= lid;
+        this.helpid 		= helpid;
+        this.platform 		= platform;
+        this.dummy2 		= dummy2;
+        this.langid 		= langid;
+        this.text 			= text;
+        this.helptext 		= helptext;
+        this.quickhelptext 	= quickhelptext;
+        this.title 			= title;
+        this.date 			= date;
     }
 
     public void setProperties( String line ){
         if( line != null )
         {
-            String[] splitted       = line.split("\t",15);
-            setProject(         splitted[ SdfEntity.PROJECT_POS ]       );
-            setSource_file(     splitted[ SdfEntity.SOURCE_FILE_POS ]   );
-            setDummy1(          splitted[ SdfEntity.DUMMY1_POS ]        );
-            setResource_type(   splitted[ SdfEntity.RESOURCE_TYPE_POS ] );
-            setGid(             splitted[ SdfEntity.GID_POS ]           );
-            setLid(             splitted[ SdfEntity.LID_POS ]           );
-            setHelpid(          splitted[ SdfEntity.HELPID_POS ]        );
-            setPlatform(        splitted[ SdfEntity.PLATFORM_POS ]      );
-            setDummy2(          splitted[ SdfEntity.DUMMY2_POS ]        );
-            setLangid(          splitted[ SdfEntity.LANGID_POS ]        );
-            setText(            splitted[ SdfEntity.TEXT_POS ]          );
-            setHelptext(        splitted[ SdfEntity.HELPTEXT_POS ]      );
-            setQuickhelptext(   splitted[ SdfEntity.QUICKHELPTEXT_POS ] );
-            setTitle(           splitted[ SdfEntity.TITLE_POS ]         );
-            setDate(            splitted[ SdfEntity.DATE_POS ]          );
+            String[] splitted		= line.split("\t",15);
+            setProject( 		splitted[ SdfEntity.PROJECT_POS ] 		);
+            setSource_file( 	splitted[ SdfEntity.SOURCE_FILE_POS ] 	);
+            setDummy1( 			splitted[ SdfEntity.DUMMY1_POS ] 		);
+            setResource_type(	splitted[ SdfEntity.RESOURCE_TYPE_POS ] );
+            setGid( 			splitted[ SdfEntity.GID_POS ] 			);
+            setLid( 			splitted[ SdfEntity.LID_POS ] 			);
+            setHelpid( 			splitted[ SdfEntity.HELPID_POS ] 		);
+            setPlatform( 		splitted[ SdfEntity.PLATFORM_POS ] 		);
+            setDummy2( 			splitted[ SdfEntity.DUMMY2_POS ] 		);
+            setLangid( 			splitted[ SdfEntity.LANGID_POS ] 		);
+            setText( 			splitted[ SdfEntity.TEXT_POS ] 			);
+            setHelptext( 		splitted[ SdfEntity.HELPTEXT_POS ] 		);
+            setQuickhelptext(	splitted[ SdfEntity.QUICKHELPTEXT_POS ] );
+            setTitle( 			splitted[ SdfEntity.TITLE_POS ] 		);
+            setDate(			splitted[ SdfEntity.DATE_POS ]			);
         }
     }
 
@@ -132,7 +132,7 @@ public class SdfEntity implements Cloneable{
     public String getId(){
         return new StringBuffer( project ).append( gid ).append( lid ).append( source_file ).append( resource_type ).append( platform ).append( helpid ).append( langid ).toString();
     }
-
+    
     public String getDummy1() {
         return dummy1;
     }
@@ -250,6 +250,6 @@ public class SdfEntity implements Cloneable{
     public void setDate(String date) {
         this.date = date;
     }
-
-
+    
+    
 }

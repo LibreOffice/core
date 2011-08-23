@@ -157,12 +157,12 @@ inline BOOL ApplicationAddress::IsConnectToSame( const ApplicationAddress& rAdr 
         return FALSE;
 }
 
-#define APPEVENT_PARAM_DELIMITER        '\n'
+#define APPEVENT_PARAM_DELIMITER    	'\n'
 
-#define APPEVENT_OPEN_STRING            "Open"
-#define APPEVENT_PRINT_STRING           "Print"
-#define APPEVENT_DISKINSERT_STRING      "DiskInsert"
-#define APPEVENT_SAVEDOCUMENTS_STRING   "SaveDocuments"
+#define APPEVENT_OPEN_STRING        	"Open"
+#define APPEVENT_PRINT_STRING       	"Print"
+#define APPEVENT_DISKINSERT_STRING  	"DiskInsert"
+#define APPEVENT_SAVEDOCUMENTS_STRING	"SaveDocuments"
 
 class VCL_DLLPUBLIC ApplicationEvent
 {
@@ -314,7 +314,7 @@ public:
         <TRUE/> if the system font is suitable for our UI
         <FALSE/> if the test string could not be displayed with the system font
      */
-    static bool                 ValidateSystemFont();
+    static bool					ValidateSystemFont();
 
     static void                 SetSettings( const AllSettings& rSettings );
     static const AllSettings&   GetSettings();
@@ -330,8 +330,8 @@ public:
 
     static ULONG                PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent );
     static ULONG                PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMouseEvent );
-    static void                 RemoveMouseAndKeyEvents( Window *pWin );
-    static BOOL                 IsProcessedMouseOrKeyEvent( ULONG nEventId );
+    static void					RemoveMouseAndKeyEvents( Window *pWin );
+    static BOOL					IsProcessedMouseOrKeyEvent( ULONG nEventId );
 
     static ULONG                PostUserEvent( ULONG nEvent, void* pEventData = NULL );
     static ULONG                PostUserEvent( const Link& rLink, void* pCaller = NULL );
@@ -378,7 +378,7 @@ public:
     static bool                 IsMultiDisplay();
     static Rectangle            GetScreenPosSizePixel( unsigned int nScreen );
     static Rectangle            GetWorkAreaPosSizePixel( unsigned int nScreen );
-    static rtl::OUString        GetScreenName( unsigned int nScreen );
+    static rtl::OUString		GetScreenName( unsigned int nScreen );
     static unsigned int         GetDefaultDisplayNumber();
     // if IsMultiDisplay() == false the return value will be
     // nearest screen of the target rectangle

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ uno::Reference< io::XInputStream > getFileAsStream( const rtl::OUString &rName )
             sMsg.append(configmgr::FileHelper::createOSLErrorString(errorCode));
 
             throw io::IOException(sMsg.makeStringAndClear(),NULL);
-        }
+        }   
 */
     }
 

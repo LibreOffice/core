@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,14 +118,14 @@ public:
     int                     GetCachedGlyphWidth( int nCharCode ) const;
     void                    CacheGlyphWidth( int nCharCode, int nCharWidth );
 
-    bool                    InitKashidaHandling( HDC );
-    int                     GetMinKashidaWidth() const { return mnMinKashidaWidth; }
-    int                     GetMinKashidaGlyph() const { return mnMinKashidaGlyph; }
+    bool					InitKashidaHandling( HDC ); 
+    int						GetMinKashidaWidth() const { return mnMinKashidaWidth; }
+    int						GetMinKashidaGlyph() const { return mnMinKashidaGlyph; }
 
 private:
     IntMap                  maWidthMap;
-    mutable int             mnMinKashidaWidth;
-    mutable int             mnMinKashidaGlyph;
+    mutable int				mnMinKashidaWidth;
+    mutable int				mnMinKashidaGlyph;
 };
 
 // -----------------------------------------------------------------------
@@ -1958,11 +1958,11 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
             }
             else
             {
-                nExtraOfs += nToFillWidth;  // at right of cell
-                nSubIter = 0;               // done with glyph injection
+                nExtraOfs += nToFillWidth;	// at right of cell
+                nSubIter = 0;				// done with glyph injection
             }
             if( !bManualCellAlign )
-                nExtraOfs -= nExtraWidth;   // adjust for right-aligned cells
+                nExtraOfs -= nExtraWidth;	// adjust for right-aligned cells
 
             // adjust the draw position for the injected-glyphs case
             if( nExtraOfs )
@@ -2171,7 +2171,7 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
         }
         // If there are still glyphs in the cluster and mnMinGlyphPos
         // has changed then we need to remove the dropped glyphs at start
-        // to correct logClusters, which is unsigned and relative to the
+        // to correct logClusters, which is unsigned and relative to the 
         // item start.
         if (rVI.mnMinGlyphPos != nOrigMinGlyphPos)
         {
@@ -2473,9 +2473,9 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
         if( rVisualItem.IsRTL() )
         {
             for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
-                if ( (1U << mpVisualAttrs[i].uJustification) & 0xFF82 )  //  any Arabic justification
+                if ( (1U << mpVisualAttrs[i].uJustification) & 0xFF82 )  //  any Arabic justification 
                 {                                                        //  excluding SCRIPT_JUSTIFY_NONE
-                    // yes
+                    // yes                                               
                     rVisualItem.mbHasKashidas = true;
                     // so prepare for kashida handling
                     InitKashidaHandling();
@@ -2528,7 +2528,7 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
         {
             for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
                 nXOffset += mpJustifications[ i ];
-
+           
             if( rVisualItem.mbHasKashidas )
                 KashidaItemFix( nMinGlyphPos, nEndGlyphPos );
         }
@@ -2559,7 +2559,7 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 
 void UniscribeLayout::InitKashidaHandling()
 {
-    if( mnMinKashidaGlyph != 0 )    // already initialized
+    if( mnMinKashidaGlyph != 0 )	// already initialized
         return;
 
     mrWinFontEntry.InitKashidaHandling( mhDC );
@@ -2576,8 +2576,8 @@ void UniscribeLayout::KashidaItemFix( int nMinGlyphPos, int nEndGlyphPos )
     {
         // check for vowels
         if( (i > nMinGlyphPos && !mpGlyphAdvances[ i-1 ])
-        &&  (1U << mpVisualAttrs[i].uJustification) & 0xFF83 )  // all Arabic justifiction types
-        {                                                       // including SCRIPT_JUSTIFY_NONE
+        &&  (1U << mpVisualAttrs[i].uJustification) & 0xFF83 )	// all Arabic justifiction types
+        {														// including SCRIPT_JUSTIFY_NONE
             // vowel, we do it like ScriptJustify does
             // the vowel gets the extra width
             long nSpaceAdded =  mpJustifications[ i ] - mpGlyphAdvances[ i ];
@@ -2627,7 +2627,7 @@ bool UniscribeLayout::KashidaWordFix ( int nMinGlyphPos, int nEndGlyphPos, int* 
     if ( nMaxAdded <= 0 )
         return false;
     // return early if there is not enough space for an extra kashida
-    if( 2*nMaxAdded < mnMinKashidaWidth )
+    if( 2*nMaxAdded < mnMinKashidaWidth ) 
         return false;
 
     // redistribute the extra spacing to the kashida position
@@ -2651,7 +2651,7 @@ bool UniscribeLayout::KashidaWordFix ( int nMinGlyphPos, int nEndGlyphPos, int* 
         // ugly: steal some pixels
         long nSteal = 1;
         if ( nMaxPos - nMinPos > 0 && ((mnMinKashidaWidth - nSpaceAdded) > (nMaxPos - nMinPos)))
-            nSteal = (mnMinKashidaWidth - nSpaceAdded) / (nMaxPos - nMinPos);
+            nSteal = (mnMinKashidaWidth - nSpaceAdded) / (nMaxPos - nMinPos); 
         for( int i = nMinPos; i <= nMaxPos; ++i )
         {
             if( i == nKashPos )
@@ -2710,7 +2710,7 @@ void UniscribeLayout::Justify( long nNewWidth )
     if( nOldWidth <= 0 )
         return;
 
-    nNewWidth *= mnUnitsPerPixel;   // convert into font units
+    nNewWidth *= mnUnitsPerPixel;	// convert into font units
     if( nNewWidth == nOldWidth )
         return;
     // prepare to distribute the extra width evenly among the visual items
@@ -2770,11 +2770,11 @@ bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
         }
     }
     // Invalid char pos or leftmost glyph in visual item
-    if ( nMinGlyphIndex == -1 || !mpLogClusters[ nCharPos ] )
+    if ( nMinGlyphIndex == -1 || !mpLogClusters[ nCharPos ] ) 
         return false;
 
-//  This test didn't give the expected results
-/*  if( mpLogClusters[ nCharPos+1 ] == mpLogClusters[ nCharPos ])
+//	This test didn't give the expected results
+/*	if( mpLogClusters[ nCharPos+1 ] == mpLogClusters[ nCharPos ]) 
     // two chars, one glyph
         return false;*/
 
@@ -2784,9 +2784,9 @@ bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
     // justification is only allowed if the glyph to the left has not SCRIPT_JUSTIFY_NONE
     // and not SCRIPT_JUSTIFY_ARABIC_BLANK
     // special case: glyph to the left is vowel (no advance width)
-    if ( mpVisualAttrs[ nGlyphPos-1 ].uJustification == SCRIPT_JUSTIFY_ARABIC_BLANK
-        || ( mpVisualAttrs[ nGlyphPos-1 ].uJustification == SCRIPT_JUSTIFY_NONE
-            && mpGlyphAdvances [ nGlyphPos-1 ] ))
+    if ( mpVisualAttrs[ nGlyphPos-1 ].uJustification == SCRIPT_JUSTIFY_ARABIC_BLANK 
+        || ( mpVisualAttrs[ nGlyphPos-1 ].uJustification == SCRIPT_JUSTIFY_NONE 
+            && mpGlyphAdvances [ nGlyphPos-1 ] ))	
         return false;
     return true;
 }
@@ -3084,7 +3084,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
 // -----------------------------------------------------------------------
 
-int WinSalGraphics::GetMinKashidaWidth()
+int	WinSalGraphics::GetMinKashidaWidth()
 {
     if( !mpWinFontEntry[0] )
         return 0;
@@ -3100,8 +3100,8 @@ ImplWinFontEntry::ImplWinFontEntry( ImplFontSelectData& rFSD )
 ,   maWidthMap( 512 )
 ,   mpKerningPairs( NULL )
 ,   mnKerningPairs( -1 )
-,   mnMinKashidaWidth( -1 )
-,   mnMinKashidaGlyph( -1 )
+,	mnMinKashidaWidth( -1 )
+,	mnMinKashidaGlyph( -1 )
 {
 #ifdef USE_UNISCRIBE
     maScriptCache = NULL;
@@ -3162,17 +3162,17 @@ int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
 
 bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
 {
-    if( mnMinKashidaWidth >= 0 )    // already cached?
+    if( mnMinKashidaWidth >= 0 )	// already cached?
         return mnMinKashidaWidth;
 
     // initialize the kashida width
     mnMinKashidaWidth = 0;
     mnMinKashidaGlyph = 0;
 #ifdef USE_UNISCRIBE
-    if (aUspModule || (bUspEnabled && InitUSP()))
+    if (aUspModule || (bUspEnabled && InitUSP())) 
     {
         SCRIPT_FONTPROPERTIES aFontProperties;
-        aFontProperties.cBytes = sizeof (aFontProperties);
+        aFontProperties.cBytes = sizeof (aFontProperties); 
         SCRIPT_CACHE& rScriptCache = GetScriptCache();
         HRESULT nRC = (*pScriptGetFontProperties)( hDC, &rScriptCache, &aFontProperties );
         if( nRC != 0 )

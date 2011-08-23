@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,64 +47,64 @@ namespace basegfx
     */
     class B2IVector : public ::basegfx::B2ITuple
     {
-    public:
-        /** Create a 2D Vector
+    public:					
+        /**	Create a 2D Vector
 
             The vector is initialized to (0, 0)
         */
-        B2IVector()
-        :   B2ITuple()
+        B2IVector() 
+        :	B2ITuple()
         {}
 
-        /** Create a 2D Vector
+        /**	Create a 2D Vector
 
             @param nX
             This parameter is used to initialize the X-coordinate
             of the 2D Vector.
-
+            
             @param nY
             This parameter is used to initialize the Y-coordinate
             of the 2D Vector.
         */
-        B2IVector(sal_Int32 nX, sal_Int32 nY)
-        :   B2ITuple(nX, nY)
+        B2IVector(sal_Int32 nX, sal_Int32 nY) 
+        :	B2ITuple(nX, nY)
         {}
 
-        /** Create a copy of a 2D Vector
+        /**	Create a copy of a 2D Vector
 
             @param rVec
             The 2D Vector which will be copied.
         */
-        B2IVector(const B2IVector& rVec)
-        :   B2ITuple(rVec)
+        B2IVector(const B2IVector& rVec) 
+        :	B2ITuple(rVec)
         {}
 
         /** constructor with tuple to allow copy-constructing
             from B2ITuple-based classes
         */
-        B2IVector(const ::basegfx::B2ITuple& rTuple)
-        :   B2ITuple(rTuple)
+        B2IVector(const ::basegfx::B2ITuple& rTuple) 
+        :	B2ITuple(rTuple)
         {}
 
-        ~B2IVector()
+        ~B2IVector() 
         {}
 
         /** *=operator to allow usage from B2IVector, too
         */
-        B2IVector& operator*=( const B2IVector& rPnt )
-        {
+        B2IVector& operator*=( const B2IVector& rPnt ) 
+        { 
             mnX *= rPnt.mnX;
-            mnY *= rPnt.mnY;
-            return *this;
+            mnY *= rPnt.mnY; 
+            return *this; 
         }
 
         /** *=operator to allow usage from B2IVector, too
         */
-        B2IVector& operator*=(sal_Int32 t)
-        {
-            mnX *= t;
-            mnY *= t;
-            return *this;
+        B2IVector& operator*=(sal_Int32 t) 
+        { 
+            mnX *= t; 
+            mnY *= t; 
+            return *this; 
         }
 
         /** assignment operator to allow assigning the results
@@ -171,7 +171,7 @@ namespace basegfx
 
         static const B2IVector& getEmptyVector();
     };
-
+    
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
@@ -213,14 +213,14 @@ namespace basegfx
     bool areParallel( const B2IVector& rVecA, const B2IVector& rVecB );
 
     /** Transform vector by given transformation matrix.
-
+        
         Since this is a vector, translational components of the
         matrix are disregarded.
     */
     B2IVector operator*( const B2DHomMatrix& rMat, const B2IVector& rVec );
 
     /** Test continuity between given vectors.
-
+        
         The two given vectors are assumed to describe control points on a
         common point. Calculate if there is a continuity between them.
     */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,24 +44,24 @@ namespace cairocanvas
         /** Create an XCachedPrimitive for given GraphicObject
          */
         CachedBitmap( const ::cairo::SurfaceSharedPtr&                pSurface,
-                      const ::com::sun::star::rendering::ViewState&   rUsedViewState,
+                      const ::com::sun::star::rendering::ViewState&	  rUsedViewState,
                       const ::com::sun::star::rendering::RenderState& rUsedRenderState,
-                      const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::rendering::XCanvas >&      rTarget   );
+                      const ::com::sun::star::uno::Reference< 
+                         ::com::sun::star::rendering::XCanvas >&      rTarget	);
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
 
     private:
-        virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&  rNewState,
-                                     const ::com::sun::star::rendering::ViewState&  rOldState,
-                                     const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::rendering::XCanvas >&    rTargetCanvas,
-                                     bool                                           bSameViewTransform );
+        virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&	rNewState,
+                                     const ::com::sun::star::rendering::ViewState&	rOldState,
+                                     const ::com::sun::star::uno::Reference< 
+                     ::com::sun::star::rendering::XCanvas >& 	rTargetCanvas,
+                                     bool											bSameViewTransform );
 
 
     ::cairo::SurfaceSharedPtr mpSurface;
-    const ::com::sun::star::rendering::RenderState  maRenderState;
+    const ::com::sun::star::rendering::RenderState	maRenderState;
     };
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,15 +38,15 @@ namespace com { namespace sun { namespace star { namespace i18n {
 // Whether to use cell boundary code, currently unused but prepared.
 #define USE_CELL_BOUNDARY_CODE 0
 
-#define CACHE_MAX 32        // max cache structure number
-#define DEFAULT_SIZE 256    // for boundary size, to avoid alloc and release memory
+#define CACHE_MAX 32		// max cache structure number
+#define DEFAULT_SIZE 256	// for boundary size, to avoid alloc and release memory
 
 // cache structure.
 struct WordBreakCache {
-    sal_Int32 length;       // contents length saved here.
-    sal_Unicode *contents;      // seperated segment contents.
-    sal_Int32* wordboundary;        // word boundaries in segments.
-    sal_Int32 size;         // size of wordboundary
+    sal_Int32 length;		// contents length saved here.
+    sal_Unicode *contents;		// seperated segment contents.
+    sal_Int32* wordboundary;     	// word boundaries in segments.
+    sal_Int32 size;			// size of wordboundary
 
     WordBreakCache();
     sal_Bool equals(const sal_Unicode *str, Boundary& boundary);    // checking cached string

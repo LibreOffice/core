@@ -50,9 +50,9 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
 
-//  ----------------------------------------------------
-//  class VCLXDevice
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXDevice
+//	----------------------------------------------------
 VCLXDevice::VCLXDevice() : mrMutex( Application::GetSolarMutex() )
 {
     mpOutputDevice = NULL;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ class SVT_DLLPUBLIC RTFOutFuncs
 {
 public:
 #if defined(MAC) || defined(UNX)
-    static const sal_Char sNewLine;     // nur \012 oder \015
+    static const sal_Char sNewLine;		// nur \012 oder \015
 #else
-    static const sal_Char __FAR_DATA sNewLine[];    // \015\012
+    static const sal_Char __FAR_DATA sNewLine[];	// \015\012
 #endif
 
     static SvStream& Out_Char( SvStream&, sal_Unicode cChar,

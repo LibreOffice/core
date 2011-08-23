@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1029,13 +1029,13 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getA
 
         // SELECTABLE
         pStateSet->AddState( accessibility::AccessibleStateType::SELECTABLE );
-        //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
+        //	    pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
 
         // SELECTED
         if( mpParent->mrParent.GetSelectItemId() == mpParent->mnId )
         {
             pStateSet->AddState( accessibility::AccessibleStateType::SELECTED );
-            //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
+            //       	    pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
         }
     }
 
@@ -1233,7 +1233,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
+sal_Int32 SAL_CALL ValueItemAcc::getBackground(  ) 
     throw (uno::RuntimeException)
 {
     UINT32 nColor;

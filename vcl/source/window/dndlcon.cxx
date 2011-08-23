@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,18 +37,18 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
 //==================================================================================================
-//
+// 
 //==================================================================================================
 
 DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions )
     : WeakComponentImplHelper4< XDragGestureRecognizer, XDropTargetDragContext, XDropTargetDropContext, XDropTarget >(GetMutex())
 {
     m_bActive = sal_True;
-    m_nDefaultActions = nDefaultActions;
+    m_nDefaultActions = nDefaultActions;	
 }
 
 //==================================================================================================
-//
+// 
 //==================================================================================================
 
 DNDListenerContainer::~DNDListenerContainer()
@@ -58,8 +58,8 @@ DNDListenerContainer::~DNDListenerContainer()
 //==================================================================================================
 // DNDListenerContainer::addDragGestureListener
 //==================================================================================================
-
-void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDragGestureListener >& dgl )
+     
+void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDragGestureListener >& dgl ) 
     throw(RuntimeException)
 {
     rBHelper.addListener( getCppuType( ( const Reference< XDragGestureListener > * ) 0 ), dgl );
@@ -69,7 +69,7 @@ void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDr
 // DNDListenerContainer::removeDragGestureListener
 //==================================================================================================
 
-void SAL_CALL DNDListenerContainer::removeDragGestureListener( const Reference< XDragGestureListener >& dgl )
+void SAL_CALL DNDListenerContainer::removeDragGestureListener( const Reference< XDragGestureListener >& dgl ) 
     throw(RuntimeException)
 {
     rBHelper.removeListener( getCppuType( ( const Reference< XDragGestureListener > * ) 0 ), dgl );
@@ -79,16 +79,16 @@ void SAL_CALL DNDListenerContainer::removeDragGestureListener( const Reference< 
 // DNDListenerContainer::resetRecognizer
 //==================================================================================================
 
-void SAL_CALL DNDListenerContainer::resetRecognizer(  )
+void SAL_CALL DNDListenerContainer::resetRecognizer(  ) 
     throw(RuntimeException)
 {
 }
-
+     
 //==================================================================================================
 // DNDListenerContainer::addDropTargetListener
 //==================================================================================================
 
-void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
+void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDropTargetListener >& dtl ) 
     throw(RuntimeException)
 {
     rBHelper.addListener( getCppuType( ( const Reference< XDropTargetListener > * ) 0 ), dtl );
@@ -98,7 +98,7 @@ void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDro
 // DNDListenerContainer::removeDropTargetListener
 //==================================================================================================
 
-void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
+void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< XDropTargetListener >& dtl ) 
     throw(RuntimeException)
 {
     rBHelper.removeListener( getCppuType( ( const Reference< XDropTargetListener > * ) 0 ), dtl );
@@ -108,7 +108,7 @@ void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< X
 // DNDListenerContainer::isActive
 //==================================================================================================
 
-sal_Bool SAL_CALL DNDListenerContainer::isActive(  )
+sal_Bool SAL_CALL DNDListenerContainer::isActive(  ) 
     throw(RuntimeException)
 {
     return m_bActive;
@@ -118,7 +118,7 @@ sal_Bool SAL_CALL DNDListenerContainer::isActive(  )
 // DNDListenerContainer::setActive
 //==================================================================================================
 
-void SAL_CALL DNDListenerContainer::setActive( sal_Bool active )
+void SAL_CALL DNDListenerContainer::setActive( sal_Bool active ) 
     throw(RuntimeException)
 {
     m_bActive = active;
@@ -128,7 +128,7 @@ void SAL_CALL DNDListenerContainer::setActive( sal_Bool active )
 // DNDListenerContainer::getDefaultActions
 //==================================================================================================
 
-sal_Int8 SAL_CALL DNDListenerContainer::getDefaultActions(  )
+sal_Int8 SAL_CALL DNDListenerContainer::getDefaultActions(  ) 
     throw(RuntimeException)
 {
     return m_nDefaultActions;
@@ -138,7 +138,7 @@ sal_Int8 SAL_CALL DNDListenerContainer::getDefaultActions(  )
 // DNDListenerContainer::setDefaultActions
 //==================================================================================================
 
-void SAL_CALL DNDListenerContainer::setDefaultActions( sal_Int8 actions )
+void SAL_CALL DNDListenerContainer::setDefaultActions( sal_Int8 actions ) 
     throw(RuntimeException)
 {
     m_nDefaultActions = actions;
@@ -148,7 +148,7 @@ void SAL_CALL DNDListenerContainer::setDefaultActions( sal_Int8 actions )
 // DNDListenerContainer::fireDropEvent
 //==================================================================================================
 
-sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDropContext >& context,
+sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDropContext >& context,	
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
     const Reference< XTransferable >& transferable )
 {
@@ -156,17 +156,17 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
 
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
-
+        
     if( pContainer && m_bActive )
     {
         OInterfaceIteratorHelper aIterator( *pContainer );
-
+    
         // remember context to use in own context methods
         m_xDropTargetDropContext = context;
 
         // do not construct the event before you are sure at least one listener is registered
-        DropTargetDropEvent aEvent( static_cast < XDropTarget * > (this), 0,
-            static_cast < XDropTargetDropContext * > (this), dropAction,
+        DropTargetDropEvent aEvent( static_cast < XDropTarget * > (this), 0, 
+            static_cast < XDropTargetDropContext * > (this), dropAction, 
             locationX, locationY, sourceActions, transferable );
 
         while (aIterator.hasMoreElements())
@@ -226,10 +226,10 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
 sal_uInt32 DNDListenerContainer::fireDragExitEvent()
 {
     sal_uInt32 nRet = 0;
-
+    
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
-
+        
     if( pContainer && m_bActive )
     {
         OInterfaceIteratorHelper aIterator( *pContainer );
@@ -268,14 +268,14 @@ sal_uInt32 DNDListenerContainer::fireDragExitEvent()
 // DNDListenerContainer::fireDragOverEvent
 //==================================================================================================
 
-sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTargetDragContext >& context,
+sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTargetDragContext >& context, 
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions )
 {
     sal_uInt32 nRet = 0;
-
+    
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
-
+        
     if( pContainer && m_bActive )
     {
         OInterfaceIteratorHelper aIterator( *pContainer );
@@ -284,8 +284,8 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
         m_xDropTargetDragContext = context;
 
         // do not construct the event before you are sure at least one listener is registered
-        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0,
-            static_cast < XDropTargetDragContext * > (this),
+        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0, 
+            static_cast < XDropTargetDragContext * > (this), 
             dropAction, locationX, locationY, sourceActions );
 
         while (aIterator.hasMoreElements())
@@ -336,14 +336,14 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
 //==================================================================================================
 
 sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTargetDragContext >& context,
-    sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
+    sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions, 
     const Sequence< DataFlavor >& dataFlavors )
 {
     sal_uInt32 nRet = 0;
-
+    
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
-
+        
     if( pContainer && m_bActive )
     {
         OInterfaceIteratorHelper aIterator( *pContainer );
@@ -352,7 +352,7 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
         m_xDropTargetDragContext = context;
 
         // do not construct the event before you are sure at least one listener is registered
-        DropTargetDragEnterEvent aEvent( static_cast < XDropTarget * > (this), 0,
+        DropTargetDragEnterEvent aEvent( static_cast < XDropTarget * > (this), 0, 
             static_cast < XDropTargetDragContext * > (this),
             dropAction, locationX, locationY, sourceActions, dataFlavors );
 
@@ -407,10 +407,10 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions )
 {
     sal_uInt32 nRet = 0;
-
+    
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
-
+        
     if( pContainer && m_bActive )
     {
         OInterfaceIteratorHelper aIterator( *pContainer );
@@ -419,7 +419,7 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
         m_xDropTargetDragContext = context;
 
         // do not construct the event before you are sure at least one listener is registered
-        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0,
+        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0, 
             static_cast < XDropTargetDragContext * > (this),
             dropAction, locationX, locationY, sourceActions );
 
@@ -474,16 +474,16 @@ sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_
     sal_Int32 dragOriginY, const Reference< XDragSource >& dragSource, const Any& triggerEvent )
 {
     sal_uInt32 nRet = 0;
-
+    
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDragGestureListener > * ) 0) );
-
+        
     if( pContainer )
     {
         OInterfaceIteratorHelper aIterator( *pContainer );
 
         // do not construct the event before you are sure at least one listener is registered
-        DragGestureEvent aEvent( static_cast < XDragGestureRecognizer * > (this), dragAction,
+        DragGestureEvent aEvent( static_cast < XDragGestureRecognizer * > (this), dragAction, 
             dragOriginX, dragOriginY, dragSource, triggerEvent );
 
         while( aIterator.hasMoreElements() )

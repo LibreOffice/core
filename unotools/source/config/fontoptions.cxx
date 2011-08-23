@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,160 +40,160 @@
 #include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl					;
+using namespace ::rtl					;
+using namespace ::osl					;
+using namespace ::com::sun::star::uno	;
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_FONT                       OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Font"           ))
+#define	ROOTNODE_FONT						OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Font"			))
 
-#define PROPERTYNAME_REPLACEMENTTABLE       OUString(RTL_CONSTASCII_USTRINGPARAM("Substitution/Replacement"     ))
-#define PROPERTYNAME_FONTHISTORY            OUString(RTL_CONSTASCII_USTRINGPARAM("View/History"                 ))
-#define PROPERTYNAME_FONTWYSIWYG            OUString(RTL_CONSTASCII_USTRINGPARAM("View/ShowFontBoxWYSIWYG"      ))
+#define	PROPERTYNAME_REPLACEMENTTABLE		OUString(RTL_CONSTASCII_USTRINGPARAM("Substitution/Replacement"		))
+#define	PROPERTYNAME_FONTHISTORY			OUString(RTL_CONSTASCII_USTRINGPARAM("View/History"					))
+#define	PROPERTYNAME_FONTWYSIWYG			OUString(RTL_CONSTASCII_USTRINGPARAM("View/ShowFontBoxWYSIWYG"		))
 
-#define PROPERTYHANDLE_REPLACEMENTTABLE     0
-#define PROPERTYHANDLE_FONTHISTORY          1
-#define PROPERTYHANDLE_FONTWYSIWYG          2
+#define	PROPERTYHANDLE_REPLACEMENTTABLE		0
+#define	PROPERTYHANDLE_FONTHISTORY			1
+#define	PROPERTYHANDLE_FONTWYSIWYG			2
 
-#define PROPERTYCOUNT                       3
+#define	PROPERTYCOUNT						3
 
 //_________________________________________________________________________________________________________________
-//  private declarations!
+//	private declarations!
 //_________________________________________________________________________________________________________________
 
 class SvtFontOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
          SvtFontOptions_Impl();
         ~SvtFontOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
+        //	overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
+            @short		called for notify of configmanager
+            @descr		These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
-            @seealso    baseclass ConfigItem
+            @seealso	baseclass ConfigItem
 
-            @param      "seqPropertyNames" is the list of properties which should be updated.
-            @return     -
+            @param		"seqPropertyNames" is the list of properties which should be updated.
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
         /*-****************************************************************************************************//**
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
+            @short		write changes to configuration
+            @descr		These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
 
-            @seealso    baseclass ConfigItem
+            @seealso	baseclass ConfigItem
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
-        //  public interface
+        //	public interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      access method to get internal values
-            @descr      These method give us a chance to regulate acces to ouer internal values.
+            @short		access method to get internal values
+            @descr		These method give us a chance to regulate acces to ouer internal values.
                         It's not used in the moment - but it's possible for the feature!
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsReplacementTableEnabled   (                   ) const ;
-        void        EnableReplacementTable      ( sal_Bool bState   )       ;
+        sal_Bool	IsReplacementTableEnabled	(					) const	;
+        void		EnableReplacementTable		( sal_Bool bState	)		;
 
-        sal_Bool    IsFontHistoryEnabled        (                   ) const ;
-        void        EnableFontHistory           ( sal_Bool bState   )       ;
+        sal_Bool	IsFontHistoryEnabled		(					) const	;
+        void		EnableFontHistory			( sal_Bool bState	)		;
 
-        sal_Bool    IsFontWYSIWYGEnabled        (                   ) const ;
-        void        EnableFontWYSIWYG           ( sal_Bool bState   )       ;
+        sal_Bool	IsFontWYSIWYGEnabled		(					) const	;
+        void		EnableFontWYSIWYG			( sal_Bool bState	)		;
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short      return list of key names of ouer configuration management which represent oue module tree
-            @descr      These methods return a static const list of key names. We need it to get needed values from our
+            @short		return list of key names of ouer configuration management which represent oue module tree
+            @descr		These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     A list of needed configuration keys is returned.
+            @param		-
+            @return		A list of needed configuration keys is returned.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > impl_GetPropertyNames();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
-        sal_Bool        m_bReplacementTable     ;
-        sal_Bool        m_bFontHistory          ;
-        sal_Bool        m_bFontWYSIWYG          ;
+        sal_Bool		m_bReplacementTable		;
+        sal_Bool		m_bFontHistory			;
+        sal_Bool		m_bFontWYSIWYG			;
 };
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtFontOptions_Impl::SvtFontOptions_Impl()
     // Init baseclasses first
-    :   ConfigItem          ( ROOTNODE_FONT )
+    :	ConfigItem			( ROOTNODE_FONT	)
     // Init member then.
-    ,   m_bReplacementTable ( sal_False     )
-    ,   m_bFontHistory      ( sal_False     )
-    ,   m_bFontWYSIWYG      ( sal_False     )
+    ,	m_bReplacementTable	( sal_False		)
+    ,	m_bFontHistory		( sal_False		)
+    ,	m_bFontWYSIWYG		( sal_False		)
 {
     // Use our static list of configuration keys to get his values.
-    Sequence< OUString >    seqNames    = impl_GetPropertyNames (           );
-    Sequence< Any >         seqValues   = GetProperties         ( seqNames  );
+    Sequence< OUString >	seqNames	= impl_GetPropertyNames	(			);
+    Sequence< Any >			seqValues	= GetProperties			( seqNames	);
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
@@ -209,17 +209,17 @@ SvtFontOptions_Impl::SvtFontOptions_Impl()
         DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtFontOptions_Impl::SvtFontOptions_Impl()\nInvalid property value detected!\n" );
         switch( nProperty )
         {
-            case PROPERTYHANDLE_REPLACEMENTTABLE    :   {
+            case PROPERTYHANDLE_REPLACEMENTTABLE	:	{
                                                             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtFontOptions_Impl::SvtFontOptions_Impl()\nWho has changed the value type of \"Office.Common\\Font\\Substitution\\Replacement\"?" );
                                                             seqValues[nProperty] >>= m_bReplacementTable;
                                                         }
                                                         break;
-            case PROPERTYHANDLE_FONTHISTORY         :   {
+            case PROPERTYHANDLE_FONTHISTORY			:	{
                                                             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtFontOptions_Impl::SvtFontOptions_Impl()\nWho has changed the value type of \"Office.Common\\Font\\View\\History\"?" );
                                                             seqValues[nProperty] >>= m_bFontHistory;
                                                         }
                                                         break;
-            case PROPERTYHANDLE_FONTWYSIWYG         :   {
+            case PROPERTYHANDLE_FONTWYSIWYG			:	{
                                                             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtFontOptions_Impl::SvtFontOptions_Impl()\nWho has changed the value type of \"Office.Common\\Font\\View\\ShowFontBoxWYSIWYG\"?" );
                                                             seqValues[nProperty] >>= m_bFontWYSIWYG;
                                                         }
@@ -233,7 +233,7 @@ SvtFontOptions_Impl::SvtFontOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtFontOptions_Impl::~SvtFontOptions_Impl()
 {
@@ -245,7 +245,7 @@ SvtFontOptions_Impl::~SvtFontOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtFontOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
@@ -282,27 +282,27 @@ void SvtFontOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtFontOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
-    Sequence< OUString >    seqNames    = impl_GetPropertyNames();
-    sal_Int32               nCount      = seqNames.getLength();
-    Sequence< Any >         seqValues   ( nCount );
+    Sequence< OUString >	seqNames	= impl_GetPropertyNames();
+    sal_Int32				nCount		= seqNames.getLength();
+    Sequence< Any >			seqValues	( nCount );
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
         switch( nProperty )
         {
-            case PROPERTYHANDLE_REPLACEMENTTABLE    :   {
+            case PROPERTYHANDLE_REPLACEMENTTABLE	:	{
                                                             seqValues[nProperty] <<= m_bReplacementTable;
                                                         }
                                                         break;
-            case PROPERTYHANDLE_FONTHISTORY         :   {
+            case PROPERTYHANDLE_FONTHISTORY			:	{
                                                             seqValues[nProperty] <<= m_bFontHistory;
                                                         }
                                                         break;
-            case PROPERTYHANDLE_FONTWYSIWYG         :   {
+            case PROPERTYHANDLE_FONTWYSIWYG			:	{
                                                             seqValues[nProperty] <<= m_bFontWYSIWYG;
                                                         }
                                                         break;
@@ -313,7 +313,7 @@ void SvtFontOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtFontOptions_Impl::IsReplacementTableEnabled() const
 {
@@ -321,7 +321,7 @@ sal_Bool SvtFontOptions_Impl::IsReplacementTableEnabled() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtFontOptions_Impl::EnableReplacementTable( sal_Bool bState )
 {
@@ -330,7 +330,7 @@ void SvtFontOptions_Impl::EnableReplacementTable( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtFontOptions_Impl::IsFontHistoryEnabled() const
 {
@@ -338,7 +338,7 @@ sal_Bool SvtFontOptions_Impl::IsFontHistoryEnabled() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtFontOptions_Impl::EnableFontHistory( sal_Bool bState )
 {
@@ -347,7 +347,7 @@ void SvtFontOptions_Impl::EnableFontHistory( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtFontOptions_Impl::IsFontWYSIWYGEnabled() const
 {
@@ -355,7 +355,7 @@ sal_Bool SvtFontOptions_Impl::IsFontWYSIWYGEnabled() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtFontOptions_Impl::EnableFontWYSIWYG( sal_Bool bState )
 {
@@ -364,16 +364,16 @@ void SvtFontOptions_Impl::EnableFontWYSIWYG( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
 {
     // Build static list of configuration key names.
     static const OUString pProperties[] =
     {
-        PROPERTYNAME_REPLACEMENTTABLE   ,
-        PROPERTYNAME_FONTHISTORY        ,
-        PROPERTYNAME_FONTWYSIWYG        ,
+        PROPERTYNAME_REPLACEMENTTABLE	,
+        PROPERTYNAME_FONTHISTORY		,
+        PROPERTYNAME_FONTWYSIWYG		,
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -382,15 +382,15 @@ Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
 }
 
 //*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//	initialize static member
+//	DON'T DO IT IN YOUR HEADER!
+//	see definition for further informations
 //*****************************************************************************************************************
-SvtFontOptions_Impl*    SvtFontOptions::m_pDataContainer    = NULL  ;
-sal_Int32               SvtFontOptions::m_nRefCount         = 0     ;
+SvtFontOptions_Impl*	SvtFontOptions::m_pDataContainer	= NULL	;
+sal_Int32				SvtFontOptions::m_nRefCount			= 0		;
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtFontOptions::SvtFontOptions()
 {
@@ -409,7 +409,7 @@ SvtFontOptions::SvtFontOptions()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtFontOptions::~SvtFontOptions()
 {
@@ -427,7 +427,7 @@ SvtFontOptions::~SvtFontOptions()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtFontOptions::IsReplacementTableEnabled() const
 {
@@ -436,7 +436,7 @@ sal_Bool SvtFontOptions::IsReplacementTableEnabled() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtFontOptions::EnableReplacementTable( sal_Bool bState )
 {
@@ -445,7 +445,7 @@ void SvtFontOptions::EnableReplacementTable( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtFontOptions::IsFontHistoryEnabled() const
 {
@@ -454,7 +454,7 @@ sal_Bool SvtFontOptions::IsFontHistoryEnabled() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtFontOptions::EnableFontHistory( sal_Bool bState )
 {
@@ -463,7 +463,7 @@ void SvtFontOptions::EnableFontHistory( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtFontOptions::IsFontWYSIWYGEnabled() const
 {
@@ -472,7 +472,7 @@ sal_Bool SvtFontOptions::IsFontWYSIWYGEnabled() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtFontOptions::EnableFontWYSIWYG( sal_Bool bState )
 {
@@ -481,7 +481,7 @@ void SvtFontOptions::EnableFontWYSIWYG( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Mutex& SvtFontOptions::impl_GetOwnStaticMutex()
 {

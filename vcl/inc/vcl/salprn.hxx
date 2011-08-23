@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,13 +47,13 @@ namespace vcl { class PrinterController; }
 
 struct VCL_DLLPUBLIC SalPrinterQueueInfo
 {
-    XubString               maPrinterName;
-    XubString               maDriver;
-    XubString               maLocation;
-    XubString               maComment;
-    ULONG                   mnStatus;
-    ULONG                   mnJobs;
-    void*                   mpSysData;
+    XubString				maPrinterName;
+    XubString				maDriver;
+    XubString				maLocation;
+    XubString				maComment;
+    ULONG					mnStatus;
+    ULONG					mnJobs;
+    void*					mpSysData;
 
                             SalPrinterQueueInfo();
                             ~SalPrinterQueueInfo();
@@ -66,8 +66,8 @@ struct VCL_DLLPUBLIC SalPrinterQueueInfo
 class VCL_DLLPUBLIC SalInfoPrinter
 {
 public:
-    std::vector< PaperInfo  >           m_aPaperFormats;    // all printer supported formats
-    bool                                m_bPapersInit;      // set to true after InitPaperFormats
+    std::vector< PaperInfo  >			m_aPaperFormats;	// all printer supported formats
+    bool								m_bPapersInit;		// set to true after InitPaperFormats
     bool                                m_bCompatMetrics;
 
     SalInfoPrinter() : m_bPapersInit( false ), m_bCompatMetrics( false ) {}
@@ -75,30 +75,30 @@ public:
 
     // SalGraphics or NULL, but two Graphics for all SalFrames
     // must be returned
-    virtual SalGraphics*            GetGraphics() = 0;
-    virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) = 0;
+    virtual SalGraphics*			GetGraphics() = 0;
+    virtual void					ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
-    virtual BOOL                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) = 0;
+    virtual BOOL					Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) = 0;
     // This function set the driver data and
     // set the new indepen data in pSetupData
-    virtual BOOL                    SetPrinterData( ImplJobSetup* pSetupData ) = 0;
+    virtual BOOL					SetPrinterData( ImplJobSetup* pSetupData ) = 0;
     // This function merged the indepen driver data
     // and set the new indepen data in pSetupData
     // Only the data must changed, where the bit
     // in nFlags is set
-    virtual BOOL                    SetData( ULONG nFlags, ImplJobSetup* pSetupData ) = 0;
+    virtual BOOL					SetData( ULONG nFlags, ImplJobSetup* pSetupData ) = 0;
 
-    virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
+    virtual void					GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight ) = 0;
-    virtual ULONG                   GetCapabilities( const ImplJobSetup* pSetupData, USHORT nType ) = 0;
-    virtual ULONG                   GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
-    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin ) = 0;
+    virtual ULONG					GetCapabilities( const ImplJobSetup* pSetupData, USHORT nType ) = 0;
+    virtual ULONG					GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
+    virtual String					GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin ) = 0;
     // fills m_aPaperFormats and sets m_bPapersInit to true
-    virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
+    virtual void					InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait
-    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
+    virtual int					GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
 };
 
 // --------------
@@ -107,11 +107,11 @@ public:
 
 class VCL_DLLPUBLIC SalPrinter
 {
-public:                     // public for Sal Implementation
+public: 					// public for Sal Implementation
     SalPrinter() {}
     virtual ~SalPrinter();
 
-    virtual BOOL                    StartJob( const String* pFileName,
+    virtual BOOL					StartJob( const String* pFileName,
                                               const String& rJobName,
                                               const String& rAppName,
                                               ULONG nCopies,
@@ -127,12 +127,12 @@ public:                     // public for Sal Implementation
                                               ImplJobSetup* pSetupData,
                                               vcl::PrinterController& rController );
 
-    virtual BOOL                    EndJob() = 0;
-    virtual BOOL                    AbortJob() = 0;
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData ) = 0;
-    virtual BOOL                    EndPage() = 0;
-    virtual ULONG                   GetErrorCode() = 0;
-
+    virtual BOOL					EndJob() = 0;
+    virtual BOOL					AbortJob() = 0;
+    virtual SalGraphics*			StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData ) = 0;
+    virtual BOOL					EndPage() = 0;
+    virtual ULONG					GetErrorCode() = 0;
+    
 };
 
 #endif // _SV_SALPRN_HXX

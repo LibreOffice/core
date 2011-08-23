@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,6 +37,6 @@ namespace vcl_accept
     sal_Bool accept(const ::rtl::OUString & accDcp, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> & rSMgr);
 }
 
-#endif  // _UNOBROK_HXX
+#endif	// _UNOBROK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

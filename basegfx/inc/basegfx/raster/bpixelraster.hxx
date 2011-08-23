@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@ namespace basegfx
         BPixelRaster& operator=(const BPixelRaster&);
 
     protected:
-        sal_uInt32                  mnWidth;
-        sal_uInt32                  mnHeight;
-        sal_uInt32                  mnCount;
-        BPixel*                     mpContent;
+        sal_uInt32					mnWidth;
+        sal_uInt32					mnHeight;
+        sal_uInt32					mnCount;
+        BPixel*						mpContent;
 
     public:
         // reset
@@ -63,7 +63,7 @@ namespace basegfx
 
         // constructor/destructor
         BPixelRaster(sal_uInt32 nWidth, sal_uInt32 nHeight)
-        :   mnWidth(nWidth),
+        :	mnWidth(nWidth),
             mnHeight(nHeight),
             mnCount(nWidth * nHeight),
             mpContent(new BPixel[mnCount])
@@ -85,12 +85,12 @@ namespace basegfx
         sal_uInt32 getWidth() const { return mnWidth; }
         sal_uInt32 getHeight() const { return mnHeight; }
         sal_uInt32 getCount() const { return mnCount; }
-
+        
         // data access read only
         const BPixel& getBPixel(sal_uInt32 nIndex) const
         {
 #ifdef DBG_UTIL
-            if(nIndex >= mnCount)
+            if(nIndex >= mnCount) 
             {
                 OSL_ENSURE(false, "getBPixel: Access out of range (!)");
                 return BPixel::getEmptyBPixel();
@@ -103,7 +103,7 @@ namespace basegfx
         BPixel& getBPixel(sal_uInt32 nIndex)
         {
 #ifdef DBG_UTIL
-            if(nIndex >= mnCount)
+            if(nIndex >= mnCount) 
             {
                 OSL_ENSURE(false, "getBPixel: Access out of range (!)");
                 return mpContent[0L];

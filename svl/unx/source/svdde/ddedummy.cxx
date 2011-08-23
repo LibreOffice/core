@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -269,10 +269,10 @@ const String& DdeService::GetName() const
   return String::EmptyString();
 }
 
-namespace
-{
-    struct theDdeServices
-        : public rtl::Static< DdeServices, theDdeServices > {};
+namespace 
+{ 
+    struct theDdeServices 
+        : public rtl::Static< DdeServices, theDdeServices > {}; 
 }
 
 DdeServices& DdeService::GetServices()

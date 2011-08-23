@@ -31,9 +31,9 @@ class EventHandler
 
     public void Print (PrintStream out)
     {
-        out.println ("Event id is " + mnEventId
+        out.println ("Event id is " + mnEventId 
             + " (" + NameProvider.getEventName(mnEventId)+")"
-            + " for " + mxEventSource.getAccessibleName() + " / "
+            + " for " + mxEventSource.getAccessibleName() + " / " 
             + NameProvider.getRoleName (mxEventSource.getAccessibleRole()));
         PrintOldAndNew (out);
     }

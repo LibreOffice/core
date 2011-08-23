@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,9 +64,9 @@ namespace cairocanvas
         mpBufferSurface(),
         mbTextureDirty(true)
     {}
-
+    
     void SpriteHelper::init( const geometry::RealSize2D& rSpriteSize,
-                             const SpriteCanvasRef&      rSpriteCanvas )
+                             const SpriteCanvasRef&	     rSpriteCanvas )
     {
         ENSURE_OR_THROW( rSpriteCanvas.get(),
                           "SpriteHelper::init(): Invalid device, sprite canvas or surface" );
@@ -148,7 +148,7 @@ namespace cairocanvas
                         ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                             rClip ));
 
-                    doPolyPolygonImplementation( aClipPoly, Clip, pCairo.get(),
+                    doPolyPolygonImplementation( aClipPoly, Clip, pCairo.get(), 
                                                  NULL, SurfaceProviderRef(mpSpriteCanvas.get()),
                                                  rClip->getFillRule() );
                 }
@@ -160,8 +160,8 @@ namespace cairocanvas
 
                 if( isContentFullyOpaque() )
                     cairo_set_operator( pCairo.get(), CAIRO_OPERATOR_SOURCE );
-                cairo_set_source_surface( pCairo.get(),
-                                          mpBufferSurface->getCairoSurface().get(),
+                cairo_set_source_surface( pCairo.get(), 
+                                          mpBufferSurface->getCairoSurface().get(), 
                                           fX, fY );
                 if( ::rtl::math::approxEqual( fAlpha, 1.0 ) )
                     cairo_paint( pCairo.get() );

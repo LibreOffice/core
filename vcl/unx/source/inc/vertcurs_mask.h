@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #define vertcurs_mask_width 16
 #define vertcurs_mask_height 16
-#define vertcurs_mask_x_hot 8
+#define vertcurs_mask_x_hot 8 
 #define vertcurs_mask_y_hot 8
 static char vertcurs_mask_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0xe0, 0x07, 0xe0, 0x0f, 0xf0,

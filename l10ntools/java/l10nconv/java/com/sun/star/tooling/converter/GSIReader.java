@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 /*
  * Created on 2005
- *  by Christian Schmidt
+ *	by Christian Schmidt
  */
 package com.sun.star.tooling.converter;
 
@@ -42,7 +42,7 @@ import com.sun.star.tooling.languageResolver.LanguageResolver.LanguageResolvingE
 
 /**
  * @author Christian Schmidt 2005
- *
+ * 
  */
 public class GSIReader extends DataReader {
     /**
@@ -102,7 +102,7 @@ public class GSIReader extends DataReader {
 
     /**
      * Create a new Instance of GSIReader
-     *
+     * 
      * @param source
      *            the file to read from
      * @param sourceLanguage
@@ -127,10 +127,10 @@ public class GSIReader extends DataReader {
 
     /**
      * Read the next GSIBlock and return the data
-     *
-     * @return A Map containing the data of the read GSIBlock the keys for the language depending data are the language id (numeric) the
+     * 
+     * @return A Map containing the data of the read GSIBlock the keys for the language depending data are the language id (numeric) the 
      * single language  are acessible with the keys "BlockNr", "resType", "languageNr", "status","content".
-     *
+     * 
      * @throws IOException
      */
     public Map getGSIData() throws IOException {
@@ -147,7 +147,7 @@ public class GSIReader extends DataReader {
 
         while (useBuffer || (line = readLine()) != null) {
 
-
+            
 
             if (useBuffer) {
                 GSILine = GSILineBuffer;
@@ -214,7 +214,7 @@ public class GSIReader extends DataReader {
                 OutputHandler.out("\n\n");
                 OutputHandler.out("GSI Blocks    :         " + this.blockCounter);
                 OutputHandler.out("GSI Lines     :         " + this.lineCounter);
-
+            
                 return null;
             }else{
                 lastLineFound = true;
@@ -230,7 +230,7 @@ public class GSIReader extends DataReader {
 
     /**
      * Split a GSILine to single fields
-     *
+     * 
      * @param line
      *            The line to split
      * @return An array containing the contents of the columns in the given line

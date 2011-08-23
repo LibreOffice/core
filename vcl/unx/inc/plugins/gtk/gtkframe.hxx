@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ class GtkSalFrame : public SalFrame
         {}
         ~GraphicsHolder();
     };
-
+    
     struct IMHandler
     {
         //--------------------------------------------------------
@@ -81,7 +81,7 @@ class GtkSalFrame : public SalFrame
             guint   keyval;
             guint16 hardware_keycode;
             guint8  group;
-
+    
             PreviousKeyPress (GdkEventKey *event)
             :   window (NULL),
                 send_event (0),
@@ -102,7 +102,7 @@ class GtkSalFrame : public SalFrame
                     group               = event->group;
                 }
             }
-
+    
             PreviousKeyPress( const PreviousKeyPress& rPrev )
             :   window( rPrev.window ),
                 send_event( rPrev.send_event ),
@@ -112,7 +112,7 @@ class GtkSalFrame : public SalFrame
                 hardware_keycode( rPrev.hardware_keycode ),
                 group( rPrev.group )
             {}
-
+    
             bool operator== (GdkEventKey *event) const
             {
                 return (event != NULL)
@@ -127,8 +127,8 @@ class GtkSalFrame : public SalFrame
                     ;
             }
         };
-
-
+        
+        
         GtkSalFrame*                    m_pFrame;
         std::list< PreviousKeyPress >   m_aPrevKeyPresses;
         int                             m_nPrevKeyPresses; // avoid using size()
@@ -137,7 +137,7 @@ class GtkSalFrame : public SalFrame
         bool                            m_bPreeditJustChanged;
         SalExtTextInputEvent            m_aInputEvent;
         std::vector< USHORT >           m_aInputFlags;
-
+        
         IMHandler( GtkSalFrame* );
         ~IMHandler();
 
@@ -148,17 +148,17 @@ class GtkSalFrame : public SalFrame
         void            endExtTextInput( USHORT nFlags );
         bool            handleKeyEvent( GdkEventKey* pEvent );
         void            focusChanged( bool bFocusIn );
-
+        
         void            doCallEndExtTextInput();
         void            sendEmptyCommit();
-
-
-        static void         signalIMCommit( GtkIMContext*, gchar*, gpointer );
-        static gboolean     signalIMDeleteSurrounding( GtkIMContext*, gint, gint, gpointer );
-        static void         signalIMPreeditChanged( GtkIMContext*, gpointer );
-        static void         signalIMPreeditEnd( GtkIMContext*, gpointer );
-        static void         signalIMPreeditStart( GtkIMContext*, gpointer );
-        static gboolean     signalIMRetrieveSurrounding( GtkIMContext*, gpointer );
+        
+        
+        static void			signalIMCommit( GtkIMContext*, gchar*, gpointer );
+        static gboolean		signalIMDeleteSurrounding( GtkIMContext*, gint, gint, gpointer );
+        static void			signalIMPreeditChanged( GtkIMContext*, gpointer );
+        static void			signalIMPreeditEnd( GtkIMContext*, gpointer );
+        static void			signalIMPreeditStart( GtkIMContext*, gpointer );
+        static gboolean		signalIMRetrieveSurrounding( GtkIMContext*, gpointer );
     };
     friend struct IMHandler;
 
@@ -192,40 +192,40 @@ class GtkSalFrame : public SalFrame
     bool                            m_bSetFocusOnMap;
     String                          m_aTitle;
     rtl::OUString                   m_sWMClass;
-
+    
     IMHandler*                      m_pIMHandler;
-
+    
     Size                            m_aMaxSize;
     Size                            m_aMinSize;
-    Rectangle                       m_aRestorePosSize;
-
-    GdkRegion*                      m_pRegion;
+    Rectangle                       m_aRestorePosSize;    
+    
+    GdkRegion*			            m_pRegion;
 
     void Init( SalFrame* pParent, ULONG nStyle );
     void Init( SystemParentData* pSysData );
     void InitCommon();
 
     // signals
-    static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
-    static void         signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer );
-    static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
-    static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
-    static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalUnmap( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalConfigure( GtkWidget*, GdkEventConfigure*, gpointer );
-    static gboolean     signalMotion( GtkWidget*, GdkEventMotion*, gpointer );
-    static gboolean     signalKey( GtkWidget*, GdkEventKey*, gpointer );
-    static gboolean     signalDelete( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalState( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
-    static gboolean     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
-    static void         signalDestroy( GtkObject*, gpointer );
+    static gboolean		signalButton( GtkWidget*, GdkEventButton*, gpointer );
+    static void			signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer );
+    static gboolean		signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
+    static gboolean		signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
+    static gboolean		signalMap( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean		signalUnmap( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean		signalConfigure( GtkWidget*, GdkEventConfigure*, gpointer );
+    static gboolean		signalMotion( GtkWidget*, GdkEventMotion*, gpointer );
+    static gboolean		signalKey( GtkWidget*, GdkEventKey*, gpointer );
+    static gboolean		signalDelete( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean		signalState( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean		signalScroll( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean		signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
+    static gboolean		signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
+    static void			signalDestroy( GtkObject*, gpointer );
 
-    void            Center();
-    void            SetDefaultSize();
-    void            setAutoLock( bool bLock );
-    void            setScreenSaverTimeout( int nTimeout );
+    void			Center();
+    void			SetDefaultSize();
+    void			setAutoLock( bool bLock );
+    void			setScreenSaverTimeout( int nTimeout );
 
     void            doKeyCallback( guint state,
                                    guint keyval,
@@ -250,7 +250,7 @@ class GtkSalFrame : public SalFrame
             !(m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) && // toolbars are also not
             !(m_nStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE);       // focusable floats are not
     }
-
+    
     bool isChild( bool bPlug = true, bool bSysChild = true )
     {
         ULONG nMask = 0;
@@ -260,7 +260,7 @@ class GtkSalFrame : public SalFrame
             nMask |= SAL_FRAME_STYLE_SYSTEMCHILD;
         return (m_nStyle & nMask) != 0;
     }
-
+    
     void resizeWindow( long nWidth, long nHeight );
     void moveWindow( long nX, long nY );
 
@@ -271,7 +271,7 @@ class GtkSalFrame : public SalFrame
     void askForXEmbedFocus( sal_Int32 nTimecode );
 
     void updateWMClass();
-
+    
     DECL_LINK( ImplDelayedFullScreenHdl, void* );
 public:
     GtkSalFrame( SalFrame* pParent, ULONG nStyle );
@@ -283,20 +283,20 @@ public:
     bool Dispatch( const XEvent* pEvent );
     void grabPointer( BOOL bGrab, BOOL bOwnerEvents = FALSE );
 
-    GtkSalDisplay*  getDisplay();
-    GdkDisplay*     getGdkDisplay();
-    GtkWidget*  getWindow() const { return m_pWindow; }
-    GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
-    GdkWindow*  getForeignParent() const { return m_pForeignParent; }
-    GdkNativeWindow getForeignParentWindow() const { return m_aForeignParentWindow; }
-    GdkWindow*  getForeignTopLevel() const { return m_pForeignTopLevel; }
-    GdkNativeWindow getForeignTopLevelWindow() const { return m_aForeignTopLevelWindow; }
+    GtkSalDisplay*	getDisplay();
+    GdkDisplay*		getGdkDisplay();
+    GtkWidget*	getWindow() const { return m_pWindow; }
+    GtkFixed*	getFixedContainer() const { return m_pFixedContainer; }
+    GdkWindow*	getForeignParent() const { return m_pForeignParent; }
+    GdkNativeWindow	getForeignParentWindow() const { return m_aForeignParentWindow; }
+    GdkWindow*	getForeignTopLevel() const { return m_pForeignTopLevel; }
+    GdkNativeWindow	getForeignTopLevelWindow() const { return m_aForeignTopLevelWindow; }
     GdkVisibilityState getVisibilityState() const
     { return m_nVisibility; }
     Pixmap getBackgroundPixmap() const { return m_hBackgroundPixmap; }
     int getScreenNumber() const { return m_nScreen; }
     void updateScreenNumber();
-
+    
     void moveToScreen( int nScreen );
 
     virtual ~GtkSalFrame();
@@ -393,13 +393,13 @@ public:
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
-    virtual void                    ResetClipRegion();
+    virtual void					ResetClipRegion();
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( ULONG nRects );
+    virtual void					BeginSetClipRegion( ULONG nRects );
     // add a rectangle to the clip region
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void					UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     // done setting up the clipregion
-    virtual void                    EndSetClipRegion();
+    virtual void					EndSetClipRegion();
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class DtransX11ConfigItem : public ::utl::ConfigItem
     sal_Int32           m_nSelectionTimeout;
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropertyNames );
-    virtual void Commit();
+    virtual void Commit();    
 public:
     DtransX11ConfigItem();
     virtual ~DtransX11ConfigItem();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/attributelist.hxx>
 
-#define RELATIONINFO_FORMAT 0
-#define CONTENTTYPE_FORMAT  1
+#define RELATIONINFO_FORMAT	0
+#define CONTENTTYPE_FORMAT	1
 #define FORMAT_MAX_ID CONTENTTYPE_FORMAT
 
 using namespace ::com::sun::star;
@@ -78,7 +78,7 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
     uno::Reference< xml::sax::XDocumentHandler > xWriterHandler( xWriterSource, uno::UNO_QUERY_THROW );
 
     xWriterSource->setOutputStream( xOutStream );
-
+    
     ::rtl::OUString aRelListElement( RTL_CONSTASCII_USTRINGPARAM( "Relationships" ) );
     ::rtl::OUString aRelElement( RTL_CONSTASCII_USTRINGPARAM( "Relationship" ) );
     ::rtl::OUString aIDAttr( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
@@ -143,7 +143,7 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
     uno::Reference< xml::sax::XDocumentHandler > xWriterHandler( xWriterSource, uno::UNO_QUERY_THROW );
 
     xWriterSource->setOutputStream( xOutStream );
-
+    
     ::rtl::OUString aTypesElement( RTL_CONSTASCII_USTRINGPARAM( "Types" ) );
     ::rtl::OUString aDefaultElement( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
     ::rtl::OUString aOverrideElement( RTL_CONSTASCII_USTRINGPARAM( "Override" ) );
@@ -252,19 +252,19 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OFOPXMLHelper::GetParsingRes
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::startDocument()
+void SAL_CALL OFOPXMLHelper::startDocument() 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::endDocument()
+void SAL_CALL OFOPXMLHelper::endDocument() 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
+void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) 	
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT )
@@ -412,7 +412,7 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::endElement( const ::rtl::OUString& aName )
+void SAL_CALL OFOPXMLHelper::endElement( const ::rtl::OUString& aName ) 	
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT || m_nFormat == CONTENTTYPE_FORMAT )
@@ -429,25 +429,25 @@ void SAL_CALL OFOPXMLHelper::endElement( const ::rtl::OUString& aName )
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::characters( const ::rtl::OUString& /*aChars*/ )
+void SAL_CALL OFOPXMLHelper::characters( const ::rtl::OUString& /*aChars*/ ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::ignorableWhitespace( const ::rtl::OUString& /*aWhitespaces*/ )
+void SAL_CALL OFOPXMLHelper::ignorableWhitespace( const ::rtl::OUString& /*aWhitespaces*/ ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::processingInstruction( const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
+void SAL_CALL OFOPXMLHelper::processingInstruction( const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
+void SAL_CALL OFOPXMLHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }

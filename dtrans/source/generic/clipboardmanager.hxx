@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,24 +73,24 @@ namespace dtrans
         virtual ::rtl::OUString SAL_CALL getImplementationName(  )
             throw(::com::sun::star::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
             throw(::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
             throw(::com::sun::star::uno::RuntimeException);
 
         /*
          * XComponent
          */
 
-        virtual void SAL_CALL dispose()
+        virtual void SAL_CALL dispose() 
             throw(::com::sun::star::uno::RuntimeException);
 
         /*
          * XEventListener
          */
 
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) 
             throw(::com::sun::star::uno::RuntimeException);
 
         /*
@@ -98,18 +98,18 @@ namespace dtrans
          */
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > SAL_CALL getClipboard( const ::rtl::OUString& aName )
-            throw(::com::sun::star::container::NoSuchElementException,
+            throw(::com::sun::star::container::NoSuchElementException, 
                   ::com::sun::star::uno::RuntimeException);
 
-        virtual void SAL_CALL addClipboard( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& xClipboard )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::container::ElementExistException,
+        virtual void SAL_CALL addClipboard( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& xClipboard ) 
+            throw(::com::sun::star::lang::IllegalArgumentException, 
+                  ::com::sun::star::container::ElementExistException, 
                   ::com::sun::star::uno::RuntimeException);
 
-        virtual void SAL_CALL removeClipboard( const ::rtl::OUString& aName )
+        virtual void SAL_CALL removeClipboard( const ::rtl::OUString& aName ) 
             throw(::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL listClipboardNames(  )
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL listClipboardNames(  ) 
             throw(::com::sun::star::uno::RuntimeException);
 
 
@@ -120,7 +120,7 @@ namespace dtrans
 // ------------------------------------------------------------------------
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ClipboardManager_getSupportedServiceNames();
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ClipboardManager_createInstance(
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ClipboardManager_createInstance( 
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 #endif

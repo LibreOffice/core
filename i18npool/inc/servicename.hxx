@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/*
+/* 
 Service Name
   com.sun.star.i18n.Transliteration     ... dispatching UNO object and generic methods
   com.sun.star.i18n.Transliteration.u2l ... upper to lower
@@ -44,12 +44,12 @@ Implementation Name
   com.sun.star.i18n.Transliteration.u2l
   com.sun.star.i18n.Transliteration.l2u
   com.sun.star.i18n.Transliteration.caseignore
-  For these there services above,
+  For these there services above, 
 
          com.sun.star.i18n.Transliteration.ja_JP
                                             ^^^^^
                         Locale name
-
+                                            
   For com.sun.star.i18n.l10n.Transliteration service,
          com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH,
          com.sun.star.i18n.Transliteration.FULLWIDTH_HALFWIDTH,
@@ -60,7 +60,7 @@ Implementation Name
 
           ... These objects above can be used in every Locale context.
 
-*/
+*/          
 
 
 #ifndef _I18N_SERVICENAME_HXX_
@@ -68,21 +68,21 @@ Implementation Name
 
 
 
-#define TRLT_SERVICELNAME "com.sun.star.i18n.Transliteration"
-#define TRLT_SERVICELNAME_PREFIX TRLT_SERVICELNAME "."
-#define TRLT_SERVICELNAME_U2L   TRLT_SERVICELNAME_PREFIX "u2l"
-#define TRLT_SERVICELNAME_L2U   TRLT_SERVICELNAME_PREFIX "l2u"
-#define TRLT_SERVICELNAME_CASEIGNORE TRLT_SERVICELNAME_PREFIX "caseignore"
-#define TRLT_SERVICELNAME_L10N  TRLT_SERVICELNAME_PREFIX "l10n"
+#define	TRLT_SERVICELNAME "com.sun.star.i18n.Transliteration"
+#define	TRLT_SERVICELNAME_PREFIX TRLT_SERVICELNAME "."
+#define	TRLT_SERVICELNAME_U2L	TRLT_SERVICELNAME_PREFIX "u2l"
+#define	TRLT_SERVICELNAME_L2U	TRLT_SERVICELNAME_PREFIX "l2u"
+#define	TRLT_SERVICELNAME_CASEIGNORE TRLT_SERVICELNAME_PREFIX "caseignore"
+#define	TRLT_SERVICELNAME_L10N	TRLT_SERVICELNAME_PREFIX "l10n"
 
-#define TRLT_IMPLNAME "com.sun.star.i18n.Transliteration"
-#define TRLT_IMPLNAME_PREFIX_LEN    34
-#define TRLT_IMPLNAME_PREFIX "com.sun.star.i18n.Transliteration."
-//                1...5...901...5...901...5...901..4  --> 34
+#define	TRLT_IMPLNAME "com.sun.star.i18n.Transliteration"
+#define	TRLT_IMPLNAME_PREFIX_LEN	34
+#define	TRLT_IMPLNAME_PREFIX "com.sun.star.i18n.Transliteration."
+//	 		      1...5...901...5...901...5...901..4  --> 34
 
-#define TRLT_IMPLNAME_L10N  TRLT_IMPLNAME_PREFIX "l10n"
-#define TRLT_IMPLNAME_FH  TRLT_IMPLNAME_PREFIX "FULLWIDTH_HALFWIDTH" // for test
-#define TRLT_IMPLNAME_Ja_JP TRLT_IMPLNAME_PREFIX "ja_JP"
+#define	TRLT_IMPLNAME_L10N  TRLT_IMPLNAME_PREFIX "l10n"
+#define	TRLT_IMPLNAME_FH  TRLT_IMPLNAME_PREFIX "FULLWIDTH_HALFWIDTH" // for test
+#define	TRLT_IMPLNAME_Ja_JP TRLT_IMPLNAME_PREFIX "ja_JP"
 
 #endif
 

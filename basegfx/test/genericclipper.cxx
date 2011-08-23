@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,8 +84,8 @@ public:
     void tearDown()
     {}
 
-    void validate(const char* pName,
-                  const char* pValidSvgD,
+    void validate(const char* pName, 
+                  const char* pValidSvgD, 
                   B2DPolyPolygon (*pFunc)(const B2DPolyPolygon&, const B2DPolyPolygon&))
     {
         const B2DPolyPolygon aSelfIntersect(
@@ -93,12 +93,12 @@ public:
         const B2DPolyPolygon aRect(
             tools::prepareForPolygonOperation(aShiftedRectangle));
 #if defined(VERBOSE)
-        fprintf(stderr, "%s input LHS - svg:d=\"%s\"\n",
+        fprintf(stderr, "%s input LHS - svg:d=\"%s\"\n", 
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(
                         aSelfIntersect),
                     RTL_TEXTENCODING_UTF8).getStr() );
-        fprintf(stderr, "%s input RHS - svg:d=\"%s\"\n",
+        fprintf(stderr, "%s input RHS - svg:d=\"%s\"\n", 
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(
                         aRect),
@@ -109,7 +109,7 @@ public:
             pFunc(aSelfIntersect, aRect);
 
 #if defined(VERBOSE)
-        fprintf(stderr, "%s - svg:d=\"%s\"\n",
+        fprintf(stderr, "%s - svg:d=\"%s\"\n", 
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(aRes),
                     RTL_TEXTENCODING_UTF8).getStr() );
@@ -145,8 +145,8 @@ public:
         validate("validateDiff", pValid, &tools::solvePolygonOperationDiff);
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
+    // Change the following lines only, if you add, remove or rename 
+    // member functions of the current class, 
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(genericclipper);

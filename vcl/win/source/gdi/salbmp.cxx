@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@ inline void ImplSetPixel4( const HPBYTE pScanline, long nX, const BYTE cIndex )
 // ----------------
 
 WinSalBitmap::WinSalBitmap() :
-        mhDIB       ( 0 ),
-        mhDDB       ( 0 ),
-        mnBitCount  ( 0 )
+        mhDIB		( 0 ),
+        mhDDB		( 0 ),
+        mnBitCount	( 0 )
 {
 }
 
@@ -92,7 +92,7 @@ bool WinSalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
     }
     else if( mhDDB )
     {
-        BITMAP  aDDBInfo;
+        BITMAP	aDDBInfo;
 
         if( WIN_GetObject( mhDDB, sizeof( BITMAP ), &aDDBInfo ) )
         {
@@ -176,12 +176,12 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 
     if( rSalBmp.mhDIB )
     {
-        PBITMAPINFO         pBI = (PBITMAPINFO) GlobalLock( rSalBmp.mhDIB );
-        PBITMAPINFOHEADER   pBIH = (PBITMAPINFOHEADER) pBI;
-        HDC                 hDC  = pGraphics->mhDC;
-        HBITMAP             hNewDDB;
-        BITMAP              aDDBInfo;
-        PBYTE               pBits = (PBYTE) pBI + *(DWORD*) pBI +
+        PBITMAPINFO 		pBI = (PBITMAPINFO) GlobalLock( rSalBmp.mhDIB );
+        PBITMAPINFOHEADER	pBIH = (PBITMAPINFOHEADER) pBI;
+        HDC 				hDC  = pGraphics->mhDC;
+        HBITMAP 			hNewDDB;
+        BITMAP				aDDBInfo;
+        PBYTE				pBits = (PBYTE) pBI + *(DWORD*) pBI +
                             ImplGetDIBColorCount( rSalBmp.mhDIB ) * sizeof( RGBQUAD );
 
         if( pBIH->biBitCount == 1 )
@@ -226,12 +226,12 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, USHORT nNewBitCount )
         if( mhDIB )
         {
             PBITMAPINFO pBI = (PBITMAPINFO) GlobalLock( mhDIB );
-            const int   nLines = (int) rSalBmp.maSize.Height();
-            HDC         hDC = GetDC( 0 );
-            PBYTE       pBits = (PBYTE) pBI + *(DWORD*) pBI +
+            const int	nLines = (int) rSalBmp.maSize.Height();
+            HDC 		hDC = GetDC( 0 );
+            PBYTE		pBits = (PBYTE) pBI + *(DWORD*) pBI +
                                 ImplGetDIBColorCount( mhDIB ) * sizeof( RGBQUAD );
-            SalData*    pSalData = GetSalData();
-            HPALETTE    hOldPal = 0;
+            SalData*	pSalData = GetSalData();
+            HPALETTE	hOldPal = 0;
 
             if ( pSalData->mhDitherPal )
             {
@@ -291,8 +291,8 @@ USHORT WinSalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
 
     if( hDIB )
     {
-        PBITMAPINFO         pBI = (PBITMAPINFO) GlobalLock( hDIB );
-        PBITMAPINFOHEADER   pBIH = (PBITMAPINFOHEADER) pBI;
+        PBITMAPINFO 		pBI = (PBITMAPINFO) GlobalLock( hDIB );
+        PBITMAPINFOHEADER	pBIH = (PBITMAPINFOHEADER) pBI;
 
         if ( pBIH->biSize != sizeof( BITMAPCOREHEADER ) )
         {
@@ -323,15 +323,15 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBits, const Bitm
 
     if ( rSize.Width() && rSize.Height() )
     {
-        const ULONG     nImageSize = AlignedWidth4Bytes( nBits * rSize.Width() ) * rSize.Height();
-        const USHORT    nColors = ( nBits <= 8 ) ? ( 1 << nBits ) : 0;
+        const ULONG 	nImageSize = AlignedWidth4Bytes( nBits * rSize.Width() ) * rSize.Height();
+        const USHORT	nColors = ( nBits <= 8 ) ? ( 1 << nBits ) : 0;
 
         hDIB = GlobalAlloc( GHND, sizeof( BITMAPINFOHEADER ) + nColors * sizeof( RGBQUAD ) + nImageSize );
 
         if( hDIB )
         {
-            PBITMAPINFO         pBI = (PBITMAPINFO) GlobalLock( hDIB );
-            PBITMAPINFOHEADER   pBIH = (PBITMAPINFOHEADER) pBI;
+            PBITMAPINFO 		pBI = (PBITMAPINFO) GlobalLock( hDIB );
+            PBITMAPINFOHEADER	pBIH = (PBITMAPINFOHEADER) pBI;
 
             pBIH->biSize = sizeof( BITMAPINFOHEADER );
             pBIH->biWidth = rSize.Width();
@@ -364,7 +364,7 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBits, const Bitm
 
 HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
 {
-    HANDLE  hCopy = 0;
+    HANDLE	hCopy = 0;
 
     if ( bDIB && hHdl )
     {
@@ -388,9 +388,9 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
         // Destination-Bitmap erzeugen
         if ( (hCopy = CreateBitmapIndirect( &aBmp )) != 0 )
         {
-            HDC     hBmpDC = CreateCompatibleDC( 0 );
+            HDC 	hBmpDC = CreateCompatibleDC( 0 );
             HBITMAP hBmpOld = (HBITMAP) SelectObject( hBmpDC, hHdl );
-            HDC     hCopyDC = CreateCompatibleDC( hBmpDC );
+            HDC 	hCopyDC = CreateCompatibleDC( hBmpDC );
             HBITMAP hCopyOld = (HBITMAP) SelectObject( hCopyDC, hCopy );
 
             BitBlt( hCopyDC, 0, 0, aBmp.bmWidth, aBmp.bmHeight, hBmpDC, 0, 0, SRCCOPY );
@@ -414,22 +414,22 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
 
     if( mhDIB )
     {
-        PBITMAPINFO         pBI = (PBITMAPINFO) GlobalLock( mhDIB );
-        PBITMAPINFOHEADER   pBIH = (PBITMAPINFOHEADER) pBI;
+        PBITMAPINFO 		pBI = (PBITMAPINFO) GlobalLock( mhDIB );
+        PBITMAPINFOHEADER	pBIH = (PBITMAPINFOHEADER) pBI;
 
         if( ( pBIH->biCompression == BI_RLE4 ) || ( pBIH->biCompression == BI_RLE8 ) )
         {
-            Size    aSizePix( pBIH->biWidth, pBIH->biHeight );
+            Size	aSizePix( pBIH->biWidth, pBIH->biHeight );
             HGLOBAL hNewDIB = ImplCreateDIB( aSizePix, pBIH->biBitCount, BitmapPalette() );
 
             if( hNewDIB )
             {
-                PBITMAPINFO         pNewBI = (PBITMAPINFO) GlobalLock( hNewDIB );
-                PBITMAPINFOHEADER   pNewBIH = (PBITMAPINFOHEADER) pNewBI;
-                const USHORT        nColorCount = ImplGetDIBColorCount( hNewDIB );
-                const ULONG         nOffset = *(DWORD*) pBI + nColorCount * sizeof( RGBQUAD );
-                BYTE*               pOldBits = (PBYTE) pBI + nOffset;
-                BYTE*               pNewBits = (PBYTE) pNewBI + nOffset;
+                PBITMAPINFO 		pNewBI = (PBITMAPINFO) GlobalLock( hNewDIB );
+                PBITMAPINFOHEADER	pNewBIH = (PBITMAPINFOHEADER) pNewBI;
+                const USHORT		nColorCount = ImplGetDIBColorCount( hNewDIB );
+                const ULONG 		nOffset = *(DWORD*) pBI + nColorCount * sizeof( RGBQUAD );
+                BYTE*				pOldBits = (PBYTE) pBI + nOffset;
+                BYTE*				pNewBits = (PBYTE) pNewBI + nOffset;
 
                 memcpy( pNewBI, pBI, nOffset );
                 pNewBIH->biCompression = 0;
@@ -515,8 +515,8 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
         {
             if( !bReadOnly && !!pBuffer->maPalette )
             {
-                PBITMAPINFO     pBI = (PBITMAPINFO) GlobalLock( mhDIB );
-                const USHORT    nCount = pBuffer->maPalette.GetEntryCount();
+                PBITMAPINFO 	pBI = (PBITMAPINFO) GlobalLock( mhDIB );
+                const USHORT	nCount = pBuffer->maPalette.GetEntryCount();
 
                 memcpy( pBI->bmiColors, pBuffer->maPalette.ImplGetColorBuffer(), nCount * sizeof( RGBQUAD ) );
                 GlobalUnlock( mhDIB );
@@ -534,17 +534,17 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
                                      const Size& rSizePixel, bool bRLE4 )
 {
-    HPBYTE          pRLE = (HPBYTE) pSrcBuf;
-    HPBYTE          pDIB = (HPBYTE) pDstBuf;
-    HPBYTE          pRow = (HPBYTE) pDstBuf;
-    ULONG           nWidthAl = AlignedWidth4Bytes( rSizePixel.Width() * ( bRLE4 ? 4UL : 8UL ) );
-    HPBYTE          pLast = pDIB + rSizePixel.Height() * nWidthAl - 1;
-    ULONG           nCountByte;
-    ULONG           nRunByte;
-    ULONG           nX = 0;
-    ULONG           i;
-    BYTE            cTmp;
-    bool            bEndDecoding = FALSE;
+    HPBYTE			pRLE = (HPBYTE) pSrcBuf;
+    HPBYTE			pDIB = (HPBYTE) pDstBuf;
+    HPBYTE			pRow = (HPBYTE) pDstBuf;
+    ULONG			nWidthAl = AlignedWidth4Bytes( rSizePixel.Width() * ( bRLE4 ? 4UL : 8UL ) );
+    HPBYTE			pLast = pDIB + rSizePixel.Height() * nWidthAl - 1;
+    ULONG			nCountByte;
+    ULONG			nRunByte;
+    ULONG			nX = 0;
+    ULONG			i;
+    BYTE			cTmp;
+    bool			bEndDecoding = FALSE;
 
     if( pRLE && pDIB )
     {

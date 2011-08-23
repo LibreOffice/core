@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ INT32 StgFAT::FindBlock( INT32& nPgs )
     INT32 nMaxStart = STG_EOF, nMaxLen = 0x7FFFFFFFL;
     INT32 nTmpStart = STG_EOF, nTmpLen = 0;
     INT32 nPages    = rStrm.GetSize() >> 2;
-    BOOL bFound     = FALSE;
+    BOOL bFound 	= FALSE;
     StgPage* pPg = NULL;
     short nEntry = 0;
     for( INT32 i = 0; i < nPages; i++, nEntry++ )
@@ -526,7 +526,7 @@ INT32 StgFATStrm::GetPage( short nOff, BOOL bMake, USHORT *pnMasterAlloc )
     USHORT nBlocks = nOff / nMasterCount;
     // Offset in letzter Masterpage
     nOff = nOff % nMasterCount;
-
+    
     StgPage* pOldPage = 0;
     StgPage* pMaster = 0;
     INT32 nFAT = rIo.aHdr.GetFATChain();
