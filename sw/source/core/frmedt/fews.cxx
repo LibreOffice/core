@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include <tabfrm.hxx>
 #include <cellfrm.hxx>
 #include <flyfrms.hxx>
-#include <txtfrm.hxx>       // SwTxtFrm
+#include <txtfrm.hxx>		// SwTxtFrm
 #include <mdiexp.hxx>
 #include <edimp.hxx>
 #include <pagedesc.hxx>
@@ -72,11 +72,11 @@ using namespace com::sun::star;
 TYPEINIT1(SwFEShell,SwEditShell)
 
 /***********************************************************************
-#*  Class      :  SwFEShell
-#*  Methode    :  EndAllActionAndCall()
+#*	Class	   :  SwFEShell
+#*	Methode    :  EndAllActionAndCall()
 #*
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 31. Oct. 95
+#*	Datum	   :  MA 03. May. 93
+#*	Update	   :  MA 31. Oct. 95
 #***********************************************************************/
 
 void SwFEShell::EndAllActionAndCall()
@@ -95,11 +95,11 @@ void SwFEShell::EndAllActionAndCall()
 
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  GetCntntPos
-#*  Beschreibung:  Ermitteln des Cntnt's der dem Punkt am naechsten liegt
-#*  Datum       :  MA 02. Jun. 92
-#*  Update      :  MA 02. May. 95
+#*	Class		:  SwFEShell
+#*	Methode 	:  GetCntntPos
+#*	Beschreibung:  Ermitteln des Cntnt's der dem Punkt am naechsten liegt
+#*	Datum		:  MA 02. Jun. 92
+#*	Update		:  MA 02. May. 95
 #***********************************************************************/
 
 Point SwFEShell::GetCntntPos( const Point& rPoint, BOOL bNext ) const
@@ -134,19 +134,19 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
     if( !pFrm )
         return GetLayout()->Frm();
 
-    BOOL  bFrm  = TRUE;
+    BOOL  bFrm 	= TRUE;
     switch ( eType )
     {
-        case RECT_PAGE_PRT:         bFrm = FALSE; /* no break */
-        case RECT_PAGE :            pFrm = pFrm->FindPageFrm();
+        case RECT_PAGE_PRT:			bFrm = FALSE; /* no break */
+        case RECT_PAGE :			pFrm = pFrm->FindPageFrm();
                                     break;
 
-        case RECT_PAGE_CALC:        pFrm->Calc();
+        case RECT_PAGE_CALC:		pFrm->Calc();
                                     pFrm = pFrm->FindPageFrm();
                                     pFrm->Calc();
                                     break;
 
-        case RECT_FLY_PRT_EMBEDDED: bFrm = FALSE; /* no break */
+        case RECT_FLY_PRT_EMBEDDED:	bFrm = FALSE; /* no break */
         case RECT_FLY_EMBEDDED:     pFrm = xObj.is() ? FindFlyFrm( xObj )
                                                 : pFrm->IsFlyFrm()
                                                     ? pFrm
@@ -161,7 +161,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     }
                                     /* KEIN BREAK */
         case RECT_SECTION_PRT:
-        case RECT_SECTION:          if( pFrm->IsInSct() )
+        case RECT_SECTION:			if( pFrm->IsInSct() )
                                         pFrm = pFrm->FindSctFrm();
                                     else {
                                         OSL_ENSURE( FALSE, "Missing section" );
@@ -172,8 +172,8 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                         bFrm = FALSE;
                                     break;
 
-        case RECT_HEADERFOOTER_PRT: bFrm = FALSE; /* no break */
-        case RECT_HEADERFOOTER:     if( 0 == (pFrm = pFrm->FindFooterOrHeader()) )
+        case RECT_HEADERFOOTER_PRT:	bFrm = FALSE; /* no break */
+        case RECT_HEADERFOOTER:	   	if( 0 == (pFrm = pFrm->FindFooterOrHeader()) )
                                         return GetLayout()->Frm();
                                     break;
 
@@ -201,20 +201,20 @@ BOOL SwFEShell::GetPageNumber( long nYPos, BOOL bAtCrsrPos, USHORT& rPhyNum, USH
 {
     const SwFrm *pPage;
 
-    if ( bAtCrsrPos )                   //Seite vom Crsr besorgen
+    if ( bAtCrsrPos )					//Seite vom Crsr besorgen
     {
         pPage = GetCurrFrm( FALSE );
         if ( pPage )
             pPage = pPage->FindPageFrm();
     }
-    else if ( nYPos > -1 )              //Seite ueber die Positon ermitteln
+    else if ( nYPos > -1 )				//Seite ueber die Positon ermitteln
     {
         pPage = GetLayout()->Lower();
         while( pPage &&  (pPage->Frm().Bottom() < nYPos ||
                             nYPos < pPage->Frm().Top() ) )
             pPage = pPage->GetNext();
     }
-    else                                //Die erste sichtbare Seite
+    else								//Die erste sichtbare Seite
     {
         pPage = Imp()->GetFirstVisPage();
         if ( pPage && ((SwPageFrm*)pPage)->IsEmptyPage() )
@@ -248,10 +248,10 @@ bool SwFEShell::IsDirectlyInSection() const
 
 /*************************************************************************
 |*
-|*  SwFEShell::GetFrmType()
+|*	SwFEShell::GetFrmType()
 |*
-|*  Ersterstellung      MA 12. Jan. 93
-|*  Letzte Aenderung    AMA 25. Nov. 98
+|*	Ersterstellung		MA 12. Jan. 93
+|*	Letzte Aenderung	AMA 25. Nov. 98
 |*
 *************************************************************************/
 
@@ -273,7 +273,7 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
     {
         switch ( pFrm->GetType() )
         {
-            case FRM_COLUMN:    if( pFrm->GetUpper()->IsSctFrm() )
+            case FRM_COLUMN:	if( pFrm->GetUpper()->IsSctFrm() )
                                 {
                                     // Check, if isn't not only a single column
                                     // from a section with footnotes at the end.
@@ -285,16 +285,16 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
                                 else // nur Seiten und Rahmenspalten
                                     nReturn |= FRMTYPE_COLUMN;
                                 break;
-            case FRM_PAGE:      nReturn |= FRMTYPE_PAGE;
-                                if( ((SwPageFrm*)pFrm)->IsFtnPage() )
+            case FRM_PAGE:		nReturn |= FRMTYPE_PAGE;
+                                if(	((SwPageFrm*)pFrm)->IsFtnPage() )
                                     nReturn |= FRMTYPE_FTNPAGE;
                                 break;
-            case FRM_HEADER:    nReturn |= FRMTYPE_HEADER;      break;
-            case FRM_FOOTER:    nReturn |= FRMTYPE_FOOTER;      break;
-            case FRM_BODY:      if( pFrm->GetUpper()->IsPageFrm() ) // nicht bei ColumnFrms
+            case FRM_HEADER:	nReturn |= FRMTYPE_HEADER;		break;
+            case FRM_FOOTER:	nReturn |= FRMTYPE_FOOTER;		break;
+            case FRM_BODY:		if( pFrm->GetUpper()->IsPageFrm() ) // nicht bei ColumnFrms
                                     nReturn |= FRMTYPE_BODY;
                                 break;
-            case FRM_FTN:       nReturn |= FRMTYPE_FOOTNOTE;    break;
+            case FRM_FTN:		nReturn |= FRMTYPE_FOOTNOTE;	break;
             case FRM_FLY:       if( ((SwFlyFrm*)pFrm)->IsFlyLayFrm() )
                                     nReturn |= FRMTYPE_FLY_FREE;
                                 else if ( ((SwFlyFrm*)pFrm)->IsFlyAtCntFrm() )
@@ -311,8 +311,8 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
                                 break;
             case FRM_TAB:
             case FRM_ROW:
-            case FRM_CELL:      nReturn |= FRMTYPE_TABLE;       break;
-            default:            /* do nothing */                break;
+            case FRM_CELL:		nReturn |= FRMTYPE_TABLE;		break;
+            default:			/* do nothing */				break;
         }
         if ( pFrm->IsFlyFrm() )
             pFrm = ((SwFlyFrm*)pFrm)->GetAnchorFrm();
@@ -324,10 +324,10 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
 
 /*************************************************************************
 |*
-|*  SwFEShell::ShLooseFcs(), ShGetFcs()
+|*	SwFEShell::ShLooseFcs(), ShGetFcs()
 |*
-|*  Ersterstellung      MA 10. May. 93
-|*  Letzte Aenderung    MA 09. Sep. 98
+|*	Ersterstellung		MA 10. May. 93
+|*	Letzte Aenderung	MA 09. Sep. 98
 |*
 *************************************************************************/
 
@@ -353,16 +353,16 @@ void SwFEShell::ShLooseFcs()
         Imp()->GetDrawView()->hideMarkHandles();
         FrameNotify( this, FLY_DRAG_END );
     }
-//  ::ResetShell();
+//	::ResetShell();
 }
 
 /*************************************************************************
 |*
-|*  SwFEShell::GetPhyPageNum()
-|*  SwFEShell::GetVirtPageNum()
+|*	SwFEShell::GetPhyPageNum()
+|*	SwFEShell::GetVirtPageNum()
 |*
-|*  Ersterstellung      OK 07.07.93 08:20
-|*  Letzte Aenderung    MA 03. Jan. 94
+|*	Ersterstellung		OK 07.07.93 08:20
+|*	Letzte Aenderung	MA 03. Jan. 94
 |*
 *************************************************************************/
 
@@ -384,13 +384,13 @@ USHORT SwFEShell::GetVirtPageNum( const BOOL bCalcFrm )
 
 /*************************************************************************
 |*
-|*  void lcl_SetAPageOffset()
-|*  void SwFEShell::SetNewPageOffset()
-|*  void SwFEShell::SetPageOffset()
-|*  USHORT SwFEShell::GetPageOffset() const
+|*	void lcl_SetAPageOffset()
+|*	void SwFEShell::SetNewPageOffset()
+|*	void SwFEShell::SetPageOffset()
+|*	USHORT SwFEShell::GetPageOffset() const
 |*
-|*  Ersterstellung      OK 07.07.93 08:20
-|*  Letzte Aenderung    MA 30. Mar. 95
+|*	Ersterstellung		OK 07.07.93 08:20
+|*	Letzte Aenderung	MA 30. Mar. 95
 |*
 *************************************************************************/
 
@@ -465,10 +465,10 @@ USHORT SwFEShell::GetPageOffset() const
 
 /*************************************************************************
 |*
-|*  SwFEShell::InsertLabel()
+|*	SwFEShell::InsertLabel()
 |*
-|*  Ersterstellung      MA 10. Feb. 94
-|*  Letzte Aenderung    MA 10. Feb. 94
+|*	Ersterstellung		MA 10. Feb. 94
+|*	Letzte Aenderung	MA 10. Feb. 94
 |*
 *************************************************************************/
 
@@ -496,7 +496,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                 //Bei Flys den Index auf den StartNode herunterreichen.
                 nIdx = pCnt->FindFlyFrm()->
                             GetFmt()->GetCntnt().GetCntntIdx()->GetIndex();
-//warum?? Bug 61913     ParkCrsr( GetCrsr()->GetPoint()->nNode );
+//warum?? Bug 61913		ParkCrsr( GetCrsr()->GetPoint()->nNode );
             }
             break;
         case LTYPE_TABLE:
@@ -563,10 +563,10 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
 
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methoden    :  Sort
-#*  Datum       :  ??
-#*  Update      :  ??
+#*	Class		:  SwFEShell
+#*	Methoden	:  Sort
+#*	Datum		:  ??
+#*	Update		:  ??
 #***********************************************************************/
 
 BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
@@ -585,7 +585,7 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
         OSL_ENSURE( pFrm->FindTabFrm(), "Crsr nicht in Tabelle." );
 
         // lasse ueber das Layout die Boxen suchen
-        SwSelBoxes  aBoxes;
+        SwSelBoxes	aBoxes;
         GetTblSel(*this, aBoxes);
 
         // die Crsr muessen noch aus dem Loesch Bereich entfernt
@@ -613,7 +613,7 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
 
             SwNodeIndex aPrevIdx( pStart->nNode, -1 );
             ULONG nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
-            xub_StrLen nCntStt  = pStart->nContent.GetIndex();
+            xub_StrLen nCntStt	= pStart->nContent.GetIndex();
 
             // Das Sortieren
             bRet = pDoc->SortText(*pPam, rOpt);
@@ -641,10 +641,10 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
 
 /*************************************************************************
 |*
-|*  SwFEShell::GetCurColNum(), _GetColNum()
+|*	SwFEShell::GetCurColNum(), _GetColNum()
 |*
-|*  Ersterstellung      MA 03. Feb. 95
-|*  Letzte Aenderung    MA 20. Apr. 95
+|*	Ersterstellung		MA 03. Feb. 95
+|*	Letzte Aenderung	MA 20. Apr. 95
 |
 |*************************************************************************/
 

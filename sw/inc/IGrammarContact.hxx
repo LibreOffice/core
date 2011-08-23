@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@ class SwDoc;
 /** Organizer of the contact between SwTxtNodes and grammar checker
 */
 class IGrammarContact
-{
+{ 
 public:
-
+    
     /** Update cursor position reacts to a change of the current input cursor
         As long as the cursor in inside a paragraph, the grammar checking does
         not show new grammar faults. When the cursor leaves the paragraph, these
@@ -47,7 +47,7 @@ public:
     @returns void
     */
     virtual void updateCursorPosition( const SwPosition& rNewPos ) = 0;
-
+    
     /** getGrammarCheck checks if the given text node is blocked by the current cursor
         if not, the normal markup list is returned
         if blocked, it will return a markup list "proxy"

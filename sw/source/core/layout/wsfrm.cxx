@@ -81,10 +81,10 @@ using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
-|*  SwFrm::SwFrm()
+|*	SwFrm::SwFrm()
 |*
-|*  Ersterstellung      AK 12-Feb-1991
-|*  Letzte Aenderung    MA 05. Apr. 94
+|*	Ersterstellung		AK 12-Feb-1991
+|*	Letzte Aenderung	MA 05. Apr. 94
 |*
 |*************************************************************************/
 
@@ -230,10 +230,10 @@ void SwTxtFrm::CheckDirection( BOOL bVert )
 
 /*************************************************************************
 |*
-|*  SwFrm::Modify()
+|*	SwFrm::Modify()
 |*
-|*  Ersterstellung      AK 01-Mar-1991
-|*  Letzte Aenderung    MA 20. Jun. 96
+|*	Ersterstellung		AK 01-Mar-1991
+|*	Letzte Aenderung	MA 20. Jun. 96
 |*
 |*************************************************************************/
 void SwFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
@@ -347,9 +347,9 @@ void SwFrm::_UpdateAttrFrm( SfxPoolItem *pOld, SfxPoolItem *pNew,
 
 /*************************************************************************
 |*
-|*    SwFrm::Prepare()
-|*    Ersterstellung    MA 13. Apr. 93
-|*    Letzte Aenderung  MA 26. Jun. 96
+|*	  SwFrm::Prepare()
+|*	  Ersterstellung	MA 13. Apr. 93
+|*	  Letzte Aenderung	MA 26. Jun. 96
 |*
 |*************************************************************************/
 void SwFrm::Prepare( const PrepareHint, const void *, BOOL )
@@ -359,12 +359,12 @@ void SwFrm::Prepare( const PrepareHint, const void *, BOOL )
 
 /*************************************************************************
 |*
-|*    SwFrm::InvalidatePage()
-|*    Beschreibung:     Invalidiert die Seite, in der der Frm gerade steht.
-|*      Je nachdem ob es ein Layout, Cntnt oder FlyFrm ist wird die Seite
-|*      entsprechend Invalidiert.
-|*    Ersterstellung    MA 22. Jul. 92
-|*    Letzte Aenderung  MA 14. Oct. 94
+|*	  SwFrm::InvalidatePage()
+|*	  Beschreibung:		Invalidiert die Seite, in der der Frm gerade steht.
+|*		Je nachdem ob es ein Layout, Cntnt oder FlyFrm ist wird die Seite
+|*		entsprechend Invalidiert.
+|*	  Ersterstellung	MA 22. Jul. 92
+|*	  Letzte Aenderung	MA 14. Oct. 94
 |*
 |*************************************************************************/
 void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
@@ -407,8 +407,8 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
             if ( pRoot->IsTurboAllowed() )
             {
                 // JP 21.09.95: wenn sich der ContentFrame 2 mal eintragen
-                //              will, kann es doch eine TurboAction bleiben.
-                //  ODER????
+                //				will, kann es doch eine TurboAction bleiben.
+                //	ODER????
                 if ( !pRoot->GetTurbo() || this == pRoot->GetTurbo() )
                     pRoot->SetTurbo( (const SwCntntFrm*)this );
                 else
@@ -424,10 +424,10 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
             if ( !pRoot->GetTurbo() )
             {
                 if ( pFly )
-                {   if( !pFly->IsLocked() )
+                {	if( !pFly->IsLocked() )
                     {
                         if ( pFly->IsFlyInCntFrm() )
-                        {   pPage->InvalidateFlyInCnt();
+                        {	pPage->InvalidateFlyInCnt();
                             ((SwFlyInCntFrm*)pFly)->InvalidateCntnt();
                             pFly->GetAnchorFrm()->InvalidatePage();
                         }
@@ -460,7 +460,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
                 pPage->InvalidateLayout();
 
             if ( pRoot->GetTurbo() )
-            {   const SwFrm *pTmp = pRoot->GetTurbo();
+            {	const SwFrm *pTmp = pRoot->GetTurbo();
                 pRoot->ResetTurbo();
                 pTmp->InvalidatePage();
             }
@@ -479,10 +479,10 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 
 /*************************************************************************
 |*
-|*  SwFrm::ChgSize()
+|*	SwFrm::ChgSize()
 |*
-|*  Ersterstellung      AK 15-Feb-1991
-|*  Letzte Aenderung    MA 18. Nov. 98
+|*	Ersterstellung		AK 15-Feb-1991
+|*	Letzte Aenderung	MA 18. Nov. 98
 |*
 |*************************************************************************/
 Size SwFrm::ChgSize( const Size& aNewSize )
@@ -560,13 +560,13 @@ Size SwFrm::ChgSize( const Size& aNewSize )
 
 /*************************************************************************
 |*
-|*  SwFrm::InsertBefore()
+|*	SwFrm::InsertBefore()
 |*
-|*  Beschreibung        SwFrm wird in eine bestehende Struktur eingefuegt
-|*                      Eingefuegt wird unterhalb des Parent und entweder
-|*                      vor pBehind oder am Ende der Kette wenn pBehind
-|*                      leer ist.
-|*  Letzte Aenderung    MA 06. Aug. 99
+|*	Beschreibung		SwFrm wird in eine bestehende Struktur eingefuegt
+|* 						Eingefuegt wird unterhalb des Parent und entweder
+|* 						vor pBehind oder am Ende der Kette wenn pBehind
+|* 						leer ist.
+|*	Letzte Aenderung	MA 06. Aug. 99
 |*
 |*************************************************************************/
 void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
@@ -578,7 +578,7 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
     pUpper = pParent;
     pNext = pBehind;
     if( pBehind )
-    {   //Einfuegen vor pBehind.
+    {	//Einfuegen vor pBehind.
         if( 0 != (pPrev = pBehind->pPrev) )
             pPrev->pNext = this;
         else
@@ -586,7 +586,7 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
         pBehind->pPrev = this;
     }
     else
-    {   //Einfuegen am Ende, oder als ersten Node im Unterbaum
+    {	//Einfuegen am Ende, oder als ersten Node im Unterbaum
         pPrev = pUpper->Lower();
         if ( pPrev )
         {
@@ -601,13 +601,13 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 
 /*************************************************************************
 |*
-|*  SwFrm::InsertBehind()
+|*	SwFrm::InsertBehind()
 |*
-|*  Beschreibung        SwFrm wird in eine bestehende Struktur eingefuegt
-|*                      Eingefuegt wird unterhalb des Parent und entweder
-|*                      hinter pBefore oder am Anfang der Kette wenn pBefore
-|*                      leer ist.
-|*  Letzte Aenderung    MA 06. Aug. 99
+|*	Beschreibung		SwFrm wird in eine bestehende Struktur eingefuegt
+|* 						Eingefuegt wird unterhalb des Parent und entweder
+|* 						hinter pBefore oder am Anfang der Kette wenn pBefore
+|* 						leer ist.
+|*	Letzte Aenderung	MA 06. Aug. 99
 |*
 |*************************************************************************/
 void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
@@ -637,14 +637,14 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 
 /*************************************************************************
 |*
-|*  SwFrm::InsertGroup()
+|*	SwFrm::InsertGroup()
 |*
-|*  Beschreibung        Eine Kette von SwFrms wird in eine bestehende Struktur
-|*                      eingefuegt
-|*  Letzte Aenderung    AMA 9. Dec. 97
+|*	Beschreibung		Eine Kette von SwFrms wird in eine bestehende Struktur
+|* 						eingefuegt
+|*	Letzte Aenderung	AMA 9. Dec. 97
 |*
 |*  Bisher wird dies genutzt, um einen SectionFrame, der ggf. schon Geschwister
-|*  mit sich bringt, in eine bestehende Struktur einzufuegen.
+|*	mit sich bringt, in eine bestehende Struktur einzufuegen.
 |*
 |*  Wenn man den dritten Parameter als NULL uebergibt, entspricht
 |*  diese Methode dem SwFrm::InsertBefore(..), nur eben mit Geschwistern.
@@ -653,9 +653,9 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 |*  this wird pNext von pParent,
 |*  pSct wird pNext vom Letzten der this-Kette,
 |*  pBehind wird vom pParent an den pSct umgehaengt.
-|*  Dies dient dazu: ein SectionFrm (this) wird nicht als
-|*  Kind an einen anderen SectionFrm (pParent) gehaengt, sondern pParent
-|*  wird in zwei Geschwister aufgespalten (pParent+pSct) und this dazwischen
+|*	Dies dient dazu: ein SectionFrm (this) wird nicht als
+|*	Kind an einen anderen SectionFrm (pParent) gehaengt, sondern pParent
+|*	wird in zwei Geschwister aufgespalten (pParent+pSct) und this dazwischen
 |*  eingebaut.
 |*
 |*************************************************************************/
@@ -696,7 +696,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             pLast->pUpper = GetUpper();
         }
         if( pBehind )
-        {   //Einfuegen vor pBehind.
+        {	//Einfuegen vor pBehind.
             if( pBehind->GetPrev() )
                 pBehind->GetPrev()->pNext = NULL;
             else
@@ -735,7 +735,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         }
         pLast->pNext = pBehind;
         if( pBehind )
-        {   //Einfuegen vor pBehind.
+        {	//Einfuegen vor pBehind.
             if( 0 != (pPrev = pBehind->pPrev) )
                 pPrev->pNext = this;
             else
@@ -743,7 +743,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             pBehind->pPrev = pLast;
         }
         else
-        {   //Einfuegen am Ende, oder des ersten Nodes im Unterbaum
+        {	//Einfuegen am Ende, oder des ersten Nodes im Unterbaum
             pPrev = pUpper->Lower();
             if ( pPrev )
             {
@@ -759,10 +759,10 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 
 /*************************************************************************
 |*
-|*  SwFrm::Remove()
+|*	SwFrm::Remove()
 |*
-|*  Ersterstellung      AK 01-Mar-1991
-|*  Letzte Aenderung    MA 07. Dec. 95
+|*	Ersterstellung		AK 01-Mar-1991
+|*	Letzte Aenderung	MA 07. Dec. 95
 |*
 |*************************************************************************/
 void SwFrm::Remove()
@@ -773,7 +773,7 @@ void SwFrm::Remove()
         // einer aus der Mitte wird removed
         pPrev->pNext = pNext;
     else
-    {   // der erste in einer Folge wird removed
+    {	// der erste in einer Folge wird removed
         OSL_ENSURE( pUpper->pLower == this, "Layout inkonsistent." );
         pUpper->pLower = pNext;
     }
@@ -786,10 +786,10 @@ void SwFrm::Remove()
 }
 /*************************************************************************
 |*
-|*  SwCntntFrm::Paste()
+|*	SwCntntFrm::Paste()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 09. Sep. 98
+|*	Ersterstellung		MA 23. Feb. 94
+|*	Letzte Aenderung	MA 09. Sep. 98
 |*
 |*************************************************************************/
 void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
@@ -894,10 +894,10 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 
 /*************************************************************************
 |*
-|*  SwCntntFrm::Cut()
+|*	SwCntntFrm::Cut()
 |*
-|*  Ersterstellung      AK 14-Feb-1991
-|*  Letzte Aenderung    MA 09. Sep. 98
+|*	Ersterstellung		AK 14-Feb-1991
+|*	Letzte Aenderung	MA 09. Sep. 98
 |*
 |*************************************************************************/
 void SwCntntFrm::Cut()
@@ -943,7 +943,7 @@ void SwCntntFrm::Cut()
     }
 
     if( 0 != (pFrm = GetIndNext()) )
-    {   //Der alte Nachfolger hat evtl. einen Abstand zum Vorgaenger
+    {	//Der alte Nachfolger hat evtl. einen Abstand zum Vorgaenger
         //berechnet, der ist jetzt, wo er der erste wird obsolet bzw. anders.
         pFrm->_InvalidatePrt();
         pFrm->_InvalidatePos();
@@ -975,7 +975,7 @@ void SwCntntFrm::Cut()
         InvalidateNextPos();
         //Einer muss die Retusche uebernehmen: Vorgaenger oder Upper
         if ( 0 != (pFrm = GetPrev()) )
-        {   pFrm->SetRetouche();
+        {	pFrm->SetRetouche();
             pFrm->Prepare( PREP_WIDOWS_ORPHANS );
             pFrm->_InvalidatePos();
             pFrm->InvalidatePage( pPage );
@@ -984,7 +984,7 @@ void SwCntntFrm::Cut()
         //er die Retouche uebernehmen.
         //Ausserdem kann eine Leerseite entstanden sein.
         else
-        {   SwRootFrm *pRoot = FindRootFrm();
+        {	SwRootFrm *pRoot = FindRootFrm();
             if ( pRoot )
             {
                 pRoot->SetSuperfluous();
@@ -1087,10 +1087,10 @@ void SwCntntFrm::Cut()
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::Paste()
+|*	SwLayoutFrm::Paste()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 23. Feb. 94
+|*	Ersterstellung		MA 23. Feb. 94
+|*	Letzte Aenderung	MA 23. Feb. 94
 |*
 |*************************************************************************/
 void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
@@ -1192,10 +1192,10 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::Cut()
+|*	SwLayoutFrm::Cut()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 23. Feb. 94
+|*	Ersterstellung		MA 23. Feb. 94
+|*	Letzte Aenderung	MA 23. Feb. 94
 |*
 |*************************************************************************/
 void SwLayoutFrm::Cut()
@@ -1257,10 +1257,10 @@ void SwLayoutFrm::Cut()
 
 /*************************************************************************
 |*
-|*  SwFrm::Grow()
+|*	SwFrm::Grow()
 |*
-|*  Ersterstellung      AK 19-Feb-1991
-|*  Letzte Aenderung    MA 05. May. 94
+|*	Ersterstellung		AK 19-Feb-1991
+|*	Letzte Aenderung	MA 05. May. 94
 |*
 |*************************************************************************/
 SwTwips SwFrm::Grow( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -1309,10 +1309,10 @@ SwTwips SwFrm::Grow( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
 /*************************************************************************
 |*
-|*  SwFrm::Shrink()
+|*	SwFrm::Shrink()
 |*
-|*  Ersterstellung      AK 14-Feb-1991
-|*  Letzte Aenderung    MA 05. May. 94
+|*	Ersterstellung		AK 14-Feb-1991
+|*	Letzte Aenderung	MA 05. May. 94
 |*
 |*************************************************************************/
 SwTwips SwFrm::Shrink( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -1358,32 +1358,32 @@ SwTwips SwFrm::Shrink( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
 /*************************************************************************
 |*
-|*  SwFrm::AdjustNeighbourhood()
+|*	SwFrm::AdjustNeighbourhood()
 |*
-|*  Beschreibung        Wenn sich die Groesse eines Frm's direkt unterhalb
-|*      eines Fussnotenbosses (Seite/Spalte) veraendert hat, so muss dieser
-|*      "Normalisiert" werden.
-|*      Es gibt dort immer einen Frame, der den "maximal moeglichen" Raum
-|*      einnimmt (der Frame, der den Body.Text enhaelt) und keinen oder
-|*      mehrere Frames die den Platz einnehmen den sie halt brauchen
-|*      (Kopf-/Fussbereich, Fussnoten).
-|*      Hat sich einer der Frames veraendert, so muss der Body-Text-Frame
-|*      entsprechen wachsen oder schrumpfen; unabhaegig davon, dass er fix ist.
-|*      !! Ist es moeglich dies allgemeiner zu loesen, also nicht auf die
-|*      Seite beschraenkt und nicht auf einen Speziellen Frame, der den
-|*      maximalen Platz einnimmt (gesteuert ueber Attribut FrmSize)? Probleme:
-|*      Was ist wenn mehrere Frames nebeneinander stehen, die den maximalen
-|*      Platz einnehmen?
-|*      Wie wird der Maximale Platz berechnet?
-|*      Wie klein duerfen diese Frames werden?
+|*	Beschreibung		Wenn sich die Groesse eines Frm's direkt unterhalb
+|* 		eines Fussnotenbosses (Seite/Spalte) veraendert hat, so muss dieser
+|*  	"Normalisiert" werden.
+|* 		Es gibt dort immer einen Frame, der den "maximal moeglichen" Raum
+|*		einnimmt (der Frame, der den Body.Text enhaelt) und keinen oder
+|* 		mehrere Frames die den Platz einnehmen den sie halt brauchen
+|* 		(Kopf-/Fussbereich, Fussnoten).
+|*		Hat sich einer der Frames veraendert, so muss der Body-Text-Frame
+|*		entsprechen wachsen oder schrumpfen; unabhaegig davon, dass er fix ist.
+|* 		!! Ist es moeglich dies allgemeiner zu loesen, also nicht auf die
+|* 		Seite beschraenkt und nicht auf einen Speziellen Frame, der den
+|* 		maximalen Platz einnimmt (gesteuert ueber Attribut FrmSize)? Probleme:
+|* 		Was ist wenn mehrere Frames nebeneinander stehen, die den maximalen
+|* 		Platz einnehmen?
+|*		Wie wird der Maximale Platz berechnet?
+|* 		Wie klein duerfen diese Frames werden?
 |*
-|*      Es wird auf jeden Fall nur so viel Platz genehmigt, dass ein
-|*      Minimalwert fuer die Hoehe des Bodys nicht unterschritten wird.
+|* 		Es wird auf jeden Fall nur so viel Platz genehmigt, dass ein
+|* 		Minimalwert fuer die Hoehe des Bodys nicht unterschritten wird.
 |*
-|*  Parameter: nDiff ist der Betrag, um den Platz geschaffen werden muss
+|*	Parameter: nDiff ist der Betrag, um den Platz geschaffen werden muss
 |*
-|*  Ersterstellung      MA 07. May. 92
-|*  Letzte Aenderung    AMA 02. Nov. 98
+|*	Ersterstellung		MA 07. May. 92
+|*	Letzte Aenderung	AMA 02. Nov. 98
 |*
 |*************************************************************************/
 SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
@@ -1684,11 +1684,11 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
 
 /*************************************************************************
 |*
-|*  SwFrm::ImplInvalidateSize(), ImplInvalidatePrt(), ImplInvalidatePos(),
-|*         ImplInvalidateLineNum()
+|*	SwFrm::ImplInvalidateSize(), ImplInvalidatePrt(), ImplInvalidatePos(),
+|* 		   ImplInvalidateLineNum()
 |*
-|*  Ersterstellung      MA 15. Oct. 92
-|*  Letzte Aenderung    MA 24. Mar. 94
+|*	Ersterstellung		MA 15. Oct. 92
+|*	Letzte Aenderung	MA 24. Mar. 94
 |*
 |*************************************************************************/
 /** method to perform additional actions on an invalidation
@@ -1778,10 +1778,10 @@ void SwFrm::ImplInvalidateLineNum()
 
 /*************************************************************************
 |*
-|*  SwFrm::ReinitializeFrmSizeAttrFlags
+|*	SwFrm::ReinitializeFrmSizeAttrFlags
 |*
-|*  Ersterstellung      MA 15. Oct. 96
-|*  Letzte Aenderung    MA 15. Oct. 96
+|*	Ersterstellung		MA 15. Oct. 96
+|*	Letzte Aenderung	MA 15. Oct. 96
 |*
 |*************************************************************************/
 void SwFrm::ReinitializeFrmSizeAttrFlags()
@@ -1795,7 +1795,7 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
         {
             SwFrm *pFrm = ((SwLayoutFrm*)this)->Lower();
             while ( pFrm )
-            {   pFrm->_InvalidateSize();
+            {	pFrm->_InvalidateSize();
                 pFrm->_InvalidatePrt();
                 pFrm = pFrm->GetNext();
             }
@@ -1875,10 +1875,10 @@ void SwFrm::ValidateThisAndAllLowers( const USHORT nStage )
 
 /*************************************************************************
 |*
-|*  SwCntntFrm::GrowFrm()
+|*	SwCntntFrm::GrowFrm()
 |*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 25. Mar. 99
+|*	Ersterstellung		MA 30. Jul. 92
+|*	Letzte Aenderung	MA 25. Mar. 99
 |*
 |*************************************************************************/
 SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -1987,10 +1987,10 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
 /*************************************************************************
 |*
-|*  SwCntntFrm::ShrinkFrm()
+|*	SwCntntFrm::ShrinkFrm()
 |*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 05. May. 94
+|*	Ersterstellung		MA 30. Jul. 92
+|*	Letzte Aenderung	MA 05. May. 94
 |*
 |*************************************************************************/
 SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -2109,11 +2109,11 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
 /*************************************************************************
 |*
-|*    SwCntntFrm::Modify()
+|*	  SwCntntFrm::Modify()
 |*
-|*    Beschreibung
-|*    Ersterstellung    AK 05-Mar-1991
-|*    Letzte Aenderung  MA 13. Oct. 95
+|*	  Beschreibung
+|*	  Ersterstellung	AK 05-Mar-1991
+|*	  Letzte Aenderung	MA 13. Oct. 95
 |*
 |*************************************************************************/
 void SwCntntFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
@@ -2201,7 +2201,7 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
             rInvFlags = 0xFF;
             /* kein break hier */
 
-        case RES_PAGEDESC:                      //Attributaenderung (an/aus)
+        case RES_PAGEDESC:						//Attributaenderung (an/aus)
             if ( IsInDocBody() && !IsInTab() )
             {
                 rInvFlags |= 0x02;
@@ -2342,10 +2342,10 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::SwLayoutFrm()
+|*	SwLayoutFrm::SwLayoutFrm()
 |*
-|*  Ersterstellung      AK 14-Feb-1991
-|*  Letzte Aenderung    MA 12. May. 95
+|*	Ersterstellung		AK 14-Feb-1991
+|*	Letzte Aenderung	MA 12. May. 95
 |*
 |*************************************************************************/
 SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt ):
@@ -2404,10 +2404,10 @@ SwTwips SwLayoutFrm::InnerHeight() const
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::GrowFrm()
+|*	SwLayoutFrm::GrowFrm()
 |*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 23. Sep. 96
+|*	Ersterstellung		MA 30. Jul. 92
+|*	Letzte Aenderung	MA 23. Sep. 96
 |*
 |*************************************************************************/
 SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -2570,10 +2570,10 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::ShrinkFrm()
+|*	SwLayoutFrm::ShrinkFrm()
 |*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 25. Mar. 99
+|*	Ersterstellung		MA 30. Jul. 92
+|*	Letzte Aenderung	MA 25. Mar. 99
 |*
 |*************************************************************************/
 SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -2631,7 +2631,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         if ( IsPageBodyFrm() && !bBrowse )
             nReal = nDist;
         else
-        {   nReal = AdjustNeighbourhood( -nReal, bTst );
+        {	nReal = AdjustNeighbourhood( -nReal, bTst );
             nReal *= -1;
             if ( !bTst && IsBodyFrm() && nReal < nRealDist )
             {
@@ -2695,13 +2695,13 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                 ((SwTabFrm*)this)->SetComplete();
         }
         else
-        {   if ( IsRetoucheFrm() )
+        {	if ( IsRetoucheFrm() )
                 SetRetouche();
             if ( IsTabFrm() )
             {
                 if( IsTabFrm() )
                     ((SwTabFrm*)this)->SetComplete();
-                if ( Lower() )  //Kann auch im Join stehen und leer sein!
+                if ( Lower() ) 	//Kann auch im Join stehen und leer sein!
                     InvalidateNextPos();
             }
         }
@@ -2743,15 +2743,15 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 }
 /*************************************************************************
 |*
-|*  SwLayoutFrm::ChgLowersProp()
+|*	SwLayoutFrm::ChgLowersProp()
 |*
-|*  Beschreibung        Aendert die Grosse der direkt untergeordneten Frm's
-|*      die eine Fixe Groesse haben, proportional zur Groessenaenderung der
-|*      PrtArea des Frm's.
-|*      Die Variablen Frm's werden auch proportional angepasst; sie werden
-|*      sich schon wieder zurechtwachsen/-schrumpfen.
-|*  Ersterstellung      MA 11.03.92
-|*  Letzte Aenderung    AMA 2. Nov. 98
+|*	Beschreibung		Aendert die Grosse der direkt untergeordneten Frm's
+|* 		die eine Fixe Groesse haben, proportional zur Groessenaenderung der
+|* 		PrtArea des Frm's.
+|* 		Die Variablen Frm's werden auch proportional angepasst; sie werden
+|* 		sich schon wieder zurechtwachsen/-schrumpfen.
+|*	Ersterstellung		MA 11.03.92
+|*	Letzte Aenderung	AMA 2. Nov. 98
 |*
 |*************************************************************************/
 void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
@@ -3149,12 +3149,12 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::Format()
+|*	SwLayoutFrm::Format()
 |*
-|*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea.
-|*                      Die Fixsize wird hier nicht eingestellt.
-|*  Ersterstellung      MA 28. Jul. 92
-|*  Letzte Aenderung    MA 21. Mar. 95
+|*	Beschreibung:		"Formatiert" den Frame; Frm und PrtArea.
+|*						Die Fixsize wird hier nicht eingestellt.
+|*	Ersterstellung		MA 28. Jul. 92
+|*	Letzte Aenderung	MA 21. Mar. 95
 |*
 |*************************************************************************/
 void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
@@ -3186,7 +3186,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
             const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
             SwTwips nMinHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
             do
-            {   bValidSize = TRUE;
+            {	bValidSize = TRUE;
 
                 //Die Groesse in der VarSize wird durch den Inhalt plus den
                 //Raendern bestimmt.
@@ -3230,7 +3230,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
         else if ( GetType() & 0x0018 )
         {
             do
-            {   if ( Frm().Height() != pAttrs->GetSize().Height() )
+            {	if ( Frm().Height() != pAttrs->GetSize().Height() )
                     ChgSize( Size( Frm().Width(), pAttrs->GetSize().Height()));
                 bValidSize = TRUE;
                 MakePos();
@@ -3243,10 +3243,10 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::InvalidatePercentLowers()
+|*	SwLayoutFrm::InvalidatePercentLowers()
 |*
-|*  Ersterstellung      MA 13. Jun. 96
-|*  Letzte Aenderung    MA 13. Jun. 96
+|*	Ersterstellung		MA 13. Jun. 96
+|*	Letzte Aenderung	MA 13. Jun. 96
 |*
 |*************************************************************************/
 static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
@@ -3316,10 +3316,10 @@ void SwLayoutFrm::InvaPercentLowers( SwTwips nDiff )
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::CalcRel()
+|*	SwLayoutFrm::CalcRel()
 |*
-|*  Ersterstellung      MA 13. Jun. 96
-|*  Letzte Aenderung    MA 10. Oct. 96
+|*	Ersterstellung		MA 13. Jun. 96
+|*	Letzte Aenderung	MA 10. Oct. 96
 |*
 |*************************************************************************/
 long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, BOOL ) const
@@ -3419,15 +3419,15 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
     //letzten Spalte ausgerichtet.
     //1. Inhalt formatieren.
     //2. Hoehe der letzten Spalte ermitteln, wenn diese zu
-    //   zu gross ist muss der Fly wachsen.
-    //   Der Betrag um den der Fly waechst ist aber nicht etwa
-    //   der Betrag des Ueberhangs, denn wir muessen davon
-    //   ausgehen, dass etwas Masse zurueckfliesst und so
-    //   zusaetzlicher Platz geschaffen wird.
-    //   Im Ersten Ansatz ist der Betrag um den gewachsen wird
-    //   der Ueberhang geteilt durch die Spaltenanzahl oder
-    //   der Ueberhang selbst wenn er kleiner als die Spalten-
-    //   anzahl ist.
+    //	 zu gross ist muss der Fly wachsen.
+    //	 Der Betrag um den der Fly waechst ist aber nicht etwa
+    //	 der Betrag des Ueberhangs, denn wir muessen davon
+    //	 ausgehen, dass etwas Masse zurueckfliesst und so
+    //	 zusaetzlicher Platz geschaffen wird.
+    //	 Im Ersten Ansatz ist der Betrag um den gewachsen wird
+    //	 der Ueberhang geteilt durch die Spaltenanzahl oder
+    //	 der Ueberhang selbst wenn er kleiner als die Spalten-
+    //	 anzahl ist.
     //3. Weiter mit 1. bis zur Stabilitaet.
 
     const SwFmtCol &rCol = rAttrs.GetAttrSet().GetCol();
@@ -3741,7 +3741,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     //Es muss geeignet invalidiert werden, damit
                     //sich die Frms huebsch ausbalancieren
                     //- Der jeweils erste ab der zweiten Spalte bekommt
-                    //  ein InvalidatePos();
+                    //	ein InvalidatePos();
                     pCol = (SwLayoutFrm*)Lower()->GetNext();
                     while ( pCol )
                     {
@@ -3784,10 +3784,10 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 
 /*************************************************************************
 |*
-|*  SwRootFrm::InvalidateAllCntnt()
+|*	SwRootFrm::InvalidateAllCntnt()
 |*
-|*  Ersterstellung      MA 13. Feb. 98
-|*  Letzte Aenderung    MA 12. Aug. 00
+|*	Ersterstellung		MA 13. Feb. 98
+|*	Letzte Aenderung	MA 12. Aug. 00
 |*
 |*************************************************************************/
 

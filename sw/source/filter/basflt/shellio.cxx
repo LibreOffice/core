@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
-#include <undobj.hxx>           // fuer Undo Insert-Dokument
-#include <swundo.hxx>           // fuer Undo Insert-Dokument
+#include <undobj.hxx>			// fuer Undo Insert-Dokument
+#include <swundo.hxx>			// fuer Undo Insert-Dokument
 #include <swtable.hxx>
 #include <tblsel.hxx>
 #include <pagedesc.hxx>
@@ -196,7 +196,7 @@ ULONG SwReader::Read( const Reader& rOptions )
 
         pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
-        if( !IsError( nError ))     // dann setzen wir das Ende mal richtig
+        if( !IsError( nError )) 	// dann setzen wir das Ende mal richtig
         {
             aEndPos--;
             pCNd = aEndPos.GetNode().GetCntntNode();
@@ -341,8 +341,8 @@ ULONG SwReader::Read( const Reader& rOptions )
 
         /*
          * !!! man muss selbst den Status vom Stream zuruecksetzen. !!!
-         *     Beim seekg wird der akt. Status, eof- und bad-Bit
-         *     gesetzt, warum weiss keiner
+         *	   Beim seekg wird der akt. Status, eof- und bad-Bit
+         *	   gesetzt, warum weiss keiner
          */
         if( pStrm )
         {
@@ -375,7 +375,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     // Wenn der Pam nur fuers Lesen konstruiert wurde, jetzt zerstoeren.
     if( !pCrsr )
     {
-        delete pPam;          // ein neues aufgemacht.
+        delete pPam;		  // ein neues aufgemacht.
 
         // --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
         // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
@@ -393,7 +393,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     pDoc->SetRedlineMode_intern( eOld );
     pDoc->SetOle2Link( aOLELink );
 
-    if( pCrsr )                 // das Doc ist jetzt modifiziert
+    if( pCrsr )					// das Doc ist jetzt modifiziert
         pDoc->SetModified();
     // --> OD 2005-02-11 #i38810# - If links have been updated, the document
     // have to be modified. During update of links the OLE link at the document
@@ -546,7 +546,7 @@ SwDoc* Reader::GetTemplateDoc()
                     {
                         pTemplate = pDocSh->GetDoc();
                         pTemplate->SetOle2Link( Link() );
-                        pTemplate->DoUndo( FALSE );     // always FALSE
+                        pTemplate->DoUndo( FALSE );		// always FALSE
                         pTemplate->set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
                         pTemplate->RemoveAllFmtLanguageDependencies();
 
@@ -612,7 +612,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
     pTemplate->set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
     pTemplate->getPrinter( true );
     pTemplate->RemoveAllFmtLanguageDependencies();
-    aChkDateTime = Date( 1, 1, 2300 );  // 2300. Jahrtausend sollte reichen
+    aChkDateTime = Date( 1, 1, 2300 );	// 2300. Jahrtausend sollte reichen
     aTemplateNm.AssignAscii( "$$Dummy$$" );
 }
 
@@ -968,7 +968,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     }
     else
     {
-        delete pPam;            // loesche den hier erzeugten Pam
+        delete pPam;			// loesche den hier erzeugten Pam
         // Alles erfolgreich geschrieben? Sag' das dem Dokument!
         if ( !IsError( nError ) && !pDoc )
         {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@
 #include <srcview.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <cmdid.h>          // Funktion-Ids
+#include <cmdid.h>		  	// Funktion-Ids
 #include <initui.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
@@ -85,7 +85,7 @@
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <modcfg.hxx>
-#include <globals.h>        // globale Konstanten z.B.
+#include <globals.h>		// globale Konstanten z.B.
 #include <app.hrc>
 #include <fontcfg.hxx>
 #include <barcfg.hxx>
@@ -257,7 +257,7 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
     return pNewView;
 }
 /*--------------------------------------------------------------------
-    Beschreibung:   Felddialog starten
+    Beschreibung:	Felddialog starten
  --------------------------------------------------------------------*/
 
 void NewXForms( SfxRequest& rReq ); // implementation: below
@@ -267,10 +267,10 @@ namespace
 
 class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
 {
-    SwView*                  m_pView;       // never owner
+    SwView*                  m_pView;    	// never owner
     SwView*                  m_pView2Close; // never owner
-    SwMailMergeConfigItem*   m_pMMConfig;   // sometimes owner
-    AbstractMailMergeWizard* m_pWizard;     // always owner
+    SwMailMergeConfigItem*   m_pMMConfig; 	// sometimes owner
+    AbstractMailMergeWizard* m_pWizard;   	// always owner
 
     DECL_LINK( EndDialogHdl, AbstractMailMergeWizard* );
     DECL_LINK( DestroyDialogHdl, AbstractMailMergeWizard* );
@@ -726,7 +726,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if(rHint.ISA(SfxItemSetHint))
     {
-        if( SFX_ITEM_SET == ((SfxItemSetHint&)rHint).GetItemSet().GetItemState(SID_ATTR_PATHNAME))
+        if(	SFX_ITEM_SET == ((SfxItemSetHint&)rHint).GetItemSet().GetItemState(SID_ATTR_PATHNAME))
         {
             ::GetGlossaries()->UpdateGlosPath( sal_False );
             SwGlossaryList* pList = ::GetGlossaryList();
@@ -858,7 +858,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
 
 }
 
-SwDBConfig* SwModule::GetDBConfig()
+SwDBConfig*	SwModule::GetDBConfig()
 {
     if(!pDBConfig)
         pDBConfig = new SwDBConfig;

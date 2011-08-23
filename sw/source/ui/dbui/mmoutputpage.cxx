@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -914,7 +914,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
     rConfigItem.SetPrintRange( (USHORT)nBegin, (USHORT)nEnd );
     SwDocMergeInfo& rStartInfo = rConfigItem.GetDocumentMergeInfo(nBegin);
     SwDocMergeInfo& rEndInfo = rConfigItem.GetDocumentMergeInfo(nEnd - 1);
-
+    
     rtl::OUString sPages(rtl::OUString::valueOf( rStartInfo.nStartPageInTarget ));
     sPages += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - "));
     sPages += rtl::OUString::valueOf(  rEndInfo.nEndPageInTarget );
@@ -939,7 +939,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
     aProps[0].Value <<= sal_True;
     aProps[1]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pages"));
     aProps[1]. Value <<= sPages;
-
+    
     pTargetView->ExecPrint( aProps, false, true );
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
 

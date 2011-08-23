@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,12 +90,12 @@ SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell, SW_RES(STR_SHELLNAME_MEDIA))
 void SwMediaShell::ExecMedia(SfxRequest &rReq)
 {
     SwWrtShell* pSh = &GetShell();
-    SdrView*    pSdrView = pSh->GetDrawView();
+    SdrView*	pSdrView = pSh->GetDrawView();
 
     if( pSdrView )
     {
         const SfxItemSet*   pArgs = rReq.GetArgs();
-        USHORT              nSlotId = rReq.GetSlot();
+        USHORT		        nSlotId = rReq.GetSlot();
         BOOL                bChanged = pSdrView->GetModel()->IsChanged();
 
         pSdrView->GetModel()->SetChanged( FALSE );
@@ -121,7 +121,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
             {
                 if( pSh->IsObjSelected() )
                 {
-                    const SfxPoolItem*  pItem;
+                    const SfxPoolItem*	pItem;
 
                     if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, FALSE, &pItem ) ) )
                         pItem = NULL;
@@ -160,16 +160,16 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
 
 void SwMediaShell::GetMediaState(SfxItemSet &rSet)
 {
-    SfxWhichIter    aIter( rSet );
-    USHORT          nWhich = aIter.FirstWhich();
+    SfxWhichIter	aIter( rSet );
+    USHORT			nWhich = aIter.FirstWhich();
 
     while( nWhich )
     {
         if( SID_AVMEDIA_TOOLBOX == nWhich )
         {
-            SwWrtShell& rSh = GetShell();
-            SdrView*    pView = rSh.GetDrawView();
-            bool        bDisable = true;
+            SwWrtShell&	rSh = GetShell();
+            SdrView*	pView = rSh.GetDrawView();
+            bool		bDisable = true;
 
             if( pView )
             {

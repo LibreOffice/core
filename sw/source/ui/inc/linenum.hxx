@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,31 +62,31 @@ public:
  --------------------------------------------------------------------*/
 class SwLineNumberingPage : public SfxTabPage
 {
-    CheckBox        aNumberingOnCB;
-    FixedText       aCharStyleFT;
-    ListBox         aCharStyleLB;
-    FixedText       aFormatFT;
-    SwNumberingTypeListBox   aFormatLB;
-    FixedText       aPosFT;
-    ListBox         aPosLB;
-    FixedText       aOffsetFT;
-    MetricField     aOffsetMF;
-    FixedText       aNumIntervalFT;
-    NumericField    aNumIntervalNF;
-    FixedText       aNumRowsFT;
+    CheckBox		aNumberingOnCB;
+    FixedText		aCharStyleFT;
+    ListBox			aCharStyleLB;
+    FixedText		aFormatFT;
+    SwNumberingTypeListBox	 aFormatLB;
+    FixedText		aPosFT;
+    ListBox			aPosLB;
+    FixedText		aOffsetFT;
+    MetricField		aOffsetMF;
+    FixedText		aNumIntervalFT;
+    NumericField	aNumIntervalNF;
+    FixedText		aNumRowsFT;
     FixedLine        aDisplayFL;
-    FixedText       aDivisorFT;
-    Edit            aDivisorED;
-    FixedText       aDivIntervalFT;
-    NumericField    aDivIntervalNF;
-    FixedText       aDivRowsFT;
+    FixedText		aDivisorFT;
+    Edit			aDivisorED;
+    FixedText		aDivIntervalFT;
+    NumericField	aDivIntervalNF;
+    FixedText		aDivRowsFT;
     FixedLine        aDivisorFL;
-    CheckBox        aCountEmptyLinesCB;
-    CheckBox        aCountFrameLinesCB;
-    CheckBox        aRestartEachPageCB;
+    CheckBox		aCountEmptyLinesCB;
+    CheckBox		aCountFrameLinesCB;
+    CheckBox		aRestartEachPageCB;
     FixedLine        aCountFL;
 
-    SwWrtShell*     pSh;
+    SwWrtShell*		pSh;
 
     SwLineNumberingPage( Window* pParent, const SfxItemSet& rSet );
     ~SwLineNumberingPage();
@@ -96,10 +96,10 @@ class SwLineNumberingPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 #endif

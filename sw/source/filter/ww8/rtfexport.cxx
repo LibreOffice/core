@@ -363,7 +363,7 @@ void RtfExport::DoFormText(const SwInputField* pFld )
     if( sStatus.getLength() )
         m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFOWNSTAT );
     m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFTYPETXT  "0" );
-
+    
     if( sName.getLength() )
         m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ").append( OutString( sName, eDefaultEncoding )).append( "}" );
     if( sHelp.getLength() )
@@ -548,7 +548,7 @@ void RtfExport::ExportDocument_Impl()
     if( pDoc->GetPageDescCnt() )
     {
         //JP 06.04.99: Bug 64361 - Seeking the first SwFmtPageDesc. If
-        //              no set, the default is valid
+        //				no set, the default is valid
         const SwFmtPageDesc* pSttPgDsc = 0;
         {
             const SwNode& rSttNd = *pDoc->GetNodes()[
@@ -622,7 +622,7 @@ void RtfExport::ExportDocument_Impl()
         // All sections are unlocked by default
         Strm() << OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED;
         OutLong(1);
-        OutPageDescription( rPageDesc, FALSE, TRUE );   // Changed bCheckForFirstPage to TRUE so headers
+        OutPageDescription( rPageDesc, FALSE, TRUE );	// Changed bCheckForFirstPage to TRUE so headers
                                                             // following title page are correctly added - i13107
         if( pSttPgDsc )
         {
@@ -647,24 +647,24 @@ void RtfExport::ExportDocument_Impl()
 
         switch( rFtnInfo.eNum )
         {
-            case FTNNUM_PAGE:       pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTPG; break;
-            case FTNNUM_DOC:        pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTCONT;   break;
+            case FTNNUM_PAGE:		pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTPG;	break;
+            case FTNNUM_DOC:		pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTCONT;	break;
             // case FTNNUM_CHAPTER:
-            default:                pOut = OOO_STRING_SVTOOLS_RTF_FTNRESTART;   break;
+            default:				pOut = OOO_STRING_SVTOOLS_RTF_FTNRESTART;	break;
         }
         Strm() << pOut;
 
         switch( rFtnInfo.aFmt.GetNumberingType() )
         {
             case SVX_NUM_CHARS_LOWER_LETTER:
-            case SVX_NUM_CHARS_LOWER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_FTNNALC;  break;
+            case SVX_NUM_CHARS_LOWER_LETTER_N:	pOut = OOO_STRING_SVTOOLS_RTF_FTNNALC; 	break;
             case SVX_NUM_CHARS_UPPER_LETTER:
-            case SVX_NUM_CHARS_UPPER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_FTNNAUC;  break;
-            case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRLC;  break;
-            case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRUC;  break;
-            case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_FTNNCHI;  break;
+            case SVX_NUM_CHARS_UPPER_LETTER_N:	pOut = OOO_STRING_SVTOOLS_RTF_FTNNAUC; 	break;
+            case SVX_NUM_ROMAN_LOWER:			pOut = OOO_STRING_SVTOOLS_RTF_FTNNRLC; 	break;
+            case SVX_NUM_ROMAN_UPPER:			pOut = OOO_STRING_SVTOOLS_RTF_FTNNRUC; 	break;
+            case SVX_NUM_CHAR_SPECIAL:			pOut = OOO_STRING_SVTOOLS_RTF_FTNNCHI;	break;
             // case SVX_NUM_ARABIC:
-            default:                    pOut = OOO_STRING_SVTOOLS_RTF_FTNNAR;       break;
+            default:					pOut = OOO_STRING_SVTOOLS_RTF_FTNNAR;		break;
         }
         Strm() << pOut;
 
@@ -678,14 +678,14 @@ void RtfExport::ExportDocument_Impl()
         switch( rEndNoteInfo.aFmt.GetNumberingType() )
         {
             case SVX_NUM_CHARS_LOWER_LETTER:
-            case SVX_NUM_CHARS_LOWER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_AFTNNALC; break;
+            case SVX_NUM_CHARS_LOWER_LETTER_N:	pOut = OOO_STRING_SVTOOLS_RTF_AFTNNALC;	break;
             case SVX_NUM_CHARS_UPPER_LETTER:
-            case SVX_NUM_CHARS_UPPER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAUC; break;
-            case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRLC; break;
-            case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRUC; break;
-            case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_AFTNNCHI; break;
+            case SVX_NUM_CHARS_UPPER_LETTER_N:	pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAUC;	break;
+            case SVX_NUM_ROMAN_LOWER:			pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRLC;	break;
+            case SVX_NUM_ROMAN_UPPER:			pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRUC;	break;
+            case SVX_NUM_CHAR_SPECIAL:			pOut = OOO_STRING_SVTOOLS_RTF_AFTNNCHI;	break;
             // case SVX_NUM_ARABIC:
-            default:                    pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAR;  break;
+            default:					pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAR;	break;
         }
         Strm() << pOut;
     }

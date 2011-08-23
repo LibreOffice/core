@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -210,7 +210,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
         for(sal_Int32 nAddress = 0; nAddress < aBlocks.getLength(); ++nAddress)
             m_aSettingsWIN.AddAddress(aBlocks[nAddress]);
         m_aSettingsWIN.SelectAddress(0);
-        m_aSettingsWIN.Invalidate();    // #i40408
+        m_aSettingsWIN.Invalidate();	// #i40408
         rConfig.SetCountrySettings(pDlg->IsIncludeCountry(), pDlg->GetCountry());
         InsertDataHdl_Impl(0);
     }
@@ -492,7 +492,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton
             m_aPreview.SelectAddress(nSelect);
         }
         m_aDeletePB.Enable( m_aAddressBlocks.getLength() > 1);
-    }
+    }        
     delete pDlg;
     return 0;
 }
@@ -513,7 +513,7 @@ void SwRestrictedComboBox::KeyInput(const KeyEvent& rEvt)
     if(rEvt.GetCharCode())
     {
         String sKey = rEvt.GetCharCode();
-        if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
+        if(	STRING_NOTFOUND != sForbiddenChars.Search(sKey))
             bCallParent = FALSE;
     }
     if(bCallParent)

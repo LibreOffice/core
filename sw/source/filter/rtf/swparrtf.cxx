@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1881,7 +1881,7 @@ void SwRTFParser::NextToken( int nToken )
     case RTF_REVDTTM:
         if (pRedlineInsert != NULL)
             pRedlineInsert->aStamp = sw::ms::DTTM2DateTime(nTokenValue);
-
+            
         break;
 
     case RTF_REVDTTMDEL:
@@ -2737,7 +2737,7 @@ void SwRTFParser::MakeStyleTab()
             const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
             for( USHORT n = rColls.Count(); n; )
                 //if( MAXLEVEL > (nLvl = rColls[ --n ]->GetOutlineLevel() ))//#outline level,zhaojianwei
-                //  nValidOutlineLevels |= 1 << nLvl;
+                //	nValidOutlineLevels |= 1 << nLvl;
                 if( rColls[ --n ]->IsAssignedToListLevelOfOutlineStyle())
                     nValidOutlineLevels |= 1 << rColls[ n ]->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
         }
@@ -3918,11 +3918,11 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
-            //pColl->SetOutlineLevel( nOutlineLevel );      //#outline level,removed by zhaojianwei
-            if(nOutlineLevel < MAXLEVEL )                           //->add by zhaojianwei
+            //pColl->SetOutlineLevel( nOutlineLevel );		//#outline level,removed by zhaojianwei
+            if(nOutlineLevel < MAXLEVEL )							//->add by zhaojianwei
                 pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
             else
-                pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+                pColl->DeleteAssignmentToListLevelOfOutlineStyle();	//<-end,zhaojianwei
             return pColl;
         }
 
@@ -3946,11 +3946,11 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
 
     if (!rbCollExist)
     {
-        //pColl->SetOutlineLevel( nOutlineLevel );  //#outline level,removed by zhaojianwei
-        if(nOutlineLevel < MAXLEVEL)                        //->add by zhaojianwei
+        //pColl->SetOutlineLevel( nOutlineLevel );	//#outline level,removed by zhaojianwei
+        if(nOutlineLevel < MAXLEVEL)						//->add by zhaojianwei
             pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
         else
-            pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+            pColl->DeleteAssignmentToListLevelOfOutlineStyle();	//<-end,zhaojianwei
     }
 
     return pColl;

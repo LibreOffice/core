@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,20 +41,20 @@ class SwTextAPIEditSource : public SvxEditSource
 {
     SwTextAPIEditSource_Impl* pImpl;
 
-    virtual SvxEditSource*      Clone() const;
-    virtual SvxTextForwarder*   GetTextForwarder();
-    virtual void                UpdateData();
-    explicit            SwTextAPIEditSource( const SwTextAPIEditSource& rSource );
+    virtual SvxEditSource*		Clone() const;
+    virtual SvxTextForwarder*	GetTextForwarder();
+    virtual void				UpdateData();
+    explicit			SwTextAPIEditSource( const SwTextAPIEditSource& rSource );
 
 public:
                         SwTextAPIEditSource(SwDoc* pDoc);
-    virtual             ~SwTextAPIEditSource();
+    virtual				~SwTextAPIEditSource();
 
-    void                Dispose();
-    void                SetText( OutlinerParaObject& rText );
-    void                SetString( const String& rText );
+    void				Dispose();
+    void				SetText( OutlinerParaObject& rText );
+    void				SetString( const String& rText );
     OutlinerParaObject* CreateText();
-    String              GetText();
+    String				GetText();
 };
 
 class SwTextAPIObject : public SvxUnoText
@@ -62,12 +62,12 @@ class SwTextAPIObject : public SvxUnoText
     SwTextAPIEditSource* pSource;
 public:
                         SwTextAPIObject( SwTextAPIEditSource* p);
-    virtual             ~SwTextAPIObject() throw();
-    void                DisposeEditSource() { pSource->Dispose(); }
+    virtual				~SwTextAPIObject() throw();
+    void				DisposeEditSource() { pSource->Dispose(); }
     OutlinerParaObject* CreateText() { return pSource->CreateText(); }
-    void                SetString( const String& rText ) { pSource->SetString( rText ); }
-    void                SetText( OutlinerParaObject& rText ) { pSource->SetText( rText ); }
-    String              GetText() { return pSource->GetText(); }
+    void				SetString( const String& rText ) { pSource->SetString( rText ); }
+    void				SetText( OutlinerParaObject& rText ) { pSource->SetText( rText ); }
+    String				GetText() { return pSource->GetText(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

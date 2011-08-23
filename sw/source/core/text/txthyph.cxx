@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,16 +34,16 @@
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <EnhancedPDFExportHelper.hxx>
-#include <viewopt.hxx>  // SwViewOptions
+#include <viewopt.hxx>	// SwViewOptions
 #include <viewsh.hxx>
 #include <errhdl.hxx>
 #include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
-#include <porhyph.hxx>  //
+#include <porhyph.hxx>	//
 #include <inftxt.hxx>
 #include <itrform2.hxx> //
-#include <guess.hxx>    //
-#include <splargs.hxx>  // SwInterHyphInfo
+#include <guess.hxx>	//
+#include <splargs.hxx>	// SwInterHyphInfo
 
 #if OSL_DEBUG_LEVEL > 1
 extern const sal_Char *GetLangName( const MSHORT nLang );
@@ -57,7 +57,7 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
 /*************************************************************************
- *                      SwTxtFormatInfo::HyphWord()
+ *						SwTxtFormatInfo::HyphWord()
  *************************************************************************/
 
 Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
@@ -78,7 +78,7 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 }
 
 /*************************************************************************
- *                      SwTxtFrm::Hyphenate
+ *						SwTxtFrm::Hyphenate
  *
  * Wir formatieren eine Zeile fuer die interaktive Trennung
  *************************************************************************/
@@ -137,7 +137,7 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::Hyphenate
+ *						SwTxtFormatter::Hyphenate
  *
  * Wir formatieren eine Zeile fuer die interaktive Trennung
  *************************************************************************/
@@ -293,7 +293,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
             {
                 rHyphInf.SetHyphWord( xHyphWord );
                 rHyphInf.nWordStart = nWrdStart;
-                rHyphInf.nWordLen   = nLen+nCnt;
+                rHyphInf.nWordLen	= nLen+nCnt;
                 rHyphInf.SetNoLang( sal_False );
                 rHyphInf.SetCheck( sal_True );
             }
@@ -314,7 +314,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 }
 
 /*************************************************************************
- *                      SwTxtPortion::CreateHyphen()
+ *						SwTxtPortion::CreateHyphen()
  *************************************************************************/
 
 sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
@@ -557,7 +557,7 @@ sal_Bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
     sal_Bool bFull = sal_True;
 
     // special case for old german spelling
-    if( rInf.IsUnderFlow()  )
+    if( rInf.IsUnderFlow()	)
     {
         if( rInf.GetSoftHyphPos() )
             return sal_True;
@@ -608,7 +608,7 @@ sal_Bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                 virtual SwSoftHyphPortion::FormatEOL()
+ *				   virtual SwSoftHyphPortion::FormatEOL()
  *************************************************************************/
 // Format end of Line
 
@@ -640,7 +640,7 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *              virtual SwSoftHyphPortion::GetExpTxt()
+ *				virtual SwSoftHyphPortion::GetExpTxt()
  *
  * Wir expandieren:
  * - wenn die Sonderzeichen sichtbar sein sollen
@@ -674,7 +674,7 @@ void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 }
 
 /*************************************************************************
- *                      SwSoftHyphStrPortion::Paint
+ *						SwSoftHyphStrPortion::Paint
  *************************************************************************/
 
 void SwSoftHyphStrPortion::Paint( const SwTxtPaintInfo &rInf ) const

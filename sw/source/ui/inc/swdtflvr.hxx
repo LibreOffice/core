@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,41 +50,41 @@ class SwView_Impl;
 typedef sal_uInt16 TransferBufferType;
 namespace nsTransferBufferType
 {
-    const sal_uInt16 TRNSFR_NONE            = 0x0000;
-    const sal_uInt16 TRNSFR_DOCUMENT        = 0x0001;
-    const sal_uInt16 TRNSFR_DOCUMENT_WORD   = 0x0002;
-    const sal_uInt16 TRNSFR_GRAPHIC         = 0x0004;
-    const sal_uInt16 TRNSFR_TABELLE         = 0x0008;
-    const sal_uInt16 TRNSFR_DDELINK         = 0x0010;
-    const sal_uInt16 TRNSFR_OLE             = 0x0020;
-    const sal_uInt16 TRNSFR_INETFLD         = 0x0040;
-    const sal_uInt16 TRNSFR_DRAWING         = 0x0081;   //Drawing ist auch intern!
+    const sal_uInt16 TRNSFR_NONE 			= 0x0000;
+    const sal_uInt16 TRNSFR_DOCUMENT		= 0x0001;
+    const sal_uInt16 TRNSFR_DOCUMENT_WORD	= 0x0002;
+    const sal_uInt16 TRNSFR_GRAPHIC			= 0x0004;
+    const sal_uInt16 TRNSFR_TABELLE			= 0x0008;
+    const sal_uInt16 TRNSFR_DDELINK			= 0x0010;
+    const sal_uInt16 TRNSFR_OLE				= 0x0020;
+    const sal_uInt16 TRNSFR_INETFLD			= 0x0040;
+    const sal_uInt16 TRNSFR_DRAWING			= 0x0081;	//Drawing ist auch intern!
 }
 
-#define DATA_FLAVOR     ::com::sun::star::datatransfer::DataFlavor
+#define DATA_FLAVOR 	::com::sun::star::datatransfer::DataFlavor
 
 class SwTransferable : public TransferableHelper
 {
     friend class SwView_Impl;
     SfxObjectShellRef             aDocShellRef;
-    TransferableDataHelper          aOleData;
-    TransferableObjectDescriptor    aObjDesc;
+    TransferableDataHelper			aOleData;
+    TransferableObjectDescriptor	aObjDesc;
     ::sfx2::SvBaseLinkRef            refDdeLink;
 
-    SwWrtShell      *pWrtShell;
+    SwWrtShell 		*pWrtShell;
     /* #96392# Added pCreatorView to distinguish SwFrameShell from
        SwWrtShell. */
     const ViewShell       *pCreatorView;
-    SwDocFac        *pClpDocFac;
-    Graphic         *pClpGraphic, *pClpBitmap, *pOrigGrf;
-    INetBookmark    *pBkmk;     // URL und Beschreibung!
-    ImageMap        *pImageMap;
-    INetImage       *pTargetURL;
+    SwDocFac		*pClpDocFac;
+    Graphic			*pClpGraphic, *pClpBitmap, *pOrigGrf;
+    INetBookmark	*pBkmk;		// URL und Beschreibung!
+    ImageMap		*pImageMap;
+    INetImage		*pTargetURL;
 
     TransferBufferType eBufferType;
 
-    BOOL bOldIdle   :1; //D&D Idle flag from the viewsettings
-    BOOL bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
+    BOOL bOldIdle	:1; //D&D Idle flag from the viewsettings
+    BOOL bCleanUp 	:1; //D&D cleanup after Drop (not by internal Drop)
 
     // helper methods for the copy
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > FindOLEObj( sal_Int64& nAspect ) const;
@@ -144,17 +144,17 @@ class SwTransferable : public TransferableHelper
                                     // not available
                                     SwTransferable();
                                     SwTransferable( const SwTransferable& );
-    SwTransferable&                 operator=( const SwTransferable& );
+    SwTransferable&					operator=( const SwTransferable& );
 
 protected:
-    virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const DATA_FLAVOR& rFlavor );
-    virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm,
+    virtual void		AddSupportedFormats();
+    virtual sal_Bool	GetData( const DATA_FLAVOR& rFlavor );
+    virtual sal_Bool	WriteObject( SotStorageStreamRef& rxOStm,
                                         void* pUserObject,
                                         sal_uInt32 nUserObjectId,
                                         const DATA_FLAVOR& rFlavor );
-    virtual void        DragFinished( sal_Int8 nDropAction );
-    virtual void        ObjectReleased();
+    virtual void 		DragFinished( sal_Int8 nDropAction );
+    virtual void		ObjectReleased();
 
     using TransferableHelper::StartDrag;
 
@@ -169,17 +169,17 @@ public:
     static void InitOle( SfxObjectShell* pDoc, SwDoc& rDoc );
 
     // copy - methods and helper methods for the copy
-    int  Cut();
-    int  Copy( BOOL bIsCut = FALSE );
+    int	 Cut();
+    int	 Copy( BOOL bIsCut = FALSE );
     int  PrepareForCopy( BOOL bIsCut = FALSE );
-    int  CalculateAndCopy();                // special for Calculator
+    int  CalculateAndCopy();				// special for Calculator
     int  CopyGlossary( SwTextBlocks& rGlossary, const String& rStr );
 
     // remove the DDE-Link format promise
     void RemoveDDELinkFormat( const Window& rWin );
 
     // paste - methods and helper methods for the paste
-    static BOOL IsPaste( const SwWrtShell&, const TransferableDataHelper& );
+    static BOOL	IsPaste( const SwWrtShell&, const TransferableDataHelper& );
     static int Paste( SwWrtShell&, TransferableDataHelper& );
     static int PasteData( TransferableDataHelper& rData,
                           SwWrtShell& rSh, USHORT nAction, ULONG nFormat,
@@ -201,9 +201,9 @@ public:
 
     // Interfaces for Drag & Drop
     void StartDrag( Window* pWin, const Point& rPos );
-
-    SwWrtShell* GetShell()              { return pWrtShell; }
-    void SetCleanUp( BOOL bFlag )       { bCleanUp = bFlag; }
+    
+    SwWrtShell* GetShell()				{ return pWrtShell; }
+    void SetCleanUp( BOOL bFlag )		{ bCleanUp = bFlag; }
 
     // Interfaces for Selection
     /* #96392# Added pCreator to distinguish SwFrameShell from SwWrtShell. */

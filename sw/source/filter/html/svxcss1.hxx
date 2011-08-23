@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,58 +47,58 @@ class FontList;
 
 enum SvxCSS1Position
 {
-    SVX_CSS1_POS_NONE,          // nichts angegeben
-    SVX_CSS1_POS_STATIC,        // normal
-    SVX_CSS1_POS_ABSOLUTE,      // absolut
-    SVX_CSS1_POS_RELATIVE,      // relativ
+    SVX_CSS1_POS_NONE,			// nichts angegeben
+    SVX_CSS1_POS_STATIC,		// normal
+    SVX_CSS1_POS_ABSOLUTE,		// absolut
+    SVX_CSS1_POS_RELATIVE,		// relativ
     SVX_CSS1_POS_END
 };
 
 
 enum SvxCSS1LengthType
 {
-    SVX_CSS1_LTYPE_NONE,        // nichts angegeben
-    SVX_CSS1_LTYPE_AUTO,        // automatisch
-    SVX_CSS1_LTYPE_TWIP,        // twip
-    SVX_CSS1_LTYPE_PERCENTAGE,  // %-Angabe
+    SVX_CSS1_LTYPE_NONE,		// nichts angegeben
+    SVX_CSS1_LTYPE_AUTO,		// automatisch
+    SVX_CSS1_LTYPE_TWIP,		// twip
+    SVX_CSS1_LTYPE_PERCENTAGE,	// %-Angabe
     SVX_CSS1_LTYPE_END
 };
 
 // Feature: PrintExt
 enum SvxCSS1SizeType
 {
-    SVX_CSS1_STYPE_NONE,        // nichts angegeben
-    SVX_CSS1_STYPE_AUTO,        // automatisch
-    SVX_CSS1_STYPE_TWIP,        // twip
-    SVX_CSS1_STYPE_LANDSCAPE,   // Landscape
-    SVX_CSS1_STYPE_PORTRAIT,    // Landscape
+    SVX_CSS1_STYPE_NONE,		// nichts angegeben
+    SVX_CSS1_STYPE_AUTO,		// automatisch
+    SVX_CSS1_STYPE_TWIP,		// twip
+    SVX_CSS1_STYPE_LANDSCAPE,	// Landscape
+    SVX_CSS1_STYPE_PORTRAIT,	// Landscape
     SVX_CSS1_STYPE_END
 };
 
 enum SvxCSS1PageBreak
 {
-    SVX_CSS1_PBREAK_NONE,       // nichts angegeben
-    SVX_CSS1_PBREAK_AUTO,       // automatisch
-    SVX_CSS1_PBREAK_ALWAYS,     // immer
-    SVX_CSS1_PBREAK_AVOID,      // nie
-    SVX_CSS1_PBREAK_LEFT,       // naechste Seite ist eine linke
-    SVX_CSS1_PBREAK_RIGHT,      // naechste Seite ist eine rechte
+    SVX_CSS1_PBREAK_NONE,		// nichts angegeben
+    SVX_CSS1_PBREAK_AUTO,		// automatisch
+    SVX_CSS1_PBREAK_ALWAYS,		// immer
+    SVX_CSS1_PBREAK_AVOID,		// nie
+    SVX_CSS1_PBREAK_LEFT,		// naechste Seite ist eine linke
+    SVX_CSS1_PBREAK_RIGHT,		// naechste Seite ist eine rechte
     SVX_CSS1_PBREAK_END
 };
 
 // /Feature: PrintExt
 
 #define CSS1_SCRIPT_WESTERN 0x01
-#define CSS1_SCRIPT_CJK     0x02
-#define CSS1_SCRIPT_CTL     0x04
-#define CSS1_SCRIPT_ALL     0x07
+#define CSS1_SCRIPT_CJK 	0x02
+#define CSS1_SCRIPT_CTL 	0x04
+#define CSS1_SCRIPT_ALL		0x07
 
 /*  */
 
 struct CSS1PropertyEnum
 {
-    const sal_Char *pName;  // Wert einer Property
-    sal_uInt16 nEnum;           // und der dazugehoerige Wert eines Enums
+    const sal_Char *pName;	// Wert einer Property
+    sal_uInt16 nEnum;			// und der dazugehoerige Wert eines Enums
 };
 
 
@@ -121,7 +121,7 @@ class SvxCSS1PropertyInfo
 
 public:
 
-    String aId;             // ID fuer Bookmarks, Rahmen etc.
+    String aId;				// ID fuer Bookmarks, Rahmen etc.
 
     sal_Bool bTopMargin : 1;
     sal_Bool bBottomMargin : 1;
@@ -212,7 +212,7 @@ inline sal_Bool operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& r
     return  rE1.aKey==rE2.aKey;
 }
 
-inline sal_Bool operator<( const SvxCSS1MapEntry& rE1,  const SvxCSS1MapEntry& rE2 )
+inline sal_Bool operator<( const SvxCSS1MapEntry& rE1,	const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey<rE2.aKey;
 }
@@ -227,7 +227,7 @@ inline sal_Bool operator<( const SvxCSS1MapEntry& rE1,  const SvxCSS1MapEntry& r
 
 class SvxCSS1Parser : public CSS1Parser
 {
-    CSS1Selectors aSelectors;   // Liste der "offenen" Selectoren
+    CSS1Selectors aSelectors;	// Liste der "offenen" Selectoren
 
     SvxCSS1Map aIds;
     SvxCSS1Map aClasses;
@@ -236,24 +236,24 @@ class SvxCSS1Parser : public CSS1Parser
 
     String sBaseURL;
 
-    SfxItemSet *pSheetItemSet;  // der Item-Set fuer Style-Sheets
-    SfxItemSet *pItemSet;       // der aktuelle Item-Set
+    SfxItemSet *pSheetItemSet;	// der Item-Set fuer Style-Sheets
+    SfxItemSet *pItemSet;		// der aktuelle Item-Set
     SvxCSS1MapEntry *pSearchEntry;
 
     SvxCSS1PropertyInfo *pSheetPropInfo;
     SvxCSS1PropertyInfo *pPropInfo;
 
-    sal_uInt16 nMinFixLineSpace;    // Mindest-Abstand fuer festen Zeilenabstand
+    sal_uInt16 nMinFixLineSpace;	// Mindest-Abstand fuer festen Zeilenabstand
 
-    rtl_TextEncoding    eDfltEnc;
-    sal_uInt16          nScriptFlags;
+    rtl_TextEncoding	eDfltEnc;
+    sal_uInt16			nScriptFlags;
 
     sal_Bool bIgnoreFontFamily;
 
     void ParseProperty( const String& rProperty,
                         const CSS1Expression *pExpr );
 
-    SvUShorts aWhichMap;        // Which-Map des Parser
+    SvUShorts aWhichMap;		// Which-Map des Parser
 
     using CSS1Parser::ParseStyleOption;
 

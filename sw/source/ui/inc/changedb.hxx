@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,34 +49,34 @@ struct SwDBData;
 class SwChangeDBDlg: public SvxStandardDialog
 {
     FixedLine       aDBListFL;
-    FixedText       aUsedDBFT;
-    FixedText       aAvailDBFT;
-    SvTreeListBox   aUsedDBTLB;
-    SwDBTreeList    aAvailDBTLB;
+    FixedText		aUsedDBFT;
+    FixedText		aAvailDBFT;
+    SvTreeListBox	aUsedDBTLB;
+    SwDBTreeList	aAvailDBTLB;
     PushButton      aAddDBPB;
-    FixedInfo       aDescFT;
-    FixedText       aDocDBTextFT;
-    FixedText       aDocDBNameFT;
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
-//  PushButton      aChangeBT;
+    FixedInfo		aDescFT;
+    FixedText		aDocDBTextFT;
+    FixedText		aDocDBNameFT;
+    OKButton  		aOKBT;
+    CancelButton 	aCancelBT;
+    HelpButton 		aHelpBT;
+//	PushButton		aChangeBT;
 
     ImageList       aImageList;
     ImageList       aImageListHC;
 
     SwWrtShell      *pSh;
-    SwFldMgr        *pMgr;
+    SwFldMgr		*pMgr;
 
     DECL_LINK(TreeSelectHdl, SvTreeListBox* pBox = 0);
     DECL_LINK(ButtonHdl, Button* pBtn);
     DECL_LINK(AddDBHdl, PushButton*);
 
-    virtual void    Apply();
-    void            UpdateFlds();
-    void            FillDBPopup();
-    SvLBoxEntry*    Insert(const String& rDBName);
-    void            ShowDBName(const SwDBData& rDBData);
+    virtual void 	Apply();
+    void			UpdateFlds();
+    void			FillDBPopup();
+    SvLBoxEntry*	Insert(const String& rDBName);
+    void			ShowDBName(const SwDBData& rDBData);
 
 public:
     SwChangeDBDlg(SwView& rVw);

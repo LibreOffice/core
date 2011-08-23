@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
 {
     friend class SwTxtINetFmt;
 
-    String aURL;                    // die URL
-    String aTargetFrame;            // in diesen Frame soll die URL
+    String aURL;					// die URL
+    String aTargetFrame;			// in diesen Frame soll die URL
     String aINetFmt;
     String aVisitedFmt;
-    String aName;                   // Name des Links
+    String aName;					// Name des Links
     SvxMacroTableDtor* pMacroTbl;
-    SwTxtINetFmt* pTxtAttr;         // mein TextAttribut
+    SwTxtINetFmt* pTxtAttr;			// mein TextAttribut
     USHORT nINetId;
     USHORT nVisitedId;
 public:
@@ -62,44 +62,44 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
+    virtual	bool QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal,
+    virtual	bool PutValue( const com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 );
 
 
-    const SwTxtINetFmt* GetTxtINetFmt() const   { return pTxtAttr; }
-    SwTxtINetFmt* GetTxtINetFmt()               { return pTxtAttr; }
+    const SwTxtINetFmt* GetTxtINetFmt() const	{ return pTxtAttr; }
+    SwTxtINetFmt* GetTxtINetFmt()				{ return pTxtAttr; }
 
-    const String& GetValue() const          { return aURL; }
+    const String& GetValue() const 			{ return aURL; }
 
-    const String& GetName() const           { return aName; }
-    void SetName( const String& rNm )       { aName = rNm; }
+    const String& GetName() const 			{ return aName; }
+    void SetName( const String& rNm )		{ aName = rNm; }
 
-    const String& GetTargetFrame() const    { return aTargetFrame; }
+    const String& GetTargetFrame() const 	{ return aTargetFrame; }
 
-    const String& GetINetFmt() const        { return aINetFmt; }
-    void SetINetFmt( const String& rNm )    { aINetFmt = rNm; }
+    const String& GetINetFmt() const		{ return aINetFmt; }
+    void SetINetFmt( const String& rNm )	{ aINetFmt = rNm; }
 
-    const String& GetVisitedFmt() const     { return aVisitedFmt; }
-    void SetVisitedFmt( const String& rNm ) { aVisitedFmt = rNm; }
+    const String& GetVisitedFmt() const		{ return aVisitedFmt; }
+    void SetVisitedFmt( const String& rNm )	{ aVisitedFmt = rNm; }
 
-    USHORT GetINetFmtId() const             { return nINetId; }
-    void SetINetFmtId( USHORT nNew )        { nINetId = nNew; }
+    USHORT GetINetFmtId() const				{ return nINetId; }
+    void SetINetFmtId( USHORT nNew )		{ nINetId = nNew; }
 
-    USHORT GetVisitedFmtId() const          { return nVisitedId; }
-    void SetVisitedFmtId( USHORT nNew )     { nVisitedId = nNew; }
+    USHORT GetVisitedFmtId() const			{ return nVisitedId; }
+    void SetVisitedFmtId( USHORT nNew )		{ nVisitedId = nNew; }
 
     // setze eine neue oder loesche die akt. MakroTabelle
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
-    const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
+    const SvxMacroTableDtor* GetMacroTbl() const	{ return pMacroTbl; }
 
     // setze / erfrage ein Makro
     void SetMacro( USHORT nEvent, const SvxMacro& rMacro );

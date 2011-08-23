@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -178,7 +178,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     }
 
     USHORT       nID    = USHRT_MAX;
-    SwFieldType* pType  = 0;
+    SwFieldType* pType 	= 0;
     const USHORT nCount = aMgr.GetFldTypeCount();
     if( rName.Len() )
     {

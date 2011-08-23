@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,15 +123,15 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 #pragma warning (disable : 4355)
 #endif
     aTabBtn         (this, SW_RES(CB_TAB)),
-    aSemiBtn        (this, SW_RES(CB_SEMI)),
-    aParaBtn        (this, SW_RES(CB_PARA)),
+    aSemiBtn		(this, SW_RES(CB_SEMI)),
+    aParaBtn		(this, SW_RES(CB_PARA)),
     aOtherBtn       (this, SW_RES(RB_OTHER)),
     aOtherEd        (this, SW_RES(ED_OTHER)),
     aKeepColumn     (this, SW_RES(CB_KEEPCOLUMN)),
     aDelimFL       (this, SW_RES(FL_DELIM)),
 
     aHeaderCB       (this, SW_RES(CB_HEADER)),
-    aRepeatHeaderCB (this, SW_RES(CB_REPEAT_HEADER)),
+    aRepeatHeaderCB	(this, SW_RES(CB_REPEAT_HEADER)),
 
     aRepeatHeaderFT         (this, SW_RES(FT_REPEAT_HEADER)),
     aRepeatHeaderBeforeFT   (this),
@@ -140,8 +140,8 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
 
     aOptionsFL      (this, SW_RES(FL_OPTIONS)),
-    aDontSplitCB    (this, SW_RES(CB_DONT_SPLIT)),
-    aBorderCB       (this, SW_RES(CB_BORDER)),
+    aDontSplitCB	(this, SW_RES(CB_DONT_SPLIT)),
+    aBorderCB		(this, SW_RES(CB_BORDER)),
     aAutoFmtBtn(this,SW_RES(BT_AUTOFORMAT)),
 
     aOkBtn(this,SW_RES(BT_OK)),
@@ -185,10 +185,10 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     else
     {
         //Einfuege-Optionen verstecken
-        aHeaderCB          .Show(FALSE);
-        aRepeatHeaderCB    .Show(FALSE);
-        aDontSplitCB       .Show(FALSE);
-        aBorderCB          .Show(FALSE);
+        aHeaderCB		   .Show(FALSE);
+        aRepeatHeaderCB	   .Show(FALSE);
+        aDontSplitCB	   .Show(FALSE);
+        aBorderCB		   .Show(FALSE);
         aOptionsFL         .Show(FALSE);
         aRepeatHeaderCombo.Show(FALSE);
 
@@ -224,7 +224,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     CheckBoxHdl();
 }
 
-SwConvertTableDlg:: ~SwConvertTableDlg()
+SwConvertTableDlg::	~SwConvertTableDlg()
 {
     delete pTAutoFmt;
 }

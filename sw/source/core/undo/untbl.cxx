@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <pam.hxx>
 #include <cntfrm.hxx>
 #include <tblsel.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <undobj.hxx>
 #include <rolbck.hxx>
 #include <ddefld.hxx>
@@ -225,7 +225,7 @@ SV_IMPL_PTRARR( _UndoTblCpyTbl_Entries, _UndoTblCpyTbl_EntryPtr )
 USHORT __FAR_DATA aSave_BoxCntntSet[] = {
     RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
     RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-    RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
+    RES_CHRATR_POSTURE,	RES_CHRATR_POSTURE,
     RES_CHRATR_SHADOWED, RES_CHRATR_WEIGHT,
     RES_PARATR_ADJUST, RES_PARATR_ADJUST,
     0 };
@@ -331,7 +331,7 @@ void SwUndoInsTbl::Redo( SwUndoIter& rUndoIter )
         SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.InsertFldType(
                                                             *pDDEFldType);
         SwDDETable* pDDETbl = new SwDDETable( pTblNode->GetTable(), pNewType );
-        pTblNode->SetNewTable( pDDETbl );       // setze die DDE-Tabelle
+        pTblNode->SetNewTable( pDDETbl );		// setze die DDE-Tabelle
         delete pDDEFldType, pDDEFldType = 0;
     }
 
@@ -488,7 +488,7 @@ void SwUndoTblToTxt::Undo( SwUndoIter& rUndoIter )
     SwTableNode* pTblNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, *pBoxSaves );
     pTblNd->GetTable().SetTableModel( pTblSave->IsNewModel() );
     SwTableFmt* pTableFmt = rDoc.MakeTblFrmFmt( sTblNm, rDoc.GetDfltFrmFmt() );
-    pTableFmt->Add( &pTblNd->GetTable() );      // das Frame-Format setzen
+    pTableFmt->Add( &pTblNd->GetTable() );		// das Frame-Format setzen
     pTblNd->GetTable().SetRowsToRepeat( nHdlnRpt );
 
     // erzeuge die alte Tabellen Struktur
@@ -499,7 +499,7 @@ void SwUndoTblToTxt::Undo( SwUndoIter& rUndoIter )
         SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.InsertFldType(
                                                             *pDDEFldType);
         SwDDETable* pDDETbl = new SwDDETable( pTblNd->GetTable(), pNewType );
-        pTblNd->SetNewTable( pDDETbl, FALSE );      // setze die DDE-Tabelle
+        pTblNd->SetNewTable( pDDETbl, FALSE );		// setze die DDE-Tabelle
         delete pDDEFldType, pDDEFldType = 0;
     }
 
@@ -745,7 +745,7 @@ void SwUndoTxtToTbl::Undo( SwUndoIter& rUndoIter )
 
     ULONG nTblNd = nSttNode;
     if( nSttCntnt )
-        ++nTblNd;       // Node wurde vorher gesplittet
+        ++nTblNd;		// Node wurde vorher gesplittet
     SwNodeIndex aIdx( rDoc.GetNodes(), nTblNd );
     SwTableNode* pTNd = rDoc.GetNodes()[ aIdx ]->GetTableNode();
     OSL_ENSURE( pTNd, "keinen Tabellen-Node gefunden" );
@@ -813,7 +813,7 @@ void SwUndoTxtToTbl::Undo( SwUndoIter& rUndoIter )
         }
     }
 
-    SetPaM( rUndoIter );        // manipulierten Bereich selectieren
+    SetPaM( rUndoIter );		// manipulierten Bereich selectieren
 }
 
 
@@ -938,8 +938,8 @@ USHORT _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
             bIsLine ? aTableLineSetRange : aTableBoxSetRange );
         pSet->Put( pFmt->GetAttrSet() );
         //JP 20.04.98: Bug 49502 - wenn eine Formel gesetzt ist, nie den
-        //              Value mit sichern. Der muss gegebenfalls neu
-        //              errechnet werden!
+        //				Value mit sichern. Der muss gegebenfalls neu
+        //				errechnet werden!
         //JP 30.07.98: Bug 54295 - Formeln immer im Klartext speichern
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pSet->GetItemState( RES_BOXATR_FORMULA, TRUE, &pItem ))
@@ -1272,7 +1272,7 @@ _SaveBox::_SaveBox( _SaveBox* pPrev, const SwTableBox& rBox, _SaveTable& rSTbl )
 
 _SaveBox::~_SaveBox()
 {
-    if( ULONG_MAX == nSttNode )     // keine EndBox
+    if( ULONG_MAX == nSttNode )		// keine EndBox
         delete Ptrs.pLine;
     else
         delete Ptrs.pCntntAttrs;
@@ -1284,7 +1284,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
 {
     rSTbl.NewFrmFmt( &rBox, FALSE, nItemSet, rBox.GetFrmFmt() );
 
-    if( ULONG_MAX == nSttNode )     // keine EndBox
+    if( ULONG_MAX == nSttNode )		// keine EndBox
     {
         if( !rBox.GetTabLines().Count() )
         {
@@ -1343,7 +1343,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
 
 void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
 {
-    if( ULONG_MAX == nSttNode )     // keine EndBox
+    if( ULONG_MAX == nSttNode )		// keine EndBox
     {
         // weiter in der Line
         Ptrs.pLine->SaveCntntAttrs( pDoc );
@@ -1385,7 +1385,7 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
         rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
     }
 
-    if( ULONG_MAX == nSttNode )     // keine EndBox
+    if( ULONG_MAX == nSttNode )		// keine EndBox
     {
         SwTableBox* pNew = new SwTableBox( pFmt, 1, &rParent );
         rParent.GetTabBoxes().C40_INSERT( SwTableBox, pNew, rParent.GetTabBoxes().Count() );
@@ -1950,7 +1950,7 @@ void SwUndoTblNdsChg::Redo( SwUndoIter& rUndoIter )
             TblChgMode eOldMode = rTbl.GetTblChgMode();
             rTbl.SetTblChgMode( (TblChgMode)nCount );
 
-            rDoc.DoUndo( TRUE );        // wir brauchen die SaveSections!
+            rDoc.DoUndo( TRUE );		// wir brauchen die SaveSections!
             SwUndoTblNdsChg* pUndo = 0;
 
             switch( nSetColType & 0xff )
@@ -2152,7 +2152,7 @@ CHECKTABLE(pTblNd->GetTable())
         pHistory->TmpRollback( &rDoc, 0 );
         pHistory->SetTmpEnd( pHistory->Count() );
     }
-//  nTblNode = pTblNd->GetIndex();
+//	nTblNode = pTblNd->GetIndex();
 
     SwPaM* pPam = rUndoIter.pAktPam;
     pPam->DeleteMark();
@@ -2408,14 +2408,14 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
     OSL_ENSURE( pBox, "keine TabellenBox gefunden" );
 
     SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
-    if( bNewFmt || bNewFml || bNewValue )
+    if(	bNewFmt || bNewFml || bNewValue )
     {
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
                                 RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
 
         // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
-        //              Sorge dafuer, das der Text auch entsprechend
-        //              formatiert wird!
+        //				Sorge dafuer, das der Text auch entsprechend
+        //				formatiert wird!
         pBoxFmt->LockModify();
 
         if( bNewFml )
@@ -2447,8 +2447,8 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
         aBoxSet.Put( SwTblBoxValue( fNum ));
 
         // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
-        //              Sorge dafuer, das der Text auch entsprechend
-        //              formatiert wird!
+        //				Sorge dafuer, das der Text auch entsprechend
+        //				formatiert wird!
         pBoxFmt->LockModify();
         pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMULA );
         pBoxFmt->UnlockModify();
@@ -2464,8 +2464,8 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
         // es ist keine Zahl
 
         // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
-        //              Sorge dafuer, das der Text auch entsprechend
-        //              formatiert wird!
+        //				Sorge dafuer, das der Text auch entsprechend
+        //				formatiert wird!
         pBoxFmt->SetFmtAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
 
         pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
@@ -3117,7 +3117,7 @@ void SwUndoMergeTbl::Undo( SwUndoIter& rIter )
         pTbl = &pNew->GetTable();
     pTbl->GetFrmFmt()->SetName( aName );
 
-//  pSavTbl->CreateNew( *pTbl, FALSE );
+//	pSavTbl->CreateNew( *pTbl, FALSE );
     pSavTbl->RestoreAttr( *pTbl );
 
 
@@ -3184,7 +3184,7 @@ void SwUndoMergeTbl::SaveFormula( SwHistory& rHistory )
 
 void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos )
 {
-    USHORT nO   = rArr.Count(), nM, nU = 0;
+    USHORT nO	= rArr.Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
@@ -3211,7 +3211,7 @@ void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos )
 
 void InsertSort( SvULongs& rArr, ULONG nIdx, USHORT* pInsPos )
 {
-    USHORT nO   = rArr.Count(), nM, nU = 0;
+    USHORT nO	= rArr.Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;

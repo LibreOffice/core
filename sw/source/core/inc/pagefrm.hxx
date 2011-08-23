@@ -67,17 +67,17 @@ class SwPageFrm: public SwFtnBossFrm
     // OD 2004-05-07 #i28701# - use <SwSortedObjs>
     SwSortedObjs *pSortedObjs;
 
-    SwPageDesc *pDesc;      //PageDesc der die Seite beschreibt.
+    SwPageDesc *pDesc;		//PageDesc der die Seite beschreibt.
 
-    USHORT  nPhyPageNum;        //Physikalische Seitennummer.
+    USHORT	nPhyPageNum;		//Physikalische Seitennummer.
 
-    BOOL bInvalidCntnt      :1;
-    BOOL bInvalidLayout     :1;
-    BOOL bInvalidFlyCntnt   :1;
-    BOOL bInvalidFlyLayout  :1;
-    BOOL bInvalidFlyInCnt   :1;
-    BOOL bFtnPage           :1; //Diese Seite ist fuer Dokumentende-Fussnoten.
-    BOOL bEmptyPage         :1; //Dies ist eine explizite Leerseite
+    BOOL bInvalidCntnt		:1;
+    BOOL bInvalidLayout		:1;
+    BOOL bInvalidFlyCntnt	:1;
+    BOOL bInvalidFlyLayout	:1;
+    BOOL bInvalidFlyInCnt	:1;
+    BOOL bFtnPage			:1;	//Diese Seite ist fuer Dokumentende-Fussnoten.
+    BOOL bEmptyPage			:1; //Dies ist eine explizite Leerseite
     BOOL bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
     BOOL bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
     BOOL bInvalidSmartTags :1;  //checking for smarttags is needed  // SMARTTAGS
@@ -201,7 +201,7 @@ public:
 
     //public, damit die ViewShell beim Umschalten vom BrowseMode darauf
     //zugreifen kann.
-    void PrepareHeader();   //Kopf-/Fusszeilen anlegen/entfernen.
+    void PrepareHeader();	//Kopf-/Fusszeilen anlegen/entfernen.
     void PrepareFooter();
 
     const SwSortedObjs  *GetSortedObjs() const  { return pSortedObjs; }
@@ -222,7 +222,7 @@ public:
           SwPageDesc *FindPageDesc();
 
                  SwCntntFrm  *FindLastBodyCntnt();
-    inline       SwCntntFrm  *FindFirstBodyCntnt();
+    inline 		 SwCntntFrm	 *FindFirstBodyCntnt();
     inline const SwCntntFrm  *FindFirstBodyCntnt() const;
     inline const SwCntntFrm  *FindLastBodyCntnt() const;
 
@@ -231,7 +231,7 @@ public:
 
     BOOL IsEmptyPage() const { return bEmptyPage; } //explizite Leerseite.
 
-    void    UpdateFtnNum();
+    void	UpdateFtnNum();
 
     //Immer nach dem Paste rufen. Erzeugt die Seitengeb. Rahmen und Formatiert
     //generischen Inhalt.
@@ -270,33 +270,33 @@ public:
     void RefreshSubsidiary( const SwRect& ) const;
 
     //Fussnotenschnittstelle
-    BOOL IsFtnPage() const                                  { return bFtnPage; }
-    BOOL IsEndNotePage() const                              { return bEndNotePage; }
-    void SetFtnPage( BOOL b )                               { bFtnPage = b; }
-    void SetEndNotePage( BOOL b )                           { bEndNotePage = b; }
+    BOOL IsFtnPage() const									{ return bFtnPage; }
+    BOOL IsEndNotePage() const								{ return bEndNotePage; }
+    void SetFtnPage( BOOL b )								{ bFtnPage = b; }
+    void SetEndNotePage( BOOL b )							{ bEndNotePage = b; }
 
-    inline  USHORT GetPhyPageNum() const        { return nPhyPageNum;}
-    inline  void SetPhyPageNum( USHORT nNum )   { nPhyPageNum = nNum;}
-    inline  void DecrPhyPageNum()               { --nPhyPageNum;     }
-    inline  void IncrPhyPageNum()               { ++nPhyPageNum;     }
+    inline	USHORT GetPhyPageNum() const	    { return nPhyPageNum;}
+    inline	void SetPhyPageNum( USHORT nNum )	{ nPhyPageNum = nNum;}
+    inline	void DecrPhyPageNum()				{ --nPhyPageNum;	 }
+    inline	void IncrPhyPageNum()				{ ++nPhyPageNum;	 }
 
     //Validieren, invalidieren und abfragen des Status der Seite.
     //Layout/Cntnt und jeweils Fly/nicht Fly werden getrennt betrachtet.
     inline void InvalidateFlyLayout() const;
     inline void InvalidateFlyCntnt() const;
     inline void InvalidateFlyInCnt() const;
-    inline void InvalidateLayout() const;
-    inline void InvalidateCntnt() const;
-    inline void InvalidateSpelling() const;
+    inline void	InvalidateLayout() const;
+    inline void	InvalidateCntnt() const;
+    inline void	InvalidateSpelling() const;
     inline void InvalidateSmartTags() const;
-    inline void InvalidateAutoCompleteWords() const;
+    inline void	InvalidateAutoCompleteWords() const;
     inline void InvalidateWordCount() const;
     inline void ValidateFlyLayout() const;
     inline void ValidateFlyCntnt() const;
     inline void ValidateFlyInCnt() const;
-    inline void ValidateLayout() const;
-    inline void ValidateCntnt() const;
-    inline void ValidateSpelling()  const;
+    inline void	ValidateLayout() const;
+    inline void	ValidateCntnt()	const;
+    inline void	ValidateSpelling()	const;
     inline void ValidateSmartTags() const;        // SMARTTAGS
     inline void ValidateAutoCompleteWords() const;
     inline void ValidateWordCount() const;
@@ -446,11 +446,11 @@ inline const SwCntntFrm *SwPageFrm::FindLastBodyCntnt() const
 {
     return ((SwPageFrm*)this)->FindLastBodyCntnt();
 }
-inline void SwPageFrm::InvalidateFlyLayout() const
+inline void	SwPageFrm::InvalidateFlyLayout() const
 {
     ((SwPageFrm*)this)->bInvalidFlyLayout = TRUE;
 }
-inline void SwPageFrm::InvalidateFlyCntnt() const
+inline void	SwPageFrm::InvalidateFlyCntnt() const
 {
     ((SwPageFrm*)this)->bInvalidFlyCntnt = TRUE;
 }
@@ -458,15 +458,15 @@ inline void SwPageFrm::InvalidateFlyInCnt() const
 {
     ((SwPageFrm*)this)->bInvalidFlyInCnt = TRUE;
 }
-inline void SwPageFrm::InvalidateLayout() const
+inline void	SwPageFrm::InvalidateLayout() const
 {
     ((SwPageFrm*)this)->bInvalidLayout = TRUE;
 }
-inline void SwPageFrm::InvalidateCntnt() const
+inline void	SwPageFrm::InvalidateCntnt() const
 {
     ((SwPageFrm*)this)->bInvalidCntnt = TRUE;
 }
-inline void SwPageFrm::InvalidateSpelling() const
+inline void	SwPageFrm::InvalidateSpelling() const
 {
     ((SwPageFrm*)this)->bInvalidSpelling = TRUE;
 }
@@ -475,7 +475,7 @@ inline void    SwPageFrm::InvalidateSmartTags() const
 {
    ((SwPageFrm*)this)->bInvalidSmartTags = TRUE;
 }
-inline void SwPageFrm::InvalidateAutoCompleteWords() const
+inline void	SwPageFrm::InvalidateAutoCompleteWords() const
 {
     ((SwPageFrm*)this)->bInvalidAutoCmplWrds = TRUE;
 }
@@ -483,11 +483,11 @@ inline void SwPageFrm::InvalidateWordCount() const
 {
     ((SwPageFrm*)this)->bInvalidWordCount = TRUE;
 }
-inline void SwPageFrm::ValidateFlyLayout() const
+inline void	SwPageFrm::ValidateFlyLayout() const
 {
     ((SwPageFrm*)this)->bInvalidFlyLayout = FALSE;
 }
-inline void SwPageFrm::ValidateFlyCntnt() const
+inline void	SwPageFrm::ValidateFlyCntnt() const
 {
     ((SwPageFrm*)this)->bInvalidFlyCntnt = FALSE;
 }
@@ -495,15 +495,15 @@ inline void SwPageFrm::ValidateFlyInCnt() const
 {
     ((SwPageFrm*)this)->bInvalidFlyInCnt = FALSE;
 }
-inline void SwPageFrm::ValidateLayout() const
+inline void	SwPageFrm::ValidateLayout() const
 {
     ((SwPageFrm*)this)->bInvalidLayout = FALSE;
 }
-inline void SwPageFrm::ValidateCntnt() const
+inline void	SwPageFrm::ValidateCntnt() const
 {
     ((SwPageFrm*)this)->bInvalidCntnt = FALSE;
 }
-inline void SwPageFrm::ValidateSpelling() const
+inline void	SwPageFrm::ValidateSpelling() const
 {
     ((SwPageFrm*)this)->bInvalidSpelling = FALSE;
 }
@@ -540,6 +540,6 @@ inline BOOL SwPageFrm::IsInvalidFly() const
 
 
 
-#endif  //_PAGEFRM_HXX
+#endif	//_PAGEFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,8 @@ struct SwPamRange
 {
     ULONG nStart, nEnd;
 
-    SwPamRange() : nStart( 0 ), nEnd( 0 )   {}
-    SwPamRange( ULONG nS, ULONG nE ) : nStart( nS ), nEnd( nE ) {}
+    SwPamRange() : nStart( 0 ), nEnd( 0 )	{}
+    SwPamRange( ULONG nS, ULONG nE ) : nStart( nS ), nEnd( nE )	{}
 
     BOOL operator==( const SwPamRange& rRg )
         { return nStart == rRg.nStart ? TRUE : FALSE; }
@@ -75,7 +75,7 @@ public:
     SwPaM& SetPam( USHORT nArrPos, SwPaM& rPam );
 
     USHORT Count() const
-                {   return _SwPamRanges::Count(); }
+                {	return _SwPamRanges::Count(); }
     SwPamRange operator[]( USHORT nPos ) const
                 { return _SwPamRanges::operator[](nPos); }
 };

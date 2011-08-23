@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dockwin.hxx>
 #include <vcl/toolbox.hxx>
-#include <swtypes.hxx>  // fuer Pathfinder
+#include <swtypes.hxx>	// fuer Pathfinder
 #include <errhdl.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -80,7 +80,7 @@
 
 // Version fuer Konfiguration
 
-#define NAVI_VERSION0   0
+#define NAVI_VERSION0	0
 #define NAVI_VERSION1   1
 #define NAVI_VERSION2   2 // bIsGlobalActive
 
@@ -104,7 +104,7 @@ void SwNavigationPI::CleanEntry( String& rEntry )
                 *pStr = 0x20;
 }
 /*------------------------------------------------------------------------
- Beschreibung:  Ausfuehrung der Drag-Operation
+ Beschreibung:	Ausfuehrung der Drag-Operation
                 mit und ohne Childs
 ------------------------------------------------------------------------*/
 
@@ -142,7 +142,7 @@ void SwNavigationPI::MoveOutline(USHORT nSource, USHORT nTarget,
 
 
 /*------------------------------------------------------------------------
- Beschreibung:  Nach Goto einen Status Rahmenselektion aufheben
+ Beschreibung:	Nach Goto einen Status Rahmenselektion aufheben
 ------------------------------------------------------------------------*/
 
 
@@ -156,7 +156,7 @@ void lcl_UnSelectFrm(SwWrtShell *pSh)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Select der Documentanzeige
+ Beschreibung:	Select der Documentanzeige
 ------------------------------------------------------------------------*/
 
 
@@ -185,7 +185,7 @@ IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox *, pBox )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Fuellen der ListBox fuer Outline Sicht oder Dokumente
+ Beschreibung:	Fuellen der ListBox fuer Outline Sicht oder Dokumente
                 Der PI wird auf volle Groesse gesetzt
 ------------------------------------------------------------------------*/
 
@@ -237,7 +237,7 @@ void SwNavigationPI::UsePage(SwWrtShell *pSh)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  SelectHandler der Toolboxen
+ Beschreibung:	SelectHandler der Toolboxen
 ------------------------------------------------------------------------*/
 
 
@@ -380,7 +380,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
     return TRUE;
 }
 /*------------------------------------------------------------------------
- Beschreibung:  ClickHandler der Toolboxen
+ Beschreibung:	ClickHandler der Toolboxen
 ------------------------------------------------------------------------*/
 
 
@@ -448,7 +448,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
             pMenu->CheckItem( aContentTree.GetOutlineLevel() + 100 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
             pBox->SetItemDown( nCurrItemId, TRUE );
-            pMenu->Execute( pBox,
+            pMenu->Execute(	pBox,
                     pBox->GetItemRect(FN_OUTLINE_LEVEL),
                     POPUPMENU_EXECUTE_DOWN );
             pBox->SetItemDown( nCurrItemId, FALSE );
@@ -520,7 +520,7 @@ void  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Action-Handler Edit; wechselt auf die Seite, wenn
+ Beschreibung:	Action-Handler Edit; wechselt auf die Seite, wenn
                 nicht Gliederungssicht angeschaltet ist.
 ------------------------------------------------------------------------*/
 
@@ -540,7 +540,7 @@ IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Falls die Seite eingestellt werden kann, wird hier
+ Beschreibung:	Falls die Seite eingestellt werden kann, wird hier
                 das Maximum gesetzt.
 ------------------------------------------------------------------------*/
 
@@ -571,7 +571,7 @@ BOOL SwNavigationPI::Close()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Setzen einer automatischen Marke
+ Beschreibung:	Setzen einer automatischen Marke
 ------------------------------------------------------------------------*/
 
 
@@ -596,7 +596,7 @@ void SwNavigationPI::MakeMark()
     // this assumes that IDocumentMarkAccess generates Names in ascending order
     if(vNavMarkNames.size() == MAX_MARKS)
         pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[nAutoMarkIdx]));
-
+        
     rSh.SetBookmark(KeyCode(), ::rtl::OUString(), ::rtl::OUString(), IDocumentMarkAccess::NAVIGATOR_REMINDER);
     SwView::SetActMark( nAutoMarkIdx );
 
@@ -795,8 +795,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
     bPageCtrlsVisible = TRUE;
 
-//  Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_SHOW_ROOT);
-//  USHORT nWidth = 2 * (USHORT)aFirstRect.Left();
+//	Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_SHOW_ROOT);
+//	USHORT nWidth = 2 * (USHORT)aFirstRect.Left();
     //doppelte Separatoren sind nicht erlaubt, also muss
     //die passende Groesse anders ermittelt werden
     Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_SELECT_FOOTNOTE);
@@ -843,7 +843,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     if(
         (
            aTmpParentSize.Width() < aMinSize.Width() ||
-           aTmpParentSize.Height() < aMinSize.Height()
+           aTmpParentSize.Height() < aMinSize.Height() 
         )
         &&
         ((SfxDockingWindow*)pParent)->GetFloatingWindow() &&
@@ -856,14 +856,14 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
                             WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aContentTree.SetSpaceBetweenEntries(3);
     aContentTree.SetSelectionMode( SINGLE_SELECTION );
-    aContentTree.SetDragDropMode(   SV_DRAGDROP_CTRL_MOVE |
+    aContentTree.SetDragDropMode( 	SV_DRAGDROP_CTRL_MOVE |
                                     SV_DRAGDROP_CTRL_COPY |
                                     SV_DRAGDROP_ENABLE_TOP );
     aContentTree.EnableAsyncDrag(TRUE);
     aContentTree.ShowTree();
     aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, TRUE);
 
-//  TreeListBox fuer Globaldokument
+// 	TreeListBox fuer Globaldokument
     aGlobalTree.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
     aGlobalTree.SetSelectionMode( MULTIPLE_SELECTION );
     aGlobalTree.SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|
@@ -871,7 +871,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     Size aGlblSize(aGlobalToolBox.CalcWindowSizePixel());
     aGlobalToolBox.SetSizePixel(aGlblSize);
 
-//  Handler
+//	Handler
 
     Link aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
     aContentToolBox.SetSelectHdl( aLk );
@@ -1089,7 +1089,7 @@ SfxChildAlignment eRetAlign;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Benachrichtigung bei geaenderter DocInfo
+    Beschreibung: 	Benachrichtigung bei geaenderter DocInfo
  --------------------------------------------------------------------*/
 
 void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
@@ -1316,7 +1316,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         INetURLObject aTemp( sFileName );
         GraphicDescriptor aDesc( aTemp );
-        if( !aDesc.Detect() )   // keine Grafiken annehmen
+        if( !aDesc.Detect() )	// keine Grafiken annehmen
         {
             if( STRING_NOTFOUND == sFileName.Search('#')
                 && (!sContentFileName.Len() || sContentFileName != sFileName ))
@@ -1371,7 +1371,7 @@ void SwNavigationPI::SetRegionDropMode(USHORT nNewMode)
 
 --------------------------------------------------*/
 
-BOOL    SwNavigationPI::ToggleTree()
+BOOL	SwNavigationPI::ToggleTree()
 {
     BOOL bRet = TRUE;
     BOOL bGlobalDoc = IsGlobalDoc();
@@ -1407,7 +1407,7 @@ BOOL    SwNavigationPI::ToggleTree()
 /*-----------------13.06.97 09:42-------------------
 
 --------------------------------------------------*/
-BOOL    SwNavigationPI::IsGlobalDoc() const
+BOOL 	SwNavigationPI::IsGlobalDoc() const
 {
     BOOL bRet = FALSE;
     SwView *pView = GetCreateView();

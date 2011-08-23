@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -838,7 +838,9 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
         else
         {
             // Form protection case
-            bRet = ( pA != pB );
+            bool bAtStartA = pA != NULL && pA->GetMarkStart() == *GetPoint();
+            bool bAtStartB = pB != NULL && pB->GetMarkStart() == *GetMark();
+            bRet = ( pA != pB ) || bAtStartA || bAtStartB;
             bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
             if ( bProtectForm )
                 bRet |= ( pA == NULL || pB == NULL );

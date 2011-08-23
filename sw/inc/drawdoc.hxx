@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ public:
     SwDrawDocument( SwDoc* pDoc );
     ~SwDrawDocument();
 
-    const SwDoc& GetDoc() const { return *pDoc; }
-          SwDoc& GetDoc()       { return *pDoc; }
+    const SwDoc& GetDoc() const	{ return *pDoc; }
+          SwDoc& GetDoc()      	{ return *pDoc; }
 
     virtual SdrPage* AllocPage(bool bMasterPage);
 

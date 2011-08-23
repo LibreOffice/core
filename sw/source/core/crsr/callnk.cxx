@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
 
 SwCallLink::~SwCallLink()
 {
-    if( !nNdTyp || !rShell.bCallChgLnk )        // siehe ctor
+    if( !nNdTyp || !rShell.bCallChgLnk )		// siehe ctor
         return ;
 
     // wird ueber Nodes getravellt, Formate ueberpruefen und im neuen
@@ -175,8 +175,8 @@ SwCallLink::~SwCallLink()
         // und sich nicht der Frame geaendert hat (Spalten!)
         if( nLeftFrmPos == SwCallLink::GetFrm( (SwTxtNode&)*pCNd, nAktCntnt,
                                                     !rShell.ActionPend() ) &&
-            (( nCmp = nCntnt ) + 1 == nAktCntnt ||          // Right
-            nCntnt -1 == ( nCmp = nAktCntnt )) )            // Left
+            (( nCmp = nCntnt ) + 1 == nAktCntnt ||			// Right
+            nCntnt -1 == ( nCmp = nAktCntnt )) )			// Left
         {
             if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & Sele
                 ++nCmp;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void MakeAll();
 
-    SwFrm           *pLower;
+    SwFrm			*pLower;
 
     virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
@@ -106,7 +106,7 @@ public:
     SwLayoutFrm( SwFrmFmt* );
     ~SwLayoutFrm();
 
-    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual	void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
     const SwFrm *Lower() const { return pLower; }
           SwFrm *Lower()       { return pLower; }
     const SwCntntFrm *ContainsCntnt() const;
@@ -125,8 +125,8 @@ public:
     BOOL IsAnLower( const SwFrm * ) const;
 
     const SwFrmFmt *GetFmt() const { return (const SwFrmFmt*)GetDep(); }
-          SwFrmFmt *GetFmt()       { return (SwFrmFmt*)GetDep(); }
-    void            SetFrmFmt( SwFrmFmt* );
+          SwFrmFmt *GetFmt()	   { return (SwFrmFmt*)GetDep(); }
+    void 			SetFrmFmt( SwFrmFmt* );
 
     //Verschieben der Ftns aller Lower - ab dem StartCntnt.
     //TRUE wenn mindestens eine Ftn verschoben wurde.
@@ -207,6 +207,6 @@ inline SwFrm* SwLayoutFrm::GetLastLower()
     return const_cast<SwFrm*>(static_cast<const SwLayoutFrm*>(this)->GetLastLower());
 }
 
-#endif  //_LAYFRM_HXX
+#endif	//_LAYFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

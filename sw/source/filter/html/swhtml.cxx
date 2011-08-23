@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,9 +94,9 @@
 #include <expfld.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
-#include <IMark.hxx>        // fuer SwBookmark ...
+#include <IMark.hxx>		// fuer SwBookmark ...
 #include <docsh.hxx>
-#include <editsh.hxx>       // fuer Start/EndAction
+#include <editsh.hxx>		// fuer Start/EndAction
 #include <docufld.hxx>
 #include <swcss1.hxx>
 #include <htmlvsh.hxx>
@@ -113,9 +113,9 @@
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #include <swerror.h>
 
-#define FONTSIZE_MASK           7
-#define FONTCOLOR_MASK          (1<<15)
-#define FONT_MASK               (1<<14)
+#define FONTSIZE_MASK 			7
+#define FONTCOLOR_MASK			(1<<15)
+#define FONT_MASK				(1<<14)
 
 #define HTML_ESC_PROP 80
 #define HTML_ESC_SUPER DFLT_ESC_SUPER
@@ -135,22 +135,22 @@ using namespace ::com::sun::star;
 // <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> usw.
 HTMLOptionEnum __FAR_DATA aHTMLPAlignTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_AL_left,  SVX_ADJUST_LEFT     },
-    { OOO_STRING_SVTOOLS_HTML_AL_center,    SVX_ADJUST_CENTER   },
-    { OOO_STRING_SVTOOLS_HTML_AL_middle,    SVX_ADJUST_CENTER   }, // Netscape
-    { OOO_STRING_SVTOOLS_HTML_AL_right, SVX_ADJUST_RIGHT    },
-    { OOO_STRING_SVTOOLS_HTML_AL_justify,   SVX_ADJUST_BLOCK    },
-    { OOO_STRING_SVTOOLS_HTML_AL_char,  SVX_ADJUST_LEFT     },
-    { 0,                0                   }
+    { OOO_STRING_SVTOOLS_HTML_AL_left,	SVX_ADJUST_LEFT		},
+    { OOO_STRING_SVTOOLS_HTML_AL_center,	SVX_ADJUST_CENTER	},
+    { OOO_STRING_SVTOOLS_HTML_AL_middle,	SVX_ADJUST_CENTER	}, // Netscape
+    { OOO_STRING_SVTOOLS_HTML_AL_right,	SVX_ADJUST_RIGHT	},
+    { OOO_STRING_SVTOOLS_HTML_AL_justify,	SVX_ADJUST_BLOCK	},
+    { OOO_STRING_SVTOOLS_HTML_AL_char,	SVX_ADJUST_LEFT		},
+    { 0,				0					}
 };
 
 // <SPACER TYPE=...>
 static HTMLOptionEnum __FAR_DATA aHTMLSpacerTypeTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_SPTYPE_block,     HTML_SPTYPE_BLOCK       },
-    { OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal,    HTML_SPTYPE_HORI        },
-    { OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical,  HTML_SPTYPE_VERT        },
-    { 0,                    0                       }
+    { OOO_STRING_SVTOOLS_HTML_SPTYPE_block,		HTML_SPTYPE_BLOCK		},
+    { OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal,	HTML_SPTYPE_HORI		},
+    { OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical,	HTML_SPTYPE_VERT		},
+    { 0,					0						}
 };
 
 SV_IMPL_PTRARR( _HTMLAttrs, _HTMLAttrPtr )
@@ -387,7 +387,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     SwDocShell* pDocSh = pDoc->GetDocShell();
     if( pDocSh )
     {
-        bViewCreated = TRUE;            // nicht, synchron laden
+        bViewCreated = TRUE;			// nicht, synchron laden
 
         // es ist ein Sprungziel vorgegeben.
 
@@ -416,7 +416,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
                     else if( sCmp.EqualsAscii( pMarkToOutline ) ||
                             sCmp.EqualsAscii( pMarkToText ) ||
                             sCmp.EqualsAscii( pMarkToFrame ) )
-                        eJumpTo = JUMPTO_NONE;  // das ist nichts gueltiges!
+                        eJumpTo = JUMPTO_NONE;	// das ist nichts gueltiges!
                     else
                         // ansonsten ist das ein normaler (Book)Mark
                         nPos = STRING_LEN;
@@ -529,7 +529,7 @@ SvParserState __EXPORT SwHTMLParser::CallParser()
 {
     // einen temporaeren Index anlegen, auf Pos 0 so wird er nicht bewegt!
     pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
-    if( !IsNewDoc() )       // in ein Dokument einfuegen ?
+    if( !IsNewDoc() )		// in ein Dokument einfuegen ?
     {
         const SwPosition* pPos = pPam->GetPoint();
 
@@ -823,8 +823,8 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         // nun noch das SplitNode vom Anfang aufheben
         else if( !IsNewDoc() )
         {
-            if( pPos->nContent.GetIndex() )     // dann gabs am Ende kein <P>,
-                pPam->Move( fnMoveForward, fnGoNode );  // als zum naechsten Node
+            if( pPos->nContent.GetIndex() ) 	// dann gabs am Ende kein <P>,
+                pPam->Move( fnMoveForward, fnGoNode ); 	// als zum naechsten Node
             SwTxtNode* pTxtNode = pPos->nNode.GetNode().GetTxtNode();
             SwNodeIndex aPrvIdx( pPos->nNode );
             if( pTxtNode && pTxtNode->CanJoinPrev( &aPrvIdx ) &&
@@ -933,7 +933,7 @@ void SwHTMLParser::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         {
             // dann uns selbst beenden
             pRegisteredIn->Remove( this );
-            ReleaseRef();                   // ansonsten sind wir fertig!
+            ReleaseRef();					// ansonsten sind wir fertig!
         }
         break;
     }
@@ -1262,7 +1262,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
             case HTML_FRAMESET_ON:
             case HTML_HEAD_OFF:
             case HTML_BODY_ON:
-            case HTML_IMAGE:        // Warum auch immer Netscape das tut.
+            case HTML_IMAGE:		// Warum auch immer Netscape das tut.
                 aUnknownToken.Erase();
                 break;
             case HTML_TEXTTOKEN:
@@ -1707,7 +1707,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 !pPam->GetNode()->FindFootnoteStartNode() ) )
             {
                 if ( nParaCnt < 5 )
-                    Show();     // bis hierhin schon mal anzeigen
+                    Show();		// bis hierhin schon mal anzeigen
 
                 SvxAdjust eAdjust = aAttrTab.pAdjust
                     ? ((const SvxAdjustItem&)aAttrTab.pAdjust->GetItem()).
@@ -1918,7 +1918,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
     case HTML_HTML_OFF:
     case HTML_HEAD_ON:
     case HTML_TITLE_OFF:
-        break;      // nicht weiter auswerten, oder???
+        break;		// nicht weiter auswerten, oder???
     case HTML_HTML_ON:
         {
             const HTMLOptions *pHTMLOptions = GetOptions();
@@ -2327,11 +2327,11 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
             }
             else switch( nWhich )
             {
-            case RES_CHRATR_FONT:       nIdx = 0;   break;
-            case RES_CHRATR_FONTSIZE:   nIdx = 1;   break;
-            case RES_CHRATR_LANGUAGE:   nIdx = 2;   break;
-            case RES_CHRATR_POSTURE:    nIdx = 3;   break;
-            case RES_CHRATR_WEIGHT:     nIdx = 4;   break;
+            case RES_CHRATR_FONT:		nIdx = 0;	break;
+            case RES_CHRATR_FONTSIZE:	nIdx = 1;	break;
+            case RES_CHRATR_LANGUAGE:	nIdx = 2;	break;
+            case RES_CHRATR_POSTURE:	nIdx = 3;	break;
+            case RES_CHRATR_WEIGHT:		nIdx = 4;	break;
             }
             if( nIdx != -1 )
             {
@@ -2821,7 +2821,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                         pCNd->SetAttr( *pAttr->pItem );
                         break;
                     }
-                    OSL_ENSURE( !this,
+                    OSL_ENSURE(	!this,
                             "LRSpace ueber mehrere Absaetze gesetzt!" );
                     // kein break (hier sollen wir trotzdem nie hinkommen;
                 default:
@@ -3221,7 +3221,7 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
     {
         ULONG nOldEnd = nEndIdx.GetIndex();
         ULONG nTmpIdx;
-        if( ( nTmpIdx = pDoc->GetNodes().GetEndOfExtras().GetIndex()) >= nOldEnd ||
+        if(	( nTmpIdx = pDoc->GetNodes().GetEndOfExtras().GetIndex()) >= nOldEnd ||
             ( nTmpIdx = pDoc->GetNodes().GetEndOfAutotext().GetIndex()) >= nOldEnd )
         {
             nTmpIdx = pDoc->GetNodes().GetEndOfInserts().GetIndex();
@@ -3599,8 +3599,8 @@ void SwHTMLParser::NewFontAttr( int nToken )
 
     String aFace, aId, aStyle, aClass, aLang, aDir;
     Color aColor;
-    ULONG nFontHeight = 0;  // tatsaechlich einzustellende Font-Hoehe
-    USHORT nSize = 0;       // Fontgroesse in Netscape-Notation (1-7)
+    ULONG nFontHeight = 0;	// tatsaechlich einzustellende Font-Hoehe
+    USHORT nSize = 0;		// Fontgroesse in Netscape-Notation (1-7)
     BOOL bColor = FALSE;
 
     const HTMLOptions *pHTMLOptions = GetOptions();
@@ -3693,8 +3693,8 @@ void SwHTMLParser::NewFontAttr( int nToken )
     OSL_ENSURE( !nSize == !nFontHeight, "HTML-Font-Size != Font-Height" );
 
     String aFontName, aStyleName;
-    FontFamily eFamily = FAMILY_DONTKNOW;   // Family und Pitch,
-    FontPitch ePitch = PITCH_DONTKNOW;      // falls nicht gefunden
+    FontFamily eFamily = FAMILY_DONTKNOW;	// Family und Pitch,
+    FontPitch ePitch = PITCH_DONTKNOW;		// falls nicht gefunden
     rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
 
     if( aFace.Len() && !pCSS1Parser->IsIgnoreFontFamily() )
@@ -3928,7 +3928,7 @@ void SwHTMLParser::EndPara( BOOL bReal )
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
         delete pCntxt;
     }
 
@@ -3983,13 +3983,13 @@ void SwHTMLParser::NewHeading( int nToken )
     USHORT nTxtColl;
     switch( nToken )
     {
-    case HTML_HEAD1_ON:         nTxtColl = RES_POOLCOLL_HEADLINE1;  break;
-    case HTML_HEAD2_ON:         nTxtColl = RES_POOLCOLL_HEADLINE2;  break;
-    case HTML_HEAD3_ON:         nTxtColl = RES_POOLCOLL_HEADLINE3;  break;
-    case HTML_HEAD4_ON:         nTxtColl = RES_POOLCOLL_HEADLINE4;  break;
-    case HTML_HEAD5_ON:         nTxtColl = RES_POOLCOLL_HEADLINE5;  break;
-    case HTML_HEAD6_ON:         nTxtColl = RES_POOLCOLL_HEADLINE6;  break;
-    default:                    nTxtColl = RES_POOLCOLL_STANDARD;   break;
+    case HTML_HEAD1_ON: 		nTxtColl = RES_POOLCOLL_HEADLINE1;	break;
+    case HTML_HEAD2_ON: 		nTxtColl = RES_POOLCOLL_HEADLINE2;	break;
+    case HTML_HEAD3_ON: 		nTxtColl = RES_POOLCOLL_HEADLINE3;	break;
+    case HTML_HEAD4_ON: 		nTxtColl = RES_POOLCOLL_HEADLINE4;	break;
+    case HTML_HEAD5_ON: 		nTxtColl = RES_POOLCOLL_HEADLINE5;	break;
+    case HTML_HEAD6_ON: 		nTxtColl = RES_POOLCOLL_HEADLINE6;	break;
+    default:					nTxtColl = RES_POOLCOLL_STANDARD;	break;
     }
 
     // den Kontext anlegen
@@ -4056,7 +4056,7 @@ void SwHTMLParser::EndHeading()
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
         delete pCntxt;
     }
 
@@ -4112,7 +4112,7 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
         eMode = AM_SPACE;
         break;
     case HTML_ADDRESS_ON:
-        eMode = AM_NOSPACE; // ADDRESS kann auf einen <P> ohne </P> folgen
+        eMode = AM_NOSPACE;	// ADDRESS kann auf einen <P> ohne </P> folgen
         break;
     case HTML_DT_ON:
     case HTML_DD_ON:
@@ -4187,7 +4187,7 @@ void SwHTMLParser::EndTxtFmtColl( int nToken )
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
         delete pCntxt;
     }
 
@@ -4320,7 +4320,7 @@ void SwHTMLParser::EndDefList()
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
         delete pCntxt;
     }
 
@@ -4403,7 +4403,7 @@ void SwHTMLParser::EndDefListItem( int nToken, BOOL bSetColl,
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
         delete pCntxt;
     }
 
@@ -4417,11 +4417,11 @@ void SwHTMLParser::EndDefListItem( int nToken, BOOL bSetColl,
 BOOL SwHTMLParser::HasCurrentParaFlys( BOOL bNoSurroundOnly,
                                        BOOL bSurroundOnly ) const
 {
-    // bNoSurroundOnly:     Der Absatz enthaelt mindestens einen Rahmen
-    //                      ohne Umlauf
-    // bSurroundOnly:       Der Absatz enthaelt mindestens einen Rahmen
-    //                      mit Umlauf aber keinen ohne Umlauf
-    // sonst:               Der Absatz enthaelt irgendeinen Rahmen
+    // bNoSurroundOnly:		Der Absatz enthaelt mindestens einen Rahmen
+    //						ohne Umlauf
+    // bSurroundOnly:		Der Absatz enthaelt mindestens einen Rahmen
+    //						mit Umlauf aber keinen ohne Umlauf
+    // sonst:				Der Absatz enthaelt irgendeinen Rahmen
     SwNodeIndex& rNodeIdx = pPam->GetPoint()->nNode;
 
     const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
@@ -4497,16 +4497,16 @@ const SwFmtColl *SwHTMLParser::GetCurrFmtColl() const
 
 void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
 {
-    SwTxtFmtColl *pCollToSet = 0;   // die zu setzende Vorlage
-    SfxItemSet *pItemSet = 0;       // der Set fuer harte Attrs
+    SwTxtFmtColl *pCollToSet = 0;	// die zu setzende Vorlage
+    SfxItemSet *pItemSet = 0;		// der Set fuer harte Attrs
     USHORT nTopColl = pContext ? pContext->GetTxtFmtColl() : 0;
     const String& rTopClass = pContext ? pContext->GetClass() : (const String&) aEmptyStr;
     USHORT nDfltColl = RES_POOLCOLL_TEXT;
 
-    BOOL bInPRE=FALSE;                          // etwas Kontext Info
+    BOOL bInPRE=FALSE;							// etwas Kontext Info
 
-    USHORT nLeftMargin = 0, nRightMargin = 0;   // die Einzuege und
-    short nFirstLineIndent = 0;                 // Abstaende
+    USHORT nLeftMargin = 0, nRightMargin = 0;	// die Einzuege und
+    short nFirstLineIndent = 0;					// Abstaende
     USHORT i;
 
     for( i = nContextStAttrMin; i < aContexts.Count(); i++ )
@@ -4890,7 +4890,7 @@ void SwHTMLParser::InsertSpacer()
                 // den unteren Absatz-Abstand des vorherigen Nodes aendern,
                 // wenn moeglich
 
-                SetAttr();  // noch offene Absatz-Attribute setzen
+                SetAttr();	// noch offene Absatz-Attribute setzen
 
                 pTxtNode = pDoc->GetNodes()[pPam->GetPoint()->nNode.GetIndex()-1]
                                ->GetTxtNode();
@@ -4914,7 +4914,7 @@ void SwHTMLParser::InsertSpacer()
                 NewAttr( &aAttrTab.pULSpace, SvxULSpaceItem( 0, (USHORT)nSize, RES_UL_SPACE ) );
                 EndAttr( aAttrTab.pULSpace, 0, FALSE );
 
-                AppendTxtNode();    // nicht am Abstand drehen!
+                AppendTxtNode();	// nicht am Abstand drehen!
             }
         }
         break;
@@ -5038,9 +5038,9 @@ void SwHTMLParser::InsertLineBreak()
     // 6.) Wenn von keinem Rahmen der Umlauf geaendert wird, wird ein
     //     harter Zeilenumbruch eingefuegt
 
-    String aId, aStyle, aClass;             // die ID der Bookmark
+    String aId, aStyle, aClass;			  	// die ID der Bookmark
     BOOL bClearLeft = FALSE, bClearRight = FALSE;
-    BOOL bCleared = FALSE;  // wurde ein CLEAR ausgefuehrt?
+    BOOL bCleared = FALSE;	// wurde ein CLEAR ausgefuehrt?
 
     // dann holen wir mal die Optionen
     const HTMLOptions *pHTMLOptions = GetOptions();
@@ -5156,7 +5156,7 @@ void SwHTMLParser::InsertLineBreak()
     {
         // wenn kein CLEAR ausgefuehrt werden sollte oder konnte, wird
         // ein Zeilenumbruch eingef?gt
-        String sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
+        String sTmp( (sal_Unicode)0x0a );	// make the Mac happy :-)
         pDoc->InsertString( *pPam, sTmp );
     }
     else if( pPam->GetPoint()->nContent.GetIndex() )

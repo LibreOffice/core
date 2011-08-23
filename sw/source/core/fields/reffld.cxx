@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ void lcl_GetLayTree( const SwFrm* pFrm, SvPtrarr& rArr )
 {
     while( pFrm )
     {
-        if( pFrm->IsBodyFrm() )     // soll uns nicht weiter interessieren
+        if( pFrm->IsBodyFrm() )		// soll uns nicht weiter interessieren
             pFrm = pFrm->GetUpper();
         else
         {
@@ -181,7 +181,7 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
             pRefFrm = (const SwFrm*)aRefArr[ nRefCnt - 1 ];
     }
 
-    if( pRefFrm )               // als Flag missbrauchen
+    if( pRefFrm ) 				// als Flag missbrauchen
     {
         if( bVert )
         {
@@ -368,12 +368,12 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                             sTxt = pFtnIdx->GetFtn().GetViewNumStr( *pDoc );
                             break;
                         }
-                    nStt = nEnd;        // kein Bereich, der String ist fertig
+                    nStt = nEnd;		// kein Bereich, der String ist fertig
                 }
                 break;
             }
 
-            if( nStt != nEnd )      // ein Bereich?
+            if( nStt != nEnd )		// ein Bereich?
             {
                 sTxt = pTxtNd->GetExpandTxt( nStt, nEnd - nStt );
 
@@ -593,14 +593,14 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             sal_Int16 nPart = 0;
             switch(GetFormat())
             {
-            case REF_PAGE       : nPart = ReferenceFieldPart::PAGE                ; break;
-            case REF_CHAPTER    : nPart = ReferenceFieldPart::CHAPTER             ; break;
-            case REF_CONTENT    : nPart = ReferenceFieldPart::TEXT                ; break;
-            case REF_UPDOWN     : nPart = ReferenceFieldPart::UP_DOWN             ; break;
-            case REF_PAGE_PGDESC: nPart = ReferenceFieldPart::PAGE_DESC           ; break;
-            case REF_ONLYNUMBER : nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
-            case REF_ONLYCAPTION: nPart = ReferenceFieldPart::ONLY_CAPTION        ; break;
-            case REF_ONLYSEQNO  : nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
+            case REF_PAGE		: nPart = ReferenceFieldPart::PAGE 				  ; break;
+            case REF_CHAPTER	: nPart = ReferenceFieldPart::CHAPTER	 		  ; break;
+            case REF_CONTENT	: nPart = ReferenceFieldPart::TEXT 				  ; break;
+            case REF_UPDOWN		: nPart = ReferenceFieldPart::UP_DOWN 			  ; break;
+            case REF_PAGE_PGDESC: nPart = ReferenceFieldPart::PAGE_DESC 		  ; break;
+            case REF_ONLYNUMBER	: nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
+            case REF_ONLYCAPTION: nPart = ReferenceFieldPart::ONLY_CAPTION 		  ; break;
+            case REF_ONLYSEQNO	: nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
             // --> OD 2007-09-06 #i81002#
             case REF_NUMBER:              nPart = ReferenceFieldPart::NUMBER;              break;
             case REF_NUMBER_NO_CONTEXT:   nPart = ReferenceFieldPart::NUMBER_NO_CONTEXT;   break;
@@ -669,13 +669,13 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             rAny >>= nPart;
             switch(nPart)
             {
-            case ReferenceFieldPart::PAGE:                  nPart = REF_PAGE; break;
-            case ReferenceFieldPart::CHAPTER:               nPart = REF_CHAPTER; break;
-            case ReferenceFieldPart::TEXT:                  nPart = REF_CONTENT; break;
-            case ReferenceFieldPart::UP_DOWN:               nPart = REF_UPDOWN; break;
-            case ReferenceFieldPart::PAGE_DESC:             nPart = REF_PAGE_PGDESC; break;
-            case ReferenceFieldPart::CATEGORY_AND_NUMBER:   nPart = REF_ONLYNUMBER; break;
-            case ReferenceFieldPart::ONLY_CAPTION:          nPart = REF_ONLYCAPTION; break;
+            case ReferenceFieldPart::PAGE: 					nPart = REF_PAGE; break;
+            case ReferenceFieldPart::CHAPTER:	 			nPart = REF_CHAPTER; break;
+            case ReferenceFieldPart::TEXT: 					nPart = REF_CONTENT; break;
+            case ReferenceFieldPart::UP_DOWN: 				nPart = REF_UPDOWN; break;
+            case ReferenceFieldPart::PAGE_DESC: 			nPart = REF_PAGE_PGDESC; break;
+            case ReferenceFieldPart::CATEGORY_AND_NUMBER: 	nPart = REF_ONLYNUMBER; break;
+            case ReferenceFieldPart::ONLY_CAPTION: 			nPart = REF_ONLYCAPTION; break;
             case ReferenceFieldPart::ONLY_SEQUENCE_NUMBER : nPart = REF_ONLYSEQNO; break;
             // --> OD 2007-09-06 #i81002#
             case ReferenceFieldPart::NUMBER:              nPart = REF_NUMBER;              break;
@@ -702,9 +702,9 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
                 ConvertProgrammaticToUIName();
             }
             break;
-            case ReferenceFieldSource::BOOKMARK       : nSubType = REF_BOOKMARK   ; break;
-            case ReferenceFieldSource::FOOTNOTE       : nSubType = REF_FOOTNOTE   ; break;
-            case ReferenceFieldSource::ENDNOTE        : nSubType = REF_ENDNOTE    ; break;
+            case ReferenceFieldSource::BOOKMARK		  : nSubType = REF_BOOKMARK   ; break;
+            case ReferenceFieldSource::FOOTNOTE		  : nSubType = REF_FOOTNOTE   ; break;
+            case ReferenceFieldSource::ENDNOTE		  : nSubType = REF_ENDNOTE    ; break;
             }
         }
         break;

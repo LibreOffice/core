@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@
 #include <viewopt.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <helpid.h>
-#include <globals.hrc>      // fuer Vorlagenname 'keins'
+#include <globals.hrc>		// fuer Vorlagenname 'keins'
 #include <misc.hrc>
 #include <outline.hrc>
 #include <paratr.hxx>
@@ -200,8 +200,8 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
     pNumRule = new SwNumRule( *rSh.GetOutlineNumRule() );
     GetCancelButton().SetClickHdl(LINK(this, SwOutlineTabDialog, CancelHdl));
 
-    AddTabPage(TP_NUM_POSITION   , &SwNumPositionTabPage::Create, 0);
-    AddTabPage(TP_OUTLINE_NUM    , &SwOutlineSettingsTabPage::Create, 0);
+    AddTabPage(TP_NUM_POSITION	 , &SwNumPositionTabPage::Create, 0);
+    AddTabPage(TP_OUTLINE_NUM	 , &SwOutlineSettingsTabPage::Create, 0);
 
     String sHeadline;
     USHORT i;
@@ -222,7 +222,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
         SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
         if(!rTxtColl.IsDefault())
         {
-            //BYTE nOutLevel = rTxtColl.GetOutlineLevel();  //<-#outline level, removed out by zhaojianwei
+            //BYTE nOutLevel = rTxtColl.GetOutlineLevel();	//<-#outline level, removed out by zhaojianwei
             //if(nOutLevel != NO_NUMBERING)
             //->added by zhaojianwei
             if(rTxtColl.IsAssignedToListLevelOfOutlineStyle())
@@ -240,7 +240,7 @@ SwOutlineTabDialog::~SwOutlineTabDialog()
     delete pNumRule;
 }
 
-void    SwOutlineTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
+void 	SwOutlineTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
 {
     switch ( nPageId )
     {
@@ -281,15 +281,15 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
     BYTE nLevelNo = 0;
     switch(pMenu->GetCurItemId())
     {
-        case MN_FORM1: nLevelNo = 1;    break;
-        case MN_FORM2: nLevelNo = 2;    break;
-        case MN_FORM3: nLevelNo = 3;    break;
-        case MN_FORM4: nLevelNo = 4;    break;
-        case MN_FORM5: nLevelNo = 5;    break;
-        case MN_FORM6: nLevelNo = 6;    break;
-        case MN_FORM7: nLevelNo = 7;    break;
-        case MN_FORM8: nLevelNo = 8;    break;
-        case MN_FORM9: nLevelNo = 9;    break;
+        case MN_FORM1: nLevelNo = 1;	break;
+        case MN_FORM2: nLevelNo = 2;	break;
+        case MN_FORM3: nLevelNo = 3;	break;
+        case MN_FORM4: nLevelNo = 4;	break;
+        case MN_FORM5: nLevelNo = 5;	break;
+        case MN_FORM6: nLevelNo = 6;	break;
+        case MN_FORM7: nLevelNo = 7;	break;
+        case MN_FORM8: nLevelNo = 8;	break;
+        case MN_FORM9: nLevelNo = 9;	break;
 
         case MN_SAVE:
         {
@@ -330,21 +330,21 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
             *pNumRule = *rWrtSh.GetOutlineNumRule();
     }
 
-    USHORT  nPageId = GetCurPageId();
-    SfxTabPage* pPage = GetTabPage( nPageId );
+    USHORT	nPageId = GetCurPageId();
+    SfxTabPage*	pPage = GetTabPage( nPageId );
     pPage->Reset(*GetOutputItemSet());
 
     return 0;
 }
 
-USHORT  SwOutlineTabDialog::GetLevel(const String &rFmtName) const
+USHORT 	SwOutlineTabDialog::GetLevel(const String &rFmtName) const
 {
     for(USHORT i = 0; i < MAXLEVEL; ++i)
     {
         if(aCollNames[i] == rFmtName)
             return i;
     }
-    return MAXLEVEL;//NO_NUMBERING; //#outline level,zhaojianwei
+    return MAXLEVEL;//NO_NUMBERING;	//#outline level,zhaojianwei
 
 }
 
@@ -374,22 +374,22 @@ short SwOutlineTabDialog::Ok()
             const SfxPoolItem & rItem =
                 rTxtColl.GetFmtAttr(RES_PARATR_NUMRULE, FALSE);
 
-            //if ((BYTE)GetLevel(rTxtColl.GetName()) == NO_NUMBERING)   //#outline level,removed by zhaojianwei
+            //if ((BYTE)GetLevel(rTxtColl.GetName()) == NO_NUMBERING)	//#outline level,removed by zhaojianwei
             //{
-            //  if (static_cast<const SwNumRuleItem &>(rItem).GetValue() ==
-            //      pOutlineRule->GetName())
-            //  {
-            //      rTxtColl.ResetFmtAttr(RES_PARATR_NUMRULE);
-            //  }
+            //	if (static_cast<const SwNumRuleItem &>(rItem).GetValue() ==
+            //		pOutlineRule->GetName())
+            //	{
+            //		rTxtColl.ResetFmtAttr(RES_PARATR_NUMRULE);
+            //	}
             //}
             //else
             //{
-            //  if (static_cast<const SwNumRuleItem &>(rItem).GetValue() !=
-            //      pOutlineRule->GetName())
-            //  {
-            //      SwNumRuleItem aItem(pOutlineRule->GetName());
-            //      rTxtColl.SetFmtAttr(aItem);
-            //  }
+            //	if (static_cast<const SwNumRuleItem &>(rItem).GetValue() !=
+            //		pOutlineRule->GetName())
+            //	{
+            //		SwNumRuleItem aItem(pOutlineRule->GetName());
+            //		rTxtColl.SetFmtAttr(aItem);
+            //	}
             //}
            if ((BYTE)GetLevel(rTxtColl.GetName()) == MAXLEVEL) //add by zhaojianwei
             {
@@ -405,7 +405,7 @@ short SwOutlineTabDialog::Ok()
             }
             else
             {
-                rTxtColl.AssignToListLevelOfOutlineStyle(GetLevel(rTxtColl.GetName()));
+                rTxtColl.AssignToListLevelOfOutlineStyle(GetLevel(rTxtColl.GetName()));	
 
                 if (static_cast<const SwNumRuleItem &>(rItem).GetValue() !=
                     pOutlineRule->GetName())
@@ -413,7 +413,7 @@ short SwOutlineTabDialog::Ok()
                     SwNumRuleItem aItem(pOutlineRule->GetName());
                     rTxtColl.SetFmtAttr(aItem);
                 }
-            }                           //<-end,zhaojianwei
+            }							//<-end,zhaojianwei
         }
     }
 
@@ -425,30 +425,30 @@ short SwOutlineTabDialog::Ok()
         SwTxtFmtColl* pColl = rWrtSh.FindTxtFmtCollByName( sHeadline );
         if( !pColl )
         {
-            //if( !aCollNames[i].Len() )            //#outline level,removed by zhaojianwei
+            //if( !aCollNames[i].Len() )			//#outline level,removed by zhaojianwei
             //{
-            //  SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
-            //      static_cast< USHORT >(RES_POOLCOLL_HEADLINE1 + i) );
-            //  pTxtColl->SetOutlineLevel( NO_NUMBERING );
-            //  pTxtColl->ResetFmtAttr(RES_PARATR_NUMRULE);
+            //	SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
+            //		static_cast< USHORT >(RES_POOLCOLL_HEADLINE1 + i) );
+            //	pTxtColl->SetOutlineLevel( NO_NUMBERING );
+            //	pTxtColl->ResetFmtAttr(RES_PARATR_NUMRULE);
             //}
             //else if(aCollNames[i] != sHeadline)
             //{
-            //  SwTxtFmtColl* pTxtColl = rWrtSh.GetParaStyle(
-            //      aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
-            //  if(pTxtColl)
-            //  {
-            //      pTxtColl->SetOutlineLevel( static_cast< BYTE >(i) );
+            //	SwTxtFmtColl* pTxtColl = rWrtSh.GetParaStyle(
+            //		aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
+            //	if(pTxtColl)
+            //	{
+            //		pTxtColl->SetOutlineLevel( static_cast< BYTE >(i) );
 
-            //      SwNumRuleItem aItem(pOutlineRule->GetName());
-            //      pTxtColl->SetFmtAttr(aItem);
-            //  }
+            //		SwNumRuleItem aItem(pOutlineRule->GetName());
+            //		pTxtColl->SetFmtAttr(aItem);
+            //	}
             //}
             if(aCollNames[i] != sHeadline)//->added by zhaojianwei
             {
                 SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
                     static_cast< USHORT >(RES_POOLCOLL_HEADLINE1 + i) );
-                pTxtColl->DeleteAssignmentToListLevelOfOutlineStyle();
+                pTxtColl->DeleteAssignmentToListLevelOfOutlineStyle();	
                 pTxtColl->ResetFmtAttr(RES_PARATR_NUMRULE);
 
                 if( aCollNames[i].Len() )
@@ -457,7 +457,7 @@ short SwOutlineTabDialog::Ok()
                                 aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
                     if(pTxtColl)
                     {
-                        pTxtColl->AssignToListLevelOfOutlineStyle(i);
+                        pTxtColl->AssignToListLevelOfOutlineStyle(i);	
                         SwNumRuleItem aItem(pOutlineRule->GetName());
                         pTxtColl->SetFmtAttr(aItem);
                     }
@@ -485,8 +485,8 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aNumberBox(this, SW_RES(LB_NUMBER), INSERT_NUM_TYPE_NO_NUMBERING|INSERT_NUM_EXTENDED_TYPES),
     aCharFmtFT(this, SW_RES(FT_CHARFMT)),
     aCharFmtLB(this, SW_RES(LB_CHARFMT)),
-    aAllLevelFT(    this, SW_RES(FT_ALL_LEVEL)),
-    aAllLevelNF(    this, SW_RES(NF_ALL_LEVEL)),
+    aAllLevelFT(	this, SW_RES(FT_ALL_LEVEL)),
+    aAllLevelNF(	this, SW_RES(NF_ALL_LEVEL)),
     aDelim(this, SW_RES(FT_DELIM)),
     aPrefixFT(this, SW_RES(FT_PREFIX)),
     aPrefixED(this, SW_RES(ED_PREFIX)),
@@ -506,19 +506,19 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     SetExchangeSupport();
 
     aCollBox.InsertEntry(aNoFmtName);
-    aLevelLB.SetSelectHdl(LINK(this,    SwOutlineSettingsTabPage, LevelHdl));
+    aLevelLB.SetSelectHdl(LINK(this, 	SwOutlineSettingsTabPage, LevelHdl));
     aAllLevelNF.SetModifyHdl(LINK(this, SwOutlineSettingsTabPage, ToggleComplete));
-    aCollBox.SetSelectHdl(LINK(this,    SwOutlineSettingsTabPage, CollSelect));
-    aCollBox.SetGetFocusHdl(LINK(this,  SwOutlineSettingsTabPage, CollSelectGetFocus));
-    aNumberBox.SetSelectHdl(LINK(this,  SwOutlineSettingsTabPage, NumberSelect));
-    aPrefixED.SetModifyHdl(LINK(this,   SwOutlineSettingsTabPage, DelimModify));
-    aSuffixED.SetModifyHdl(LINK(this,   SwOutlineSettingsTabPage, DelimModify));
-    aStartEdit.SetModifyHdl(LINK(this,  SwOutlineSettingsTabPage, StartModified));
-    aCharFmtLB.SetSelectHdl(LINK(this,  SwOutlineSettingsTabPage, CharFmtHdl));
+    aCollBox.SetSelectHdl(LINK(this, 	SwOutlineSettingsTabPage, CollSelect));
+    aCollBox.SetGetFocusHdl(LINK(this, 	SwOutlineSettingsTabPage, CollSelectGetFocus));
+    aNumberBox.SetSelectHdl(LINK(this, 	SwOutlineSettingsTabPage, NumberSelect));
+    aPrefixED.SetModifyHdl(LINK(this, 	SwOutlineSettingsTabPage, DelimModify));
+    aSuffixED.SetModifyHdl(LINK(this, 	SwOutlineSettingsTabPage, DelimModify));
+    aStartEdit.SetModifyHdl(LINK(this, 	SwOutlineSettingsTabPage, StartModified));
+    aCharFmtLB.SetSelectHdl(LINK(this, 	SwOutlineSettingsTabPage, CharFmtHdl));
 
 }
 
-void    SwOutlineSettingsTabPage::Update()
+void   	SwOutlineSettingsTabPage::Update()
 {
         // falls eine Vorlage fuer diese Ebene bereits selektiert wurde,
         // diese in der ListBox auswaehlean
@@ -543,13 +543,13 @@ void    SwOutlineSettingsTabPage::Update()
                 pFirstFmt = aNumFmtArr[i]->GetCharFmt();
             else
             {
-                bSameType   &= aNumFmtArr[i]->GetNumberingType() == aNumFmtArr[0]->GetNumberingType();
-                bSameStart  &= aNumFmtArr[i]->GetStart() == aNumFmtArr[0]->GetStart();
+                bSameType 	&= aNumFmtArr[i]->GetNumberingType() == aNumFmtArr[0]->GetNumberingType();
+                bSameStart	&= aNumFmtArr[i]->GetStart() == aNumFmtArr[0]->GetStart();
                 bSamePrefix &= aNumFmtArr[i]->GetPrefix() == aNumFmtArr[0]->GetPrefix();
                 bSameSuffix &= aNumFmtArr[i]->GetSuffix() == aNumFmtArr[0]->GetSuffix();
                 bSameComplete &= aNumFmtArr[i]->GetIncludeUpperLevels() == aNumFmtArr[0]->GetIncludeUpperLevels();
                 const SwCharFmt* pFmt = aNumFmtArr[i]->GetCharFmt();
-                bSameCharFmt &=     !pFirstFmt && !pFmt
+                bSameCharFmt &= 	!pFirstFmt && !pFmt
                                     || pFirstFmt && pFmt && pFmt->GetName() == pFirstFmt->GetName();
             }
         }
@@ -776,7 +776,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
 
 IMPL_LINK( SwOutlineSettingsTabPage, CharFmtHdl, ListBox *, EMPTYARG )
 {
-//  bAutomaticCharStyles = FALSE;
+//	bAutomaticCharStyles = FALSE;
     String sEntry = aCharFmtLB.GetSelectEntry();
     USHORT nMask = 1;
     BOOL bFormatNone = sEntry == ViewShell::GetShellRes()->aStrNone;
@@ -907,12 +907,12 @@ BOOL    SwOutlineSettingsTabPage::FillItemSet( SfxItemSet&  )
     return TRUE;
 }
 
-void    SwOutlineSettingsTabPage::Reset( const SfxItemSet& rSet )
+void 	SwOutlineSettingsTabPage::Reset( const SfxItemSet& rSet )
 {
     ActivatePage(rSet);
 }
 
-SfxTabPage* SwOutlineSettingsTabPage::Create( Window* pParent,
+SfxTabPage*	SwOutlineSettingsTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwOutlineSettingsTabPage(pParent, rAttrSet);
@@ -1223,7 +1223,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
             }
         }
     }
-    DrawOutDev( Point(0,0), aSize,
+    DrawOutDev(	Point(0,0), aSize,
                 Point(0,0), aSize,
                         *pVDev );
     delete pVDev;

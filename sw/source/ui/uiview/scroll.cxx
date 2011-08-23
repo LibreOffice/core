@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ SwScrollbar::SwScrollbar( Window *pWin, BOOL bHoriz ) :
  SwScrollbar::~SwScrollbar() {}
 
 /*------------------------------------------------------------------------
- Beschreibung:  wird nach einer Aenderung der Dokumentgroesse gerufen, um den
+ Beschreibung:	wird nach einer Aenderung der Dokumentgroesse gerufen, um den
                 Range des Scrollbars neu einzustellen.
 ------------------------------------------------------------------------*/
 
@@ -71,7 +71,7 @@ void SwScrollbar::DocSzChgd( const Size &rSize )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  wird nach einer Veraenderung des sichtbaren Ausschnittes
+ Beschreibung:	wird nach einer Veraenderung des sichtbaren Ausschnittes
                 gerufen.
 ------------------------------------------------------------------------*/
 
@@ -134,7 +134,7 @@ void SwScrollbar::SetAuto(BOOL bSet)
         if(!bAuto && bVisible && !ScrollBar::IsVisible())
             ExtendedShow(TRUE);
         else if(bAuto)
-            AutoShow(); // oder automatisch verstecken
+            AutoShow();	// oder automatisch verstecken
     }
 }
 /*-----------------14.04.98 11:43-------------------
@@ -151,7 +151,7 @@ void SwScrollbar::AutoShow()
                 ScrollBar::Show(FALSE);
         }
         else if ( !ScrollBar::IsVisible() &&
-                  (!bHori || nVis) )        //Optimierung fuer Browser.
+                  (!bHori || nVis) )		//Optimierung fuer Browser.
                                             //Horizontaler Scrollbar per
                                             //default aus.
         {

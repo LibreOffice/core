@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef DOCUMENT_HXX
 #define DOCUMENT_HXX
 
-#define SMDLL   1
+#define SMDLL	1
 
 #include <sot/storage.hxx>
 #include <sot/sotref.hxx>
@@ -50,20 +50,20 @@ class SfxPrinter;
 class Printer;
 class SmCursor;
 
-#define HINT_DATACHANGED    1004
+#define HINT_DATACHANGED	1004
 
-#define SM30BIDENT   ((ULONG)0x534D3033L)
-#define SM30IDENT    ((ULONG)0x30334d53L)
+#define SM30BIDENT	 ((ULONG)0x534D3033L)
+#define SM30IDENT	 ((ULONG)0x30334d53L)
 #define SM304AIDENT  ((ULONG)0x34303330L)
 #define SM30VERSION  ((ULONG)0x00010000L)
-#define SM50VERSION  ((ULONG)0x00010001L)   //Unterschied zur SM30VERSION ist
+#define SM50VERSION	 ((ULONG)0x00010001L)	//Unterschied zur SM30VERSION ist
                                             //der neue Border im Format.
 
-#define FRMIDENT    ((ULONG)0x03031963L)
-#define FRMVERSION  ((ULONG)0x00010001L)
+#define FRMIDENT	((ULONG)0x03031963L)
+#define FRMVERSION	((ULONG)0x00010001L)
 
-#define STAROFFICE_XML  "StarOffice XML (Math)"
-#define MATHML_XML      "MathML XML (Math)"
+#define STAROFFICE_XML	"StarOffice XML (Math)"
+#define MATHML_XML		"MathML XML (Math)"
 
 /* Zugriff auf den Drucker sollte ausschliesslich ueber diese Klasse erfolgen
  * ==========================================================================
@@ -111,22 +111,22 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     friend class SmModel;
     friend class SmCursor;
 
-    String              aText;
-    SmFormat            aFormat;
-    SmParser            aInterpreter;
+    String				aText;
+    SmFormat   			aFormat;
+    SmParser	  		aInterpreter;
     String              aAccText;
-    SmNode             *pTree;
+    SmNode		  	   *pTree;
     SfxMenuBarManager  *pMenuMgr;
-    SfxItemPool        *pEditEngineItemPool;
-    EditEngine         *pEditEngine;
-    SfxPrinter         *pPrinter;       //Siehe Kommentar zum SmPrinter Access!
-    Printer            *pTmpPrinter;    //ebenfalls
-    long                nLeftBorder,
+    SfxItemPool		   *pEditEngineItemPool;
+    EditEngine		   *pEditEngine;
+    SfxPrinter		   *pPrinter;		//Siehe Kommentar zum SmPrinter Access!
+    Printer			   *pTmpPrinter;	//ebenfalls
+    long				nLeftBorder,
                         nRightBorder,
                         nTopBorder,
                         nBottomBorder;
-    USHORT              nModifyCount;
-    BOOL                bIsFormulaArranged;
+    USHORT				nModifyCount;
+    BOOL				bIsFormulaArranged;
     SmCursor           *pCursor;
 
 
@@ -136,11 +136,11 @@ class SmDocShell : public SfxObjectShell, public SfxListener
 
     BOOL        WriteAsMathType3( SfxMedium& );
 
-    virtual void        Draw(OutputDevice *pDevice,
+    virtual void		Draw(OutputDevice *pDevice,
                              const JobSetup & rSetup,
                              USHORT nAspect = ASPECT_CONTENT);
 
-    virtual void        FillClass(SvGlobalName* pClassName,
+    virtual void		FillClass(SvGlobalName* pClassName,
                                   sal_uInt32*  pFormat,
                                   String* pAppName,
                                   String* pFullTypeName,
@@ -148,13 +148,13 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                                   sal_Int32 nFileFormat,
                                   sal_Bool bTemplate = sal_False ) const;
 
-    virtual BOOL        SetData( const String& rData );
-    virtual ULONG       GetMiscStatus() const;
-    virtual void        OnDocumentPrinterChanged( Printer * );
+    virtual BOOL		SetData( const String& rData );
+    virtual ULONG		GetMiscStatus() const;
+    virtual void		OnDocumentPrinterChanged( Printer * );
     virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual BOOL        Load( SfxMedium& rMedium );
-            void        ImplSave(  SvStorageStreamRef xStrm  );
-    virtual BOOL        Save();
+            void		ImplSave(  SvStorageStreamRef xStrm  );
+    virtual BOOL		Save();
     virtual BOOL        SaveAs( SfxMedium& rMedium );
     virtual BOOL        ConvertTo( SfxMedium &rMedium );
     virtual BOOL        SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
@@ -162,10 +162,10 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();
 
-    BOOL                IsFormulaArranged() const { return bIsFormulaArranged; }
-    void                SetFormulaArranged(BOOL bVal) { bIsFormulaArranged = bVal; }
+    BOOL				IsFormulaArranged() const { return bIsFormulaArranged; }
+    void		        SetFormulaArranged(BOOL bVal) { bIsFormulaArranged = bVal; }
 
-    virtual BOOL        ConvertFrom(SfxMedium &rMedium);
+    virtual BOOL		ConvertFrom(SfxMedium &rMedium);
 
     /** Called whenever the formula is changed
      * Deletes the current cursor
@@ -179,10 +179,10 @@ public:
     SFX_DECL_OBJECTFACTORY();
 
                 SmDocShell( const sal_uInt64 i_nSfxCreationFlags );
-    virtual     ~SmDocShell();
+    virtual		~SmDocShell();
 
-    void        LoadSymbols();
-    void        SaveSymbols();
+    void		LoadSymbols();
+    void 		SaveSymbols();
 
     void        ArrangeFormula();
 
@@ -190,9 +190,9 @@ public:
     //und fuer die Kommunikation mit dem SFX!
     //Alle internen Verwendungen des Printers sollten ausschlieslich uber
     //den SmPrinterAccess funktionieren.
-    BOOL        HasPrinter()    { return 0 != pPrinter; }
-    SfxPrinter *GetPrinter()    { GetPrt(); return pPrinter; }
-    void        SetPrinter( SfxPrinter * );
+    BOOL		HasPrinter()	{ return 0 != pPrinter; }
+    SfxPrinter *GetPrinter()	{ GetPrt(); return pPrinter; }
+    void	    SetPrinter( SfxPrinter * );
 
     const String GetComment() const;
 
@@ -200,32 +200,32 @@ public:
     sal_Bool    ReplaceBadChars();
 
     void        UpdateText();
-    void        SetText(const String& rBuffer);
-    String&     GetText() { return (aText); }
-    void        SetFormat(SmFormat& rFormat);
+    void		SetText(const String& rBuffer);
+    String& 	GetText() { return (aText); }
+    void		SetFormat(SmFormat& rFormat);
     const SmFormat&  GetFormat() { return (aFormat); }
 
-    void            Parse();
-    SmParser &      GetParser() { return aInterpreter; }
-    const SmNode *  GetFormulaTree() const  { return pTree; }
-    void            SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
+    void			Parse();
+    SmParser &		GetParser() { return aInterpreter; }
+    const SmNode *	GetFormulaTree() const 	{ return pTree; }
+    void 			SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
 
     String          GetAccessibleText();
 
-    EditEngine &    GetEditEngine();
-    SfxItemPool &   GetEditEngineItemPool();
+    EditEngine & 	GetEditEngine();
+    SfxItemPool &	GetEditEngineItemPool();
 
-    void        DrawFormula(OutputDevice &rDev, Point &rPosition, BOOL bDrawSelection = FALSE);
-    Size        GetSize();
+    void		DrawFormula(OutputDevice &rDev, Point &rPosition, BOOL bDrawSelection = FALSE);
+    Size		GetSize();
 
     void        Repaint();
 
-    virtual     SfxUndoManager *GetUndoManager ();
+    virtual 	SfxUndoManager *GetUndoManager ();
 
     virtual     SfxItemPool& GetPool() const;
 
-    void        Execute( SfxRequest& rReq );
-    void        GetState(SfxItemSet &);
+    void		Execute( SfxRequest& rReq );
+    void		GetState(SfxItemSet &);
 
     virtual void SetVisArea (const Rectangle & rVisArea);
     virtual void SetModified(BOOL bModified);

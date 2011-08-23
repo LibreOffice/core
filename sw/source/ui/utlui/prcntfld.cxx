@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@
 // STATIC DATA -----------------------------------------------------------
 
 PercentField::PercentField( Window* pWin, const ResId& rResId ) :
-        MetricField ( pWin, rResId ),
+        MetricField	( pWin, rResId ),
 
         nOldMax     (0),
-        nOldMin     (0),
+        nOldMin		(0),
         nLastPercent(-1),
         nLastValue  (-1),
         eOldUnit    (FUNIT_NONE),
@@ -101,7 +101,7 @@ void PercentField::ShowPercent(BOOL bPercent)
         }
         else
             MetricFormatter::SetValue(nLastPercent);
-//      SetValue(100, FUNIT_CUSTOM);
+//		SetValue(100, FUNIT_CUSTOM);
     }
     else
     {
@@ -215,7 +215,7 @@ void PercentField::SetMax(sal_Int64 nNewMax, FieldUnit eInUnit)
     {
         if (eInUnit == FUNIT_NONE)
             eInUnit = eOldUnit;
-//      SetRefValue(Convert(nNewMax, eInUnit, FUNIT_TWIP));
+//		SetRefValue(Convert(nNewMax, eInUnit, FUNIT_TWIP));
     }
 }
 
@@ -281,7 +281,7 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
         // Umrechnen in Metrik
         sal_Int64 nTwipValue = (nRefValue * nValue + 50) / 100;
 
-        if (eOutUnit == FUNIT_TWIP) // Nur wandeln, wenn unbedingt notwendig
+        if (eOutUnit == FUNIT_TWIP)	// Nur wandeln, wenn unbedingt notwendig
             return NormalizePercent(nTwipValue);
         else
             return ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FUNIT_TWIP, eOutUnit);
@@ -293,7 +293,7 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
         sal_Int64 nAktWidth;
         nValue = DenormalizePercent(nValue);
 
-        if (eInUnit == FUNIT_TWIP)  // Nur wandeln, wenn unbedingt notwendig
+        if (eInUnit == FUNIT_TWIP)	// Nur wandeln, wenn unbedingt notwendig
             nAktWidth = nValue;
         else
             nAktWidth = ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);

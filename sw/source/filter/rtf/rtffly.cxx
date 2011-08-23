@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@
 
 using namespace ::com::sun::star;
 
-#define ANCHOR(p)   ((SwFmtAnchor*)p)
+#define ANCHOR(p) 	((SwFmtAnchor*)p)
 
 // steht in shellio.hxx
 extern SwCntntNode* GoNextNds( SwNodeIndex * pIdx, BOOL bChk );
@@ -245,9 +245,9 @@ void SwRTFParser::SetFlysInDoc()
 
 
         //JP 21.09.98: wenn ein DropCap ist, dann Text im Node belassen, am
-        //              Absatz das Absatz Attribut setzen. Ggfs noch die
-        //              FontSize zuruecksetzen, damit das DropCap nicht zu
-        //              gro? wird.
+        //				Absatz das Absatz Attribut setzen. Ggfs noch die
+        //				FontSize zuruecksetzen, damit das DropCap nicht zu
+        //				gro? wird.
         if( pFlySave->nDropAnchor )
         {
             SwTxtNode* pSttNd = pFlySave->nSttNd.GetNode().GetTxtNode();
@@ -311,7 +311,7 @@ void SwRTFParser::SetFlysInDoc()
             if( pNd->IsNoTxtNode() )
             {
                 // die Size muss noch korrigiert werden!
-                nAktPageDesc = 0;       // Standart PageDesc
+                nAktPageDesc = 0;		// Standart PageDesc
                 if( SFX_ITEM_SET != pFlySave->aFlySet.GetItemState(
                     RES_FRM_SIZE, FALSE ) )
                     _SetPictureSize( *(SwNoTxtNode*)pNd, aRg.aStart,
@@ -459,9 +459,9 @@ void SwRTFParser::SetFlysInDoc()
 
             //JP 02.08.99: that is wrong. The anchor is ever the NEXT!
             //JP 05.08.99: there are an Bug in the ExportFilter which will
-            //              be fixed in the Version 517 - by SWG-Export
-            //              the fly will be after the paragraph - but in RTF
-            //              the flys will be before the paragraph.
+            //				be fixed in the Version 517 - by SWG-Export
+            //				the fly will be after the paragraph - but in RTF
+            // 				the	flys will be before the paragraph.
             if( !bSwPageDesc || 5430 < GetVersionNo() )
                 pFlySave->nSttNd++;
 
@@ -610,7 +610,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     aSz.SetHeightSizeType( ((SwFmtFrmSize*)pItem)->GetHeightSizeType() );
                     aSz.SetHeight( ((SwFmtFrmSize*)pItem)->GetHeight() );
                 }
-                if( MINFLY > nTokenValue )  nTokenValue = MINFLY;
+                if( MINFLY > nTokenValue )	nTokenValue = MINFLY;
                 aSet.Put( aSz );
             }
             break;
@@ -629,7 +629,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     nTokenValue = -nTokenValue;
                     aSz.SetHeightSizeType( ATT_FIX_SIZE );
                 }
-                if( MINFLY > nTokenValue )  nTokenValue = MINFLY;
+                if( MINFLY > nTokenValue )	nTokenValue = MINFLY;
                 aSz.SetHeight( nTokenValue );
                 aSet.Put( aSz );
             }
@@ -644,8 +644,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 {
                     SvxULSpaceItem aUL( RES_UL_SPACE );
                     SvxLRSpaceItem aLR( RES_LR_SPACE );
-                    aUL.SetUpper( nVal );   aUL.SetLower( nVal );
-                    aLR.SetLeft( nVal );    aLR.SetRight( nVal );
+                    aUL.SetUpper( nVal );	aUL.SetLower( nVal );
+                    aLR.SetLeft( nVal );	aLR.SetRight( nVal );
                     pSet->Put( aUL );
                     pSet->Put( aLR );
                 }
@@ -654,14 +654,14 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         case RTF_DFRMTXTX:
                 {
                     SvxLRSpaceItem aLR( RES_LR_SPACE );
-                    aLR.SetLeft( nVal );    aLR.SetRight( nVal );
+                    aLR.SetLeft( nVal );	aLR.SetRight( nVal );
                     pSet->Put( aLR );
                 }
                 break;
         case RTF_DFRMTXTY:
                 {
                     SvxULSpaceItem aUL( RES_UL_SPACE );
-                    aUL.SetUpper( nVal );   aUL.SetLower( nVal );
+                    aUL.SetUpper( nVal );	aUL.SetLower( nVal );
                     pSet->Put( aUL );
                 }
                 break;
@@ -718,7 +718,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             aFrmDir.SetValue( FRMDIR_VERT_TOP_RIGHT );
             break;
 
-        case RTF_DROPCAPLI:                         // Dropcaps !!
+        case RTF_DROPCAPLI:							// Dropcaps !!
                 if( bChkDropCap )
                 {
                     nDropCapLines = USHORT( nTokenValue );
@@ -738,8 +738,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
         // fuer die "alten" Writer - haben die Spaltigkeit falsch heraus-
         // geschrieben
-        case RTF_COLS:          nCols = USHORT( nTokenValue );      break;
-        case RTF_COLSX:         nColSpace = USHORT( nTokenValue );  break;
+        case RTF_COLS:			nCols = USHORT( nTokenValue );		break;
+        case RTF_COLSX:			nColSpace = USHORT( nTokenValue );	break;
         case RTF_COLNO:
             nAktCol = USHORT( nTokenValue );
             if( RTF_COLW == GetNextToken() )
@@ -748,7 +748,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 if( RTF_COLSR == GetNextToken() )
                     nSpace = USHORT( nTokenValue );
                 else
-                    SkipToken( -1 );        // wieder zurueck
+                    SkipToken( -1 );		// wieder zurueck
 
                 if( --nAktCol == ( aColumns.Count() / 2 ) )
                 {
@@ -766,7 +766,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     if( RTF_SHADINGDEF == (nToken & ~0xff) )
                     {
                         ReadBackgroundAttr( nToken, aSet );
-                        GetNextToken();     // Klammer ueberlesen
+                        GetNextToken();		// Klammer ueberlesen
                     }
                     else
                         nSkip = -1;
@@ -777,7 +777,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     bReadSwFly = true;      // alles kommt in den akt. Fly
                     SvxLRSpaceItem aLR( RES_LR_SPACE );
                     SvxULSpaceItem aUL( RES_UL_SPACE );
-                    nCols = USHRT_MAX;      // neu aufsetzen
+                    nCols = USHRT_MAX;		// neu aufsetzen
                     nColSpace = USHRT_MAX;
                     do {
                     nVal = USHORT(nTokenValue);
@@ -829,10 +829,10 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                             aHori.SetRelationOrient( aHO.GetRelation() );
                         }
                         break;
-                    case RTF_FLYOUTLEFT:        aLR.SetLeft( nVal );        break;
-                    case RTF_FLYOUTRIGHT:       aLR.SetRight( nVal );       break;
-                    case RTF_FLYOUTUPPER:       aUL.SetUpper( nVal );       break;
-                    case RTF_FLYOUTLOWER:       aUL.SetLower( nVal );       break;
+                    case RTF_FLYOUTLEFT:		aLR.SetLeft( nVal );		break;
+                    case RTF_FLYOUTRIGHT:		aLR.SetRight( nVal );		break;
+                    case RTF_FLYOUTUPPER:		aUL.SetUpper( nVal );		break;
+                    case RTF_FLYOUTLOWER:		aUL.SetLower( nVal );		break;
                     case RTF_FLYANCHOR:
                             switch( GetNextToken() )
                             {
@@ -853,11 +853,11 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                                 break;
 
 // JP 26.09.94: die Bindung an die Spalte gibt es nicht mehr !!
-//                          case RTF_FLY_COLUMN:
+//							case RTF_FLY_COLUMN:
                             }
                             break;
-                    case RTF_COLS:  nCols = USHORT( nTokenValue );      break;
-                    case RTF_COLSX: nColSpace = USHORT( nTokenValue );  break;
+                    case RTF_COLS:	nCols = USHORT( nTokenValue );		break;
+                    case RTF_COLSX:	nColSpace = USHORT( nTokenValue );	break;
                     case RTF_COLNO:
                         nAktCol = USHORT( nTokenValue );
                         if( RTF_COLW == GetNextToken() )
@@ -866,7 +866,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                             if( RTF_COLSR == GetNextToken() )
                                 nSpace = USHORT( nTokenValue );
                             else
-                                SkipToken( -1 );        // wieder zurueck
+                                SkipToken( -1 );		// wieder zurueck
 
                             if( --nAktCol == ( aColumns.Count() / 2 ) )
                             {
@@ -909,7 +909,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                         }
                         else
                             SkipGroup();
-                        GetNextToken();     // Klammer ueberlesen
+                        GetNextToken();		// Klammer ueberlesen
                         break;
                     }
                     } while( IsParserWorking() &&
@@ -996,7 +996,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         pSet->Put( aCol );
     }
 
-    if( pSet != &aSet )         // wurde der Set uebergeben, dann wars das
+    if( pSet != &aSet )			// wurde der Set uebergeben, dann wars das
         return ;
 
     // ein neues FlyFormat anlegen oder das alte benutzen ?
@@ -1062,8 +1062,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             nToken = GetNextToken();
 
             // BUG 22036: kommt zwischen Fly-Attributen ein unbekanntes,
-            //              dann erzeuge nie 2 FlyFrames, sondern fasse
-            //              beide zusammen !!!
+            //				dann erzeuge nie 2 FlyFrames, sondern fasse
+            //				beide zusammen !!!
             while( RTF_APOCTL == ( nToken & ~(0xff | RTF_SWGDEFS) ))
             {
                 if( RTF_FLY_INPARA == nToken )
@@ -1113,8 +1113,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         pPam->GetPoint()->nNode == pFlySave->nSttNd &&
         !pPam->GetPoint()->nContent.GetIndex() )
     {
-//      // dann erzeuge mindestens einen leeren TextNode
-//      pDoc->AppendTxtNode(*pPam);
+//		// dann erzeuge mindestens einen leeren TextNode
+//		pDoc->AppendTxtNode(*pPam);
         // dann zerstoere den FlySave wieder.
         aFlyArr.DeleteAndDestroy( --nFlyArrCnt );
 
@@ -1295,10 +1295,10 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
         }
 
         SwFlyFrmFmt* pFlyFmt = pDoc->Insert( *pPam,
-                    rGrfNm, aEmptyStr,      // Name der Graphic !!
+                    rGrfNm, aEmptyStr,		// Name der Graphic !!
                     pGrf,
-                    &aFlySet,               // Attribute fuer den FlyFrm
-                    pGrfAttrSet, NULL );            // Attribute fuer die Grafik
+                    &aFlySet,				// Attribute fuer den FlyFrm
+                    pGrfAttrSet, NULL );			// Attribute fuer die Grafik
 
         pGrfNd = pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()->
                                             GetIndex()+1 ]->GetGrfNode();
@@ -1321,11 +1321,11 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
                 {
                     SwXFrame::GetOrCreateSdrObject( pFlyFmt );
                     pDoc->SetFlyFrmTitle( *(pFlyFmt), aIt->second );
-                }
+                }    
                 ++aIt;
             }
-        }
-
+        }    
+    
     }
 
     if( pGrfAttrSet )
@@ -1391,7 +1391,7 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
     }
 
     //JP 8.11.2001: bug 94450 - if no size exist, then the size is set by
-    //              the swapin of the graphic.
+    //				the swapin of the graphic.
     SwGrfNode* pGrfNd;
     if( !aSize.Width() && !aSize.Height() &&
         0 != (pGrfNd = (SwGrfNode*)rNd.GetGrfNode() ) && pGrfNd->IsGrfLink() )
@@ -1504,7 +1504,7 @@ void SwRTFParser::ReadOLEData()
     SvxRTFPictureType aPicType, aOleType;
 
     int nToken, bValidOle = TRUE, bWeiter = TRUE;
-    int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
+    int nOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
 
     String* pStr = 0;
     String sObjClass, sObjName, sObjData;
@@ -1515,7 +1515,7 @@ void SwRTFParser::ReadOLEData()
         USHORT nVal = USHORT( nTokenValue );
         switch( nToken )
         {
-        case '}':       --nOpenBrakets; pStr = 0; break;
+        case '}':		--nOpenBrakets;	pStr = 0; break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
@@ -1536,19 +1536,19 @@ void SwRTFParser::ReadOLEData()
             break;
 
         case RTF_OBJECT:
-        case RTF_OBJEMB:        // default ist embedded
-        case RTF_LINKSELF:      // ??
-        case RTF_OBJLOCK:       // ??
-        case RTF_OBJUPDATE:     // ??
-        case RTF_OBJTIME:       // ??
+        case RTF_OBJEMB:		// default ist embedded
+        case RTF_LINKSELF:		// ??
+        case RTF_OBJLOCK:		// ??
+        case RTF_OBJUPDATE:		// ??
+        case RTF_OBJTIME:		// ??
         case RTF_OBJSETSIZE:
         case RTF_OBJALIGN:
         case RTF_OBJTRANSY:
         case RTF_OBJATTPH:
             break;
 
-        case RTF_OBJLINK:       // ?? welche Daten sind das ??
-        case RTF_OBJAUTLINK:    // ??       -""-            ??
+        case RTF_OBJLINK:		// ?? welche Daten sind das ??
+        case RTF_OBJAUTLINK:	// ??       -""-            ??
         case RTF_OBJSUB:
         case RTF_OBJPUB:
         case RTF_OBJICEMB:
@@ -1556,7 +1556,7 @@ void SwRTFParser::ReadOLEData()
         case RTF_OBJHTML:
         case RTF_OBJALIAS:
         case RTF_OBJSECT:
-            bValidOle = FALSE;      // diese Typen koennen wir nicht
+            bValidOle = FALSE;		// diese Typen koennen wir nicht
             break;
 
         case RTF_OBJCLASS:
@@ -1579,21 +1579,21 @@ void SwRTFParser::ReadOLEData()
                 bWeiter = FALSE;
             }
             break;
-        case RTF_RSLTBMP:           // diese sollten wir ignorieren
+        case RTF_RSLTBMP:			// diese sollten wir ignorieren
         case RTF_RSLTMERGE:
         case RTF_RSLTPICT:
         case RTF_RSLTRTF:
         case RTF_RSLTTXT:
             break;
 
-        case RTF_OBJW:          aOleType.nWidth = nVal; break;
-        case RTF_OBJH:          aOleType.nHeight = nVal; break;
-        case RTF_OBJCROPT:      aOleType.nCropT = (short)nTokenValue; break;
-        case RTF_OBJCROPB:      aOleType.nCropB = (short)nTokenValue; break;
-        case RTF_OBJCROPL:      aOleType.nCropL = (short)nTokenValue; break;
-        case RTF_OBJCROPR:      aOleType.nCropR = (short)nTokenValue; break;
-        case RTF_OBJSCALEX:     aOleType.nScalX = nVal; break;
-        case RTF_OBJSCALEY:     aOleType.nScalY = nVal; break;
+        case RTF_OBJW:			aOleType.nWidth = nVal; break;
+        case RTF_OBJH:			aOleType.nHeight = nVal; break;
+        case RTF_OBJCROPT:		aOleType.nCropT = (short)nTokenValue; break;
+        case RTF_OBJCROPB:		aOleType.nCropB = (short)nTokenValue; break;
+        case RTF_OBJCROPL:		aOleType.nCropL = (short)nTokenValue; break;
+        case RTF_OBJCROPR:		aOleType.nCropR = (short)nTokenValue; break;
+        case RTF_OBJSCALEX:		aOleType.nScalX = nVal; break;
+        case RTF_OBJSCALEY:		aOleType.nScalY = nVal; break;
 
         case RTF_TEXTTOKEN:
             if( 1 < nOpenBrakets && pStr )
@@ -1618,24 +1618,24 @@ void SwRTFParser::ReadOLEData()
 
     if( bValidOle )
     {
-        bValidOle = FALSE;      // erstmal
+        bValidOle = FALSE; 		// erstmal
     }
 
-    if( !bWeiter )      // dann stehen wir noch im Result
+    if( !bWeiter )		// dann stehen wir noch im Result
     {
         // ist das Ole-Object Ok?
         // -> dann solange SkipGroup rufen, bis zur letzten
-        //      schliessenden Klammer
+        //		schliessenden Klammer
         // ansonsten alle Token verarbeiten, bis zur letzten
-        //      schliessenden Klammer
+        //		schliessenden Klammer
 
         bWeiter = TRUE;
         while( nOpenBrakets && IsParserWorking() && bWeiter )
         {
             switch( nToken = GetNextToken() )
             {
-            case '}':       --nOpenBrakets; break;
-            case '{':       ++nOpenBrakets;  break;
+            case '}':		--nOpenBrakets; break;
+            case '{':		++nOpenBrakets;	 break;
             }
             if( nOpenBrakets && !bValidOle )
                 NextToken( nToken );
@@ -1645,7 +1645,7 @@ void SwRTFParser::ReadOLEData()
     if( !bValidOle && '}' != nToken )
         SkipGroup();
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
 }
 #endif
 

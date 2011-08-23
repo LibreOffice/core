@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,20 +59,20 @@ using rtl::OUString;
 SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     SwFldPage( pParent, SW_RES( TP_FLD_FUNC ), rCoreSet ),
 
-    aTypeFT     (this, SW_RES(FT_FUNCTYPE)),
-    aTypeLB     (this, SW_RES(LB_FUNCTYPE)),
+    aTypeFT		(this, SW_RES(FT_FUNCTYPE)),
+    aTypeLB		(this, SW_RES(LB_FUNCTYPE)),
     aSelectionFT(this, SW_RES(FT_FUNCSELECTION)),
     aSelectionLB(this, SW_RES(LB_FUNCSELECTION)),
-    aFormatFT   (this, SW_RES(FT_FUNCFORMAT)),
-    aFormatLB   (this, SW_RES(LB_FUNCFORMAT)),
-    aNameFT     (this, SW_RES(FT_FUNCNAME)),
-    aNameED     (this, SW_RES(ED_FUNCNAME)),
-    aValueFT    (this, SW_RES(FT_FUNCVALUE)),
-    aValueED    (this, SW_RES(ED_FUNCVALUE)),
-    aCond1FT    (this, SW_RES(FT_FUNCCOND1)),
-    aCond1ED    (this, SW_RES(ED_FUNCCOND1)),
-    aCond2FT    (this, SW_RES(FT_FUNCCOND2)),
-    aCond2ED    (this, SW_RES(ED_FUNCCOND2)),
+    aFormatFT	(this, SW_RES(FT_FUNCFORMAT)),
+    aFormatLB	(this, SW_RES(LB_FUNCFORMAT)),
+    aNameFT		(this, SW_RES(FT_FUNCNAME)),
+    aNameED		(this, SW_RES(ED_FUNCNAME)),
+    aValueFT	(this, SW_RES(FT_FUNCVALUE)),
+    aValueED	(this, SW_RES(ED_FUNCVALUE)),
+    aCond1FT	(this, SW_RES(FT_FUNCCOND1)),
+    aCond1ED	(this, SW_RES(ED_FUNCCOND1)),
+    aCond2FT	(this, SW_RES(FT_FUNCCOND2)),
+    aCond2ED	(this, SW_RES(ED_FUNCCOND2)),
     aMacroBT    (this, SW_RES(BT_FUNCMACRO)),
     aListItemFT(    this, SW_RES( FT_LISTITEM    )),
     aListItemED(    this, SW_RES( ED_LISTITEM    )),
@@ -98,7 +98,7 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aCond1ED.ShowBrackets(FALSE);
     aCond2ED.ShowBrackets(FALSE);
 
-//  SwWrtShell* pSh = (SwWrtShell*)ViewShell::GetCurrShell();
+//	SwWrtShell* pSh = (SwWrtShell*)ViewShell::GetCurrShell();
 }
 
 SwFldFuncPage::~SwFldFuncPage()
@@ -108,7 +108,7 @@ SwFldFuncPage::~SwFldFuncPage()
 void SwFldFuncPage::Reset(const SfxItemSet& )
 {
     SavePos(&aTypeLB);
-    Init(); // Allgemeine initialisierung
+    Init();	// Allgemeine initialisierung
 
     aTypeLB.SetUpdateMode(FALSE);
     aTypeLB.Clear();
@@ -144,12 +144,12 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
     // alte Pos selektieren
     RestorePos(&aTypeLB);
 
-    aTypeLB.SetDoubleClickHdl       (LINK(this, SwFldFuncPage, InsertHdl));
-    aTypeLB.SetSelectHdl            (LINK(this, SwFldFuncPage, TypeHdl));
-    aSelectionLB.SetSelectHdl       (LINK(this, SwFldFuncPage, SelectHdl));
-    aSelectionLB.SetDoubleClickHdl  (LINK(this, SwFldFuncPage, InsertMacroHdl));
-    aFormatLB.SetDoubleClickHdl     (LINK(this, SwFldFuncPage, InsertHdl));
-    aMacroBT.SetClickHdl            (LINK(this, SwFldFuncPage, MacroHdl));
+    aTypeLB.SetDoubleClickHdl		(LINK(this, SwFldFuncPage, InsertHdl));
+    aTypeLB.SetSelectHdl			(LINK(this, SwFldFuncPage, TypeHdl));
+    aSelectionLB.SetSelectHdl		(LINK(this, SwFldFuncPage, SelectHdl));
+    aSelectionLB.SetDoubleClickHdl	(LINK(this, SwFldFuncPage, InsertMacroHdl));
+    aFormatLB.SetDoubleClickHdl		(LINK(this, SwFldFuncPage, InsertHdl));
+    aMacroBT.SetClickHdl			(LINK(this, SwFldFuncPage, MacroHdl));
     Link aListModifyLk( LINK(this, SwFldFuncPage, ListModifyHdl));
     aListAddPB.SetClickHdl(aListModifyLk);
     aListRemovePB.SetClickHdl(aListModifyLk);
@@ -608,7 +608,7 @@ BOOL SwFldFuncPage::FillItemSet(SfxItemSet& )
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat );
     }
 
-    ModifyHdl();    // Insert ggf enablen/disablen
+    ModifyHdl();	// Insert ggf enablen/disablen
 
     return FALSE;
 }
@@ -638,7 +638,7 @@ String SwFldFuncPage::TurnMacroString(const String &rMacro)
     return rMacro;
 }
 
-SfxTabPage* SwFldFuncPage::Create(  Window* pParent,
+SfxTabPage* SwFldFuncPage::Create( 	Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldFuncPage( pParent, rAttrSet ) );
@@ -649,7 +649,7 @@ USHORT SwFldFuncPage::GetGroup()
     return GRP_FKT;
 }
 
-void    SwFldFuncPage::FillUserData()
+void	SwFldFuncPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
                         RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));

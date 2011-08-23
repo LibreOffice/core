@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,16 +37,16 @@
 
 #include "dialog.hrc"
 
-#define NUM_TBX_CATEGORIES  9
+#define NUM_TBX_CATEGORIES	9
 
 class SmToolBoxWindow : public SfxFloatingWindow
 {
 
 protected:
-    ToolBox     aToolBoxCat;
+    ToolBox		aToolBoxCat;
     FixedLine   aToolBoxCat_Delim;  // to visualy seperate the catalog part
-    ToolBox    *pToolBoxCmd;
-    ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
+    ToolBox	   *pToolBoxCmd;
+    ToolBox	   *vToolBoxCategories[NUM_TBX_CATEGORIES];
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
     ImageList  *aImageListsH[NUM_TBX_CATEGORIES + 1];   /* high contrast */
     USHORT      nActiveCategoryRID;
@@ -65,15 +65,15 @@ protected:
 public:
     SmToolBoxWindow(SfxBindings    *pBindings,
                     SfxChildWindow *pChildWindow,
-                    Window         *pParent);
+                    Window		   *pParent);
     ~SmToolBoxWindow();
 
     // Window
-    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual void	StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent &rEvt );
 
     void        AdjustPosSize( BOOL bSetPos );
-    void        SetCategory(USHORT nCategory);
+    void		SetCategory(USHORT nCategory);
 };
 
 /**************************************************************************/

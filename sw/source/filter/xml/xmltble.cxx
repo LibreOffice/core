@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,8 +77,8 @@ using table::XCell;
 
 class SwXMLTableColumn_Impl : public SwWriteTableCol
 {
-    OUString    sStyleName;
-    sal_uInt32  nRelWidth;
+    OUString	sStyleName;
+    sal_uInt32	nRelWidth;
 
 public:
 
@@ -117,9 +117,9 @@ IMPL_CONTAINER_SORT( SwXMLTableColumnsSortByWidth_Impl, SwXMLTableColumn_Impl,
 
 class SwXMLTableLines_Impl
 {
-    SwXMLTableColumns_Impl  aCols;
-    const SwTableLines      *pLines;
-    sal_uInt32              nWidth;
+    SwXMLTableColumns_Impl	aCols;
+    const SwTableLines  	*pLines;
+    sal_uInt32				nWidth;
 
 public:
 
@@ -385,10 +385,10 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
     // order is: -/-/-/num,
     //           -/-/box/-, --/-/box/num,
-    //           -/brush/-/-, -/brush/-/num, -/brush/box/-, -/brush/box/num,
-    //           vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
-    //           vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
-    //           vert/brush/box/num
+    //			 -/brush/-/-, -/brush/-/num, -/brush/box/-, -/brush/box/num,
+    // 			 vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
+    //			 vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
+    //			 vert/brush/box/num
     sal_uInt32 nCount2 = Count();
     sal_Bool bInsert = sal_True;
     sal_uInt32 i;
@@ -605,7 +605,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
         const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
         sal_uInt16 nCPos = 0U;
         sal_uInt16 nColumns = rCols.Count();
-        for( sal_uInt16 nColumn=0U; nColumn<nColumns; nColumn++ )
+        for( sal_uInt16	nColumn=0U; nColumn<nColumns; nColumn++ )
         {
             SwXMLTableColumn_Impl *pColumn = rCols[nColumn];
 

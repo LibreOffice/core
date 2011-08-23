@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,14 +124,14 @@ protected:
 
     SwFlowFrm *pFollow;
 
-    BOOL bIsFollow  :1; //Ist's ein Follow
-    BOOL bLockJoin  :1; //Join (und damit deleten) verboten wenn TRUE!
+    BOOL bIsFollow	:1;	//Ist's ein Follow
+    BOOL bLockJoin	:1;	//Join (und damit deleten) verboten wenn TRUE!
     BOOL bUndersized:1; // wir sind kleiner als gewuenscht
-    BOOL bFtnAtEnd  :1; // For sectionfrms only: footnotes at the end of section
-    BOOL bEndnAtEnd :1; //  "       "        " : endnotes at the end of section
-    BOOL bCntntLock :1; //  "       "        " : content locked
-    BOOL bOwnFtnNum :1; //  "       "        " : special numbering of footnotes
-    BOOL bFtnLock   :1; //  "       "        " : ftn, don't leave this section bwd
+    BOOL bFtnAtEnd	:1; // For sectionfrms only: footnotes at the end of section
+    BOOL bEndnAtEnd	:1; // 	"		"		 " : endnotes at the end of section
+    BOOL bCntntLock	:1; //  "       "        " : content locked
+    BOOL bOwnFtnNum	:1; //  "       "        " : special numbering of footnotes
+    BOOL bFtnLock	:1; //  "       "        " : ftn, don't leave this section bwd
     BOOL bFlyLock   :1; //  Stop positioning of at-character flyframes
 
     //Prueft ob Vorwaertsfluss noch Sinn macht Endloswanderschaften (unterbinden)
@@ -139,7 +139,7 @@ protected:
     // --> OD 2005-03-08 #i44049# - method <CalcCntnt(..)> has to check this property.
     friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
     // <--
-    BOOL IsKeepFwdMoveAllowed();    //Wie oben, Move fuer Keep.
+    BOOL IsKeepFwdMoveAllowed();	//Wie oben, Move fuer Keep.
 
     //Prueft ob ein Obj das Umlauf wuenscht ueberlappt.
     //eine Null bedeutet, kein Objekt ueberlappt,
@@ -159,14 +159,14 @@ protected:
 public:
     SwFlowFrm( SwFrm &rFrm );
 
-    const SwFrm *GetFrm() const            { return &rThis; }
-          SwFrm *GetFrm()                  { return &rThis; }
+    const SwFrm *GetFrm() const 		   { return &rThis; }
+          SwFrm *GetFrm()				   { return &rThis; }
 
-    static BOOL IsMoveBwdJump()            { return bMoveBwdJump; }
+    static BOOL IsMoveBwdJump()			   { return bMoveBwdJump; }
     static void SetMoveBwdJump( BOOL bNew ){ bMoveBwdJump = bNew; }
 
     inline void SetUndersized( const BOOL bNew ) { bUndersized = bNew; }
-    inline BOOL IsUndersized()  const { return bUndersized; }
+    inline BOOL IsUndersized() 	const { return bUndersized;	}
 
     BOOL IsPrevObjMove() const;
 
@@ -174,18 +174,18 @@ public:
     //neuen Parent Moven.
     void MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling = 0 );
 
-           BOOL       HasFollow() const    { return pFollow ? TRUE : FALSE; }
-           BOOL       IsFollow()     const { return bIsFollow; }
-    inline void       _SetIsFollow( BOOL bSet ) { bIsFollow = bSet; }
-    const  SwFlowFrm *GetFollow() const    { return pFollow;   }
-           SwFlowFrm *GetFollow()          { return pFollow;   }
-           BOOL       IsAnFollow( const SwFlowFrm *pFlow ) const;
-    inline void       SetFollow( SwFlowFrm *pNew ) { pFollow = pNew; }
+           BOOL 	  HasFollow() const    { return pFollow ? TRUE : FALSE; }
+           BOOL		  IsFollow()     const { return bIsFollow; }
+    inline void		  _SetIsFollow( BOOL bSet ) { bIsFollow = bSet; }
+    const  SwFlowFrm *GetFollow() const	   { return pFollow;   }
+           SwFlowFrm *GetFollow()	   	   { return pFollow;   }
+           BOOL  	  IsAnFollow( const SwFlowFrm *pFlow ) const;
+    inline void   	  SetFollow( SwFlowFrm *pNew ) { pFollow = pNew; }
 
     sal_Bool IsJoinLocked() const { return bLockJoin; }
     sal_Bool IsAnyJoinLocked() const { return bLockJoin || HasLockedFollow(); }
-    BOOL IsFtnAtEnd() const { return bFtnAtEnd; }
-    BOOL IsEndnAtEnd() const { return bEndnAtEnd;   }
+    BOOL IsFtnAtEnd() const { return bFtnAtEnd;	}
+    BOOL IsEndnAtEnd() const { return bEndnAtEnd;	}
     BOOL IsAnyNoteAtEnd() const { return bFtnAtEnd || bEndnAtEnd; }
     BOOL AreNotesAtEnd() const { return bFtnAtEnd && bEndnAtEnd; }
 
@@ -249,17 +249,17 @@ public:
     void CheckKeep();
 
     void SetFtnLock( BOOL bNew ){ bFtnLock = bNew; }
-    BOOL IsFtnLock() const {    return bFtnLock; }
+    BOOL IsFtnLock() const {	return bFtnLock; }
     void SetFlyLock( BOOL bNew ){ bFlyLock = bNew; }
     BOOL IsFlyLock() const {    return bFlyLock; }
     void SetOwnFtnNum( BOOL bNew ){ bOwnFtnNum = bNew; }
-    BOOL IsOwnFtnNum() const {  return bOwnFtnNum; }
+    BOOL IsOwnFtnNum() const {	return bOwnFtnNum; }
     void SetCntntLock( BOOL bNew ){ bCntntLock = bNew; }
-    BOOL IsCntntLocked() const {    return bCntntLock; }
+    BOOL IsCntntLocked() const {	return bCntntLock; }
 
     //casten einen Frm auf einen FlowFrm - wenns denn einer ist, sonst 0
     //Diese Methoden muessen fuer neue Ableitungen geaendert werden!
-    static       SwFlowFrm *CastFlowFrm( SwFrm *pFrm );
+    static 		 SwFlowFrm *CastFlowFrm( SwFrm *pFrm );
     static const SwFlowFrm *CastFlowFrm( const SwFrm *pFrm );
 };
 

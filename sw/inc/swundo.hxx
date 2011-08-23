@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@ enum SwUndoId
 {
     UNDO_EMPTY = 0,
     UNDO_STD_BEGIN = 1,
-    UNDO_START = UNDO_STD_BEGIN,            //  1
+    UNDO_START = UNDO_STD_BEGIN,    		//  1
     UNDO_END,                               //  2
-        REPEAT_START,               // alle UndoIds zwischen REPEAT_START und
+        REPEAT_START,				// alle UndoIds zwischen REPEAT_START und
                                     // REPEAT_END sind Repeat-Faehig !!
-    UNDO_DELETE = REPEAT_START,             //  3
-    UNDO_INSERT,                            //  4
+    UNDO_DELETE = REPEAT_START,            	//  3
+    UNDO_INSERT,							//  4
     UNDO_OVERWRITE,                         //  5
     UNDO_SPLITNODE,                         //  6
     UNDO_INSATTR,                           //  7
@@ -73,8 +73,8 @@ enum SwUndoId
     UNDO_REJECT_REDLINE,                    // 34
     UNDO_SPLIT_TABLE,                       // 35
     UNDO_DONTEXPAND,                        // 36
-    UNDO_AUTOCORRECT,                       // 37
-    UNDO_MERGE_TABLE,                       // 38
+    UNDO_AUTOCORRECT,                    	// 37
+    UNDO_MERGE_TABLE,                    	// 38
     UNDO_TRANSLITERATE,                     // 39
 
     // -> #111827#
@@ -126,7 +126,7 @@ enum SwUndoId
     UNDO_ENDNOTEINFO,                       // 82
     UNDO_COMPAREDOC,                        // 83
     UNDO_SETFLYFRMFMT,                      // 84
-    UNDO_SETRUBYATTR,                       // 85
+    UNDO_SETRUBYATTR,						// 85
 
     UNDO_TMPAUTOCORR,                       // 86 #102505#
     UNDO_TOXCHANGE,                         // 87
@@ -193,7 +193,7 @@ public:
     ~SwUndoIdAndName();
 
     SwUndoId GetUndoId() const          { return eUndoId; }
-    const String* GetUndoStr() const    { return pUndoStr; }
+    const String* GetUndoStr() const	{ return pUndoStr; }
 };
 typedef SwUndoIdAndName* SwUndoIdAndNamePtr;
 SV_DECL_PTRARR_DEL( SwUndoIds, SwUndoIdAndNamePtr, INIT_UNDOIDS, GROW_UNDOIDS )

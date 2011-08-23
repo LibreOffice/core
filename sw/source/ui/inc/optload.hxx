@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,12 @@ private:
     FixedLine   aUpdateFL;
     FixedText   aLinkFT;
     RadioButton aAlwaysRB;
-    RadioButton aRequestRB;
-    RadioButton aNeverRB;
+    RadioButton	aRequestRB;
+    RadioButton	aNeverRB;
 
     FixedText   aFieldFT;
     CheckBox    aAutoUpdateFields;
-    CheckBox    aAutoUpdateCharts;
+    CheckBox	aAutoUpdateCharts;
 
     FixedLine   aSettingsFL;
     FixedText   aMetricFT;
@@ -65,7 +65,7 @@ private:
     CheckBox    aUseSquaredPageMode;
     CheckBox    aUseCharUnit;
 
-    SwWrtShell* pWrtShell;
+    SwWrtShell*	pWrtShell;
     sal_Bool    bHTMLMode;
     UINT16      nLastTab;
     sal_Int32   nOldLinkMode;
@@ -77,11 +77,11 @@ public:
     SwLoadOptPage( Window* pParent, const SfxItemSet& rSet );
     ~SwLoadOptPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 class SwCaptionOptDlg : public SfxSingleTabDialog
@@ -105,69 +105,69 @@ public:
 class SwCaptionPreview : public Window
 {
 private:
-    String          maText;
-    Point           maDrawPos;
+    String			maText;
+    Point			maDrawPos;
 public:
                     SwCaptionPreview( Window* pParent, const ResId& rResId );
-    void            SetPreviewText( const String& rText );
-    virtual void    Paint( const Rectangle& rRect );
+    void			SetPreviewText( const String& rText );
+    virtual void	Paint( const Rectangle& rRect );
 };
 
 class SwCaptionOptPage : public SfxTabPage
 {
 private:
-    FixedText       aCheckFT;
-    SvxCheckListBox aCheckLB;
+    FixedText		aCheckFT;
+    SvxCheckListBox	aCheckLB;
 
     FixedText       aFtCaptionOrder;
     ListBox         aLbCaptionOrder;
-
+    
     SwCaptionPreview    aPreview;
-
+    
     FixedLine       aSettingsGroupFL;
-    FixedText       aCategoryText;
-    CaptionComboBox aCategoryBox;
-    FixedText       aFormatText;
-    ListBox         aFormatBox;
-    //#i61007# order of captions
+    FixedText		aCategoryText;
+    CaptionComboBox	aCategoryBox;
+    FixedText		aFormatText;
+    ListBox			aFormatBox;
+    //#i61007# order of captions 
     FixedText       aNumberingSeparatorFT;
     Edit            aNumberingSeparatorED;
-    FixedText       aTextText;
-    Edit            aTextEdit;
-    FixedText       aPosText;
-    ListBox         aPosBox;
+    FixedText		aTextText;
+    Edit			aTextEdit;
+    FixedText		aPosText;
+    ListBox			aPosBox;
 
-    FixedLine       aNumCaptFL;
-    FixedText       aFtLevel;
-    ListBox         aLbLevel;
-    FixedText       aFtDelim;
-    Edit            aEdDelim;
+    FixedLine		aNumCaptFL;
+    FixedText 		aFtLevel;
+    ListBox 		aLbLevel;
+    FixedText 		aFtDelim;
+    Edit 			aEdDelim;
 
-    FixedLine       aCategoryFL;
-    FixedText       aCharStyleFT;
-    ListBox         aCharStyleLB;
-    CheckBox        aApplyBorderCB;
+    FixedLine		aCategoryFL;
+    FixedText		aCharStyleFT;
+    ListBox			aCharStyleLB;
+    CheckBox		aApplyBorderCB;
 
-    String          sSWTable;
-    String          sSWFrame;
-    String          sSWGraphic;
-    String          sOLE;
+    String			sSWTable;
+    String			sSWFrame;
+    String			sSWGraphic;
+    String			sOLE;
 
-    String          sIllustration;
-    String          sTable;
-    String          sText;
+    String			sIllustration;
+    String			sTable;
+    String			sText;
     String          sDrawing;
 
-    String          sBegin;
-    String          sEnd;
-    String          sAbove;
-    String          sBelow;
+    String			sBegin;
+    String			sEnd;
+    String			sAbove;
+    String			sBelow;
 
     String          sNone;
 
-    SwFldMgr        *pMgr;
-    USHORT          eType;
-    BOOL            bHTMLMode;
+    SwFldMgr		*pMgr;
+    USHORT			eType;
+    BOOL 			bHTMLMode;
 
     DECL_LINK( SelectHdl, ListBox *pLB = 0 );
     DECL_LINK( ModifyHdl, Edit *pEdt = 0 );
@@ -175,23 +175,23 @@ private:
     DECL_LINK( ShowEntryHdl, SvxCheckListBox *pLB = 0 );
     DECL_LINK( SaveEntryHdl, SvxCheckListBox *pLB = 0 );
 
-    void                DelUserData();
-    void                SetOptions( const USHORT nPos,
+    void				DelUserData();
+    void				SetOptions(	const USHORT nPos,
                                     const SwCapObjType eType,
                                     const SvGlobalName *pOleId = 0);
-    void                SaveEntry( SvLBoxEntry* pEntry );
-    void                DrawSample();
+    void				SaveEntry( SvLBoxEntry* pEntry );
+    void				DrawSample();
 
 public:
                         SwCaptionOptPage( Window* pParent,
                                          const SfxItemSet& rSet );
                         ~SwCaptionOptPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 #endif

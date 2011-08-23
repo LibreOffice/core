@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -482,7 +482,7 @@ sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
 }
 
 Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttributes(
-        sal_Int32 nIndex,
+        sal_Int32 nIndex, 
         const uno::Sequence< ::rtl::OUString > & /*rRequestedAttributes*/ )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -845,7 +845,7 @@ SmEditSource::SmEditSource( const SmEditSource &rSrc ) :
     aViewFwd    (rSrc.rEditAcc),
     aTextFwd    (rSrc.rEditAcc, *this),
     aEditViewFwd(rSrc.rEditAcc),
-    rEditAcc    (rSrc.rEditAcc)
+    rEditAcc	(rSrc.rEditAcc)
 {
 }
 
@@ -1083,7 +1083,7 @@ void SmTextForwarder::RemoveAttribs( const ESelection& rSelection, sal_Bool bRem
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
         pEditEngine->RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
-}
+}    
 
 void SmTextForwarder::GetPortions( USHORT nPara, SvUShorts& rList ) const
 {
@@ -1145,7 +1145,7 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
 {
     EECharAttribArray aAttribs;
 
-    const SfxPoolItem*  pLastItem = NULL;
+    const SfxPoolItem*	pLastItem = NULL;
 
     SfxItemState eState = SFX_ITEM_DEFAULT;
 
@@ -1167,8 +1167,8 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
         // get list of char attribs
         rEditEngine.GetCharAttribs( nPara, aAttribs );
 
-        BOOL bEmpty = TRUE;     // we found no item inside the selektion of this paragraph
-        BOOL bGaps  = FALSE;    // we found items but theire gaps between them
+        BOOL bEmpty = TRUE;		// we found no item inside the selektion of this paragraph
+        BOOL bGaps  = FALSE;	// we found items but theire gaps between them
         USHORT nLastEnd = nPos;
 
         const SfxPoolItem* pParaItem = NULL;
@@ -1180,10 +1180,10 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
 
             const sal_Bool bEmptyPortion = aAttrib.nStart == aAttrib.nEnd;
             if( (!bEmptyPortion && (aAttrib.nStart >= nEndPos)) || (bEmptyPortion && (aAttrib.nStart > nEndPos)) )
-                break;  // break if we are already behind our selektion
+                break;	// break if we are already behind our selektion
 
             if( (!bEmptyPortion && (aAttrib.nEnd <= nPos)) || (bEmptyPortion && (aAttrib.nEnd < nPos)) )
-                continue;   // or if the attribute ends before our selektion
+                continue;	// or if the attribute ends before our selektion
 
             if( aAttrib.pAttr->Which() != nWhich )
                 continue; // skip if is not the searched item
@@ -1282,7 +1282,7 @@ Rectangle SmTextForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
     Rectangle aRect(0,0,0,0);
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-
+    
     if (pEditEngine)
     {
         // #108900# Handle virtual position one-past-the end of the string
@@ -1306,7 +1306,7 @@ Rectangle SmTextForwarder::GetParaBounds( USHORT nPara ) const
 {
     Rectangle aRect(0,0,0,0);
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-
+    
     if (pEditEngine)
     {
         const Point aPnt = pEditEngine->GetDocPosTopLeft( nPara );
@@ -1337,8 +1337,8 @@ sal_Bool SmTextForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USH
     if (pEditEngine)
     {
         EPosition aDocPos = pEditEngine->FindDocPosition( rPos );
-        nPara   = aDocPos.nPara;
-        nIndex  = aDocPos.nIndex;
+        nPara	= aDocPos.nPara;
+        nIndex	= aDocPos.nIndex;
         bRes = sal_True;
     }
     return bRes;
@@ -1368,7 +1368,7 @@ sal_Bool SmTextForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& n
 sal_Bool SmTextForwarder::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    return pEditEngine ?
+    return pEditEngine ? 
                 SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, *pEditEngine, nPara, nIndex )
                 : sal_False;
 }
@@ -1384,18 +1384,18 @@ USHORT SmTextForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetLineLen(nPara, nLine) : 0;
 }
-
+    
 void SmTextForwarder::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     pEditEngine->GetLineBoundaries(rStart, rEnd, nPara, nLine);
-}
+}    
 
 USHORT SmTextForwarder::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetLineNumberAtIndex(nPara, nIndex) : 0;
-}
+}    
 
 sal_Bool SmTextForwarder::QuickFormatDoc( BOOL /*bFull*/ )
 {
@@ -1478,7 +1478,7 @@ xub_StrLen SmTextForwarder::AppendTextPortion( USHORT nPara, const String &rText
         // append text
         ESelection aSel( nPara, pEditEngine->GetTextLen( nPara ) );
         pEditEngine->QuickInsertText( rText, aSel );
-
+        
         // set attributes for new appended text
         nRes = aSel.nEndPos = pEditEngine->GetTextLen( nPara );
         pEditEngine->QuickSetAttribs( rSet, aSel );
@@ -1488,7 +1488,7 @@ xub_StrLen SmTextForwarder::AppendTextPortion( USHORT nPara, const String &rText
 
 void SmTextForwarder::CopyText(const SvxTextForwarder& rSource)
 {
-
+    
     const SmTextForwarder* pSourceForwarder = dynamic_cast< const SmTextForwarder* >( &rSource );
     if( !pSourceForwarder )
         return;
@@ -1500,7 +1500,7 @@ void SmTextForwarder::CopyText(const SvxTextForwarder& rSource)
         pEditEngine->SetText( *pNewTextObject );
         delete pNewTextObject;
     }
-}
+}    
 
 //------------------------------------------------------------------------
 

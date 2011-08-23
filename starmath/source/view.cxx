@@ -79,13 +79,13 @@
 #include "mathmlimport.hxx"
 #include "cursor.hxx"
 
-#define MINWIDTH        200
-#define MINHEIGHT       200
-#define MINSPLIT        40
-#define SPLITTERWIDTH       2
+#define MINWIDTH		200
+#define MINHEIGHT		200
+#define MINSPLIT		40
+#define SPLITTERWIDTH		2
 
-#define MINZOOM         25
-#define MAXZOOM         800
+#define MINZOOM			25
+#define MAXZOOM 		800
 
 #define SmViewShell
 #include "smslots.hxx"
@@ -186,7 +186,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
             pNode = pTree->FindRectClosestTo(aPos);
 
         if (pNode)
-        {   SmEditWindow  *pEdit = pViewShell->GetEditWindow();
+        {	SmEditWindow  *pEdit = pViewShell->GetEditWindow();
             const SmToken  aToken (pNode->GetToken());
 
             // set selection to the beginning of the token
@@ -278,10 +278,10 @@ void SmGraphicWindow::SetCursor(const Rectangle &rRect)
     SmModule *pp = SM_MOD();
 
     if (IsCursorVisible())
-        ShowCursor(FALSE);      // clean up remainings of old cursor
+        ShowCursor(FALSE);		// clean up remainings of old cursor
     aCursorRect = rRect;
     if (pp->GetConfig()->IsShowFormulaCursor())
-        ShowCursor(TRUE);       // draw new cursor
+        ShowCursor(TRUE);		// draw new cursor
 }
 
 const SmNode * SmGraphicWindow::SetCursorPos(USHORT nRow, USHORT nCol)
@@ -316,7 +316,7 @@ void SmGraphicWindow::Paint(const Rectangle&)
     SmDocShell &rDoc = *pViewShell->GetDoc();
     Point aPoint;
 
-    rDoc.DrawFormula(*this, aPoint, TRUE);  //! modifies aPoint to be the topleft
+    rDoc.DrawFormula(*this, aPoint, TRUE);	//! modifies aPoint to be the topleft
                                 //! corner of the formula
     SetFormulaDrawPos(aPoint);
     if(IsInlineEditEnabled()) {
@@ -324,12 +324,12 @@ void SmGraphicWindow::Paint(const Rectangle&)
         if(pViewShell->GetDoc()->HasCursor())
             pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint);
     } else {
-    SetIsCursorVisible(FALSE);  // (old) cursor must be drawn again
+    SetIsCursorVisible(FALSE);	// (old) cursor must be drawn again
 
     const SmEditWindow *pEdit = pViewShell->GetEditWindow();
     if (pEdit)
-    {   // get new position for formula-cursor (for possible altered formula)
-        USHORT  nRow, nCol;
+    {	// get new position for formula-cursor (for possible altered formula)
+        USHORT	nRow, nCol;
         SmGetLeftSelectionPart(pEdit->GetSelection(), nRow, nCol);
         nRow++;
         nCol++;
@@ -545,8 +545,8 @@ void SmGraphicWindow::ZoomToFitInWindow()
     // set defined mapmode before calling 'LogicToPixel' below
     SetMapMode(MapMode(MAP_100TH_MM));
 
-    Size       aSize (LogicToPixel(rDoc.GetSize()));
-    Size       aWindowSize (GetSizePixel());
+    Size	   aSize (LogicToPixel(rDoc.GetSize()));
+    Size	   aWindowSize (GetSizePixel());
 
     if (aSize.Width() > 0  &&  aSize.Height() > 0)
     {
@@ -571,7 +571,7 @@ uno::Reference< XAccessible > SmGraphicWindow::CreateAccessible()
 
 SmGraphicController::SmGraphicController(SmGraphicWindow &rSmGraphic,
                         USHORT          nId_,
-                        SfxBindings     &rBindings) :
+                        SfxBindings 	&rBindings) :
     SfxControllerItem(nId_, rBindings),
     rGraphic(rSmGraphic)
 {
@@ -652,17 +652,17 @@ void SmCmdBoxWindow::Resize()
     {
         switch (GetAlignment())
         {
-            case SFX_ALIGN_TOP:     aRect.Bottom()--;   break;
-            case SFX_ALIGN_BOTTOM:  aRect.Top()++;      break;
-            case SFX_ALIGN_LEFT:    aRect.Right()--;    break;
-            case SFX_ALIGN_RIGHT:   aRect.Left()++;     break;
+            case SFX_ALIGN_TOP:		aRect.Bottom()--;	break;
+            case SFX_ALIGN_BOTTOM:	aRect.Top()++;		break;
+            case SFX_ALIGN_LEFT:	aRect.Right()--;	break;
+            case SFX_ALIGN_RIGHT:	aRect.Left()++;		break;
             default:
                 break;
         }
     }
 
     DecorationView aView(this);
-    aRect.Left() += 8; aRect.Top()   += 8;
+    aRect.Left() += 8; aRect.Top()	 += 8;
     aRect.Right()-= 8; aRect.Bottom()-= 8;
     aRect = aView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
 
@@ -708,7 +708,7 @@ void SmCmdBoxWindow::Paint(const Rectangle& /*rRect*/)
         DrawLine( aFrom, aTo );
         aView.DrawFrame(aRect, FRAME_DRAW_OUT);
     }
-    aRect.Left() += 8; aRect.Top()   += 8;
+    aRect.Left() += 8; aRect.Top()	 += 8;
     aRect.Right()-= 8; aRect.Bottom()-= 8;
     aRect = aView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
 }
@@ -966,11 +966,11 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetTextSize" );
 
-    Size    aSize;
-    String  aLine;
-    Size    TextSize;
-    String  aText;
-    USHORT  nLines = rText.GetTokenCount('\n');
+    Size	aSize;
+    String	aLine;
+    Size	TextSize;
+    String	aText;
+    USHORT	nLines = rText.GetTokenCount('\n');
 
     for (USHORT i = 0; i < nLines; i++)
     {
@@ -985,7 +985,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
         {
             do
             {
-                xub_StrLen m    = aLine.Len();
+                xub_StrLen m	= aLine.Len();
                 xub_StrLen nLen = m;
 
                 for (xub_StrLen n = 0; n < nLen; n++)
@@ -1028,9 +1028,9 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::DrawTextLine" );
 
-    String  aText;
-    Point   aPoint (rPosition);
-    USHORT  nTabs = rLine.GetTokenCount('\t');
+    String	aText;
+    Point	aPoint (rPosition);
+    USHORT	nTabs = rLine.GetTokenCount('\t');
 
     if (nTabs > 0)
     {
@@ -1057,11 +1057,11 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::DrawText" );
 
-    USHORT  nLines = rText.GetTokenCount('\n');
-    Point   aPoint (rPosition);
-    Size    aSize;
-    String  aLine;
-    String  aText;
+    USHORT	nLines = rText.GetTokenCount('\n');
+    Point	aPoint (rPosition);
+    Size	aSize;
+    String	aLine;
+    String	aText;
 
     for (USHORT i = 0; i < nLines; i++)
     {
@@ -1074,7 +1074,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
         {
             do
             {
-                xub_StrLen m    = aLine.Len();
+                xub_StrLen m	= aLine.Len();
                 xub_StrLen nLen = m;
 
                 for (xub_StrLen n = 0; n < nLen; n++)
@@ -1230,7 +1230,7 @@ void SmViewShell::Impl_Print(
                 Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
                                                             aOutRect.GetHeight()), MapMode(MAP_100TH_MM)));
                 Size     GraphicSize (rOutDev.LogicToPixel(aSize, MapMode(MAP_100TH_MM)));
-                USHORT   nZ = (USHORT) Min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
+                USHORT	 nZ = (USHORT) Min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
                                               (long)Fraction(OutputSize.Height() * 100L, GraphicSize.Height()));
                 Fraction aFraction ((USHORT) Max ((USHORT) MINZOOM, Min((USHORT) MAXZOOM, (USHORT) (nZ - 10))), (USHORT) 100);
 
@@ -1324,7 +1324,7 @@ SmEditWindow *SmViewShell::GetEditWindow()
 
     if (pWrapper != NULL)
     {
-        SmEditWindow *pEditWin  = pWrapper->GetEditWindow();
+        SmEditWindow *pEditWin	= pWrapper->GetEditWindow();
         OSL_ENSURE( pEditWin, "SmEditWindow missing" );
         return pEditWin;
     }
@@ -1760,10 +1760,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
                             SfxPrinter *pPrinter = GetPrinter( TRUE );
                             Point aPoint;
                             Rectangle  OutputRect(aPoint, pPrinter->GetOutputSize());
-                            Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
+                            Size	   OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                                               OutputRect.GetHeight()), aMap));
-                            Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
-                            USHORT     nZ = (USHORT) Min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
+                            Size	   GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
+                            USHORT	   nZ = (USHORT) Min((long)Fraction(OutputSize.Width()	* 100L, GraphicSize.Width()),
                                                          (long)Fraction(OutputSize.Height() * 100L, GraphicSize.Height()));
                             aGraphic.SetZoom (nZ);
                             break;

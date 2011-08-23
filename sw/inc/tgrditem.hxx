@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,19 +58,19 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     SwTextGridItem&  operator=( const SwTextGridItem& );
 
     const Color& GetColor() const { return aColor; }
-    void SetColor( const Color& rCol )  { aColor = rCol; }
+    void SetColor( const Color& rCol ) 	{ aColor = rCol; }
 
     sal_uInt16 GetLines() const { return nLines; }
     void SetLines( sal_uInt16 nNew ) { nLines = nNew; }
@@ -95,20 +95,20 @@ public:
     BOOL IsDisplayGrid() const { return bDisplayGrid; }
     BOOL GetDisplayGrid() const { return bDisplayGrid; }
     void SetDisplayGrid( BOOL bNew ) { bDisplayGrid = bNew; }
-
+    
     //for textgrid enhancement
     sal_uInt16 GetBaseWidth() const { return nBaseWidth;}
     void SetBaseWidth( sal_uInt16 nNew ) { nBaseWidth = nNew; }
-
+    
     BOOL IsSnapToChars() const { return bSnapToChars; }
     BOOL GetSnapToChars() const { return bSnapToChars; }
     void SetSnapToChars( BOOL bNew ) { bSnapToChars = bNew; }
-
+    
     BOOL IsSquaredMode() const { return bSquaredMode; }
     BOOL GetSquaredMode() const { return bSquaredMode; }
     void SetSquaredMode( BOOL bNew ) { bSquaredMode = bNew; }
     void SwitchPaperMode(BOOL bNew );
-
+    
     void Init();
 };
 

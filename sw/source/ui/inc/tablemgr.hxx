@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@ const char cParaDelim = 0x0a;
 
 class SW_DLLPUBLIC SwTableFUNC
 {
-    SwFrmFmt    *pFmt;
-    SwWrtShell  *pSh;
-    BOOL        bCopy;
-    SwTabCols   aCols;
+    SwFrmFmt	*pFmt;
+    SwWrtShell	*pSh;
+    BOOL		bCopy;
+    SwTabCols	aCols;
 
 private:
     SW_DLLPRIVATE int GetRightSeparator(int nNum) const;
@@ -64,13 +64,13 @@ public:
            SwTableFUNC(SwWrtShell *pShell, BOOL bCopyFmt = FALSE);
            ~SwTableFUNC();
 
-    void    InitTabCols();
-    void    ColWidthDlg(Window *pParent );
+    void	InitTabCols();
+    void	ColWidthDlg(Window *pParent );
     SwTwips GetColWidth(USHORT nNum) const;
     SwTwips GetMaxColWidth(USHORT nNum) const;
-    void    SetColWidth(USHORT nNum, SwTwips nWidth );
-    USHORT  GetColCount() const;
-    USHORT  GetCurColNum() const;
+    void	SetColWidth(USHORT nNum, SwTwips nWidth );
+    USHORT	GetColCount() const;
+    USHORT	GetCurColNum() const;
 
     BOOL IsTableSelected() const { return pFmt != 0; }
 
@@ -82,7 +82,7 @@ public:
     void UpdateChart();
 
     /// @return the XModel of the newly inserted chart if successfull
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > 
         InsertChart( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > &rxDataProvider, sal_Bool bFillWithData, const rtl::OUString &rCellRange, SwFlyFrmFmt** ppFlyFrmFmt = 0 );
 };
 

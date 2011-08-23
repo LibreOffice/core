@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,38 +26,38 @@
  *
  ************************************************************************/
 #ifndef _SWFONT_HXX
-#define _SWFONT_HXX
+#define	_SWFONT_HXX
 
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <editeng/svxfont.hxx>
 #include <swtypes.hxx>
-#include <drawfont.hxx>     // SwDrawTextInfo
+#include <drawfont.hxx>		// SwDrawTextInfo
 
 class SfxItemSet;
 class SwAttrSet;
-class SwDoCapitals;     // DoCapitals
+class SwDoCapitals; 	// DoCapitals
 class SwDrawTextInfo;   // _DrawText
 class SwScriptInfo;     // _GetTxtSize
 class ViewShell;
 class IDocumentSettingAccess;
 
-const xub_Unicode CH_BLANK = ' ';   // ' ' Leerzeichen
-const xub_Unicode CH_BREAK = 0x0A;  //
-const xub_Unicode CH_TAB   = '\t';  // \t
-const xub_Unicode CH_PAR    = 0xB6;     // Paragraph
-const xub_Unicode CH_BULLET = 0xB7;     // mittiger Punkt
+const xub_Unicode CH_BLANK = ' ';  	// ' ' Leerzeichen
+const xub_Unicode CH_BREAK = 0x0A; 	//
+const xub_Unicode CH_TAB   = '\t'; 	// \t
+const xub_Unicode CH_PAR    = 0xB6;   	// Paragraph
+const xub_Unicode CH_BULLET = 0xB7;		// mittiger Punkt
 
 class SwSubFont : public SvxFont
 {
     friend class SwFont;
-    const void *pMagic;         // "MagicNumber" innerhalb des Fontcaches
-    Size        aSize;          // Fremde kriegen nur diese Size zu sehen
-    USHORT      nFntIndex;      // Index im Fontcache
-    USHORT      nOrgHeight;     // Hoehe inkl. Escapement/Proportion
-    USHORT      nOrgAscent;     // Ascent inkl. Escapement/Proportion
-    USHORT      nPropWidth;     // proportional width
+    const void *pMagic;			// "MagicNumber" innerhalb des Fontcaches
+    Size		aSize;          // Fremde kriegen nur diese Size zu sehen
+    USHORT 		nFntIndex;      // Index im Fontcache
+    USHORT	 	nOrgHeight;		// Hoehe inkl. Escapement/Proportion
+    USHORT	 	nOrgAscent;		// Ascent inkl. Escapement/Proportion
+    USHORT		nPropWidth;		// proportional width
     inline SwSubFont() : aSize(0,0)
     { pMagic = NULL; nFntIndex = nOrgHeight = nOrgAscent = 0; nPropWidth =100; }
 
@@ -131,30 +131,30 @@ public:
 class SwFont
 {                               // CJK == Chinese, Japanese, Korean
                                 // CTL == Complex text layout ( Hebrew, Arabic )
-    SwSubFont   aSub[SW_SCRIPTS]; // Latin-, CJK- and CTL-font
-    Color*      pBackColor;     // background color (i.e. at character styles)
-    Color       aUnderColor;    // color of the underlining
-    Color       aOverColor;     // color of the overlining
-    BYTE        nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
-    BYTE        nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
+    SwSubFont	aSub[SW_SCRIPTS]; // Latin-, CJK- and CTL-font
+    Color*		pBackColor;     // background color (i.e. at character styles)
+    Color  		aUnderColor;    // color of the underlining
+    Color  		aOverColor;     // color of the overlining
+    BYTE  		nToxCnt;		// Zaehlt die Schachtelungstiefe der Tox
+    BYTE  		nRefCnt;		// Zaehlt die Schachtelungstiefe der Refs
     BYTE        m_nMetaCount;   // count META/METAFIELD
-    BYTE        nActual;        // actual font (Latin, CJK or CTL)
+    BYTE    	nActual;		// actual font (Latin, CJK or CTL)
 
     // Schalter fuer die Font-Extensions
-    BOOL bNoHyph        :1;  // SwTxtNoHyphenHere:    keine Trennstelle
-    BOOL bBlink         :1;  // blinkender Font
+    BOOL bNoHyph		:1;  // SwTxtNoHyphenHere:	  keine Trennstelle
+    BOOL bBlink      	:1;  // blinkender Font
     BOOL bPaintBlank    :1;  // Blanks nicht mit DrawRect
-    BOOL bFntChg        :1;
-    BOOL bOrgChg        :1;  // nOrgHeight/Ascent sind invalid
-    BOOL bURL           :1;
-    BOOL bPaintWrong    :1;  // Flag fuer Rechtschreibfehler
-    BOOL bGreyWave      :1;  // Fuers extended TextInput: Graue Wellenlinie
+    BOOL bFntChg		:1;
+    BOOL bOrgChg		:1;	 // nOrgHeight/Ascent sind invalid
+    BOOL bURL			:1;
+    BOOL bPaintWrong	:1;  // Flag fuer Rechtschreibfehler
+    BOOL bGreyWave		:1;  // Fuers extended TextInput: Graue Wellenlinie
     BOOL bNoColReplace  :1;  // Replacement without colormanipulation
 
     BOOL operator==( const SwFont &rFnt ) const;
 
 protected:
-    inline SwFont() { pBackColor = NULL; nActual = SW_LATIN; }
+    inline SwFont()	{ pBackColor = NULL; nActual = SW_LATIN; }
 
 public:
     SwFont( const SwAttrSet* pSet, const IDocumentSettingAccess* pIDocumentSettingAccess );
@@ -167,7 +167,7 @@ public:
 
     SwFont& operator=( const SwFont &rFont );
 
-    inline BYTE GetActual() const { return nActual; }
+    inline BYTE GetActual() const {	return nActual;	}
     inline void SetActual( BYTE nNew );
     inline const SvxFont& GetActualFont() const { return aSub[nActual]; }
 
@@ -287,7 +287,7 @@ public:
     const XubString& GetStyleName() const {return aSub[nActual].GetStyleName();}
     FontFamily GetFamily() const { return aSub[nActual].GetFamily(); }
     FontPitch GetPitch() const { return aSub[nActual].GetPitch(); }
-    rtl_TextEncoding GetCharSet() const { return aSub[nActual].GetCharSet(); }
+    rtl_TextEncoding GetCharSet() const	{ return aSub[nActual].GetCharSet(); }
     long GetHeight() const { return aSub[nActual].GetSize().Height(); }
     FontWeight GetWeight() const { return aSub[nActual].GetWeight(); }
     FontEmphasisMark GetEmphasisMark() const
@@ -841,7 +841,7 @@ public:
 
 
 /*************************************************************************
- *                      class SvStatistics
+ *						class SvStatistics
  *************************************************************************/
 
 #if OSL_DEBUG_LEVEL > 1
@@ -882,17 +882,17 @@ inline void SvStatistics::PrintOn( SvStream &rOS ) const //$ ostream
     if( IsEmpty() )
         return;
 
-    rOS << "{   SV called:" << '\n';
+    rOS << "{	SV called:" << '\n';
     if( nGetTextSize )
-        rOS << "\tnGetTextSize: " <<    nGetTextSize    << '\n';        if( nDrawText   )
-        rOS << "\tnDrawText: "  << nDrawText    << '\n';        if( nGetStretchTextSize )
-        rOS << "\tnGetStretchTextSize: "    << nGetStretchTextSize  << '\n';        if( nDrawStretchText    )
-        rOS << "\tnDrawStretchText: "   << nDrawStretchText << '\n';        if( nChangeFont )
-        rOS << "\tnChangeFont: "    << nChangeFont  << '\n';        if( nGetFontMetric  )
-        rOS << "\tnGetFontMetric: " << nGetFontMetric   << '\n';        rOS << "}"  << '\n';    }
+        rOS << "\tnGetTextSize:	" <<	nGetTextSize	<< '\n';		if(	nDrawText	)
+        rOS	<< "\tnDrawText: "	<< nDrawText	<< '\n';		if(	nGetStretchTextSize	)
+        rOS	<< "\tnGetStretchTextSize: "	<< nGetStretchTextSize	<< '\n';		if(	nDrawStretchText	)
+        rOS	<< "\tnDrawStretchText: "	<< nDrawStretchText	<< '\n';		if(	nChangeFont	)
+        rOS	<< "\tnChangeFont: "	<< nChangeFont	<< '\n';		if(	nGetFontMetric	)
+        rOS	<< "\tnGetFontMetric: "	<< nGetFontMetric	<< '\n';		rOS	<< "}"	<< '\n';	}
 #else
 #define SV_STAT(nWhich)
-#endif  /*  DEBUG   */
+#endif	/*	DEBUG	*/
 
 #endif
 

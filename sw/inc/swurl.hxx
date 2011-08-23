@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 class UniString;
 class ViewShell;
 
-#define URLLOAD_NOFILTER            0x0000
-#define URLLOAD_NEWVIEW             0x8000
+#define URLLOAD_NOFILTER 			0x0000
+#define URLLOAD_NEWVIEW 			0x8000
 
 
 void LoadURL( const UniString& rName, ViewShell* pSh,

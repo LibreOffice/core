@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _BLINK_HXX
-#define _BLINK_HXX
+#ifndef	_BLINK_HXX
+#define	_BLINK_HXX
 
 class SwLinePortion;
 class SwRootFrm;
@@ -40,8 +40,8 @@ class SwTxtFrm;
 class SwBlinkPortion
 {
     Point               aPos;
-    const SwLinePortion *pPor;
-    const SwRootFrm     *pFrm;
+    const SwLinePortion	*pPor;
+    const SwRootFrm		*pFrm;
     USHORT              nDir;
 public:
     SwBlinkPortion( const SwLinePortion* pPortion, USHORT nDirection )
@@ -65,9 +65,9 @@ SV_DECL_PTRARR_SORT_DEL(SwBlinkList, SwBlinkPortionPtr, 0, 10)
 
 class SwBlink
 {
-    SwBlinkList     aList;
-    AutoTimer       aTimer;
-    BOOL            bVisible;
+    SwBlinkList		aList;
+    AutoTimer		aTimer;
+    BOOL			bVisible;
 public:
     SwBlink();
     ~SwBlink();

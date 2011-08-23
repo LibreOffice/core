@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,17 +73,17 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 
     switch( eType )
     {
-    case MACASSGN_TEXTBAUST:            // Textbausteine
+    case MACASSGN_TEXTBAUST:			// Textbausteine
         // rPg.SetGetRangeLink( &_GetRangeHdl );
         aItem.AddEvent( String( SW_RES(STR_EVENT_START_INS_GLOSSARY) ), String(),
                             SW_EVENT_START_INS_GLOSSARY );
-        aItem.AddEvent( String( SW_RES(STR_EVENT_END_INS_GLOSSARY) ), String(),
+        aItem.AddEvent( String( SW_RES(STR_EVENT_END_INS_GLOSSARY) ), String(), 
                             SW_EVENT_END_INS_GLOSSARY);
         // damit der neue Handler aktiv wird!
         // rPg.Reset( rSet );
         break;
     case MACASSGN_ALLFRM:
-    case MACASSGN_GRAPHIC:          // Grafiken
+    case MACASSGN_GRAPHIC:			// Grafiken
         {
             aItem.AddEvent( String( SW_RES(STR_EVENT_IMAGE_ERROR) ), String(),
                                 SVX_EVENT_IMAGE_ERROR);
@@ -93,7 +93,7 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
                                 SVX_EVENT_IMAGE_LOAD);
         }
         // kein break;
-    case MACASSGN_FRMURL:           // Frm - URL-Attribute
+    case MACASSGN_FRMURL:			// Frm - URL-Attribute
         {
             if( !bHtmlMode &&
                 (MACASSGN_FRMURL == eType || MACASSGN_ALLFRM == eType))
@@ -109,14 +109,14 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
             }
         }
         // kein break;
-    case MACASSGN_OLE:              // OLE
+    case MACASSGN_OLE:				// OLE
         {
             if( !bHtmlMode )
                 aItem.AddEvent( String( SW_RES(STR_EVENT_OBJECT_SELECT) ), String(),
                                 SW_EVENT_OBJECT_SELECT );
         }
         // kein break;
-    case MACASSGN_INETFMT:          // INetFmt-Attribute
+    case MACASSGN_INETFMT:			// INetFmt-Attribute
         {
             aItem.AddEvent( String( SW_RES(STR_EVENT_MOUSEOVER_OBJECT) ), String(),
                                 SFX_EVENT_MOUSEOVER_OBJECT );
@@ -147,7 +147,7 @@ BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
     aSet.Put( AddEvents( MACASSGN_INETFMT ) );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( pParent, aSet,
+    SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( pParent, aSet, 
         rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
         SID_EVENTCONFIG );
     if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )

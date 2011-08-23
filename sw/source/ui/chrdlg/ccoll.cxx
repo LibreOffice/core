@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,34 +119,34 @@ rtl::OUString GetCommandContextByIndex( sal_Int16 nIndex )
 
 CommandStruct SwCondCollItem::aCmds[] =
 {
-    { PARA_IN_TABLEHEAD,    0 },
-    { PARA_IN_TABLEBODY,    0 },
-    { PARA_IN_FRAME,        0 },
-    { PARA_IN_SECTION,      0 },
-    { PARA_IN_FOOTENOTE,    0 },
-    { PARA_IN_ENDNOTE,      0 },
-    { PARA_IN_HEADER,       0 },
-    { PARA_IN_FOOTER,       0 },
-    { PARA_IN_OUTLINE,      0 },
-    { PARA_IN_OUTLINE,      1 },
-    { PARA_IN_OUTLINE,      2 },
-    { PARA_IN_OUTLINE,      3 },
-    { PARA_IN_OUTLINE,      4 },
-    { PARA_IN_OUTLINE,      5 },
-    { PARA_IN_OUTLINE,      6 },
-    { PARA_IN_OUTLINE,      7 },
-    { PARA_IN_OUTLINE,      8 },
-    { PARA_IN_OUTLINE,      9 },
-    { PARA_IN_LIST,         0 },
-    { PARA_IN_LIST,         1 },
-    { PARA_IN_LIST,         2 },
-    { PARA_IN_LIST,         3 },
-    { PARA_IN_LIST,         4 },
-    { PARA_IN_LIST,         5 },
-    { PARA_IN_LIST,         6 },
-    { PARA_IN_LIST,         7 },
-    { PARA_IN_LIST,         8 },
-    { PARA_IN_LIST,         9 }
+    { PARA_IN_TABLEHEAD,	0 },
+    { PARA_IN_TABLEBODY, 	0 },
+    { PARA_IN_FRAME, 		0 },
+    { PARA_IN_SECTION, 		0 },
+    { PARA_IN_FOOTENOTE,	0 },
+    { PARA_IN_ENDNOTE,		0 },
+    { PARA_IN_HEADER, 		0 },
+    { PARA_IN_FOOTER, 		0 },
+    { PARA_IN_OUTLINE, 		0 },
+    { PARA_IN_OUTLINE, 		1 },
+    { PARA_IN_OUTLINE, 		2 },
+    { PARA_IN_OUTLINE, 		3 },
+    { PARA_IN_OUTLINE, 		4 },
+    { PARA_IN_OUTLINE, 		5 },
+    { PARA_IN_OUTLINE, 		6 },
+    { PARA_IN_OUTLINE, 		7 },
+    { PARA_IN_OUTLINE, 		8 },
+    { PARA_IN_OUTLINE, 		9 },
+    { PARA_IN_LIST, 		0 },
+    { PARA_IN_LIST, 		1 },
+    { PARA_IN_LIST, 		2 },
+    { PARA_IN_LIST, 		3 },
+    { PARA_IN_LIST, 		4 },
+    { PARA_IN_LIST, 		5 },
+    { PARA_IN_LIST, 		6 },
+    { PARA_IN_LIST, 		7 },
+    { PARA_IN_LIST, 		8 },
+    { PARA_IN_LIST, 		9 }
 };
 
 
@@ -186,7 +186,7 @@ int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
     return bReturn;
 }
 
-const String&   SwCondCollItem::GetStyle(USHORT nPos) const
+const String&	SwCondCollItem::GetStyle(USHORT nPos) const
 {
     return nPos < COND_COMMAND_COUNT ? sStyles[nPos] : aEmptyStr;
 }

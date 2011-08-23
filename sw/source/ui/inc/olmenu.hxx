@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ class SwWrtShell;
 
 class SwSpellPopup : public PopupMenu
 {
-    SwWrtShell* pSh;
+    SwWrtShell*	pSh;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >  >     aDics;
+        ::com::sun::star::linguistic2::XDictionary >  >		aDics;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
+        ::com::sun::star::linguistic2::XSpellAlternatives >	xSpellAlt;
 
     ::com::sun::star::uno::Sequence< rtl::OUString >  aSuggestions;
-
+    
     LanguageType                nCheckedLanguage;
     LanguageType                nGuessLangWord;
     LanguageType                nGuessLangPara;
@@ -64,9 +64,9 @@ class SwSpellPopup : public PopupMenu
     bool    bGrammarResults;    // show grammar results? Or show spellcheck results?
 
     Image   aInfo16;
-
-    void fillLangPopupMenu( PopupMenu *pPopupMenu, USHORT nLangStart,
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq, SwWrtShell* pWrtSh,
+    
+    void fillLangPopupMenu( PopupMenu *pPopupMenu, USHORT nLangStart, 
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq, SwWrtShell* pWrtSh, 
             std::map< sal_Int16, ::rtl::OUString > &rLangTable );
 
     using PopupMenu::Execute;
@@ -82,7 +82,7 @@ public:
             sal_Int32 nErrorInResult,
             const ::com::sun::star::uno::Sequence< rtl::OUString > &rSuggestions,
             const String & rParaText );
-
+    
     sal_uInt16  Execute( const Rectangle& rPopupPos, Window* pWin );
     void Execute( USHORT nId );
 

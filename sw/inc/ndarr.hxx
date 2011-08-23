@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ class SW_DLLPUBLIC SwNodes: private BigPtrArray
     friend class SwNode;
     friend class SwNodeIndex;
 
-    SwNodeIndex* pRoot;                 // Liste aller Indizies auf Nodes
+    SwNodeIndex* pRoot;					// Liste aller Indizies auf Nodes
 
     // --> OD 2008-05-14 #refactorlists# - removed <bSyncNumberAndNumRule>
     void InsertNode( const SwNodePtr pNode,
@@ -99,18 +99,18 @@ class SW_DLLPUBLIC SwNodes: private BigPtrArray
     // <--
 
 
-    SwDoc* pMyDoc;                      // in diesem Doc ist das Nodes-Array
+    SwDoc* pMyDoc;						// in diesem Doc ist das Nodes-Array
 
-    SwNode *pEndOfPostIts, *pEndOfInserts,  // das sind die festen Bereiche
+    SwNode *pEndOfPostIts, *pEndOfInserts, 	// das sind die festen Bereiche
            *pEndOfAutotext, *pEndOfRedlines,
            *pEndOfContent;
 
-    mutable SwOutlineNodes* pOutlineNds;        // Array aller GliederiungsNodes
+    mutable SwOutlineNodes* pOutlineNds;		// Array aller GliederiungsNodes
 
-    BOOL bInNodesDel : 1;               // falls rekursiv aufgerufen wird
+    BOOL bInNodesDel : 1;				// falls rekursiv aufgerufen wird
                                         // Num/Outline nicht aktualisierem
-    BOOL bInDelUpdOutl : 1;             // Flags fuers aktualisieren von Outl.
-    BOOL bInDelUpdNum : 1;              // Flags fuers aktualisieren von Outl.
+    BOOL bInDelUpdOutl : 1;				// Flags fuers aktualisieren von Outl.
+    BOOL bInDelUpdNum : 1;				// Flags fuers aktualisieren von Outl.
 
     // fuer dier Verwaltung der Indizies
     void RegisterIndex( SwNodeIndex& rIdx );
@@ -124,7 +124,7 @@ class SW_DLLPUBLIC SwNodes: private BigPtrArray
     void ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
                   SwNodeIndex& rInsPos, BOOL bNewFrms );
 
-    void UpdtOutlineIdx( const SwNode& );   // Update ab Node alle OutlineNodes
+    void UpdtOutlineIdx( const SwNode& );	// Update ab Node alle OutlineNodes
 
     void _CopyNodes( const SwNodeRange&, const SwNodeIndex&,
                     BOOL bNewFrms = TRUE, BOOL bTblInsDummyNode = FALSE ) const;
@@ -138,12 +138,12 @@ public:
 
     typedef ::std::vector<SwNodeRange> NodeRanges_t;
     typedef ::std::vector<NodeRanges_t> TableRanges_t;
-
+    
     SwNodePtr operator[]( ULONG n ) const
         { return (SwNodePtr)BigPtrArray::operator[] ( n ); }
 
 //JP 29.09.97: impl. steht im ndindex.hxx - sollte moeglichst bald auf die
-//              neue Schnittstelle angepasst werden
+//				neue Schnittstelle angepasst werden
     inline SwNodePtr operator[]( const SwNodeIndex& rIdx ) const;
 
     ULONG Count() const { return BigPtrArray::Count(); }
@@ -160,18 +160,18 @@ public:
                     FnForEach_SwNodes fnForEach, void* pArgs = 0 );
 
     // eine noch leere Section
-    SwNode& GetEndOfPostIts() const     { return *pEndOfPostIts; }
+    SwNode& GetEndOfPostIts() const 	{ return *pEndOfPostIts; }
     // Section fuer alle Fussnoten
-    SwNode& GetEndOfInserts() const     { return *pEndOfInserts; }
+    SwNode& GetEndOfInserts() const 	{ return *pEndOfInserts; }
     // Section fuer alle Flys/Header/Footers
-    SwNode& GetEndOfAutotext() const    { return *pEndOfAutotext; }
+    SwNode& GetEndOfAutotext() const 	{ return *pEndOfAutotext; }
     // Section fuer alle Redlines
-    SwNode& GetEndOfRedlines() const    { return *pEndOfRedlines; }
+    SwNode& GetEndOfRedlines() const 	{ return *pEndOfRedlines; }
     // das ist der letzte EndNode einer SonderSection. Hier nach kommt nur
     // noch die normale ContentSection (also der BodyText)
-    SwNode& GetEndOfExtras() const      { return *pEndOfRedlines; }
+    SwNode& GetEndOfExtras() const 		{ return *pEndOfRedlines; }
     // die normale ContentSection (also der BodyText)
-    SwNode& GetEndOfContent() const     { return *pEndOfContent; }
+    SwNode& GetEndOfContent() const		{ return *pEndOfContent; }
 
     // ist das NodesArray das normale vom Doc? (nicht das UndoNds, .. )
     // Implementierung steht im doc.hxx (weil man dazu Doc kennen muss) !
@@ -220,7 +220,7 @@ public:
     // die Impl. von "Make...Node" stehen in den angegebenen .ccx-Files
     SwTxtNode *MakeTxtNode( const SwNodeIndex & rWhere,
                             SwTxtFmtColl *pColl,
-                            SwAttrSet* pAutoAttr = 0 ); // in ndtxt.cxx
+                            SwAttrSet* pAutoAttr = 0 );	// in ndtxt.cxx
     SwStartNode* MakeTextSection( const SwNodeIndex & rWhere,
                             SwStartNodeType eSttNdTyp,
                             SwTxtFmtColl *pColl,
@@ -232,29 +232,29 @@ public:
                             const Graphic* pGraphic,
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0,
-                            BOOL bDelayed = FALSE );    // in ndgrf.cxx
+                            BOOL bDelayed = FALSE );	// in ndgrf.cxx
 
     SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
                             const GraphicObject& rGrfObj,
                             SwGrfFmtColl *pColl,
-                            SwAttrSet* pAutoAttr = 0 ); // in ndgrf.cxx
+                            SwAttrSet* pAutoAttr = 0 );	// in ndgrf.cxx
 
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
                             const svt::EmbeddedObjectRef&,
                             SwGrfFmtColl *pColl,
-                            SwAttrSet* pAutoAttr = 0 ); // in ndole.cxx
+                            SwAttrSet* pAutoAttr = 0 );	// in ndole.cxx
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
                             const String &rName,
                             sal_Int64 nAspect,
                             SwGrfFmtColl *pColl,
-                            SwAttrSet* pAutoAttr ); // in ndole.cxx
+                            SwAttrSet* pAutoAttr );	// in ndole.cxx
 
         // Array aller GliederiungsNodes;
     const SwOutlineNodes& GetOutLineNds() const;
 
     //void UpdateOutlineNode( const SwNode&, BYTE nOldLevel, BYTE nNewLevel );//#outline level,removed by zhaojianwei
         // alle Nodes Updaten - Rule/Format-Aenderung
-    void UpdateOutlineNode(SwNode & rNd);
+    void UpdateOutlineNode(SwNode & rNd); 
 
         // fuege die Nodes fuer die Tabelle ein
         // wenn Lines angegeben, erzeuge die Matrix aus Lines & Boxen
@@ -280,11 +280,11 @@ public:
                                 SwTableBoxFmt* pBoxFmt,
                                 SwTxtFmtColl* pTxtColl,
                                 SwUndoTxtToTbl* pUndo = 0 );
-
+    
     SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
-
+    
     //create a table from a vector of NodeRanges - API support
-    SwTableNode* TextToTable( const TableRanges_t& rTableNodes,
+    SwTableNode* TextToTable( const TableRanges_t& rTableNodes, 
                                 SwTableFmt* pTblFmt,
                                 SwTableLineFmt* pLineFmt,
                                 SwTableBoxFmt* pBoxFmt,
@@ -327,8 +327,8 @@ public:
                                 bool const bCreateFrms = true);
 
         // in welchem Doc steht das Nodes-Array ?
-            SwDoc* GetDoc()         { return pMyDoc; }
-    const   SwDoc* GetDoc() const   { return pMyDoc; }
+            SwDoc* GetDoc()			{ return pMyDoc; }
+    const	SwDoc* GetDoc() const	{ return pMyDoc; }
 
         // suche den vorhergehenden [/nachfolgenden ] ContentNode oder
         // TabellenNode mit Frames. Wird kein Ende angeben, dann wird mit

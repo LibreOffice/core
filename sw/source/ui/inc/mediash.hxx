@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@ class SwMediaShell: public SwBaseShell
 public:
     SFX_DECL_INTERFACE(SW_MEDIASHELL)
 
-    void    ExecMedia(SfxRequest &);
-    void    GetMediaState(SfxItemSet &);
+    void	ExecMedia(SfxRequest &);
+    void	GetMediaState(SfxItemSet &);
 
             SwMediaShell(SwView &rView);
 };

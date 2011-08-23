@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,12 +56,12 @@ typedef std::vector< SwTabColsEntry > SwTabColsEntries;
 
 class SW_DLLPUBLIC SwTabCols
 {
-    long nLeftMin,      //Linker aeusserer Rand (Bezugspunkt) in
+    long nLeftMin,		//Linker aeusserer Rand (Bezugspunkt) in
                         //Dokumentkordinaten.
                         //Alle anderen Werte relativ zu diesem Punkt!
-            nLeft,      //Linker Rand der Tabelle.
-           nRight,      //Rechter Rand der Tabelle.
-           nRightMax;   //Maximaler rechter Rand der Tabelle.
+            nLeft,		//Linker Rand der Tabelle.
+           nRight,		//Rechter Rand der Tabelle.
+           nRightMax;	//Maximaler rechter Rand der Tabelle.
 
     bool bLastRowAllowedToChange;       // if the last row of the table frame
                                         // is split across pages, it may not
@@ -92,19 +92,19 @@ public:
           SwTabColsEntry& GetEntry( USHORT nPos )  { return aData[nPos]; }
 
     long GetLeftMin() const { return nLeftMin; }
-    long GetLeft()  const { return nLeft;    }
-    long GetRight() const { return nRight;   }
+    long GetLeft()	const { return nLeft;	 }
+    long GetRight()	const { return nRight;	 }
     long GetRightMax()const { return nRightMax;}
 
-    void SetLeftMin ( long nNew )   { nLeftMin = nNew; }
-    void SetLeft    ( long nNew )   { nLeft = nNew;    }
-    void SetRight   ( long nNew )   { nRight = nNew;   }
-    void SetRightMax( long nNew )   { nRightMax = nNew;}
+    void SetLeftMin ( long nNew )	{ nLeftMin = nNew; }
+    void SetLeft	( long nNew )	{ nLeft = nNew;	   }
+    void SetRight	( long nNew )	{ nRight = nNew;   }
+    void SetRightMax( long nNew )	{ nRightMax = nNew;}
 
     bool IsLastRowAllowedToChange() const { return bLastRowAllowedToChange; }
     void SetLastRowAllowedToChange( bool bNew ) { bLastRowAllowedToChange = bNew; }
 };
 
-#endif  //_TABCOL_HXX
+#endif	//_TABCOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

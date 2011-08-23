@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtCharFmt: public SfxPoolItem, public SwClient
 {
     friend class SwTxtCharFmt;
-    SwTxtCharFmt* pTxtAttr;     // mein TextAttribut
+    SwTxtCharFmt* pTxtAttr;		// mein TextAttribut
 
 public:
     SwFmtCharFmt() : pTxtAttr(0) {}
@@ -63,19 +63,19 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     // an das SwTxtCharFmt weiterleiten (vom SwClient)
     virtual void    Modify( SfxPoolItem*, SfxPoolItem* );
-    virtual BOOL    GetInfo( SfxPoolItem& rInfo ) const;
+    virtual BOOL 	GetInfo( SfxPoolItem& rInfo ) const;
 
     void SetCharFmt( SwFmt* pFmt ) { pFmt->Add(this); }
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }

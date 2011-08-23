@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-#    Watches for formula dumps by starmath and renders them
+#	 Watches for formula dumps by starmath and renders them
 # If starmath is compiled with the macro DEBUG_ENABLE_DUMPASDOT defined.
 # shift+enter, in the visual formula editor will make starmath dump a
 # graphviz graph of the formula tree structure. This is very useful when
@@ -20,7 +20,7 @@
 touch /tmp/smath-dump.gv;
 while inotifywait -q -e close_write /tmp/smath-dump.gv;
 do
-    dot -Tpng < /tmp/smath-dump.gv > /tmp/smath-dump.png; > /dev/null
-    kill `pidof -s feh`; > /dev/null
-    feh /tmp/smath-dump.png & > /dev/null
+	dot -Tpng < /tmp/smath-dump.gv > /tmp/smath-dump.png; > /dev/null
+	kill `pidof -s feh`; > /dev/null
+	feh /tmp/smath-dump.png & > /dev/null
 done

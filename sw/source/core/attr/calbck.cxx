@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <hintids.hxx>      // fuer RES_..
+#include <hintids.hxx>		// fuer RES_..
 #include <frame.hxx>
 #include <hints.hxx>
 #include <swcache.hxx>
@@ -42,14 +42,14 @@
 
 static SwClientIter* pClientIters = 0;
 
-TYPEINIT0(SwClient);    //rtti
+TYPEINIT0(SwClient);	//rtti
 
 /*************************************************************************
-|*    SwClient::SwClient(SwModify *)
+|*	  SwClient::SwClient(SwModify *)
 |*
-|*    Beschreibung      callback.doc V1.14
-|*    Ersterstellung    VB 20.03.91
-|*    Letzte Aenderung  MA 20. Mar. 95
+|*	  Beschreibung		callback.doc V1.14
+|*	  Ersterstellung	VB 20.03.91
+|*	  Letzte Aenderung	MA 20. Mar. 95
 *************************************************************************/
 
 
@@ -67,11 +67,11 @@ SwClient::SwClient(SwModify *pToRegisterIn)
 }
 
 /*************************************************************************
-|*    SwClient::Modify()
+|*	  SwClient::Modify()
 |*
-|*    Beschreibung      callback.doc V1.14
-|*    Ersterstellung    VB 20.03.91
-|*    Letzte Aenderung  VB 20.03.91
+|*	  Beschreibung		callback.doc V1.14
+|*	  Ersterstellung	VB 20.03.91
+|*	  Letzte Aenderung	VB 20.03.91
 *************************************************************************/
 
 
@@ -94,11 +94,11 @@ void SwClient::Modify( SfxPoolItem *pOld, SfxPoolItem * )
 }
 
 /*************************************************************************
-|*    SwClient::~SwClient()
+|*	  SwClient::~SwClient()
 |*
-|*    Beschreibung      callback.doc V1.14
-|*    Ersterstellung    VB 20.03.91
-|*    Letzte Aenderung  MA 25. Jan. 94
+|*	  Beschreibung		callback.doc V1.14
+|*	  Ersterstellung	VB 20.03.91
+|*	  Letzte Aenderung	MA 25. Jan. 94
 *************************************************************************/
 
 
@@ -114,15 +114,15 @@ SwClient::~SwClient()
     // erfrage vom Client Informationen
 BOOL SwClient::GetInfo( SfxPoolItem& ) const
 {
-    return TRUE;        // und weiter
+    return TRUE;		// und weiter
 }
 
 /*************************************************************************
-|*    SwModify::SwModify( SwModify * )
+|*	  SwModify::SwModify( SwModify * )
 |*
-|*    Beschreibung      Dokument 1.7
-|*    Ersterstellung    JP 20.11.90
-|*    Letzte Aenderung  VB 20.03.91
+|*	  Beschreibung		Dokument 1.7
+|*	  Ersterstellung	JP 20.11.90
+|*	  Letzte Aenderung	VB 20.03.91
 *************************************************************************/
 
 
@@ -139,11 +139,11 @@ SwModify::SwModify( const SwModify & )
 }
 
 /*************************************************************************
-|*    SwModify::~SwModify()
+|*	  SwModify::~SwModify()
 |*
-|*    Beschreibung      Dokument 1.7
-|*    Ersterstellung    JP 20.11.90
-|*    Letzte Aenderung  JP 15.04.94
+|*	  Beschreibung		Dokument 1.7
+|*	  Ersterstellung	JP 20.11.90
+|*	  Letzte Aenderung	JP 15.04.94
 *************************************************************************/
 
 
@@ -166,7 +166,7 @@ SwModify::~SwModify()
             while( 0 != ( p = aIter++ ) )
                 p->pRegisteredIn = 0;
 
-            p = aIter.GoRoot();         // wieder ab Root (==Start) anfangen
+            p = aIter.GoRoot(); 		// wieder ab Root (==Start) anfangen
             do {
                 p->pRegisteredIn = 0;
             } while( 0 != ( p = aIter-- ) );
@@ -186,11 +186,11 @@ SwModify::~SwModify()
 }
 
 /*************************************************************************
-|*    SwModify::Modify( SwHint * pOldValue, SwHint * pNewValue )
+|*	  SwModify::Modify( SwHint * pOldValue, SwHint * pNewValue )
 |*
-|*    Beschreibung      Dokument 1.7
-|*    Ersterstellung    JP 20.11.90
-|*    Letzte Aenderung  MA 20. Mar. 95
+|*	  Beschreibung		Dokument 1.7
+|*	  Ersterstellung	JP 20.11.90
+|*	  Letzte Aenderung	MA 20. Mar. 95
 *************************************************************************/
 
 
@@ -236,11 +236,11 @@ void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 
     SwClientIter aIter( *this );
     SwClient * pLast = aIter.GoStart();
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
+    if( pLast ) 	// konnte zum Anfang gesprungen werden ??
         do
         {
             pLast->Modify( pOldValue, pNewValue );
-            if( !pRoot )    // Baum schon Weg ??
+            if( !pRoot )	// Baum schon Weg ??
                 break;
         } while( 0 != ( pLast = aIter++ ));
 
@@ -252,7 +252,7 @@ void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 
 BOOL SwModify::GetInfo( SfxPoolItem& rInfo ) const
 {
-    BOOL bRet = TRUE;       // bedeutet weiter zum naechsten
+    BOOL bRet = TRUE;		// bedeutet weiter zum naechsten
 
     if( pRoot )
     {
@@ -265,15 +265,15 @@ BOOL SwModify::GetInfo( SfxPoolItem& rInfo ) const
                 ;
     }
 
-    return bRet;        // und weiter
+    return bRet;		// und weiter
 }
 
 /*************************************************************************
-|*    SwModify::Add( SwClient *pDepend )
+|*	  SwModify::Add( SwClient *pDepend )
 |*
-|*    Beschreibung      Dokument 1.7
-|*    Ersterstellung    JP 20.11.90
-|*    Letzte Aenderung  JP 14.09.94
+|*	  Beschreibung		Dokument 1.7
+|*	  Ersterstellung	JP 20.11.90
+|*	  Letzte Aenderung	JP 14.09.94
 *************************************************************************/
 
 
@@ -319,11 +319,11 @@ void SwModify::Add(SwClient *pDepend)
 }
 
 /*************************************************************************
-|*    SwModify::_Remove( SwClient *pDepend )
+|*	  SwModify::_Remove( SwClient *pDepend )
 |*
-|*    Beschreibung      Dokument 1.7
-|*    Ersterstellung    JP 20.11.90
-|*    Letzte Aenderung  JP 14.09.94
+|*	  Beschreibung		Dokument 1.7
+|*	  Ersterstellung	JP 20.11.90
+|*	  Letzte Aenderung	JP 14.09.94
 *************************************************************************/
 
 
@@ -376,10 +376,10 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
 
 
 /*************************************************************************
-|*    SwModify::CheckCaching( const USHORT nWhich )
+|*	  SwModify::CheckCaching( const USHORT nWhich )
 |*
-|*    Ersterstellung    JP 25.06.95
-|*    Letzte Aenderung  JP 25.06.95
+|*	  Ersterstellung	JP 25.06.95
+|*	  Letzte Aenderung	JP 25.06.95
 *************************************************************************/
 
 
@@ -420,11 +420,11 @@ void SwModify::CheckCaching( const USHORT nWhich )
 // ----------
 
 /*************************************************************************
-|*    SwDepend::SwDepend(SwClient *pTellHim,SwModify *pDepend)
+|*	  SwDepend::SwDepend(SwClient *pTellHim,SwModify *pDepend)
 |*
-|*    Beschreibung      callback.doc V1.14
-|*    Ersterstellung    VB 20.03.91
-|*    Letzte Aenderung  VB 20.03.91
+|*	  Beschreibung		callback.doc V1.14
+|*	  Ersterstellung	VB 20.03.91
+|*	  Letzte Aenderung	VB 20.03.91
 *************************************************************************/
 
 
@@ -436,11 +436,11 @@ SwDepend::SwDepend(SwClient *pTellHim, SwModify *pDepend)
 
 /*************************************************************************
 |*
-|*    SwDepend::Modify(SwHint *, SwHint *)
+|*	  SwDepend::Modify(SwHint *, SwHint *)
 |*
-|*    Beschreibung      callback.doc V1.14
-|*    Ersterstellung    VB 20.03.91
-|*    Letzte Aenderung  VB 20.03.91
+|*	  Beschreibung		callback.doc V1.14
+|*	  Ersterstellung	VB 20.03.91
+|*	  Letzte Aenderung	VB 20.03.91
 |*
 *************************************************************************/
 
@@ -568,7 +568,7 @@ SwClient* SwClientIter::operator--()
 }
 
 
-SwClient* SwClientIter::GoStart()       // zum Anfang des Baums
+SwClient* SwClientIter::GoStart() 		// zum Anfang des Baums
 {
     pAkt = rRoot.pRoot;
     if( pAkt )
@@ -579,7 +579,7 @@ SwClient* SwClientIter::GoStart()       // zum Anfang des Baums
 }
 
 
-SwClient* SwClientIter::GoEnd()         // zum End des Baums
+SwClient* SwClientIter::GoEnd()			// zum End des Baums
 {
     pAkt = pDelNext;
     if( !pAkt )

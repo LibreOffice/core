@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,7 +161,7 @@ BOOL SwGrfNode::ReRead(
         if( rGrfName.Len() )
         {
             // Besonderheit: steht im FltNamen DDE, handelt es sich um eine
-            //                  DDE-gelinkte Grafik
+            //					DDE-gelinkte Grafik
             String sCmd( rGrfName );
             if( rFltName.Len() )
             {
@@ -183,7 +183,7 @@ BOOL SwGrfNode::ReRead(
 
             refLink->SetLinkSourceName( sCmd );
         }
-        else        // kein Name mehr, Link aufheben
+        else		// kein Name mehr, Link aufheben
         {
             GetDoc()->GetLinkManager().Remove( refLink );
             refLink.Clear();
@@ -301,7 +301,7 @@ BOOL SwGrfNode::ReRead(
     }
 
     // Bug 39281: Size nicht sofort loeschen - Events auf ImageMaps
-    //            sollten nicht beim Austauschen nicht ins "leere greifen"
+    //			  sollten nicht beim Austauschen nicht ins "leere greifen"
     if( bSetTwipSize )
         SetTwipSize( ::GetGraphicSizeTwip( aGrfObj.GetGraphic(), 0 ) );
 
@@ -416,7 +416,7 @@ BOOL SwGrfNode::ImportGraphic( SvStream& rStrm )
 
 short SwGrfNode::SwapIn( BOOL bWaitForData )
 {
-    if( bInSwapIn )                 // nicht rekuriv!!
+    if( bInSwapIn )					// nicht rekuriv!!
         return !aGrfObj.IsSwappedOut();
 
     short nRet = 0;
@@ -641,7 +641,7 @@ void SwGrfNode::ReleaseLink()
     if( refLink.Is() )
     {
         // erst die Grafik reinswappen!
-//      if( aGraphic.IsSwapOut() || !refLink->IsSynchron() )
+//		if( aGraphic.IsSwapOut() || !refLink->IsSynchron() )
         {
             bInSwapIn = TRUE;
             SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
@@ -1067,7 +1067,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
         case RES_MIRROR_GRAPH_VERT:     nMirror = BMP_MIRROR_NONE; break;
         case RES_MIRROR_GRAPH_HOR:  nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
                                     break;
-        default:                    nMirror = BMP_MIRROR_VERT; break;
+        default: 					nMirror = BMP_MIRROR_VERT; break;
         }
     }
     else
@@ -1108,7 +1108,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
 BOOL SwGrfNode::IsTransparent() const
 {
     BOOL bRet = aGrfObj.IsTransparent();
-    if( !bRet ) // ask the attribut
+    if( !bRet )	// ask the attribut
         bRet = 0 != GetSwAttrSet().GetTransparencyGrf().GetValue();
 
     return bRet;

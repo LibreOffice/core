@@ -64,40 +64,40 @@ class SwViewImp
 {
     friend class ViewShell;
 
-    friend class SwLayAction;   //Lay- und IdleAction tragen sich ein und aus.
+    friend class SwLayAction;	//Lay- und IdleAction tragen sich ein und aus.
     friend class SwLayIdle;
 
     // OD 12.12.2002 #103492# - for paint of page preview
     friend class SwPagePreviewLayout;
 
-    ViewShell *pSh;             //Falls jemand einen Imp durchreicht und doch
+    ViewShell *pSh;				//Falls jemand einen Imp durchreicht und doch
                                 //mal eine ViewShell braucht hier die
                                 //Rueckwaertsverkettung.
 
-    SwDrawView  *pDrawView;     //Unsere DrawView
-    SdrPageView *pSdrPageView;  //Genau eine Seite fuer unsere DrawView
+    SwDrawView  *pDrawView;		//Unsere DrawView
+    SdrPageView *pSdrPageView;	//Genau eine Seite fuer unsere DrawView
 
-    SwPageFrm     *pFirstVisPage;//Zeigt immer auf die erste sichtbare Seite.
+    SwPageFrm	  *pFirstVisPage;//Zeigt immer auf die erste sichtbare Seite.
     SwRegionRects *pRegion;      //Sammler fuer Paintrects aus der LayAction.
 
-    SwLayAction   *pLayAct;      //Ist gesetzt wenn ein Action-Objekt existiert
+    SwLayAction	  *pLayAct;		 //Ist gesetzt wenn ein Action-Objekt existiert
                                  //Wird vom SwLayAction-CTor ein- und vom DTor
                                  //ausgetragen.
-    SwLayIdle     *pIdleAct;     //Analog zur SwLayAction fuer SwLayIdle.
+    SwLayIdle	  *pIdleAct;	 //Analog zur SwLayAction fuer SwLayIdle.
 
-    SwAccessibleMap *pAccMap;       // Accessible Wrappers
+    SwAccessibleMap	*pAccMap;		// Accessible Wrappers
 
     mutable const SdrObject * pSdrObjCached;
     mutable String sSdrObjCachedComment;
 
-    BOOL bFirstPageInvalid  :1; //Pointer auf erste Seite ungueltig?
+    BOOL bFirstPageInvalid	:1;	//Pointer auf erste Seite ungueltig?
 
     //BOOL bResetXorVisibility:1; //StartAction/EndAction
-    //HMHBOOL bShowHdlPaint     :1; //LockPaint/UnlockPaint
+    //HMHBOOL bShowHdlPaint		:1; //LockPaint/UnlockPaint
     BOOL bResetHdlHiddenPaint:1;//  -- "" --
 
-    BOOL bSmoothUpdate      :1; //Meber fuer SmoothScroll
-    BOOL bStopSmooth        :1;
+    BOOL bSmoothUpdate		:1;	//Meber fuer SmoothScroll
+    BOOL bStopSmooth		:1;
     BOOL bStopPrt           :1; // Stop Printing
 
     USHORT nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
@@ -127,11 +127,11 @@ class SwViewImp
     */
     void ResetStopPrt() { bStopPrt = FALSE; }
 
-    void SetFirstVisPage();     //Neue Ermittlung der ersten sichtbaren Seite
+    void SetFirstVisPage();		//Neue Ermittlung der ersten sichtbaren Seite
 
-    void StartAction();         //Henkel Anzeigen und verstecken.
-    void EndAction();           //gerufen von ViewShell::ImplXXXAction
-    void LockPaint();           //dito, gerufen von ViewShell::ImplLockPaint
+    void StartAction();			//Henkel Anzeigen und verstecken.
+    void EndAction();			//gerufen von ViewShell::ImplXXXAction
+    void LockPaint();			//dito, gerufen von ViewShell::ImplLockPaint
     void UnlockPaint();
 
 private:
@@ -182,27 +182,27 @@ private:
 public:
     SwViewImp( ViewShell * );
     ~SwViewImp();
-    void Init( const SwViewOption * );          //nur fuer ViewShell::Init()
+    void Init( const SwViewOption * );			//nur fuer ViewShell::Init()
 
     const ViewShell *GetShell() const { return pSh; }
-          ViewShell *GetShell()       { return pSh; }
+          ViewShell *GetShell()		  { return pSh; }
 
     Color GetRetoucheColor() const;
 
     //Verwaltung zur ersten sichtbaren Seite
     inline const SwPageFrm *GetFirstVisPage() const;
-    inline       SwPageFrm *GetFirstVisPage();
+    inline		 SwPageFrm *GetFirstVisPage();
     void SetFirstVisPageInvalid() { bFirstPageInvalid = TRUE; }
 
     BOOL AddPaintRect( const SwRect &rRect );
-    SwRegionRects *GetRegion()      { return pRegion; }
+    SwRegionRects *GetRegion()		{ return pRegion; }
     void DelRegion();
 
     // neues Interface fuer StarView Drawing
     inline BOOL HasDrawView()       const { return 0 != pDrawView; }
-          SwDrawView* GetDrawView()       { return pDrawView; }
+          SwDrawView* GetDrawView() 	  { return pDrawView; }
     const SwDrawView* GetDrawView() const { return pDrawView; }
-          SdrPageView*GetPageView()       { return pSdrPageView; }
+          SdrPageView*GetPageView() 	  { return pSdrPageView; }
     const SdrPageView*GetPageView() const { return pSdrPageView; }
     void MakeDrawView();
 
@@ -231,23 +231,23 @@ public:
     void NotifySizeChg( const Size &rNewSz );
 
     //SS Fuer die Lay- bzw. IdleAction und verwandtes
-    BOOL  IsAction() const                   { return pLayAct  != 0; }
-    BOOL  IsIdleAction() const               { return pIdleAct != 0; }
-          SwLayAction &GetLayAction()        { return *pLayAct; }
+    BOOL  IsAction() const 					 { return pLayAct  != 0; }
+    BOOL  IsIdleAction() const				 { return pIdleAct != 0; }
+          SwLayAction &GetLayAction()		 { return *pLayAct; }
     const SwLayAction &GetLayAction() const  { return *pLayAct; }
-          SwLayIdle   &GetIdleAction()       { return *pIdleAct;}
+          SwLayIdle	  &GetIdleAction()		 { return *pIdleAct;}
     const SwLayIdle   &GetIdleAction() const { return *pIdleAct;}
 
     //Wenn eine Aktion laueft wird diese gebeten zu pruefen ob es
     //an der zeit ist den WaitCrsr einzuschalten.
     void CheckWaitCrsr();
-    BOOL IsCalcLayoutProgress() const;  //Fragt die LayAction wenn vorhanden.
+    BOOL IsCalcLayoutProgress() const;	//Fragt die LayAction wenn vorhanden.
     //TRUE wenn eine LayAction laeuft, dort wird dann auch das Flag fuer
     //ExpressionFields gesetzt.
     BOOL IsUpdateExpFlds();
 
-    void    SetRestoreActions(USHORT nSet){nRestoreActions = nSet;}
-    USHORT  GetRestoreActions() const{return nRestoreActions;}
+    void	SetRestoreActions(USHORT nSet){nRestoreActions = nSet;}
+    USHORT 	GetRestoreActions() const{return nRestoreActions;}
 
     // OD 12.12.2002 #103492#
     void InitPagePreviewLayout();

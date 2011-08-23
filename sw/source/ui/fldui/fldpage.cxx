@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
     m_bRefresh          (FALSE),
     m_bFirstHTMLInit    (TRUE)
 {
-//  FreeResource();
+//	FreeResource();
 }
 
 SwFldPage::~SwFldPage()
@@ -153,7 +153,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
     SwView* pView = GetActiveView();
     SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : pView->GetWrtShellPtr();
 
-    if (!IsFldEdit())   // Neues Feld einfuegen
+    if (!IsFldEdit())	// Neues Feld einfuegen
     {
         SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
         //#i26566# provide parent for SwWrtShell::StartInputFldDlg
@@ -197,7 +197,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
         }
 
     }
-    else    // Feld aendern
+    else	// Feld aendern
     {
         SwField *const pTmpFld = m_pCurFld->CopyField();
 
@@ -249,7 +249,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                 {
                     if( pFmtFld->GetFld() == m_pCurFld)
                     {
-                        pTyp->Add(pFmtFld); // Feld auf neuen Typ umhaengen
+                        pTyp->Add(pFmtFld);	// Feld auf neuen Typ umhaengen
                         pTmpFld->ChgTyp(pTyp);
                         break;
                     }
@@ -272,7 +272,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
             {
                 // User- oder SetField ?
                 if (m_aMgr.GetFldType(RES_USERFLD, sPar1) == 0 &&
-                !(pTmpFld->GetSubType() & INP_TXT)) // SETEXPFLD
+                !(pTmpFld->GetSubType() & INP_TXT))	// SETEXPFLD
                 {
                     SwSetExpField* pFld = (SwSetExpField*)pTmpFld;
                     pFld->SetPromptText(sPar2);
@@ -353,7 +353,7 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
         pDlg->InsertHdl();
 
         if (pBtn)
-            pBtn->GrabFocus();  // Wegen InputField-Dlg
+            pBtn->GrabFocus();	// Wegen InputField-Dlg
     }
     else
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class SwNoTxtNode;
 namespace com { namespace sun { namespace star { namespace style {
                 class XStyle; } } } }
 
-class SwXMLTextParagraphExport : public XMLTextParagraphExport
+class SwXMLTextParagraphExport : public XMLTextParagraphExport 
 {
     const ::rtl::OUString sTextTable;
     const ::rtl::OUString sEmbeddedObjectProtocol;
@@ -50,7 +50,7 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
     const SvGlobalName aIFrameClassId;
     const SvGlobalName aOutplaceClassId;
 
-    SwNoTxtNode *GetNoTxtNode(
+    SwNoTxtNode *GetNoTxtNode( 
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet ) const;
 
@@ -86,6 +86,6 @@ public:
 };
 
 
-#endif  //  _XMLTEXTE_HXX
+#endif	//  _XMLTEXTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

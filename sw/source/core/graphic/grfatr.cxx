@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ TYPEINIT1_AUTOFACTORY(SwCropGrf, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwGammaGrf, SfxPoolItem)
 
 /******************************************************************************
- *  Implementierung     class SwMirrorGrf
+ *	Implementierung		class SwMirrorGrf
  ******************************************************************************/
 
 SfxPoolItem* SwMirrorGrf::Clone( SfxItemPool* ) const
@@ -164,7 +164,7 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 
 /******************************************************************************
- *  Implementierung     class SwCropGrf
+ *	Implementierung		class SwCropGrf
  ******************************************************************************/
 
 SwCropGrf::SwCropGrf()
@@ -188,7 +188,7 @@ SfxPoolItem* SwRotationGrf::Clone( SfxItemPool * ) const
 }
 
 
-int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
+int	SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxUInt16Item::operator==( rCmp ) &&
         GetUnrotatedSize() == ((SwRotationGrf&)rCmp).GetUnrotatedSize();
@@ -261,7 +261,7 @@ SfxPoolItem* SwGammaGrf::Clone( SfxItemPool * ) const
     return new SwGammaGrf( *this );
 }
 
-int SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
+int	SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxPoolItem::operator==( rCmp ) &&
         nValue == ((SwGammaGrf&)rCmp).GetValue();

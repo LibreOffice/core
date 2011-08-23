@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::i18n;
 #define KAPITAELCHENPROP 80
 
 /*************************************************************************
- *                      class SwCapitalInfo
+ *						class SwCapitalInfo
  *
  * The information encapsulated in SwCapitalInfo is required
  * by the ::Do functions. They contain the information about
@@ -70,7 +70,7 @@ public:
 };
 
 /*************************************************************************
- *                      xub_StrLen lcl_CalcCaseMap()
+ *						xub_StrLen lcl_CalcCaseMap()
  *
  * rFnt: required for CalcCaseMap
  * rOrigString: The original string
@@ -114,7 +114,7 @@ xub_StrLen lcl_CalcCaseMap( const SwFont& rFnt,
 }
 
 /*************************************************************************
- *                      class SwDoCapitals
+ *						class SwDoCapitals
  *************************************************************************/
 
 class SwDoCapitals
@@ -134,7 +134,7 @@ public:
 };
 
 /*************************************************************************
- *                    class SwDoGetCapitalSize
+ *					  class SwDoGetCapitalSize
  *************************************************************************/
 
 class SwDoGetCapitalSize : public SwDoCapitals
@@ -162,7 +162,7 @@ void SwDoGetCapitalSize::Do()
 }
 
 /*************************************************************************
- *                    SwSubFont::GetCapitalSize()
+ *					  SwSubFont::GetCapitalSize()
  *************************************************************************/
 
 Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
@@ -189,7 +189,7 @@ Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
 }
 
 /*************************************************************************
- *                    class SwDoGetCapitalBreak
+ *					  class SwDoGetCapitalBreak
  *************************************************************************/
 
 class SwDoGetCapitalBreak : public SwDoCapitals
@@ -254,12 +254,12 @@ void SwDoGetCapitalBreak::Do()
 }
 
 /*************************************************************************
- *                    SwFont::GetCapitalBreak()
+ *					  SwFont::GetCapitalBreak()
  *************************************************************************/
 
 xub_StrLen SwFont::GetCapitalBreak( ViewShell* pSh, const OutputDevice* pOut,
     const SwScriptInfo* pScript, const XubString& rTxt, long nTextWidth,
-    xub_StrLen *pExtra, const xub_StrLen nIdx, const xub_StrLen nLen )
+    xub_StrLen *pExtra,	const xub_StrLen nIdx, const xub_StrLen nLen )
 {
     // Start:
     Point aPos( 0, 0 );
@@ -281,7 +281,7 @@ xub_StrLen SwFont::GetCapitalBreak( ViewShell* pSh, const OutputDevice* pOut,
 }
 
 /*************************************************************************
- *                     class SwDoDrawCapital
+ *					   class SwDoDrawCapital
  *************************************************************************/
 
 class SwDoDrawCapital : public SwDoCapitals
@@ -325,7 +325,7 @@ void SwDoDrawCapital::Do()
 }
 
 /*************************************************************************
- *                    SwDoDrawCapital::DrawSpace()
+ *					  SwDoDrawCapital::DrawSpace()
  *************************************************************************/
 
 void SwDoDrawCapital::DrawSpace( Point &rPos )
@@ -362,7 +362,7 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
 }
 
 /*************************************************************************
- *                    SwSubFont::DrawCapital()
+ *					  SwSubFont::DrawCapital()
  *************************************************************************/
 
 void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
@@ -377,7 +377,7 @@ void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
 }
 
 /*************************************************************************
- *                     class SwDoDrawCapital
+ *					   class SwDoDrawCapital
  *************************************************************************/
 
 class SwDoCapitalCrsrOfst : public SwDoCapitals
@@ -442,7 +442,7 @@ void SwDoCapitalCrsrOfst::Do()
 }
 
 /*************************************************************************
- *                    SwSubFont::GetCapitalCrsrOfst()
+ *					  SwSubFont::GetCapitalCrsrOfst()
  *************************************************************************/
 
 xub_StrLen SwSubFont::GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
@@ -459,7 +459,7 @@ xub_StrLen SwSubFont::GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
 }
 
 /*************************************************************************
- *                    class SwDoDrawStretchCapital
+ *					  class SwDoDrawStretchCapital
  *************************************************************************/
 
 class SwDoDrawStretchCapital : public SwDoDrawCapital
@@ -479,7 +479,7 @@ public:
 };
 
 /*************************************************************************
- *                    SwDoDrawStretchCapital
+ *					  SwDoDrawStretchCapital
  *************************************************************************/
 
 void SwDoDrawStretchCapital::Do()
@@ -524,7 +524,7 @@ void SwDoDrawStretchCapital::Do()
 }
 
 /*************************************************************************
- *                    SwSubFont::DrawStretchCapital()
+ *					  SwSubFont::DrawStretchCapital()
  *************************************************************************/
 
 void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
@@ -547,7 +547,7 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
 }
 
 /*************************************************************************
- *                  SwSubFont::DoOnCapitals() const
+ *					SwSubFont::DoOnCapitals() const
  *************************************************************************/
 
 // JP 22.8.2001 - global optimization off - Bug 91245 / 91223
@@ -832,7 +832,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         if ( bWordWise )
             delete pSpaceFontAccess;
     }
-    pLastFont = pOldLast;
+    pLastFont =	pOldLast;
     pLastFont->SetDevFont( rDo.GetInf().GetShell(), rDo.GetOut() );
 
     delete pSmallFontAccess;

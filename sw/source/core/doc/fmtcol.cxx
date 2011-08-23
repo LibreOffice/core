@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <doc.hxx>          // fuer GetAttrPool
+#include <doc.hxx>			// fuer GetAttrPool
 #include <errhdl.hxx>
 #include <fmtcol.hxx>
 // --> OD 2006-11-22 #i71574#
@@ -250,27 +250,27 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                                         (const SfxPoolItem**)&pOldLRSpace ))
     {
         int bChg = FALSE;
-        if( pOldLRSpace != pNewLRSpace )    // verhinder Rekursion (SetAttr!!)
+        if( pOldLRSpace != pNewLRSpace )	// verhinder Rekursion (SetAttr!!)
         {
             SvxLRSpaceItem aNew( *pOldLRSpace );
             // wir hatten eine relative Angabe -> neu berechnen
             if( 100 != aNew.GetPropLeft() )
             {
-                long nTmp = aNew.GetLeft();     // alten zum Vergleichen
+                long nTmp = aNew.GetLeft();		// alten zum Vergleichen
                 aNew.SetLeft( pNewLRSpace->GetLeft(), aNew.GetPropLeft() );
                 bChg |= nTmp != aNew.GetLeft();
             }
             // wir hatten eine relative Angabe -> neu berechnen
             if( 100 != aNew.GetPropRight() )
             {
-                long nTmp = aNew.GetRight();        // alten zum Vergleichen
+                long nTmp = aNew.GetRight();		// alten zum Vergleichen
                 aNew.SetRight( pNewLRSpace->GetRight(), aNew.GetPropRight() );
                 bChg |= nTmp != aNew.GetRight();
             }
             // wir hatten eine relative Angabe -> neu berechnen
             if( 100 != aNew.GetPropTxtFirstLineOfst() )
             {
-                short nTmp = aNew.GetTxtFirstLineOfst();        // alten zum Vergleichen
+                short nTmp = aNew.GetTxtFirstLineOfst();		// alten zum Vergleichen
                 aNew.SetTxtFirstLineOfst( pNewLRSpace->GetTxtFirstLineOfst(),
                                             aNew.GetPropTxtFirstLineOfst() );
                 bChg |= nTmp != aNew.GetTxtFirstLineOfst();
@@ -289,21 +289,21 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
     if( pNewULSpace && SFX_ITEM_SET == GetItemState(
             RES_UL_SPACE, FALSE, (const SfxPoolItem**)&pOldULSpace ) &&
-        pOldULSpace != pNewULSpace )    // verhinder Rekursion (SetAttr!!)
+        pOldULSpace != pNewULSpace )	// verhinder Rekursion (SetAttr!!)
     {
         SvxULSpaceItem aNew( *pOldULSpace );
         int bChg = FALSE;
         // wir hatten eine relative Angabe -> neu berechnen
         if( 100 != aNew.GetPropUpper() )
         {
-            USHORT nTmp = aNew.GetUpper();      // alten zum Vergleichen
+            USHORT nTmp = aNew.GetUpper();		// alten zum Vergleichen
             aNew.SetUpper( pNewULSpace->GetUpper(), aNew.GetPropUpper() );
             bChg |= nTmp != aNew.GetUpper();
         }
         // wir hatten eine relative Angabe -> neu berechnen
         if( 100 != aNew.GetPropLower() )
         {
-            USHORT nTmp = aNew.GetLower();      // alten zum Vergleichen
+            USHORT nTmp = aNew.GetLower();		// alten zum Vergleichen
             aNew.SetLower( pNewULSpace->GetLower(), aNew.GetPropLower() );
             bChg |= nTmp != aNew.GetLower();
         }
@@ -339,7 +339,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             else
             {
                 // wir hatten eine relative Angabe -> neu berechnen
-                UINT32 nTmp = pOldFSize->GetHeight();       // alten zum Vergleichen
+                UINT32 nTmp = pOldFSize->GetHeight();		// alten zum Vergleichen
                 SvxFontHeightItem aNew(240 , 100, pFSize->Which());
                 aNew.SetHeight( pFSize->GetHeight(), pOldFSize->GetProp(),
                                 pOldFSize->GetPropUnit() );

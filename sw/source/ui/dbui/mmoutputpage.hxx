@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     long            m_nFromToFTPos;
     long            m_nFromToNFPos;
     long            m_nRBOffset;
-
+    
     bool            m_bCancelSaving;
 
     SwMailMergeWizard*  m_pWizard;

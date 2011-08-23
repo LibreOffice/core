@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ void SwView::GetState(SfxItemSet &rSet)
         switch(nWhich)
         {
             case FN_EDIT_LINK_DLG:
-                if( !pWrtShell->GetLinkManager().GetLinks().Count() )
+                if( !pWrtShell->GetLinkManager().GetLinks().Count()	)
                     rSet.DisableItem(nWhich);
                 else if( pWrtShell->IsSelFrmMode() &&
                             pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
@@ -126,7 +126,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_PRINTDOC:
             case SID_PRINTDOCDIRECT:
-                GetSlotState( nWhich, SfxViewShell::GetInterface(), &rSet );
+                GetSlotState( nWhich, SfxViewShell::GetInterface(),	&rSet );
             break;
             case SID_ATTR_PAGE:
             case SID_ATTR_PAGE_SIZE:
@@ -158,7 +158,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_UNDO:
             {
                 //JP 21.07.98: Bug 53429 - die muss noch nicht vorhanden sein
-                //              also lasse sie mal anlegen:
+                // 				also lasse sie mal anlegen:
                 if( !pShell )
                     SelectShell();
 
@@ -293,7 +293,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_THESAURUS:
             {
                 SwWrtShell  &rSh = GetWrtShell();
-                if (2 <= rSh.GetCrsrCnt())  // multi selection?
+                if (2 <= rSh.GetCrsrCnt())	// multi selection?
                     rSet.DisableItem(nWhich);
                 else
                 {
@@ -331,7 +331,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_DOCUMENT_COMPARE:
             case SID_DOCUMENT_MERGE:
                 if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
-//                  pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True )||
+//					pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True )||
                     (SID_DOCUMENT_MERGE == nWhich && pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength()))
                     rSet.DisableItem(nWhich);
             break;

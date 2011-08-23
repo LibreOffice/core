@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -272,8 +272,8 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                 m_pSpellState->m_aStartDrawingSelection = ESelection();
 /*
 Note: spelling in a selection only, or starting in a mid of a drawing object requires
-further changes elsewhere. (Especially if it should work in sc and sd as well.)
-The code below would only be part of the solution.
+further changes elsewhere. (Especially if it should work in sc and sd as well.) 
+The code below would only be part of the solution. 
 (Keeping it a as a comment for the time being)
                 ESelection aCurSel( pOLV->GetSelection() );
                 ESelection aSentenceSel( pOLV->GetEditView().GetEditEngine()->SelectSentence( aCurSel ) );
@@ -331,7 +331,7 @@ The code below would only be part of the solution.
             //spell inside of the Writer text
             if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
             {
-                // if there is a selection (within body or header/footer text)
+                // if there is a selection (within body or header/footer text) 
                 // then spell/grammar checking should not move outside of it.
                 if (!m_pSpellState->m_bStartedInSelection)
                 {

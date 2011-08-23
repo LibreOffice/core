@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,35 +69,35 @@ using namespace ::com::sun::star;
 // tippt sich schneller
 #define RESOURCE ViewShell::GetShellRes()
 
-const sal_Char __FAR_DATA sCalc_Add[]   =   "add";
-const sal_Char __FAR_DATA sCalc_Sub[]   =   "sub";
-const sal_Char __FAR_DATA sCalc_Mul[]   =   "mul";
-const sal_Char __FAR_DATA sCalc_Div[]   =   "div";
-const sal_Char __FAR_DATA sCalc_Phd[]   =   "phd";
-const sal_Char __FAR_DATA sCalc_Sqrt[]  =   "sqrt";
-const sal_Char __FAR_DATA sCalc_Pow[]   =   "pow";
-const sal_Char __FAR_DATA sCalc_Or[]    =   "or";
-const sal_Char __FAR_DATA sCalc_Xor[]   =   "xor";
-const sal_Char __FAR_DATA sCalc_And[]   =   "and";
-const sal_Char __FAR_DATA sCalc_Not[]   =   "not";
-const sal_Char __FAR_DATA sCalc_Eq[]    =   "eq";
-const sal_Char __FAR_DATA sCalc_Neq[]   =   "neq";
-const sal_Char __FAR_DATA sCalc_Leq[]   =   "leq";
-const sal_Char __FAR_DATA sCalc_Geq[]   =   "geq";
-const sal_Char __FAR_DATA sCalc_L[]     =   "l";
-const sal_Char __FAR_DATA sCalc_G[]     =   "g";
-const sal_Char __FAR_DATA sCalc_Sum[]   =   "sum";
-const sal_Char __FAR_DATA sCalc_Mean[]  =   "mean";
-const sal_Char __FAR_DATA sCalc_Min[]   =   "min";
-const sal_Char __FAR_DATA sCalc_Max[]   =   "max";
-const sal_Char __FAR_DATA sCalc_Sin[]   =   "sin";
-const sal_Char __FAR_DATA sCalc_Cos[]   =   "cos";
-const sal_Char __FAR_DATA sCalc_Tan[]   =   "tan";
-const sal_Char __FAR_DATA sCalc_Asin[]  =   "asin";
-const sal_Char __FAR_DATA sCalc_Acos[]  =   "acos";
-const sal_Char __FAR_DATA sCalc_Atan[]  =   "atan";
-const sal_Char __FAR_DATA sCalc_Round[] =   "round";
-const sal_Char __FAR_DATA sCalc_Date[]  =   "date";
+const sal_Char __FAR_DATA sCalc_Add[] 	= 	"add";
+const sal_Char __FAR_DATA sCalc_Sub[]	=	"sub";
+const sal_Char __FAR_DATA sCalc_Mul[]	=	"mul";
+const sal_Char __FAR_DATA sCalc_Div[]	=	"div";
+const sal_Char __FAR_DATA sCalc_Phd[]	=	"phd";
+const sal_Char __FAR_DATA sCalc_Sqrt[]	=	"sqrt";
+const sal_Char __FAR_DATA sCalc_Pow[]	=	"pow";
+const sal_Char __FAR_DATA sCalc_Or[]	=	"or";
+const sal_Char __FAR_DATA sCalc_Xor[]	=	"xor";
+const sal_Char __FAR_DATA sCalc_And[]	=	"and";
+const sal_Char __FAR_DATA sCalc_Not[]	=	"not";
+const sal_Char __FAR_DATA sCalc_Eq[]	=	"eq";
+const sal_Char __FAR_DATA sCalc_Neq[]	=	"neq";
+const sal_Char __FAR_DATA sCalc_Leq[]	=	"leq";
+const sal_Char __FAR_DATA sCalc_Geq[]	=	"geq";
+const sal_Char __FAR_DATA sCalc_L[]		=	"l";
+const sal_Char __FAR_DATA sCalc_G[]		=	"g";
+const sal_Char __FAR_DATA sCalc_Sum[]	=	"sum";
+const sal_Char __FAR_DATA sCalc_Mean[]	=	"mean";
+const sal_Char __FAR_DATA sCalc_Min[]	=	"min";
+const sal_Char __FAR_DATA sCalc_Max[]	=	"max";
+const sal_Char __FAR_DATA sCalc_Sin[]	=	"sin";
+const sal_Char __FAR_DATA sCalc_Cos[]	=	"cos";
+const sal_Char __FAR_DATA sCalc_Tan[]	=	"tan";
+const sal_Char __FAR_DATA sCalc_Asin[]	=	"asin";
+const sal_Char __FAR_DATA sCalc_Acos[]	=	"acos";
+const sal_Char __FAR_DATA sCalc_Atan[]	=	"atan";
+const sal_Char __FAR_DATA sCalc_Round[]	=	"round";
+const sal_Char __FAR_DATA sCalc_Date[]	=	"date";
 
 
 
@@ -111,41 +111,41 @@ struct _CalcOp
     SwCalcOper eOp;
 };
 
-_CalcOp __READONLY_DATA aOpTable[] = {
+_CalcOp	__READONLY_DATA aOpTable[] = {
 /* ACOS */    {{sCalc_Acos},       CALC_ACOS},  // Arcuscosinus
 /* ADD */     {{sCalc_Add},        CALC_PLUS},  // Addition
-/* AND */     {{sCalc_And},        CALC_AND},   // log. und
+/* AND */     {{sCalc_And},        CALC_AND},  	// log. und
 /* ASIN */    {{sCalc_Asin},       CALC_ASIN},  // Arcussinus
 /* ATAN */    {{sCalc_Atan},       CALC_ATAN},  // Arcustangens
-/* COS */     {{sCalc_Cos},        CALC_COS},   // Cosinus
-/* DATE */    {{sCalc_Date},       CALC_DATE},  // Date
+/* COS */     {{sCalc_Cos},        CALC_COS},  	// Cosinus
+/* DATE */    {{sCalc_Date},       CALC_DATE},	// Date
 /* DIV */     {{sCalc_Div},        CALC_DIV},   // Dividieren
-/* EQ */      {{sCalc_Eq},         CALC_EQ},    // gleich
-/* G */       {{sCalc_G},          CALC_GRE},   // groesser
-/* GEQ */     {{sCalc_Geq},        CALC_GEQ},   // groesser gleich
-/* L */       {{sCalc_L},          CALC_LES},   // kleiner
-/* LEQ */     {{sCalc_Leq},        CALC_LEQ},   // kleiner gleich
-/* MAX */     {{sCalc_Max},        CALC_MAX},   // Maximalwert
+/* EQ */      {{sCalc_Eq},         CALC_EQ},   	// gleich
+/* G */       {{sCalc_G},          CALC_GRE},  	// groesser
+/* GEQ */     {{sCalc_Geq},        CALC_GEQ},  	// groesser gleich
+/* L */       {{sCalc_L},          CALC_LES},  	// kleiner
+/* LEQ */     {{sCalc_Leq},        CALC_LEQ},  	// kleiner gleich
+/* MAX */     {{sCalc_Max},        CALC_MAX},  	// Maximalwert
 /* MEAN */    {{sCalc_Mean},       CALC_MEAN},  // Mittelwert
-/* MIN */     {{sCalc_Min},        CALC_MIN},   // Minimalwert
-/* MUL */     {{sCalc_Mul},        CALC_MUL},   // Multiplizieren
-/* NEQ */     {{sCalc_Neq},        CALC_NEQ},   // nicht gleich
-/* NOT */     {{sCalc_Not},        CALC_NOT},   // log. nicht
-/* OR */      {{sCalc_Or},         CALC_OR},    // log. oder
+/* MIN */     {{sCalc_Min},        CALC_MIN},  	// Minimalwert
+/* MUL */     {{sCalc_Mul},        CALC_MUL},  	// Multiplizieren
+/* NEQ */     {{sCalc_Neq},        CALC_NEQ},  	// nicht gleich
+/* NOT */     {{sCalc_Not},        CALC_NOT},  	// log. nicht
+/* OR */      {{sCalc_Or},         CALC_OR},   	// log. oder
 /* PHD */     {{sCalc_Phd},        CALC_PHD},   // Prozent
-/* POW */     {{sCalc_Pow},        CALC_POW},   // Potenzieren
-/* ROUND */   {{sCalc_Round},      CALC_ROUND}, // Runden
-/* SIN */     {{sCalc_Sin},        CALC_SIN},   // Sinus
-/* SQRT */    {{sCalc_Sqrt},       CALC_SQRT},  // Wurzel
-/* SUB */     {{sCalc_Sub},        CALC_MINUS}, // Subtraktion
-/* SUM */     {{sCalc_Sum},        CALC_SUM},   // Summe
-/* TAN */     {{sCalc_Tan},        CALC_TAN},   // Tangens
-/* XOR */     {{sCalc_Xor},        CALC_XOR}    // log. xoder
+/* POW */     {{sCalc_Pow},        CALC_POW},	// Potenzieren
+/* ROUND */   {{sCalc_Round},      CALC_ROUND},	// Runden
+/* SIN */     {{sCalc_Sin},        CALC_SIN},  	// Sinus
+/* SQRT */    {{sCalc_Sqrt},       CALC_SQRT},	// Wurzel
+/* SUB */     {{sCalc_Sub},        CALC_MINUS},	// Subtraktion
+/* SUM */     {{sCalc_Sum},        CALC_SUM},  	// Summe
+/* TAN */     {{sCalc_Tan},        CALC_TAN},  	// Tangens
+/* XOR */     {{sCalc_Xor},        CALC_XOR}  	// log. xoder
 };
 
 double __READONLY_DATA nRoundVal[] = {
-    5.0e+0, 0.5e+0, 0.5e-1, 0.5e-2, 0.5e-3, 0.5e-4, 0.5e-5, 0.5e-6,
-    0.5e-7, 0.5e-8, 0.5e-9, 0.5e-10,0.5e-11,0.5e-12,0.5e-13,0.5e-14,
+    5.0e+0,	0.5e+0,	0.5e-1,	0.5e-2,	0.5e-3,	0.5e-4,	0.5e-5,	0.5e-6,
+    0.5e-7,	0.5e-8,	0.5e-9,	0.5e-10,0.5e-11,0.5e-12,0.5e-13,0.5e-14,
     0.5e-15,0.5e-16
 };
 
@@ -258,10 +258,10 @@ double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
 
 /******************************************************************************
 |*
-|*  SwCalc::SwCalc( SwDoc* pD ) :
+|*	SwCalc::SwCalc( SwDoc* pD ) :
 |*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    JP 03.11.95
+|*	Erstellung			OK 12-02-93 11:04am
+|*	Letzte Aenderung	JP 03.11.95
 |*
 |******************************************************************************/
 
@@ -400,17 +400,17 @@ static ULONG SwDocStat::* __READONLY_DATA aDocStat2[ 4 ] =
 
 // at time its better not to use "graph", because then the im-/export have
 // to change in all formulas this name.
-//  nVal.PutLong( rDocStat.*aDocStat1[ 1 ]  );
-//  VarTable[ aHashValue[ 26 ] ]->pNext = new SwCalcExp(
-//                                              sNTypeTab[ 26 ], nVal, 0 );
+//	nVal.PutLong( rDocStat.*aDocStat1[ 1 ]  );
+//	VarTable[ aHashValue[ 26 ] ]->pNext = new SwCalcExp(
+//												sNTypeTab[ 26 ], nVal, 0 );
 }
 
 /******************************************************************************
 |*
-|*  SwCalc::~SwCalc()
+|*	SwCalc::~SwCalc()
 |*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    OK 12-02-93 11:04am
+|*	Erstellung			OK 12-02-93 11:04am
+|*	Letzte Aenderung	OK 12-02-93 11:04am
 |*
 |******************************************************************************/
 
@@ -426,10 +426,10 @@ SwCalc::~SwCalc()
 
 /******************************************************************************
 |*
-|*  SwSbxValue SwCalc::Calculate( const String& rStr )
+|*	SwSbxValue SwCalc::Calculate( const String& rStr )
 |*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    OK 12-02-93 11:04am
+|*	Erstellung			OK 12-02-93 11:04am
+|*	Letzte Aenderung	OK 12-02-93 11:04am
 |*
 |******************************************************************************/
 
@@ -442,7 +442,7 @@ SwSbxValue SwCalc::Calculate( const String& rStr )
         return nResult;
 
     nListPor = 0;
-    eCurrListOper = CALC_PLUS;          // defaulten auf Summe
+    eCurrListOper = CALC_PLUS;			// defaulten auf Summe
 
     sCommand = rStr;
     nCommandPos = 0;
@@ -458,13 +458,13 @@ SwSbxValue SwCalc::Calculate( const String& rStr )
 
 /******************************************************************************
 |*
-|*  String SwCalc::GetStrResult( SwSbxValue nValue, BOOL bRound = TRUE )
-|*  Beschreibung        Der Parameter bRound ist auf TRUE defaultet und darf
-|*                      nur beim errechnen von Tabellenzellen auf FALSE gesetzt
-|*                      werden, damit keine Rundungsfehler beim zusammenstellen
-|*                      der Formel entstehen.
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    JP 19.02.98
+|*	String SwCalc::GetStrResult( SwSbxValue nValue, BOOL bRound = TRUE )
+|*	Beschreibung		Der Parameter bRound ist auf TRUE defaultet und darf
+|*						nur beim errechnen von Tabellenzellen auf FALSE gesetzt
+|*						werden, damit keine Rundungsfehler beim zusammenstellen
+|*						der Formel entstehen.
+|*	Erstellung			OK 12-02-93 11:04am
+|*	Letzte Aenderung	JP 19.02.98
 |*
 |******************************************************************************/
 
@@ -482,18 +482,18 @@ String SwCalc::GetStrResult( double nValue, BOOL )
     if( nValue >= DBL_MAX )
         switch( eError )
         {
-            case CALC_SYNTAX    :   return RESOURCE->aCalc_Syntax;
-            case CALC_ZERODIV   :   return RESOURCE->aCalc_ZeroDiv;
-            case CALC_BRACK     :   return RESOURCE->aCalc_Brack;
-            case CALC_POWERR    :   return RESOURCE->aCalc_Pow;
-            case CALC_VARNFND   :   return RESOURCE->aCalc_VarNFnd;
-            case CALC_OVERFLOW  :   return RESOURCE->aCalc_Overflow;
-            case CALC_WRONGTIME :   return RESOURCE->aCalc_WrongTime;
-            default             :   return RESOURCE->aCalc_Default;
+            case CALC_SYNTAX	:	return RESOURCE->aCalc_Syntax;
+            case CALC_ZERODIV	:	return RESOURCE->aCalc_ZeroDiv;
+            case CALC_BRACK		:	return RESOURCE->aCalc_Brack;
+            case CALC_POWERR	:	return RESOURCE->aCalc_Pow;
+            case CALC_VARNFND	:	return RESOURCE->aCalc_VarNFnd;
+            case CALC_OVERFLOW	:	return RESOURCE->aCalc_Overflow;
+            case CALC_WRONGTIME :	return RESOURCE->aCalc_WrongTime;
+            default				:	return RESOURCE->aCalc_Default;
         }
 
-    USHORT  nDec = 15; //pLclData->getNumDigits();
-    String  aRetStr( ::rtl::math::doubleToUString( nValue,
+    USHORT	nDec = 15; //pLclData->getNumDigits();
+    String	aRetStr( ::rtl::math::doubleToUString( nValue,
                 rtl_math_StringFormat_Automatic,
                 nDec,
                 pLclData->getNumDecimalSep().GetChar(0),
@@ -504,10 +504,10 @@ String SwCalc::GetStrResult( double nValue, BOOL )
 
 /******************************************************************************
 |*
-|*  SwCalcExp* SwCalc::VarLook( const String& )
+|*	SwCalcExp* SwCalc::VarLook( const String& )
 |*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    JP 15.11.99
+|*	Erstellung			OK 12-02-93 11:04am
+|*	Letzte Aenderung	JP 15.11.99
 |*
 |******************************************************************************/
 
@@ -520,10 +520,10 @@ SwCalcExp* SwCalc::VarInsert( const String &rStr )
 
 /******************************************************************************
 |*
-|*  SwCalcExp* SwCalc::VarLook( const String& , USHORT ins )
+|*	SwCalcExp* SwCalc::VarLook( const String& , USHORT ins )
 |*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    JP 15.11.99
+|*	Erstellung			OK 12-02-93 11:04am
+|*	Letzte Aenderung	JP 15.11.99
 |*
 |******************************************************************************/
 SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
@@ -564,22 +564,22 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
             else if( !pUFld->IsValid() )
             {
                 // Die aktuellen Werte sichern . . .
-                USHORT          nOld_ListPor        = nListPor;
-                SwSbxValue      nOld_LastLeft       = nLastLeft;
-                SwSbxValue      nOld_NumberValue    = nNumberValue;
-                xub_StrLen      nOld_CommandPos     = nCommandPos;
-                SwCalcOper      eOld_CurrOper       = eCurrOper;
-                SwCalcOper      eOld_CurrListOper   = eCurrListOper;
+                USHORT			nOld_ListPor		= nListPor;
+                SwSbxValue		nOld_LastLeft		= nLastLeft;
+                SwSbxValue		nOld_NumberValue	= nNumberValue;
+                xub_StrLen		nOld_CommandPos		= nCommandPos;
+                SwCalcOper		eOld_CurrOper	  	= eCurrOper;
+                SwCalcOper		eOld_CurrListOper	= eCurrListOper;
 
                 pFndExp->nValue.PutDouble( pUFld->GetValue( *this ) );
 
                 // . . . und zurueck damit.
-                nListPor        = nOld_ListPor;
-                nLastLeft       = nOld_LastLeft;
-                nNumberValue    = nOld_NumberValue;
-                nCommandPos     = nOld_CommandPos;
-                eCurrOper       = eOld_CurrOper;
-                eCurrListOper   = eOld_CurrListOper;
+                nListPor		= nOld_ListPor;
+                nLastLeft		= nOld_LastLeft;
+                nNumberValue	= nOld_NumberValue;
+                nCommandPos		= nOld_CommandPos;
+                eCurrOper		= eOld_CurrOper;
+                eCurrListOper	= eOld_CurrListOper;
             }
             else
                 pFndExp->nValue.PutDouble( pUFld->GetValue() );
@@ -677,10 +677,10 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
 
 /******************************************************************************
 |*
-|*  BOOL SwCalc::VarChange( const String& rStr, const SwSbxValue nValue )
+|*	BOOL SwCalc::VarChange( const String& rStr, const SwSbxValue nValue )
 |*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    OK 12-02-93 11:04am
+|*	Erstellung			OK 12-02-93 11:04am
+|*	Letzte Aenderung	OK 12-02-93 11:04am
 |*
 |******************************************************************************/
 
@@ -710,10 +710,10 @@ void SwCalc::VarChange( const String& rStr, const SwSbxValue& rValue )
 
 /******************************************************************************
 |*
-|*  BOOL SwCalc::Push( const void* pPtr )
+|*	BOOL SwCalc::Push( const void* pPtr )
 |*
-|*  Erstellung          OK 12-02-93 11:05am
-|*  Letzte Aenderung    OK 12-02-93 11:05am
+|*	Erstellung			OK 12-02-93 11:05am
+|*	Letzte Aenderung	OK 12-02-93 11:05am
 |*
 |******************************************************************************/
 
@@ -728,10 +728,10 @@ BOOL SwCalc::Push( const VoidPtr pPtr )
 
 /******************************************************************************
 |*
-|*  void SwCalc::Pop( const void* pPtr )
+|*	void SwCalc::Pop( const void* pPtr )
 |*
-|*  Erstellung          OK 12-02-93 11:05am
-|*  Letzte Aenderung    OK 12-02-93 11:05am
+|*	Erstellung			OK 12-02-93 11:05am
+|*	Letzte Aenderung	OK 12-02-93 11:05am
 |*
 |******************************************************************************/
 
@@ -745,10 +745,10 @@ void SwCalc::Pop( const VoidPtr )
 
 /******************************************************************************
 |*
-|*  SwCalcOper SwCalc::GetToken()
+|*	SwCalcOper SwCalc::GetToken()
 |*
-|*  Erstellung          OK 12-02-93 11:05am
-|*  Letzte Aenderung    JP 03.11.95
+|*	Erstellung			OK 12-02-93 11:05am
+|*	Letzte Aenderung	JP 03.11.95
 |*
 |******************************************************************************/
 
@@ -756,7 +756,7 @@ SwCalcOper SwCalc::GetToken()
 {
 #if OSL_DEBUG_LEVEL > 1
 //JP 25.01.2001: static for switch back to the "old" implementation of the
-//              calculator, which don't use the I18N routines.
+//				calculator, which don't use the I18N routines.
 static int nUseOld = 0;
 if( !nUseOld )
 {
@@ -792,7 +792,7 @@ if( !nUseOld )
             if( sLowerCaseName == sCurrSym )
             {
                 nCommandPos = (xub_StrLen)aRes.EndPos;
-                return GetToken();  // also nochmal aufrufen
+                return GetToken();	// also nochmal aufrufen
             }
 
             // Operations abfangen
@@ -855,7 +855,7 @@ if( !nUseOld )
                 case '+':
                 case '-':
                 case '(':
-                case ')':   eCurrOper = SwCalcOper(ch);
+                case ')':	eCurrOper = SwCalcOper(ch);
                             break;
 
                 case '=':
@@ -962,7 +962,7 @@ if( !nUseOld )
 
 #if OSL_DEBUG_LEVEL > 1
 
-#define NextCh( s, n )  (nCommandPos < sCommand.Len() ? sCommand.GetChar( nCommandPos++ ) : 0)
+#define NextCh( s, n )	(nCommandPos < sCommand.Len() ? sCommand.GetChar( nCommandPos++ ) : 0)
 
 }
 else
@@ -1003,7 +1003,7 @@ else
         case '+':
         case '-':
         case '(':
-        case ')':   eCurrOper = SwCalcOper(ch);
+        case ')':	eCurrOper = SwCalcOper(ch);
                     break;
 
         case '=':   if( '=' == sCommand.GetChar( nCommandPos ) )
@@ -1042,12 +1042,12 @@ else
                     eCurrOper = eCurrListOper;
                     break;
 
-        case '0':   case '1':   case '2':   case '3':   case '4':
-        case '5':   case '6':   case '7':   case '8':   case '9':
+        case '0':	case '1':	case '2':	case '3':	case '4':
+        case '5':	case '6':	case '7':	case '8':	case '9':
         case ',':
-        case '.':   {
+        case '.':	{
                         double nVal;
-                        --nCommandPos;      //  auf das 1. Zeichen zurueck
+                        --nCommandPos; 		//  auf das 1. Zeichen zurueck
                         if( Str2Double( sCommand, nCommandPos, nVal, pLclData ))
                         {
                             nNumberValue.PutDouble( nVal );
@@ -1062,7 +1062,7 @@ else
                     }
                     break;
 
-        case '[':   {
+        case '[':	{
                         String aStr;
                         BOOL bIgnore = FALSE;
                         do {
@@ -1087,7 +1087,7 @@ else
                     }
                     break;
 
-        case '"':   {
+        case '"':	{
                         xub_StrLen nStt = nCommandPos;
                         while( 0 != ( ch = NextCh( sCommand, nCommandPos ) )
                                 && '"' != ch )
@@ -1101,7 +1101,7 @@ else
                     }
                     break;
 
-        default:    if( ch && pCharClass->isLetter( sCommand, nCommandPos - 1)
+        default:	if( ch && pCharClass->isLetter( sCommand, nCommandPos - 1)
                             || '_' == ch )
                     {
                         xub_StrLen nStt = nCommandPos-1;
@@ -1120,7 +1120,7 @@ else
 
                         // Currency-Symbol abfangen
                         if( aStr == sCurrSym )
-                            return GetToken();  // also nochmal aufrufen
+                            return GetToken();	// also nochmal aufrufen
 
                         // Operations abfangen
                         _CalcOp* pFnd = ::FindOperator( aStr );
@@ -1160,10 +1160,10 @@ else
 
 /******************************************************************************
 |*
-|*  SwSbxValue SwCalc::Term()
+|*	SwSbxValue SwCalc::Term()
 |*
-|*  Erstellung          OK 12-02-93 11:05am
-|*  Letzte Aenderung    JP 16.01.96
+|*	Erstellung			OK 12-02-93 11:05am
+|*	Letzte Aenderung	JP 16.01.96
 |*
 |******************************************************************************/
 
@@ -1178,22 +1178,22 @@ SwSbxValue SwCalc::Term()
         switch( eCurrOper )
         {
 // wir haben kein Bitweises verodern, oder ?
-//          case CALC_AND:  eSbxOper = SbxAND;  break;
-//          case CALC_OR:   eSbxOper = SbxOR;   break;
-//          case CALC_XOR:  eSbxOper = SbxXOR;  break;
-            case CALC_AND:  {
+//			case CALC_AND:	eSbxOper = SbxAND;	break;
+//			case CALC_OR:	eSbxOper = SbxOR;	break;
+//			case CALC_XOR:	eSbxOper = SbxXOR;	break;
+            case CALC_AND:	{
                                 GetToken();
                                 BOOL bB = Prim().GetBool();
                                 left.PutBool( left.GetBool() && bB );
                             }
                             break;
-            case CALC_OR:   {
+            case CALC_OR:	{
                                 GetToken();
                                 BOOL bB = Prim().GetBool();
                                 left.PutBool( left.GetBool() || bB );
                             }
                             break;
-            case CALC_XOR:  {
+            case CALC_XOR:	{
                                 GetToken();
                                 BOOL bR = Prim().GetBool();
                                 BOOL bL = left.GetBool();
@@ -1201,15 +1201,15 @@ SwSbxValue SwCalc::Term()
                             }
                             break;
 
-            case CALC_EQ:   nSbxOper = SbxEQ;   break;
-            case CALC_NEQ:  nSbxOper = SbxNE;   break;
-            case CALC_LEQ:  nSbxOper = SbxLE;   break;
-            case CALC_GEQ:  nSbxOper = SbxGE;   break;
-            case CALC_GRE:  nSbxOper = SbxGT;   break;
-            case CALC_LES:  nSbxOper = SbxLT;   break;
+            case CALC_EQ:	nSbxOper = SbxEQ;	break;
+            case CALC_NEQ:	nSbxOper = SbxNE;	break;
+            case CALC_LEQ:	nSbxOper = SbxLE;	break;
+            case CALC_GEQ:	nSbxOper = SbxGE;	break;
+            case CALC_GRE:	nSbxOper = SbxGT;	break;
+            case CALC_LES:	nSbxOper = SbxLT;	break;
 
-            case CALC_MUL:  nSbxOper = SbxMUL;  break;
-            case CALC_DIV:  nSbxOper = SbxDIV;  break;
+            case CALC_MUL:	nSbxOper = SbxMUL; 	break;
+            case CALC_DIV:	nSbxOper = SbxDIV;  break;
 
             case CALC_MIN_IN:
                             {
@@ -1285,7 +1285,7 @@ SwSbxValue SwCalc::Term()
                                     bSign = FALSE;
 
                                 // runden
-                                double fNum = fVal;             // find the exponent
+                                double fNum = fVal;				// find the exponent
                                 int nExp = 0;
                                 if( fNum > 0 )
                                 {
@@ -1335,7 +1335,7 @@ SwSbxValue SwCalc::Term()
                             }
                             break;
 */
-            default:        return left;
+            default:		return left;
         }
 
         if( USHRT_MAX != nSbxOper )
@@ -1363,10 +1363,10 @@ SwSbxValue SwCalc::Term()
 
 /******************************************************************************
 |*
-|*  SwSbxValue SwCalc::Prim()
+|*	SwSbxValue SwCalc::Prim()
 |*
-|*  Erstellung          OK 12-02-93 11:05am
-|*  Letzte Aenderung    JP 03.11.95
+|*	Erstellung			OK 12-02-93 11:05am
+|*	Letzte Aenderung	JP 03.11.95
 |*
 |******************************************************************************/
 
@@ -1382,14 +1382,14 @@ SwSbxValue SwCalc::Prim()
 
     switch( eCurrOper )
     {
-        case CALC_SIN:      pFnc = &sin;                        break;
-        case CALC_COS:      pFnc = &cos;                        break;
-        case CALC_TAN:      pFnc = &tan;                        break;
-        case CALC_ATAN:     pFnc = &atan;                       break;
-        case CALC_ASIN:     pFnc = &asin;   bChkTrig = TRUE;    break;
-        case CALC_ACOS:     pFnc = &acos;   bChkTrig = TRUE;    break;
+        case CALC_SIN:		pFnc = &sin;						break;
+        case CALC_COS:		pFnc = &cos;						break;
+        case CALC_TAN:		pFnc = &tan;						break;
+        case CALC_ATAN:		pFnc = &atan;						break;
+        case CALC_ASIN:		pFnc = &asin; 	bChkTrig = TRUE;	break;
+        case CALC_ACOS:		pFnc = &acos; 	bChkTrig = TRUE;	break;
 
-        case CALC_NOT:      {
+        case CALC_NOT:		{
                                 GetToken();
                                 nErg = Prim();
                                 if( SbxSTRING == nErg.GetType() )
@@ -1410,7 +1410,7 @@ SwSbxValue SwCalc::Prim()
                             }
                             break;
 
-        case CALC_NUMBER:   if( GetToken() == CALC_PHD )
+        case CALC_NUMBER:	if( GetToken() == CALC_PHD )
                             {
                                 double aTmp = nNumberValue.GetDouble();
                                 aTmp *= 0.01;
@@ -1426,7 +1426,7 @@ SwSbxValue SwCalc::Prim()
                             }
                             break;
 
-        case CALC_NAME:     if( GetToken() == CALC_ASSIGN )
+        case CALC_NAME: 	if( GetToken() == CALC_ASSIGN )
                             {
                                 SwCalcExp* n = VarInsert( aVarName );
                                 GetToken();
@@ -1439,11 +1439,11 @@ SwSbxValue SwCalc::Prim()
                             }
                             break;
 
-        case CALC_MINUS:    GetToken();
+        case CALC_MINUS:	GetToken();
                             nErg.PutDouble( -(Prim().GetDouble()) );
                             break;
 
-        case CALC_LP:       {
+        case CALC_LP:		{
                                 GetToken();
                                 nErg = Expr();
                                 if( eCurrOper != CALC_RP )
@@ -1456,7 +1456,7 @@ SwSbxValue SwCalc::Prim()
                             }
                             break;
 
-        case CALC_MEAN:     {
+        case CALC_MEAN:		{
                                 nListPor = 1;
                                 GetToken();
                                 nErg = Expr();
@@ -1466,7 +1466,7 @@ SwSbxValue SwCalc::Prim()
                             }
                             break;
 
-        case CALC_SQRT:     {
+        case CALC_SQRT:		{
                                 GetToken();
                                 nErg = Prim();
                                 if( nErg.GetDouble() < 0 )
@@ -1479,14 +1479,14 @@ SwSbxValue SwCalc::Prim()
         case CALC_SUM:
         case CALC_DATE:
         case CALC_MIN:
-        case CALC_MAX:      GetToken();
+        case CALC_MAX:		GetToken();
                             nErg = Expr();
                             break;
 
-        case CALC_ENDCALC:  nErg.Clear();
+        case CALC_ENDCALC:	nErg.Clear();
                             break;
 
-        default:            eError = CALC_SYNTAX;
+        default:			eError = CALC_SYNTAX;
                             break;
     }
 
@@ -1526,7 +1526,7 @@ SwSbxValue SwCalc::Prim()
             else
             {
                 nErg.PutDouble( dleft );
-//              GetToken();
+//				GetToken();
             }
         }
     }
@@ -1536,21 +1536,21 @@ SwSbxValue SwCalc::Prim()
 
 /******************************************************************************
 |*
-|*  SwSbxValue  SwCalc::Expr()
+|*	SwSbxValue	SwCalc::Expr()
 |*
-|*  Erstellung          OK 12-02-93 11:06am
-|*  Letzte Aenderung    JP 03.11.95
+|*	Erstellung			OK 12-02-93 11:06am
+|*	Letzte Aenderung	JP 03.11.95
 |*
 |******************************************************************************/
 
-SwSbxValue  SwCalc::Expr()
+SwSbxValue	SwCalc::Expr()
 {
     SwSbxValue left = Term(), right;
     nLastLeft = left;
     for(;;)
         switch(eCurrOper)
         {
-            case CALC_PLUS:     GetToken();
+            case CALC_PLUS:		GetToken();
                                 // erzeuge zum addieren auf jedenfall einen
                                 // Double-Wert
                                 left.MakeDouble();
@@ -1559,7 +1559,7 @@ SwSbxValue  SwCalc::Expr()
                                 nListPor++;
                                 break;
 
-            case CALC_MINUS:    GetToken();
+            case CALC_MINUS:	GetToken();
                                 // erzeuge zum addieren auf jedenfall einen
                                 // Double-Wert
                                 left.MakeDouble();
@@ -1567,7 +1567,7 @@ SwSbxValue  SwCalc::Expr()
                                 left.Compute( SbxMINUS, right );
                                 break;
 
-            default:            return left;
+            default:			return left;
         }
 }
 
@@ -1631,10 +1631,10 @@ lcl_Str2Double( const String& rCommand, xub_StrLen& rCommandPos, double& rVal,
 }
 
 /******************************************************************************
- *  Methode     :   BOOL SwCalc::Str2Double( double& )
- *  Beschreibung:
- *  Erstellt    :   OK 07.06.94 12:56
- *  Aenderung   :   JP 27.10.98
+ *	Methode		:	BOOL SwCalc::Str2Double( double& )
+ *	Beschreibung:
+ *	Erstellt	:	OK 07.06.94 12:56
+ *	Aenderung	: 	JP 27.10.98
  ******************************************************************************/
 bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     double& rVal, const LocaleDataWrapper* const pLclData )
@@ -1698,10 +1698,10 @@ BOOL SwCalc::IsValidVarName( const String& rStr,
 
 /******************************************************************************
 |*
-|*  CTOR DTOR der SwHash classes
+|*	CTOR DTOR der SwHash classes
 |*
-|*  Ersterstellung      OK 25.06.93 12:20
-|*  Letzte Aenderung    OK 25.06.93 12:20
+|*	Ersterstellung		OK 25.06.93 12:20
+|*	Letzte Aenderung	OK 25.06.93 12:20
 |*
 ******************************************************************************/
 
@@ -1775,18 +1775,18 @@ SwSbxValue& SwSbxValue::MakeDouble()
 void main()
 {
 static sal_Char
-    sNType0[] = "false",    sNType1[] = "true",     sNType2[] = "pi",
-    sNType3[] = "e",        sNType4[] = "tables",   sNType5[] = "graf",
-    sNType6[] = "ole",      sNType7[] = "page",     sNType8[] = "para",
-    sNType9[] = "word",     sNType10[]= "char",
-    sNType11[] = "user_company" ,       sNType12[] = "user_firstname" ,
-    sNType13[] = "user_lastname" ,      sNType14[] = "user_initials",
+    sNType0[] = "false", 	sNType1[] = "true",		sNType2[] = "pi",
+    sNType3[] = "e",		sNType4[] = "tables",	sNType5[] = "graf",
+    sNType6[] = "ole",		sNType7[] = "page",		sNType8[] = "para",
+    sNType9[] = "word",		sNType10[]= "char",
+    sNType11[] = "user_company" ,		sNType12[] = "user_firstname" ,
+    sNType13[] = "user_lastname" ,		sNType14[] = "user_initials",
     sNType15[] = "user_street" ,        sNType16[] = "user_country" ,
     sNType17[] = "user_zipcode" ,       sNType18[] = "user_city" ,
     sNType19[] = "user_title" ,         sNType20[] = "user_position" ,
-    sNType21[] = "user_tel_home",       sNType22[] = "user_tel_work",
+    sNType21[] = "user_tel_home",	    sNType22[] = "user_tel_work",
     sNType23[] = "user_fax" ,           sNType24[] = "user_email" ,
-    sNType25[] = "user_state",          sNType26[] = "graph"
+    sNType25[] = "user_state",			sNType26[] = "graph"
     ;
 
 static const sal_Char* sNTypeTab[ 27 ] =

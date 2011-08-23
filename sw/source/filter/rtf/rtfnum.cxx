@@ -68,7 +68,7 @@ SfxItemSet& GetNumChrFmt( SwDoc& rDoc, SwNumRule& rRule, BYTE nNumLvl )
 void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
 {
     int nToken;
-    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
     int nLvlTxtLevel = 0, nLvlNumberLevel = 0;
     String sLvlText, sLvlNumber;
     SwNumFmt* pCurNumFmt;
@@ -114,9 +114,9 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 // Unknown und alle bekannten nicht ausgewerteten Gruppen
                 // sofort ueberspringen
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ))
-//                      RTF_PANOSE != nToken && RTF_FALT != nToken &&
-//                      RTF_FALT != nToken && RTF_FNAME != nToken &&
-//                      RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
+//						RTF_PANOSE != nToken && RTF_FALT != nToken &&
+//						RTF_FALT != nToken && RTF_FNAME != nToken &&
+//						RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
                     nToken = SkipToken( -2 );
                 else
                 {
@@ -136,12 +136,12 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 sal_Int16 eType = SVX_NUM_ARABIC;
                 switch( nTokenValue )
                 {
-                case 1:     eType = SVX_NUM_ROMAN_UPPER;            break;
-                case 2:     eType = SVX_NUM_ROMAN_LOWER;            break;
-                case 3:     eType = SVX_NUM_CHARS_UPPER_LETTER_N;   break;
-                case 4:     eType = SVX_NUM_CHARS_LOWER_LETTER_N;   break;
+                case 1:		eType = SVX_NUM_ROMAN_UPPER;			break;
+                case 2:		eType = SVX_NUM_ROMAN_LOWER;			break;
+                case 3:		eType = SVX_NUM_CHARS_UPPER_LETTER_N;	break;
+                case 4:		eType = SVX_NUM_CHARS_LOWER_LETTER_N;	break;
                 case 255:
-                case 23:    eType = SVX_NUM_CHAR_SPECIAL;           break;
+                case 23:	eType = SVX_NUM_CHAR_SPECIAL;			break;
                 }
                 if( pCurNumFmt )
                     pCurNumFmt->SetNumberingType(eType);
@@ -153,8 +153,8 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 SvxAdjust eAdj = SVX_ADJUST_LEFT;
                 switch( nTokenValue )
                 {
-                case 1:     eAdj = SVX_ADJUST_CENTER;   break;
-                case 2:     eAdj = SVX_ADJUST_RIGHT;    break;
+                case 1:		eAdj = SVX_ADJUST_CENTER;	break;
+                case 2:		eAdj = SVX_ADJUST_RIGHT;	break;
                 }
                 if( pCurNumFmt )
                     pCurNumFmt->SetNumAdjust( eAdj );
@@ -294,7 +294,7 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
 void SwRTFParser::ReadListTable()
 {
     int nToken;
-    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
     bNewNumList = TRUE;
 
     BYTE nNumLvl = 0;
@@ -305,7 +305,7 @@ void SwRTFParser::ReadListTable()
     {
         switch( ( nToken = GetNextToken() ))
         {
-        case '}':       if( --nNumOpenBrakets && IsParserWorking() )
+        case '}':		if( --nNumOpenBrakets && IsParserWorking() )
                         {
                             // Style konnte vollstaendig gelesen werden,
                             // also ist das noch ein stabiler Status
@@ -326,9 +326,9 @@ void SwRTFParser::ReadListTable()
                 // Unknown und alle bekannten nicht ausgewerteten Gruppen
                 // sofort ueberspringen
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ))
-//                      RTF_PANOSE != nToken && RTF_FALT != nToken &&
-//                      RTF_FALT != nToken && RTF_FNAME != nToken &&
-//                      RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
+//						RTF_PANOSE != nToken && RTF_FALT != nToken &&
+//						RTF_FALT != nToken && RTF_FNAME != nToken &&
+//						RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
                     nToken = SkipToken( -2 );
                 else
                 {
@@ -361,8 +361,8 @@ void SwRTFParser::ReadListTable()
             }
             break;
 
-        case RTF_LISTID:            aEntry.nListId = nTokenValue;       break;
-        case RTF_LISTTEMPLATEID:    aEntry.nListTemplateId = nTokenValue; break;
+        case RTF_LISTID:			aEntry.nListId = nTokenValue;		break;
+        case RTF_LISTTEMPLATEID:	aEntry.nListTemplateId = nTokenValue; break;
 
         case RTF_LISTRESTARTHDN:
             break;
@@ -398,7 +398,7 @@ void SwRTFParser::ReadListTable()
     if( pCurRule && pCurRule->IsContinusNum() )
         lcl_ExpandNumFmts( *pCurRule );
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
 }
 
 BOOL lcl_IsEqual( SwNumRule* pOrigRule, SwNumRule* pRule )
@@ -413,7 +413,7 @@ BOOL lcl_IsEqual( SwNumRule* pOrigRule, SwNumRule* pRule )
             for( BYTE n = 0; bRet && n < MAXLEVEL; ++n )
             {
                 const SwNumFmt* pOFmt = pOrigRule->GetNumFmt( n ),
-                              * pFmt = pRule->GetNumFmt( n );
+                              *	pFmt = pRule->GetNumFmt( n );
                 if( pFmt && pOFmt )
                 {
                     SwCharFmt* pOCFmt = pOFmt->GetCharFmt(),
@@ -443,7 +443,7 @@ BOOL lcl_IsEqual( SwNumRule* pOrigRule, SwNumRule* pRule )
 void SwRTFParser::ReadListOverrideTable()
 {
     int nToken;
-    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
     SwListEntry aEntry;
     SwNumRule* pRule = 0, *pOrigRule = 0;
     BYTE nNumLvl = 0;
@@ -533,9 +533,9 @@ void SwRTFParser::ReadListOverrideTable()
             }
             break;
 
-        case RTF_LISTOVERRIDE:      aEntry.Clear();                 break;
-        case RTF_LISTID:            aEntry.nListId = nTokenValue;   break;
-        case RTF_LS:                aEntry.nListNo = nTokenValue;   break;
+        case RTF_LISTOVERRIDE:		aEntry.Clear();					break;
+        case RTF_LISTID:			aEntry.nListId = nTokenValue;	break;
+        case RTF_LS:				aEntry.nListNo = nTokenValue;	break;
         case RTF_LISTOVERRIDECOUNT:
             if( nTokenValue )
             {
@@ -662,7 +662,7 @@ void SwRTFParser::ReadListOverrideTable()
         } while( 0 != (pStyle = GetStyleTbl().Next()) );
     }
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
 }
 
 SwNumRule* SwRTFParser::GetNumRuleOfListNo( long nListNo, BOOL bRemoveFromList )
@@ -783,7 +783,7 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
     {
         switch( nToken = GetNextToken() )
         {
-        case RTF_PNLVL:         nListNo = 3;
+        case RTF_PNLVL:			nListNo = 3;
                                 bContinus = FALSE;
                                 nLevel = MAXLEVEL <= (unsigned long) nTokenValue
                                                     ? MAXLEVEL - 1
@@ -847,7 +847,7 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
     }
 
     FontUnderline eUnderline;
-    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
     while( nNumOpenBrakets && IsParserWorking() )
     {
         switch( ( nToken = GetNextToken() ))
@@ -885,11 +885,11 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
         case RTF_PNCARD:
         case RTF_PNORD:
         case RTF_PNORDT:
-        case RTF_PNDEC:     pCurNumFmt->SetNumberingType(SVX_NUM_ARABIC);               break;
-        case RTF_PNUCLTR:   pCurNumFmt->SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N); break;
-        case RTF_PNUCRM:    pCurNumFmt->SetNumberingType(SVX_NUM_ROMAN_UPPER);          break;
-        case RTF_PNLCLTR:   pCurNumFmt->SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N); break;
-        case RTF_PNLCRM:    pCurNumFmt->SetNumberingType(SVX_NUM_ROMAN_LOWER);          break;
+        case RTF_PNDEC: 	pCurNumFmt->SetNumberingType(SVX_NUM_ARABIC);				break;
+        case RTF_PNUCLTR:	pCurNumFmt->SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N);	break;
+        case RTF_PNUCRM:    pCurNumFmt->SetNumberingType(SVX_NUM_ROMAN_UPPER);			break;
+        case RTF_PNLCLTR:   pCurNumFmt->SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N);	break;
+        case RTF_PNLCRM:    pCurNumFmt->SetNumberingType(SVX_NUM_ROMAN_LOWER);			break;
 
         case RTF_PNF:
             {
@@ -998,9 +998,9 @@ NUMATTR_SETUNDERLINE:
             }
             break;
 
-        case RTF_PNQC:  pCurNumFmt->SetNumAdjust( SVX_ADJUST_CENTER );  break;
-        case RTF_PNQL:  pCurNumFmt->SetNumAdjust( SVX_ADJUST_LEFT );        break;
-        case RTF_PNQR:  pCurNumFmt->SetNumAdjust( SVX_ADJUST_RIGHT );       break;
+        case RTF_PNQC:	pCurNumFmt->SetNumAdjust( SVX_ADJUST_CENTER ); 	break;
+        case RTF_PNQL:	pCurNumFmt->SetNumAdjust( SVX_ADJUST_LEFT ); 		break;
+        case RTF_PNQR:	pCurNumFmt->SetNumAdjust( SVX_ADJUST_RIGHT );		break;
 
         case RTF_PNSTART:
             pCurNumFmt->SetStart( USHORT( nTokenValue ));
@@ -1009,7 +1009,7 @@ NUMATTR_SETUNDERLINE:
         case RTF_PNNUMONCE:
         case RTF_PNACROSS:
         case RTF_PNHANG:
-        case RTF_PNRESTART:     break;
+        case RTF_PNRESTART:		break;
 
         case RTF_PNTXTA:
             {
@@ -1070,7 +1070,7 @@ NUMATTR_SETUNDERLINE:
         }
     }
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
     return pCurRule;
 }
 

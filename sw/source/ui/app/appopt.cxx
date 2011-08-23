@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
-#include <cmdid.h>          // Funktion-Ids
+#include <cmdid.h>		  	// Funktion-Ids
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 
@@ -58,8 +58,8 @@
 #include <wrtsh.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <uitool.hxx>
-#include <initui.hxx>                   // fuer ::GetGlossaries()
-#include <fldbas.hxx>      //fuer UpdateFields
+#include <initui.hxx>					// fuer ::GetGlossaries()
+#include <fldbas.hxx>	   //fuer UpdateFields
 #include <wview.hxx>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
@@ -73,7 +73,7 @@
 #include <editeng/unolingu.hxx>
 
 #include <globals.hrc>
-#include <globals.h>        // globale Konstanten z.B.
+#include <globals.h>		// globale Konstanten z.B.
 #include <svl/slstitm.hxx>
 #include "swabstdlg.hxx"
 #include <swwrtshitem.hxx>
@@ -83,7 +83,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
+SfxItemSet*	 SwModule::CreateItemSet( USHORT nId )
 {
     BOOL bTextDialog = (nId == SID_SW_EDITOPTIONS) ? TRUE : FALSE;
 
@@ -109,25 +109,25 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     /********************************************************************/
     /* Options/Edit                                              */
     /********************************************************************/
-    SfxItemSet* pRet = new SfxItemSet (GetPool(),   FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
-                                    SID_PRINTPREVIEW,       SID_PRINTPREVIEW,
-                                    SID_ATTR_GRID_OPTIONS,  SID_ATTR_GRID_OPTIONS,
-                                    FN_PARAM_PRINTER,       FN_PARAM_STDFONTS,
-                                    FN_PARAM_WRTSHELL,      FN_PARAM_WRTSHELL,
-                                    FN_PARAM_ADDPRINTER,    FN_PARAM_ADDPRINTER,
-                                    SID_ATTR_METRIC,        SID_ATTR_METRIC,
+    SfxItemSet*	pRet = new SfxItemSet (GetPool(),	FN_PARAM_DOCDISP,		FN_PARAM_ELEM,
+                                    SID_PRINTPREVIEW, 		SID_PRINTPREVIEW,
+                                    SID_ATTR_GRID_OPTIONS, 	SID_ATTR_GRID_OPTIONS,
+                                    FN_PARAM_PRINTER, 		FN_PARAM_STDFONTS,
+                                    FN_PARAM_WRTSHELL,		FN_PARAM_WRTSHELL,
+                                    FN_PARAM_ADDPRINTER, 	FN_PARAM_ADDPRINTER,
+                                    SID_ATTR_METRIC,		SID_ATTR_METRIC,
                                     SID_ATTR_APPLYCHARUNIT, SID_ATTR_APPLYCHARUNIT,
-                                    SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
-                                    RES_BACKGROUND,         RES_BACKGROUND,
-                                    SID_HTML_MODE,          SID_HTML_MODE,
-                                    FN_PARAM_SHADOWCURSOR,  FN_PARAM_SHADOWCURSOR,
+                                    SID_ATTR_DEFTABSTOP, 	SID_ATTR_DEFTABSTOP,
+                                    RES_BACKGROUND,			RES_BACKGROUND,
+                                    SID_HTML_MODE,			SID_HTML_MODE,
+                                    FN_PARAM_SHADOWCURSOR,	FN_PARAM_SHADOWCURSOR,
                                     FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED,
                                     FN_HSCROLL_METRIC,      FN_VSCROLL_METRIC,
                                     SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
                                     SID_ATTR_CHAR_CJK_LANGUAGE,   SID_ATTR_CHAR_CJK_LANGUAGE,
                                     SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
 #if OSL_DEBUG_LEVEL > 1
-                                    FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
+                                    FN_PARAM_SWTEST,		FN_PARAM_SWTEST,
 #endif
                                     0);
 
@@ -281,7 +281,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 
         if(!aViewOpt.IsViewMetaChars())
         {
-            if(     (!aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab) ||
+            if( 	(!aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab) ||
                     (!aViewOpt.IsBlank( TRUE ) && pDocDispItem->bSpace) ||
                     (!aViewOpt.IsParagraph( TRUE ) && pDocDispItem->bParagraphEnd) ||
                     (!aViewOpt.IsLineBreak( TRUE ) && pDocDispItem->bManualBreak) )
@@ -404,7 +404,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 
     //--------------------------------------------------------------------------
-    //      Writer Drucker Zusatzeinstellungen auswerten
+    //	 	Writer Drucker Zusatzeinstellungen auswerten
     //----------------------------------------------------------------------------
 
     if( SFX_ITEM_SET == rSet.GetItemState(
