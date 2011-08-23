@@ -1674,6 +1674,7 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "DISABLE_ATL",   "@DISABLE_ATL@","e" );
+   ToFile( "INCLUDE",           "",                 "e" );
    # Variables used when building the parts that needs to be available
    # also as 64-bit versions in a 32-bit LibreOffice build, like
    # the Explorer extension. If the configure script hasn't

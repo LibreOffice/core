@@ -277,7 +277,6 @@ define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	unset INCLUDE && \
 	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
@@ -297,7 +296,6 @@ define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	unset INCLUDE && \
 	$(gb_CXX) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
@@ -320,7 +318,6 @@ define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
-	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
@@ -339,7 +336,6 @@ define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
-	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
