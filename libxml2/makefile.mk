@@ -54,7 +54,8 @@ PATCH_FILES=libxml2-configure.patch \
             libxml2-xpath.patch \
             libxml2-global-symbols.patch \
             libxml2-aix.patch \
-            libxml2-vc10.patch
+            libxml2-vc10.patch \
+            libxml2-mingw.patch
 
 .IF "$(OS)" == "WNT"
 PATCH_FILES+= libxml2-long-path.patch
@@ -74,8 +75,19 @@ xml2_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=no --without-debug --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(xml2_CC)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 -L$(ILIB:s/;/ -L/)" LIBS="$(xml2_LIBS)" OBJDUMP=objdump
+.IF "$(CROSS_COMPILING)"=="YES"
+BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ELSE
+BUILD_AND_HOST=--build=i586-pc-mingw32 --host=i586-pc-mingw32
+.ENDIF
+.IF "$(ILIB)" == ""
+CONF_ILIB=
+.ELSE
+CONF_ILIB=-L$(ILIB:s/;/ -L/)
+.ENDIF
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=no --without-debug $(BUILD_AND_HOST) lt_cv_cc_dll_switch="-shared" CC="$(xml2_CC)" LDFLAGS="-Wl,--no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 $(CONF_ILIB)" LIBS="$(xml2_LIBS)" OBJDUMP=objdump
 BUILD_ACTION=$(GNUMAKE)
+BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 CONFIGURE_DIR=win32
@@ -129,7 +141,6 @@ OUT2BIN+=xml2-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=.libs$/libxml2*.a
-OUT2BIN+=.libs$/libxml2*.dll
 OUT2BIN+=.libs$/xmllint.exe
 OUT2BIN+=xml2-config
 .ELSE
