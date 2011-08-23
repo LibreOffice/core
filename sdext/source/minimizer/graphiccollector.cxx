@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -217,7 +217,7 @@ void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& rxMSF, c
         Reference< XPropertySet > xPropertySet( rxDrawPage, UNO_QUERY_THROW );
         xPropertySet->getPropertyValue( TKGet( TK_Width ) ) >>= aLogicalSize.Width;
         xPropertySet->getPropertyValue( TKGet( TK_Height ) ) >>= aLogicalSize.Height;
-
+        
         Reference< XPropertySet > xBackgroundPropSet;
         if ( xPropertySet->getPropertyValue( TKGet( TK_Background ) ) >>= xBackgroundPropSet )
             ImpAddFillBitmapEntity( rxMSF, xBackgroundPropSet, aLogicalSize, rGraphicEntities, rGraphicSettings, xPropertySet );
@@ -266,7 +266,7 @@ awt::Size GraphicCollector::GetOriginalSize( const Reference< XComponentContext 
     if ( xGraphicPropertySet->getPropertyValue( TKGet( TK_Size100thMM ) ) >>= aSize100thMM )
     {
         if ( !aSize100thMM.Width && !aSize100thMM.Height )
-        {   // MAPMODE_PIXEL USED :-(
+        {	// MAPMODE_PIXEL USED :-(
             awt::Size aSourceSizePixel( 0, 0 );
             if ( xGraphicPropertySet->getPropertyValue( TKGet( TK_SizePixel ) ) >>= aSourceSizePixel )
             {
@@ -403,7 +403,7 @@ void ImpCountBackgroundGraphic( const Reference< XComponentContext >& /* rxMSF *
         Reference< XPropertySet > xPropertySet( rxDrawPage, UNO_QUERY_THROW );
         xPropertySet->getPropertyValue( TKGet( TK_Width ) ) >>= aLogicalSize.Width;
         xPropertySet->getPropertyValue( TKGet( TK_Height ) ) >>= aLogicalSize.Height;
-
+        
         Reference< XPropertySet > xBackgroundPropSet;
         if ( xPropertySet->getPropertyValue( TKGet( TK_Background ) ) >>= xBackgroundPropSet )
         {

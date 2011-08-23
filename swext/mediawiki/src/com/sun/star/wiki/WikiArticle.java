@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,27 +37,27 @@ import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.*;
 
 
-public class WikiArticle
+public class WikiArticle 
 {
     private XComponentContext m_xContext;
-
+    
     private String m_sEditTime = "";
     private String m_sEditToken = "";
-
+    
     protected String m_sHTMLCode;
     private boolean m_bNoArticle = true;
-
+    
     protected String m_sWikiUser;
     protected String m_sWikiPass;
-
+    
     protected String m_sTitle = "";
-
+    
     private URI m_aMainURI;
     private HostConfiguration m_aHostConfig;
-
-
+    
+   
     /** Creates a new instance of WikiArticle */
-    public WikiArticle( XComponentContext xContext, String sTitle, Hashtable wikiSettings, boolean bLogin, WikiPropDialog aPropDialog )
+    public WikiArticle( XComponentContext xContext, String sTitle, Hashtable wikiSettings, boolean bLogin, WikiPropDialog aPropDialog ) 
         throws java.net.MalformedURLException, com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
     {
         m_xContext = xContext;
@@ -66,7 +66,7 @@ public class WikiArticle
         m_sWikiUser = (String) wikiSettings.get("Username");
         m_sWikiPass = (String) wikiSettings.get("Password");
         m_sTitle = sTitle;
-
+        
         m_aMainURI = new URI( sMainUrl );
 
 //         viewURL = sMainUrl + "index.php?title=" + m_sTitle;
@@ -92,7 +92,7 @@ public class WikiArticle
                     }
                     else
                         throw new WikiCancelException();
-
+                    
                     if ( aPropDialog != null )
                     {
                         aPropDialog.SetThrobberActive( true );
@@ -110,29 +110,29 @@ public class WikiArticle
         // in case of saving the contents should be checked whether they are empty
         InitArticleHTML();
 
-        // getArticleWiki();
+        // getArticleWiki();                                
     }
 
     public String GetMainURL()
     {
         return m_aMainURI.toString();
     }
-
+    
     public String GetTitle()
     {
         return m_sTitle;
     }
-
+        
     public String GetViewURL()
     {
         return m_aMainURI.toString() + "index.php?title=" + m_sTitle;
     }
-
-    private String getArticleWiki()
+    
+    private String getArticleWiki() 
         throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
     {
         String sWikiCode = null;
-
+        
         if ( m_aHostConfig != null )
         {
             URI aURI = new URI( m_aMainURI.toString() + "index.php?title=" + m_sTitle + "&action=edit" );
@@ -144,20 +144,20 @@ public class WikiArticle
             String sWebPage = null;
             if ( nResultCode == 200 )
                 sWebPage = aRequest.getResponseBodyAsString();
-
+ 
             if ( sWebPage != null )
             {
                 StringReader r = new StringReader(sWebPage);
                 HTMLEditorKit.Parser parse = Helper.GetHTMLParser();
                 EditPageParser callback = new EditPageParser();
-
+                
                 parse.parse(r,callback,true);
                 m_sEditTime = callback.m_sEditTime;
                 m_sEditToken = callback.m_sEditToken;
-
+                    
                 int iPosStart = callback.m_nWikiArticleStart;
                 int iPosEnd = callback.m_nWikiArticleEnd;
-
+                
                 if ( iPosStart >= 0 && iPosEnd > 0 )
                 {
                     String sArticle = sWebPage.substring(iPosStart, iPosEnd);
@@ -166,11 +166,11 @@ public class WikiArticle
                 }
             }
         }
-
+        
         return sWikiCode;
     }
-
-    private void InitArticleHTML()
+    
+    private void InitArticleHTML() 
         throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
     {
         if ( m_aHostConfig != null )
@@ -184,19 +184,19 @@ public class WikiArticle
             String sWebPage = null;
             if ( nResultCode == 200 )
                 sWebPage = aRequest.getResponseBodyAsString();
-
+            
             if ( sWebPage != null )
             {
                 StringReader r = new StringReader(sWebPage);
                 HTMLEditorKit.Parser parse = Helper.GetHTMLParser();
                 EditPageParser callback = new EditPageParser();
-
+                
                 parse.parse(r,callback,true);
-
+                    
                 int iPosStart = callback.m_nHTMLArticleStart;
                 int iPosEnd = callback.m_nHTMLArticleEnd;
                 int nPosNoArt = callback.m_nNoArticleInd;
-
+                
                 if ( iPosStart >= 0 && iPosEnd > 0 )
                 {
                     m_sHTMLCode = sWebPage.substring(iPosStart, iPosEnd);
@@ -205,8 +205,8 @@ public class WikiArticle
             }
         }
     }
-
-    protected boolean setArticle( String sWikiCode, String sWikiComment, boolean bMinorEdit )
+    
+    protected boolean setArticle( String sWikiCode, String sWikiComment, boolean bMinorEdit ) 
         throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
     {
         boolean bResult = false;
@@ -229,7 +229,7 @@ public class WikiArticle
             aPost.addParameter( "wpSave", "Save page" );
             aPost.addParameter( "wpEditToken", m_sEditToken );
 
-            if ( bMinorEdit )
+            if ( bMinorEdit ) 
                 aPost.addParameter( "wpMinoredit", "1" );
 
             Helper.ExecuteMethod( aPost, m_aHostConfig, aURI, m_xContext, false );
@@ -246,47 +246,47 @@ public class WikiArticle
 
         return bResult;
     }
-
-    protected boolean Login()
+    
+    protected boolean Login() 
         throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
     {
         m_aHostConfig = Helper.Login( m_aMainURI, m_sWikiUser, m_sWikiPass, m_xContext );
         return ( m_aHostConfig != null );
     }
-
-    protected void cleanHTML()
+    
+    protected void cleanHTML() 
     {
         if ( m_sHTMLCode != null )
         {
             //Welcome to regex hell ;)
-
+            
             //strip comments
             m_sHTMLCode = m_sHTMLCode.replaceAll("\\<![ \\r\\n\\t]*(--([^\\-]|[\\r\\n]|-[^\\-])*--[ \\r\\n\\t]*)\\>","");
-
+            
             //strip edit section links
             m_sHTMLCode = m_sHTMLCode.replaceAll("\\<div class=\"editsection\".*?\\</div\\>","");
-
+            
             //strip huge spaces
             m_sHTMLCode = m_sHTMLCode.replaceAll("\\<p\\>\\<br /\\>[ \r\n\t]*?\\</p\\>","");
-
+            
             //strip toc
             m_sHTMLCode = m_sHTMLCode.replaceAll("\\<table.*id=\"toc\"(.|[\r\n])*?\\</table\\>","");
 
             //strip jump-to-nav
             m_sHTMLCode = m_sHTMLCode.replaceAll("\\<div id=\"jump-to-nav\".*?\\</div\\>","");
-
+            
             //strip Javascript
             m_sHTMLCode = m_sHTMLCode.replaceAll("\\<script(.|[\r\n])*?\\</script\\>","");
         }
     }
-
-
+    
+    
     protected boolean NotExist()
     {
         boolean bResult = true;
         if ( m_sHTMLCode != null )
             bResult = m_bNoArticle;
-
+        
         return bResult;
     }
 

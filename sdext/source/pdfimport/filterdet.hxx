@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,22 +41,22 @@
 namespace pdfi
 {
 
-typedef ::cppu::WeakComponentImplHelper1<
+typedef ::cppu::WeakComponentImplHelper1< 
     com::sun::star::document::XExtendedFilterDetection > PDFDetectorBase;
 
 class PDFDetector : private cppu::BaseMutex,
                     public PDFDetectorBase
 {
 private:
-    com::sun::star::uno::Reference<
+    com::sun::star::uno::Reference< 
         com::sun::star::uno::XComponentContext > m_xContext;
 
 public:
-    explicit PDFDetector( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::uno::XComponentContext >& xContext );
+    explicit PDFDetector( const ::com::sun::star::uno::Reference< 
+                                ::com::sun::star::uno::XComponentContext >& xContext );    
 
     // XExtendedFilterDetection
-    virtual rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence<
+    virtual rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< 
                                                com::sun::star::beans::PropertyValue >& io_rDescriptor )
         throw (com::sun::star::uno::RuntimeException);
 };

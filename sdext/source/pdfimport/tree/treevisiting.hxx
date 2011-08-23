@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace pdfi
     struct DocumentElement;
     struct EmitContext;
     struct Element;
-
+   
     /** To be visited by all tree element types
 
         Visitor interface from the "visitor pattern". Implementor gets

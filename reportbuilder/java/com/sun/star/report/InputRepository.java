@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ public interface InputRepository
     InputStream createInputStream(final String name) throws IOException;
 
     /** allows to acces sub repositories inside this repository
-     *
+     * 
      * @param name describes the path to the sub repository
      * @return the sub repository
      * @throws java.io.IOException when the sub repository doesn't exist.

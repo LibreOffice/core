@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,9 +94,9 @@ namespace {
             const ::boost::shared_ptr<PresenterAnimator>& rpAnimator);
         virtual ~ModeChangeAnimationStarter (void);
         virtual void SAL_CALL disposing (void);
-
+        
         // XConfigurationChangeListener
-
+        
         virtual void SAL_CALL notifyConfigurationChange (
             const com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
             throw (com::sun::star::uno::RuntimeException);
@@ -201,7 +201,7 @@ void PresenterWindowManager::SetParentPane (
     }
     mxParentWindow = NULL;
     mxParentCanvas = NULL;
-
+    
     if (rxPane.is())
     {
         mxParentWindow = rxPane->getWindow();
@@ -224,7 +224,7 @@ void PresenterWindowManager::SetParentPane (
         if (xPeer.is())
             xPeer->setBackground(util::Color(0xff000000));
     }
-}
+} 
 
 
 
@@ -234,7 +234,7 @@ void PresenterWindowManager::SetTheme (const ::boost::shared_ptr<PresenterTheme>
     mpTheme = rpTheme;
 
     // Get background bitmap or background color from the theme.
-
+    
     if (mpTheme.get() != NULL)
     {
         mpBackgroundBitmap = mpTheme->GetBitmap(OUString(), A2S("Background"));
@@ -265,7 +265,7 @@ void PresenterWindowManager::NotifyPaneCreation (
     if (xBorderWindow.is() && ! rpDescriptor->mbIsSprite)
     {
         Invalidate();
-
+        
         xBorderWindow->addWindowListener(this);
         xBorderWindow->addFocusListener(this);
 #ifndef ENABLE_PANE_RESIZING
@@ -288,7 +288,7 @@ void PresenterWindowManager::NotifyViewCreation (const Reference<XView>& rxView)
     if (pDescriptor.get() != NULL)
     {
         Layout();
-
+        
         mpPresenterController->GetPaintManager()->Invalidate(
             pDescriptor->mxContentWindow,
             (sal_Int16)(awt::InvalidateStyle::TRANSPARENT
@@ -364,7 +364,7 @@ void PresenterWindowManager::SetPaneBorderPainter (
 
 
 //----- XWindowListener -------------------------------------------------------
-
+    
 void SAL_CALL PresenterWindowManager::windowResized (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
@@ -425,7 +425,7 @@ void SAL_CALL PresenterWindowManager::windowHidden (const lang::EventObject& rEv
 
 
 //----- XPaintListener --------------------------------------------------------
-
+    
 void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent)
     throw (RuntimeException)
 {
@@ -554,7 +554,7 @@ void SAL_CALL PresenterWindowManager::disposing (const lang::EventObject& rEvent
 bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 {
     bool bChildInvalidated (false);
-
+    
     // Call windowPaint on all children that lie in or touch the
     // update rectangle.
     PresenterPaneContainer::PaneList::const_iterator iPane;
@@ -613,7 +613,7 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
 {
     OSL_ASSERT(mpPresenterController.get() != NULL);
-
+    
     if (meLayoutMode != eMode
         || mbIsSlideSorterActive
         || mbIsHelpViewActive)
@@ -762,15 +762,15 @@ void PresenterWindowManager::RestoreViewMode (void)
         case 0:
             SetViewMode(VM_Standard);
             break;
-
+            
         case 1:
             SetViewMode(VM_Notes);
             break;
-
+            
         case 2:
             SetViewMode(VM_SlideOverview);
             break;
-    }
+    }                               
 }
 
 
@@ -863,7 +863,7 @@ void PresenterWindowManager::Layout (void)
                     default:
                         LayoutStandardMode();
                         break;
-
+                    
                     case LM_Notes:
                         LayoutNotesMode();
                         break;
@@ -909,7 +909,7 @@ void PresenterWindowManager::LayoutStandardMode (void)
             aCurrentSlideOuterBox.Width,
             aCurrentSlideOuterBox.Height);
     }
-
+    
 
     // For the next slide view calculate the outer height from the outer
     // width.  This takes into acount the slide aspect ratio and thus has to
@@ -939,7 +939,7 @@ void PresenterWindowManager::LayoutNotesMode (void)
     awt::Rectangle aBox = mxParentWindow->getPosSize();
 
     const geometry::RealRectangle2D aToolBarBox (LayoutToolBar());
-
+    
     const double nGoldenRatio ((1 + sqrt(5.0)) / 2);
     const double nGap (20);
     const double nPrimaryWidth (aBox.Width / nGoldenRatio);
@@ -947,7 +947,7 @@ void PresenterWindowManager::LayoutNotesMode (void)
     const double nTertiaryWidth (nSecondaryWidth / nGoldenRatio);
     double nSlidePreviewTop (0);
     double nNotesViewBottom (aToolBarBox.Y1 - nGap);
-
+    
     // The notes view has no fixed aspect ratio.
     PresenterPaneContainer::SharedPaneDescriptor pPane (
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNotesPaneURL));
@@ -966,7 +966,7 @@ void PresenterWindowManager::LayoutNotesMode (void)
             aNotesViewOuterSize.Height);
         nNotesViewBottom = nSlidePreviewTop + aNotesViewOuterSize.Height;
     }
-
+    
     // For the current slide view calculate the outer height from the outer
     // width.  This takes into acount the slide aspect ratio and thus has to
     // go over the inner pane size.
@@ -983,7 +983,7 @@ void PresenterWindowManager::LayoutNotesMode (void)
             aCurrentSlideOuterBox.Width,
             aCurrentSlideOuterBox.Height);
     }
-
+    
 
     // For the next slide view calculate the outer height from the outer
     // width.  This takes into acount the slide aspect ratio and thus has to
@@ -1152,7 +1152,7 @@ void PresenterWindowManager::NotifyLayoutModeChange (void)
             {
             }
         }
-    }
+    }    
 }
 
 
@@ -1182,7 +1182,7 @@ void PresenterWindowManager::NotifyDisposing (void)
             {
             }
         }
-    }
+    }    
 }
 
 
@@ -1191,7 +1191,7 @@ void PresenterWindowManager::NotifyDisposing (void)
 void PresenterWindowManager::LayoutUnknownMode (void)
 {
     awt::Rectangle aBox = mxParentWindow->getPosSize();
-
+        
     PresenterPaneContainer::PaneList::const_iterator iPane;
     PresenterPaneContainer::PaneList::const_iterator iEnd (mpPaneContainer->maPanes.end());
     for (iPane=mpPaneContainer->maPanes.begin(); iPane!=iEnd; ++iPane)
@@ -1260,7 +1260,7 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
     Reference<rendering::XGraphicDevice> xDevice (mxParentCanvas->getDevice());
     if ( ! xDevice.is())
         return;
-
+    
     // Create a polygon for the background and for clipping.
     Reference<rendering::XPolyPolygon2D> xBackgroundPolygon (
         PresenterGeometryHelper::CreatePolygon(mxParentWindow->getPosSize(), xDevice));
@@ -1281,7 +1281,7 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
     if (mpBackgroundBitmap.get() != NULL)
     {
         ProvideBackgroundBitmap();
-
+        
         if (mxScaledBackgroundBitmap.is())
         {
             Sequence<rendering::Texture> aTextures (1);
@@ -1410,7 +1410,7 @@ void PresenterWindowManager::UpdateWindowList (void)
         Reference<lang::XComponent> xComponent (mxPaneBorderManager, UNO_QUERY);
         if (xComponent.is())
             xComponent->dispose();
-
+        
         Reference<lang::XMultiComponentFactory> xFactory (mxComponentContext->getServiceManager());
         if (xFactory.is())
         {
@@ -1559,7 +1559,7 @@ ModeChangeAnimationStarter::ModeChangeAnimationStarter (
     mpSprite->SetFactory(rxCanvas);
     mpSprite->Resize(geometry::RealSize2D(aWindowSize.Width, aWindowSize.Height));
     mpSprite->SetPriority(10);
-
+    
     // Fill it with the background inside the bounding box.
     const rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
@@ -1611,7 +1611,7 @@ void SAL_CALL ModeChangeAnimationStarter::notifyConfigurationChange (
     throw (com::sun::star::uno::RuntimeException)
 {
     (void)rEvent;
-
+    
     // Start the actual animation.
     mpAnimator->AddAnimation(SharedPresenterAnimation(new ModeChangeAnimation(
         mpSprite,

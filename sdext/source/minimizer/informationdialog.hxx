@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,19 +59,19 @@ public :
                 sal_Bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
     ~InformationDialog();
 
-    sal_Bool                execute();
+    sal_Bool				execute();
 
 private :
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >mxMSF;
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
-    com::sun::star::uno::Reference< com::sun::star::io::XStream >           mxTempFile;
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >			mxFrame;
+    com::sun::star::uno::Reference< com::sun::star::io::XStream >			mxTempFile;
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
+    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >	mxActionListener;
 
     rtl::OUString ImpGetStandardImage( const rtl::OUString& rPrivateURL );
     void InitDialog();
-
+    
     sal_Int64 mnSourceSize;
     sal_Int64 mnDestSize;
     sal_Int64 mnApproxSize;
@@ -92,7 +92,7 @@ public:
     virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
 private:
-
+    
     InformationDialog& mrInformationDialog;
 };
 

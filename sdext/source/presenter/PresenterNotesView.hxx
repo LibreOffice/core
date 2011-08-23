@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 namespace css = ::com::sun::star;
 
 namespace {
-    typedef cppu::WeakComponentImplHelper5<
+    typedef cppu::WeakComponentImplHelper5< 
         css::awt::XWindowListener,
         css::awt::XPaintListener,
         css::drawing::framework::XView,
@@ -98,16 +98,16 @@ public:
 
     ::boost::shared_ptr<PresenterTextView> GetTextView (void) const;
 
-
+    
     // lang::XEventListener
 
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         disposing (const css::lang::EventObject& rEventObject)
         throw (css::uno::RuntimeException);
 
 
     // XWindowListener
-
+    
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -126,7 +126,7 @@ public:
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
+    
     // XResourceId
 
     virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
@@ -135,7 +135,7 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);
 
-
+    
     // XDrawView
 
     virtual void SAL_CALL setCurrentPage (
@@ -145,7 +145,7 @@ public:
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
         throw (css::uno::RuntimeException);
 
-
+    
     // XKeyListener
 
     virtual void SAL_CALL keyPressed (const css::awt::KeyEvent& rEvent)
@@ -171,7 +171,7 @@ private:
     double mnTop;
     PresenterTheme::SharedFontDescriptor mpFont;
     ::boost::shared_ptr<PresenterTextView> mpTextView;
-
+    
     void CreateToolBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,11 +62,11 @@ public :
         sal_Int16 execute();
 
         void setDefaultName( const rtl::OUString& );
-//      void setDefaultDirectory( const rtl::OUString& );
+//		void setDefaultDirectory( const rtl::OUString& );
 
-        ::rtl::OUString getURL() const;
+        ::rtl::OUString	getURL() const;
         ::rtl::OUString getFilterName() const;
 };
 
-#endif  // _FILEOPEN_DIALOG_HXX_
+#endif	// _FILEOPEN_DIALOG_HXX_
 

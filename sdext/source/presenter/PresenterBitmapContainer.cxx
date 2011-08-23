@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ PresenterBitmapContainer::PresenterBitmapContainer (
       mxPresenterHelper(rxPresenterHelper)
 {
     Initialize(rxComponentContext);
-
+    
     // Get access to the configuration.
     PresenterConfigurationAccess aConfiguration (
         rxComponentContext,
@@ -173,7 +173,7 @@ void PresenterBitmapContainer::LoadBitmaps (
 
     if ( ! rxBitmapList.is())
         return;
-
+    
     try
     {
         // Load all button bitmaps.
@@ -369,7 +369,7 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (void)
       mxMaskBitmap()
 {
 }
-
+        
 
 
 
@@ -429,19 +429,19 @@ css::uno::Reference<css::rendering::XBitmap>
         case Normal:
         default:
             return mxNormalBitmap;
-
+            
         case MouseOver:
             if (mxMouseOverBitmap.is())
                 return mxMouseOverBitmap;
             else if (bMissingDefaultsToNormal)
                 return mxNormalBitmap;
-
+            
         case ButtonDown:
             if (mxButtonDownBitmap.is())
                 return mxButtonDownBitmap;
             else if (bMissingDefaultsToNormal)
                 return mxNormalBitmap;
-
+            
         case Disabled:
             if (mxDisabledBitmap.is())
                 return mxDisabledBitmap;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,13 +67,13 @@ class FileEmitContext : public EmitContext
     oslFileHandle m_aHandle;
     oslFileHandle m_aReadHandle;
     unsigned int  m_nReadLen;
-
+    
     void openReadFile( const char* pOrigName );
-
+    
     public:
     FileEmitContext( const char* pFileName, const char* pOrigName, const PDFContainer* pTop );
     virtual ~FileEmitContext();
-
+    
     virtual bool write( const void* pBuf, unsigned int nLen ) throw();
     virtual unsigned int getCurPos() throw();
     virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw();
@@ -93,7 +93,7 @@ FileEmitContext::FileEmitContext( const char* pFileName, const char* pOrigName, 
         fprintf( stderr, "filename conversion \"%s\" failed\n", pFileName );
         return;
     }
-
+    
     if( osl_openFile( aURL.pData, &m_aHandle, osl_File_OpenFlag_Write ) == osl_File_E_None )
     {
         if( osl_setFileSize( m_aHandle, 0 ) != osl_File_E_None )
@@ -110,7 +110,7 @@ FileEmitContext::FileEmitContext( const char* pFileName, const char* pOrigName, 
         return;
     }
     m_bDeflate = true;
-
+    
     openReadFile( pOrigName );
 }
 
@@ -131,20 +131,20 @@ void FileEmitContext::openReadFile( const char* pInFile )
         fprintf( stderr, "filename conversion \"%s\" failed\n", pInFile );
         return;
     }
-
+    
     if( osl_openFile( aURL.pData, &m_aReadHandle, osl_File_OpenFlag_Read ) != osl_File_E_None )
     {
         fprintf( stderr, "could not open %s\n", pInFile );
         return;
     }
-
+                                                       
     if( osl_setFilePos( m_aReadHandle, osl_Pos_End, 0 ) != osl_File_E_None )
     {
         fprintf( stderr, "could not seek to end of %s\n", pInFile );
         osl_closeFile( m_aReadHandle );
         return;
     }
-
+    
     sal_uInt64 nFileSize = 0;
     if( osl_getFilePos( m_aReadHandle, &nFileSize ) != osl_File_E_None )
     {
@@ -152,7 +152,7 @@ void FileEmitContext::openReadFile( const char* pInFile )
         osl_closeFile( m_aReadHandle );
         return;
     }
-
+    
     m_nReadLen = static_cast<unsigned int>(nFileSize);
 }
 
@@ -160,7 +160,7 @@ bool FileEmitContext::write( const void* pBuf, unsigned int nLen ) throw()
 {
     if( ! m_aHandle )
         return false;
-
+    
     sal_uInt64 nWrite = static_cast<sal_uInt64>(nLen);
     sal_uInt64 nWritten = 0;
     return (osl_writeFile( m_aHandle, pBuf, nWrite, &nWritten ) == osl_File_E_None)
@@ -182,7 +182,7 @@ bool FileEmitContext::copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen
 {
     if( nOrigOffset + nLen > m_nReadLen )
         return false;
-
+    
     if( osl_setFilePos( m_aReadHandle, osl_Pos_Absolut, nOrigOffset ) != osl_File_E_None )
     {
         fprintf( stderr, "could not seek to offset %u\n", nOrigOffset );
@@ -208,7 +208,7 @@ unsigned int FileEmitContext::readOrigBytes( unsigned int nOrigOffset, unsigned 
 {
     if( nOrigOffset + nLen > m_nReadLen )
         return 0;
-
+    
     if( osl_setFilePos( m_aReadHandle, osl_Pos_Absolut, nOrigOffset ) != osl_File_E_None )
     {
         fprintf( stderr, "could not seek to offset %u\n", nOrigOffset );
@@ -224,7 +224,7 @@ typedef int(*PDFFileHdl)(const char*, const char*, PDFFile*);
 
 int handleFile( const char* pInFile, const char* pOutFile, const char* pPassword, PDFFileHdl pHdl )
 {
-
+    
     PDFReader aParser;
     int nRet = 0;
     PDFEntry* pEntry = aParser.read( pInFile );
@@ -332,18 +332,18 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
         PDFDict* pDict = dynamic_cast<PDFDict*>(pObj->m_pObject);
         if( ! pDict )
             continue;
-
+        
         std::hash_map<rtl::OString,PDFEntry*,rtl::OStringHash>::iterator map_it =
                 pDict->m_aMap.find( "Type" );
         if( map_it == pDict->m_aMap.end() )
             continue;
-
+        
         PDFName* pName = dynamic_cast<PDFName*>(map_it->second);
         if( ! pName )
             continue;
         if( ! pName->m_aName.equals( "FontDescriptor" ) )
             continue;
-
+        
         // the font name will be helpful, also there must be one in
         // a font descriptor
         map_it = pDict->m_aMap.find( "FontName" );
@@ -351,9 +351,9 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
             continue;
         pName = dynamic_cast<PDFName*>(map_it->second);
         if( ! pName )
-            continue;
+            continue;        
         rtl::OString aFontName( pName->m_aName );
-
+        
         PDFObjectRef* pStreamRef = 0;
         const char* pFileType = NULL;
         // we have a font descriptor, try for a type 1 font
@@ -376,14 +376,14 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
                     pFileType = "ttf";
             }
         }
-
+        
         if( ! pStreamRef )
             continue;
-
+        
         PDFObject* pStream = i_pPDFFile->findObject( pStreamRef );
         if( ! pStream )
             continue;
-
+        
         rtl::OStringBuffer aOutStream( i_pOutFile );
         aOutStream.append( "_font_" );
         aOutStream.append( sal_Int32(pStreamRef->m_nNumber) );
@@ -439,7 +439,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     const char* pPassword = NULL;
     OStringBuffer aOutFile( 256 );
     PDFFileHdl aHdl = write_unzipFile;
-
+    
     for( int nArg = 1; nArg < argc; nArg++ )
     {
         if( argv[nArg][0] == '-' )
@@ -492,7 +492,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                         s_aEmitObjects.push_back( std::pair<sal_Int32,sal_Int32>(nObject,nGeneration) );
                     }
                 }
-            }
+            }            
             else
             {
                 fprintf( stderr, "unrecognized option \"%s\"\n",
@@ -532,7 +532,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             return 11;
         }
     }
-
+    
     return handleFile( pInFile, pOutFile, pPassword, aHdl );
 }
 

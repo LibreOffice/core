@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,10 +85,10 @@ public:
     css::geometry::IntegerSize2D GetSize (void);
 
     // XWindowListener
-
+    
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -104,7 +104,7 @@ public:
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
+    
     // XMouseListener
 
     virtual void SAL_CALL mousePressed (const css::awt::MouseEvent& rEvent)
@@ -121,10 +121,10 @@ public:
 
 
     // XMouseMotionListener
-
+    
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -175,7 +175,7 @@ private:
     static css::uno::Reference<css::beans::XPropertySet> GetConfigurationProperties (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const ::rtl::OUString& rsConfgurationName);
-
+    
     void ThrowIfDisposed (void) const
         throw (::com::sun::star::lang::DisposedException);
 };

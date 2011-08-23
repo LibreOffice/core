@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ PresenterNotesView::PresenterNotesView (
             rxComponentContext,
             mxCanvas,
             mpPresenterController->GetPaintManager()->GetInvalidator(mxParentWindow)));
-
+        
         const OUString sResourceURL (mxViewId->getResourceURL());
         mpFont.reset(new PresenterTheme::FontDescriptor(
             rpPresenterController->GetViewFont(sResourceURL)));
@@ -198,7 +198,7 @@ void SAL_CALL PresenterNotesView::disposing (void)
         if (xComponent.is())
             xComponent->dispose();
     }
-
+    
     // Create the tool bar.
 
     mpScrollBar = NULL;
@@ -220,7 +220,7 @@ void PresenterNotesView::CreateToolBar (
         rpPresenterController->GetPresenterHelper());
     if ( ! xPresenterHelper.is())
         return;
-
+            
     // Create a new window as container of the tool bar.
     mxToolBarWindow = xPresenterHelper->createWindow(
         mxParentWindow,
@@ -265,7 +265,7 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
         sal_Int32 nCount (xIndexAccess->getCount());
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {
-
+            
             Reference<lang::XServiceName> xServiceName (
                 xIndexAccess->getByIndex(nIndex), UNO_QUERY);
             if (xServiceName.is()
@@ -305,7 +305,7 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
             mpScrollBar->SetThumbPosition(0, false);
             UpdateScrollBar();
         }
-
+        
         Invalidate();
     }
 }
@@ -326,7 +326,7 @@ void SAL_CALL PresenterNotesView::disposing (const lang::EventObject& rEventObje
 
 
 //----- XWindowListener -------------------------------------------------------
-
+    
 void SAL_CALL PresenterNotesView::windowResized (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
@@ -373,7 +373,7 @@ void SAL_CALL PresenterNotesView::windowPaint (const awt::PaintEvent& rEvent)
 
     if ( ! mbIsPresenterViewActive)
         return;
-
+    
     ::osl::MutexGuard aSolarGuard (::osl::Mutex::getGlobalMutex());
     Paint(rEvent.UpdateRect);
 }
@@ -495,7 +495,7 @@ void PresenterNotesView::Layout (void)
 {
     if ( ! mxParentWindow.is())
         return;
-
+    
     awt::Rectangle aWindowBox (mxParentWindow->getPosSize());
     geometry::RealRectangle2D aNewTextBoundingBox (0,0,aWindowBox.Width, aWindowBox.Height);
 
@@ -548,7 +548,7 @@ void PresenterNotesView::Layout (void)
                 aNewTextBoundingBox.Y2));
         if ( ! bShowVerticalScrollbar)
             mpScrollBar->SetThumbPosition(0, false);
-
+        
         UpdateScrollBar();
     }
 
@@ -604,7 +604,7 @@ void PresenterNotesView::Paint (const awt::Rectangle& rUpdateBox)
 void PresenterNotesView::PaintToolBar (const awt::Rectangle& rUpdateBox)
 {
     awt::Rectangle aWindowBox (mxParentWindow->getPosSize());
-
+    
     rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL);
@@ -624,7 +624,7 @@ void PresenterNotesView::PaintToolBar (const awt::Rectangle& rUpdateBox)
             awt::Rectangle(0,sal_Int32(maTextBoundingBox.Y2),aWindowBox.Width,aWindowBox.Height),
             awt::Rectangle());
     }
-
+    
     // Paint the horizontal separator.
     OSL_ASSERT(mxViewId.is());
     PresenterCanvasHelper::SetDeviceColor(aRenderState, maSeparatorColor);
@@ -646,7 +646,7 @@ void PresenterNotesView::PaintText (const awt::Rectangle& rUpdateBox)
 
     if (aBox.Width <= 0 || aBox.Height <= 0)
         return;
-
+    
     rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         PresenterGeometryHelper::CreatePolygon(aBox, mxCanvas->getDevice()));

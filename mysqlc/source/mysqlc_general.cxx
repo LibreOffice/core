@@ -1,6 +1,6 @@
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -128,19 +128,19 @@ int mysqlToOOOType(int cppConnType)
         case sql::DataType::SET:
         case sql::DataType::VARCHAR:
             return com::sun::star::sdbc::DataType::VARCHAR;
-
+        
         case sql::DataType::VARBINARY:
             return com::sun::star::sdbc::DataType::VARBINARY;
 
         case sql::DataType::LONGVARCHAR:
             return com::sun::star::sdbc::DataType::LONGVARCHAR;
-
+        
         case sql::DataType::LONGVARBINARY:
             return com::sun::star::sdbc::DataType::LONGVARBINARY;
 
         case sql::DataType::TIMESTAMP:
             return com::sun::star::sdbc::DataType::TIMESTAMP;
-
+        
         case sql::DataType::DATE:
             return com::sun::star::sdbc::DataType::DATE;
 
@@ -149,7 +149,7 @@ int mysqlToOOOType(int cppConnType)
 
         case sql::DataType::GEOMETRY:
             return com::sun::star::sdbc::DataType::VARCHAR;
-
+        
         case sql::DataType::SQLNULL:
             return com::sun::star::sdbc::DataType::SQLNULL;
 

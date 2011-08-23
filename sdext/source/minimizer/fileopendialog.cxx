@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
     mxMSF( rxMSF )
 {
     Sequence< Any > aInitPropSeq( 1 );
-    aInitPropSeq[ 0 ] <<= (sal_Int16)TemplateDescription::FILESAVE_AUTOEXTENSION;   // TemplateDescription.FILEOPEN_SIMPLE
+    aInitPropSeq[ 0 ] <<= (sal_Int16)TemplateDescription::FILESAVE_AUTOEXTENSION;	// TemplateDescription.FILEOPEN_SIMPLE
 
     mxFilePicker = Reference < XFilePicker >( mxMSF->getServiceManager()->createInstanceWithArgumentsAndContext(
         OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aInitPropSeq, rxMSF ),UNO_QUERY_THROW );
@@ -118,10 +118,10 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
                                 j = aFilterProperties.getLength();
                         }
                         break;
-                        case TK_Name :      rProperty.Value >>= aFilterEntry.maName; break;
-                        case TK_UIName :    rProperty.Value >>= aFilterEntry.maUIName; break;
-                        case TK_Type :      rProperty.Value >>= aFilterEntry.maType; break;
-                        case TK_Flags :     rProperty.Value >>= aFilterEntry.maFlags; break;
+                        case TK_Name :		rProperty.Value >>= aFilterEntry.maName; break;
+                        case TK_UIName :	rProperty.Value >>= aFilterEntry.maUIName; break;
+                        case TK_Type :		rProperty.Value >>= aFilterEntry.maType; break;
+                        case TK_Flags :		rProperty.Value >>= aFilterEntry.maFlags; break;
                         default : break;
                     }
                 }
@@ -140,7 +140,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
         OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ) ), rxMSF ), UNO_QUERY_THROW );
     Sequence< OUString > aTypeList( xFilters->getElementNames() );
 
-//  mxFilePicker->setDefaultName( );
+//	mxFilePicker->setDefaultName( );
 
     Reference< XFilterManager > xFilterManager( mxFilePicker, UNO_QUERY_THROW );
     std::vector< FilterEntry >::iterator aIter( aFilterEntryList.begin() );
@@ -185,12 +185,12 @@ void FileOpenDialog::setDefaultName( const rtl::OUString& rDefaultName )
 {
     mxFilePicker->setDefaultName( rDefaultName );
 }
-::rtl::OUString FileOpenDialog::getURL() const
+::rtl::OUString	FileOpenDialog::getURL() const
 {
     Sequence< OUString > aFileSeq( mxFilePicker->getFiles() );
     return aFileSeq.getLength() ? aFileSeq[ 0 ] : OUString();
 };
-::rtl::OUString FileOpenDialog::getFilterName() const
+::rtl::OUString	FileOpenDialog::getFilterName() const
 {
     rtl::OUString aFilterName;
     Reference< XFilterManager > xFilterManager( mxFilePicker, UNO_QUERY_THROW );

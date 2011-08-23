@@ -1,6 +1,6 @@
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ struct TypeInfoDef {
     const char *localTypeName;
     sal_Int32 minScale;
     sal_Int32 maxScale;
-    sal_Int32 sqlDataType;
-    sal_Int32 sqlDateTimeSub;
+    sal_Int32 sqlDataType; 
+    sal_Int32 sqlDateTimeSub; 
     sal_Int32 numPrecRadix;
 };
 

@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ rtl::OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString
         TKGet( TK_Step ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( nHeight ),
         Any( nOrientation ),
         Any( nPosX ),
@@ -92,8 +92,8 @@ rtl::OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     rOptimizerDialog.insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFixedLineModel" ) ),
         rControlName, aNames, aValues );
@@ -116,7 +116,7 @@ rtl::OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& r
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( bEnabled  ),
         Any( nHeight ),
         Any( rOptimizerDialog.getString( nResID ) ),
@@ -130,8 +130,8 @@ rtl::OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& r
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     rOptimizerDialog.insertButton( rControlName, xActionListener, aNames, aValues );
     return rControlName;
@@ -152,7 +152,7 @@ rtl::OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const rtl::OUS
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( nHeight ),
         Any( rLabel ),
         Any( bMultiLine ),
@@ -164,8 +164,8 @@ rtl::OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const rtl::OUS
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     rOptimizerDialog.insertFixedText( rControlName, aNames, aValues );
     if ( bBold )
@@ -189,7 +189,7 @@ rtl::OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString&
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( sal_True ),
         Any( nHeight ),
         Any( rLabel ),
@@ -201,8 +201,8 @@ rtl::OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString&
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     Reference< XCheckBox > xCheckBox( rOptimizerDialog.insertCheckBox( rControlName, aNames, aValues ) );
     if ( xItemListener.is() )
@@ -229,7 +229,7 @@ rtl::OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUS
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( fEffectiveMax ),
         Any( fEffectiveMin ),
         Any( sal_True ),
@@ -244,8 +244,8 @@ rtl::OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUS
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     Reference< XTextComponent > xTextComponent( rOptimizerDialog.insertFormattedField( rControlName, aNames, aValues ), UNO_QUERY_THROW );
     if ( xTextListener.is() )
@@ -276,7 +276,7 @@ rtl::OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString&
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( sal_True ),
         Any( bEnabled ),
         Any( nHeight ),
@@ -290,8 +290,8 @@ rtl::OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString&
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     Reference< XTextComponent > xTextComponent( rOptimizerDialog.insertComboBox( rControlName, aNames, aValues ), UNO_QUERY_THROW );
     if ( xTextListener.is() )
@@ -314,7 +314,7 @@ rtl::OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const rtl::O
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( nHeight ),
         Any( rLabel ),
         Any( bMultiLine ),
@@ -326,8 +326,8 @@ rtl::OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const rtl::O
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     Reference< XRadioButton > xRadioButton( rOptimizerDialog.insertRadioButton( rControlName, aNames, aValues ) );
     if ( xItemListener.is() )
@@ -354,7 +354,7 @@ rtl::OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& 
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( sal_True ),
         Any( bEnabled ),
         Any( nHeight ),
@@ -369,8 +369,8 @@ rtl::OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& 
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     Reference< XListBox > xListBox( rOptimizerDialog.insertListBox( rControlName, aNames, aValues ) );
     if ( xListBox.is() )
@@ -382,10 +382,10 @@ rtl::OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& 
 
 void OptimizerDialog::InitNavigationBar()
 {
-    sal_Int32   nCancelPosX = OD_DIALOG_WIDTH - BUTTON_WIDTH - 6;
-    sal_Int32   nFinishPosX = nCancelPosX - 6 - BUTTON_WIDTH;
-    sal_Int32   nNextPosX = nFinishPosX - 6 - BUTTON_WIDTH;
-    sal_Int32   nBackPosX = nNextPosX - 3 - BUTTON_WIDTH;
+    sal_Int32	nCancelPosX = OD_DIALOG_WIDTH - BUTTON_WIDTH - 6;
+    sal_Int32	nFinishPosX = nCancelPosX - 6 - BUTTON_WIDTH;
+    sal_Int32	nNextPosX = nFinishPosX - 6 - BUTTON_WIDTH;
+    sal_Int32	nBackPosX = nNextPosX - 3 - BUTTON_WIDTH;
 
     InsertSeparator( *this, TKGet( TK_lnNavSep1 ), 0, 0, DIALOG_HEIGHT - 26, OD_DIALOG_WIDTH, 1 );
     InsertSeparator( *this, TKGet( TK_lnNavSep2 ), 1, 85, 0, 1, BUTTON_POS_Y - 6 );
@@ -407,7 +407,7 @@ void OptimizerDialog::UpdateControlStatesPage0()
     short nSelectedItem = -1;
     Sequence< OUString > aItemList;
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
-    if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
+    if ( rList.size() > 1 )	// the first session in the list is the actual one -> skipping first one
     {
         aItemList.realloc( rList.size() - 1 );
         for ( i = 1; i < rList.size(); i++ )
@@ -426,7 +426,7 @@ void OptimizerDialog::UpdateControlStatesPage0()
     {
         aSelectedItems.realloc( 1 );
         aSelectedItems[ 0 ] = nSelectedItem;
-        if ( nSelectedItem > 2 )    // only allowing to delete custom themes, the first can|t be deleted
+        if ( nSelectedItem > 2 )	// only allowing to delete custom themes, the first can|t be deleted
             bRemoveButtonEnabled = sal_True;
     }
     setControlProperty( TKGet( TK_ListBox0Pg0 ), TKGet( TK_StringItemList ), Any( aItemList ) );
@@ -631,7 +631,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     sal_uInt32 w;
     Sequence< OUString > aItemList;
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
-    if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
+    if ( rList.size() > 1 )	// the first session in the list is the actual one -> skipping first one
     {
         aItemList.realloc( rList.size() - 1 );
         for ( w = 1; w < rList.size(); w++ )
@@ -641,7 +641,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
 
     // now check if it is sensible to enable the combo box
     sal_Bool bSaveSettingsEnabled = sal_True;
-    if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
+    if ( rList.size() > 1 )	// the first session in the list is the actual one -> skipping first one
     {
         for ( w = 1; w < rList.size(); w++ )
         {
@@ -770,7 +770,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         sal_Int32 i = aStr.indexOf( aImagePlaceholder, 0 );
         if ( i >= 0 )
             aStr = aStr.replaceAt( i, aImagePlaceholder.getLength(), OUString::valueOf( nGraphics ) );
-
+        
         sal_Int32 j = aStr.indexOf( aQualityPlaceholder, 0 );
         if ( j >= 0 )
             aStr = aStr.replaceAt( j, aQualityPlaceholder.getLength(), OUString::valueOf( nJPEGQuality ) );
@@ -847,7 +847,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
 
 void OptimizerDialog::InitPage4()
 {
-    {   // creating progress bar:
+    {	// creating progress bar:
         OUString pNames[] = {
             TKGet( TK_Height ),
             TKGet( TK_Name ),
@@ -858,7 +858,7 @@ void OptimizerDialog::InitPage4()
             TKGet( TK_ProgressValueMin ),
             TKGet( TK_Width ) };
 
-        Any pValues[] = {
+        Any	pValues[] = {
             Any( (sal_Int32)12 ),
             Any( TKGet( STR_SAVE_AS ) ),
             Any( (sal_Int32)( PAGE_POS_X + 6 ) ),
@@ -870,8 +870,8 @@ void OptimizerDialog::InitPage4()
 
         sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-        Sequence< rtl::OUString >   aNames( pNames, nCount );
-        Sequence< Any >             aValues( pValues, nCount );
+        Sequence< rtl::OUString >	aNames( pNames, nCount );
+        Sequence< Any >				aValues( pValues, nCount );
 
         Reference< XMultiPropertySet > xMultiPropertySet( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlProgressBarModel" ) ),
             TKGet( TK_Progress ), aNames, aValues ), UNO_QUERY );
@@ -880,7 +880,7 @@ void OptimizerDialog::InitPage4()
     Sequence< OUString > aItemList;
     std::vector< rtl::OUString > aControlList;
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText0Pg4 ), getString( STR_SUMMARY_TITLE ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
-//  aControlList.push_back( InsertSeparator( *this, TKGet( TK_Separator0Pg4 ), 0, PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 1 ) );
+//	aControlList.push_back( InsertSeparator( *this, TKGet( TK_Separator0Pg4 ), 0, PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 1 ) );
 
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText4Pg4 ), OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, sal_False, sal_False, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText5Pg4 ), OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 22, PAGE_WIDTH - 12, 8, sal_False, sal_False, mnTabIndex++ ) );
