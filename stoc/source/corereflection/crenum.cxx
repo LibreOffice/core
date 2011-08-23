@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ class IdlEnumFieldImpl
     , public XIdlField
     , public XIdlField2
 {
-    sal_Int32               _nValue;
-
+    sal_Int32				_nValue;
+    
 public:
     IdlEnumFieldImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                       typelib_TypeDescription * pTypeDescr, sal_Int32 nValue )
@@ -49,16 +49,16 @@ public:
         , _nValue( nValue )
         {}
     virtual ~IdlEnumFieldImpl();
-
+    
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
-
+    
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
-
+    
     // XIdlMember
     virtual Reference< XIdlClass > SAL_CALL getDeclaringClass() throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
@@ -201,7 +201,7 @@ Reference< XIdlField > EnumIdlClassImpl::getField( const OUString & rName )
 {
     if (! _pFields)
         getFields(); // init members
-
+    
     const OUString2Field::const_iterator iFind( _aName2Field.find( rName ) );
     if (iFind != _aName2Field.end())
         return (*iFind).second;
@@ -221,14 +221,14 @@ Sequence< Reference< XIdlField > > EnumIdlClassImpl::getFields()
             Sequence< Reference< XIdlField > > * pFields =
                 new Sequence< Reference< XIdlField > >( nFields );
             Reference< XIdlField > * pSeq = pFields->getArray();
-
+            
             while (nFields--)
             {
                 OUString aName( getTypeDescr()->ppEnumNames[nFields] );
                 _aName2Field[aName] = pSeq[nFields] = new IdlEnumFieldImpl(
                     getReflection(), aName, IdlClassImpl::getTypeDescr(), getTypeDescr()->pEnumValues[nFields] );
             }
-
+            
             _pFields = pFields;
         }
     }

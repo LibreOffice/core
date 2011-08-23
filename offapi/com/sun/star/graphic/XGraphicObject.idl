@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ module com { module sun { module star { module graphic
 interface XGraphic;
 /** <code>XGraphicObject</code> objects represent in-memory image and graphic
     objects.
-
+    
     <p>Such objects are accessable using GraphicObject scheme urls like
     <ul>
         <li>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</li>
@@ -45,8 +45,8 @@ interface XGraphic;
     the associated image/graphic is available.</p>
 
     @see XGraphicObject
-    @see GraphicProvider
-    @see MediaProperties
+    @see GraphicProvider 
+    @see MediaProperties 
 */
 
 interface XGraphicObject : ::com::sun::star::uno::XInterface
@@ -55,11 +55,11 @@ interface XGraphicObject : ::com::sun::star::uno::XInterface
     */
     [attribute ] XGraphic Graphic;
 
-    /** is the id that can be used to form the <code>vnd.sun.star.GraphicObject</code> url to address this object.
+    /** is the id that can be used to form the <code>vnd.sun.star.GraphicObject</code> url to address this object. 
     */
     [attribute, readonly ] string UniqueID;
 };
 
-} ; } ; } ; } ;
+} ; } ; } ; } ; 
 
 #endif

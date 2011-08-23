@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,39 +24,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_XSearchDescriptor_idl__
-#define __com_sun_star_util_XSearchDescriptor_idl__
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module util {
-
-//=============================================================================
-
+#ifndef __com_sun_star_util_XSearchDescriptor_idl__ 
+#define __com_sun_star_util_XSearchDescriptor_idl__ 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module util {  
+ 
+//============================================================================= 
+ 
 /** specifies a string search operation.
  */
 published interface XSearchDescriptor: com::sun::star::beans::XPropertySet
-{
-    //-------------------------------------------------------------------------
-    /** @returns
+{ 
+    //------------------------------------------------------------------------- 
+    /** @returns 
                     the string of characters to search for.
      */
-    string getSearchString();
-
-    //-------------------------------------------------------------------------
+    string getSearchString(); 
+ 
+    //------------------------------------------------------------------------- 
     /** sets the string of characters to look for.
      */
-    [oneway] void setSearchString( [in] string aString );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [oneway] void setSearchString( [in] string aString ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

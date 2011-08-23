@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,27 +24,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_Hatch_idl__
-#define __com_sun_star_drawing_Hatch_idl__
-
-#ifndef __com_sun_star_drawing_HatchStyle_idl__
-#include <com/sun/star/drawing/HatchStyle.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
-#include <com/sun/star/util/Color.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_Hatch_idl__ 
+#define __com_sun_star_drawing_Hatch_idl__ 
+ 
+#ifndef __com_sun_star_drawing_HatchStyle_idl__ 
+#include <com/sun/star/drawing/HatchStyle.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_Color_idl__ 
+#include <com/sun/star/util/Color.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: struct com::sun::star::drawing::Hatch
 /** This struct defines the appearence of a hatch.
-
+    
     <p>A hatch is a texture made of straight lines.</p>
  */
 published struct Hatch
@@ -53,34 +53,34 @@ published struct Hatch
     /** The <type>HatchStyle</type> defines the kind of lines used to draw
         this hatch.
      */
-    com::sun::star::drawing::HatchStyle Style;
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::drawing::HatchStyle Style; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: field com::sun::star::drawing::Hatch::Color
     /** This is the color of the hatch lines.
      */
-    com::sun::star::util::Color Color;
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::util::Color Color; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: field com::sun::star::drawing::Hatch::Distance
     /** This is the distance between the lines in the hatch.
      */
-    long Distance;
-
-    //-------------------------------------------------------------------------
-
+    long Distance; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: field com::sun::star::drawing::Hatch::Angle
     /** You can rotate the lines of the hatch with this angle.
      */
-    long Angle;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    long Angle; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

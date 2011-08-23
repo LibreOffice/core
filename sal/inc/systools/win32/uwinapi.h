@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,16 +29,16 @@
 #pragma once
 #include <sal/macros.h>
 #ifdef _UWINAPI_
-#   define _KERNEL32_
-#   define _USER32_
-#   define _SHELL32_
+#	define _KERNEL32_
+#	define _USER32_
+#	define _SHELL32_
 #endif
 
 #ifndef _WINDOWS_
 #ifdef _MSC_VER
 #   pragma warning(push,1) /* disable warnings within system headers */
 #endif
-#   include <windows.h>
+#	include <windows.h>
 #ifdef _MSC_VER
 #   pragma warning(pop)
 #endif
@@ -51,9 +51,9 @@
 #endif
 #endif
 
-/** GetUserDomain
+/**	GetUserDomain
 
-The GetUserDomain function retrieves the name of the NT domain the user is
+The GetUserDomain function retrieves the name of the NT domain the user	is
 logged in.
 
 Parameters
@@ -96,9 +96,9 @@ EXTERN_C WINBASEAPI DWORD WINAPI GetUserDomainA( LPSTR lpBuffer, DWORD nBuffserS
 EXTERN_C WINBASEAPI DWORD WINAPI GetUserDomainW( LPWSTR lpBuffer, DWORD nBuffserSize );
 
 #ifdef UNICODE
-#define GetUserDomain   GetUserDomainW
+#define GetUserDomain	GetUserDomainW
 #else
-#define GetUserDomain   GetUserDomainA
+#define GetUserDomain	GetUserDomainA
 #endif
 
 EXTERN_C WINBASEAPI DWORD WINAPI GetProcessId( HANDLE hProcess );
@@ -107,13 +107,13 @@ EXTERN_C WINBASEAPI DWORD WINAPI GetProcessId( HANDLE hProcess );
 
 inline bool IsValidHandle(HANDLE handle)
 {
-    return  handle != INVALID_HANDLE_VALUE && handle != NULL;
+    return	handle != INVALID_HANDLE_VALUE && handle != NULL;
 }
 
-#else   /* __cplusplus */
+#else	/* __cplusplus */
 
-#define IsValidHandle(Handle)   ((DWORD)(Handle) + 1 > 1)
+#define IsValidHandle(Handle)	((DWORD)(Handle) + 1 > 1)
 
-#endif  /* __cplusplus */
+#endif	/* __cplusplus */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

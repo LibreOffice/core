@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ public:
     AstConstant(const ExprType type, AstExpression* pExpr,
                 const ::rtl::OString& name, AstScope* pScope);
     virtual ~AstConstant();
-
+    
     AstExpression* getConstValue()
         { return m_pConstValue; }
     ExprType getConstValueType() const
@@ -50,8 +50,8 @@ public:
     sal_Bool dumpBlob(
         typereg::Writer & rBlob, sal_uInt16 index, bool published);
 private:
-    AstExpression*                  m_pConstValue;
-    const ExprType  m_constValueType;
+    AstExpression* 					m_pConstValue;
+    const ExprType	m_constValueType;
 };
 
 #endif // _IDLC_ASTCONSTANT_HXX_

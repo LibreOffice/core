@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 #ifndef __com_sun_star_lang_NullPointerException_idl__
 #include <com/sun/star/lang/NullPointerException.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
@@ -55,39 +55,39 @@ module com { module sun { module star { module configuration { module backend {
 //==============================================================================
 
 /**
-  provides read access to layers that contain sublayers accessible through an
+  provides read access to layers that contain sublayers accessible through an 
   additional criterion (for instance the locale they contain data for).
 
     @since OOo 1.1.2
   */
-published interface XCompositeLayer : XLayer
+published interface XCompositeLayer : XLayer 
 {
     //--------------------------------------------------------------------------
-
+    
     /**
       Returns a list of the criteria that can be used to access the
       sublayers.
 
-      @return
+      @return   
             a list supported sublayer identifiers
 
       @throws com::sun::star::lang::WrappedTargetException
             if an error occurs in the retrieval of the data.
       */
-    sequence<string> listSubLayerIds()
+    sequence<string> listSubLayerIds() 
         raises (com::sun::star::lang::WrappedTargetException) ;
-
+    
     //--------------------------------------------------------------------------
-
+    
     /**
       Describes the content of a particular sublayer to
       an <type>XLayerHandler</type>.
 
-      @param aHandler
-            Handler object that will receive calls
+      @param aHandler   
+            Handler object that will receive calls 
             describing the contents of the sublayer.
 
-      @param aSubLayerId
+      @param aSubLayerId    
             Identifier of the sublayer to be read.
             <p> Must be one the identifiers returned by
                 <member>XCompositeLayer::listSubLayerIds()</member>
@@ -103,7 +103,7 @@ published interface XCompositeLayer : XLayer
               if the data read from the layer is rejected as invalid by the
               <type>XLayerHandler</type>.
       */
-    void readSubLayerData([in] XLayerHandler aHandler, [in] string aSubLayerId)
+    void readSubLayerData([in] XLayerHandler aHandler, [in] string aSubLayerId) 
         raises (com::sun::star::lang::NullPointerException,
                 com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::WrappedTargetException,
@@ -115,4 +115,4 @@ published interface XCompositeLayer : XLayer
 //==============================================================================
 
 } ; } ; } ; } ; } ;
-#endif
+#endif 

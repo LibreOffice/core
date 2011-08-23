@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,15 @@
 #ifndef __com_sun_star_rendering_XBitmapPalette_idl__
 #define __com_sun_star_rendering_XBitmapPalette_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_rendering_XColorSpace_idl__
 #include <com/sun/star/rendering/XColorSpace.idl>
 #endif
@@ -110,10 +110,10 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
      */
     boolean setIndex( [in] sequence<ColorComponent> color, [in] boolean transparency, [in] long nIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException,
-                com::sun::star::lang::IllegalArgumentException);
+                com::sun::star::lang::IllegalArgumentException); 
 
     //-------------------------------------------------------------------------
-
+    
     /** Query associated color space.<p>
 
         @return the color space that is associated with this palette.

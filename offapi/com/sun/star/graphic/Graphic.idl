@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ module com { module sun { module star { module graphic
 
     <p>The main interface that has to be implemented for this service
     is the <type>XGraphic</type> interface, which itself exposes only
-    a few methods. Beside this, a <type>Graphic</type> service
+    a few methods. Beside this, a <type>Graphic</type> service 
     incorporates the <type>GraphicDescriptor</type> to give
     access to the attributes of the graphic.
-
+    
     @see XGraphic
     @see XGraphicTtransformer
     @see GraphicDescriptor
@@ -57,6 +57,6 @@ published service Graphic
     service ::com::sun::star::graphic::GraphicDescriptor;
 };
 
-} ; } ; } ; } ;
+} ; } ; } ; } ; 
 
 #endif

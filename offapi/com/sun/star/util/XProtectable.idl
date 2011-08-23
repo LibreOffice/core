@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,49 +24,49 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_XProtectable_idl__
-#define __com_sun_star_util_XProtectable_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module util {
-
-//=============================================================================
-
+#ifndef __com_sun_star_util_XProtectable_idl__ 
+#define __com_sun_star_util_XProtectable_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module util {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to protect objects from modifications.
  */
 published interface XProtectable: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** activates the protection.
      */
-    void protect( [in] string aPassword );
-
-    //-------------------------------------------------------------------------
+    void protect( [in] string aPassword ); 
+ 
+    //------------------------------------------------------------------------- 
     /** removes the protection.
      */
-    void unprotect( [in] string aPassword )
-            raises( com::sun::star::lang::IllegalArgumentException );
-
-    //-------------------------------------------------------------------------
-    /** @returns
+    void unprotect( [in] string aPassword ) 
+            raises( com::sun::star::lang::IllegalArgumentException ); 
+ 
+    //------------------------------------------------------------------------- 
+    /** @returns  
                 the current state of protection.
      */
-    boolean isProtected();
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    boolean isProtected(); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

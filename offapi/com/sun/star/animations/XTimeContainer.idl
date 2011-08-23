@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_animations_XTimeContainer_idl__
-#define __com_sun_star_animations_XTimeContainer_idl__
+#ifndef __com_sun_star_animations_XTimeContainer_idl__ 
+#define __com_sun_star_animations_XTimeContainer_idl__ 
 
 #ifndef __com_sun_star_animations_XAnimationNode_idl__
 #include <com/sun/star/animations/XAnimationNode.idl>
@@ -47,11 +47,11 @@
 #include <com/sun/star/container/ElementExistException.idl>
 #endif
 
-//=============================================================================
-
- module com {  module sun {  module star {  module animations {
-
-//=============================================================================
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module animations {  
+ 
+//============================================================================= 
 
 /**
 
@@ -89,23 +89,23 @@ interface XTimeContainer : XAnimationNode
     /**
     */
     XAnimationNode insertBefore( [in] XAnimationNode newChild, [in] XAnimationNode refChild )
-        raises( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::NoSuchElementException,
+        raises( com::sun::star::lang::IllegalArgumentException, 
+                com::sun::star::container::NoSuchElementException, 
                 com::sun::star::container::ElementExistException,
                 com::sun::star::lang::WrappedTargetException );
 
     /**
     */
     XAnimationNode insertAfter( [in] XAnimationNode newChild, [in] XAnimationNode refChild )
-        raises( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::NoSuchElementException,
+        raises( com::sun::star::lang::IllegalArgumentException, 
+                com::sun::star::container::NoSuchElementException, 
                 com::sun::star::container::ElementExistException,
                 com::sun::star::lang::WrappedTargetException );
 
     /**
     */
     XAnimationNode replaceChild( [in] XAnimationNode newChild, [in] XAnimationNode oldChild )
-        raises( com::sun::star::lang::IllegalArgumentException,
+        raises( com::sun::star::lang::IllegalArgumentException, 
                 com::sun::star::container::NoSuchElementException,
                 com::sun::star::container::ElementExistException,
                 com::sun::star::lang::WrappedTargetException );
@@ -113,20 +113,20 @@ interface XTimeContainer : XAnimationNode
     /**
     */
     XAnimationNode removeChild( [in] XAnimationNode oldChild )
-        raises( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::NoSuchElementException,
+        raises( com::sun::star::lang::IllegalArgumentException, 
+                com::sun::star::container::NoSuchElementException, 
                 com::sun::star::lang::WrappedTargetException );
 
     /**
     */
     XAnimationNode appendChild( [in] XAnimationNode newChild )
-        raises( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::ElementExistException,
+        raises( com::sun::star::lang::IllegalArgumentException, 
+                com::sun::star::container::ElementExistException, 
                 com::sun::star::lang::WrappedTargetException );
 };
 
-//=============================================================================
-
-}; }; }; };
+//============================================================================= 
+ 
+}; }; }; };  
 
 #endif

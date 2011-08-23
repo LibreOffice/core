@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -344,7 +344,7 @@ namespace rtl {
 
 /** Helper base class for a late-initialized (default-constructed)
     static variable, implementing the double-checked locking pattern correctly.
-
+    
     @derive
     Derive from this class (common practice), e.g.
     <pre>
@@ -353,7 +353,7 @@ namespace rtl {
     MyType & rStatic = MyStatic::get();
     ...
     </pre>
-
+    
     @tplparam T
               variable's type
     @tplparam Unique
@@ -366,7 +366,7 @@ class Static {
 public:
     /** Gets the static.  Mutual exclusion is performed using the
         osl global mutex.
-
+        
         @return
                 static variable
     */
@@ -387,7 +387,7 @@ private:
 
 /** Helper class for a late-initialized static aggregate, e.g. an array,
     implementing the double-checked locking pattern correctly.
-
+    
     @tplparam T
               aggregate's element type
     @tplparam InitAggregate
@@ -398,7 +398,7 @@ class StaticAggregate {
 public:
     /** Gets the static aggregate, late-initializing.
         Mutual exclusion is performed using the osl global mutex.
-
+        
         @return
                 aggregate
     */
@@ -412,7 +412,7 @@ public:
 
 /** Helper base class for a late-initialized static variable,
     implementing the double-checked locking pattern correctly.
-
+    
     @derive
     Derive from this class (common practice),
     providing an initializer functor class, e.g.
@@ -427,7 +427,7 @@ public:
     MyType & rStatic = MyStatic::get();
     ...
     </pre>
-
+    
     @tplparam T
               variable's type
     @tplparam InitData
@@ -447,7 +447,7 @@ class StaticWithInit {
 public:
     /** Gets the static.  Mutual exclusion is performed using the
         osl global mutex.
-
+        
         @return
                 static variable
     */

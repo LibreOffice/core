@@ -6,35 +6,35 @@
     <component-description>
         <author> Joerg Budischewski </author>
         <name> com.sun.star.comp.io.stm.Pipe </name>
-        <description>
+        <description> 
             This component provides ...
         </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
-        <language>  c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.io.Pipe </supported-service>
+        <loader-name> com.sun.star.loader.SharedLibrary	</loader-name>
+        <language>	c++	</language>
+        <status	value="final"/>
+        <supported-service>	com.sun.star.io.Pipe </supported-service>
         <service-dependency> ... </service-dependency>
-        <type>   com.sun.star.io.XObjectInputStream                 </type>
-        <type>   com.sun.star.io.XObjectOutputStream                </type>
-        <type>   com.sun.star.io.XActiveDataSource                  </type>
-        <type>   com.sun.star.io.XActiveDataSink                    </type>
-        <type>   com.sun.star.io.XMarkableStream                    </type>
-        <type>   com.sun.star.io.UnexpectedEOFException             </type>
-        <type>   com.sun.star.io.WrongFormatException               </type>
-        <type>   com.sun.star.lang.XComponent                       </type>
-        <type>   com.sun.star.lang.XMultiServiceFactory             </type>
-        <type>   com.sun.star.lang.XSingleServiceFactory            </type>
-        <type>   com.sun.star.lang.XServiceInfo                     </type>
-        <type>   com.sun.star.lang.XTypeProvider                    </type>
-        <type>   com.sun.star.lang.IllegalArgumentException         </type>
-        <type>   com.sun.star.registry.XRegistryKey                 </type>
-        <type>   com.sun.star.registry.XImplementationRegistration  </type>
-        <type>   com.sun.star.test.XSimpleTest                      </type>
-        <type>   com.sun.star.lang.XSingleComponentFactory          </type>
-        <type>   com.sun.star.uno.XComponentContext                 </type>
-        <type>   com.sun.star.uno.TypeClass                         </type>
-        <type>   com.sun.star.uno.XWeak                             </type>
-        <type>   com.sun.star.uno.XAggregation                      </type>
+        <type>	 com.sun.star.io.XObjectInputStream					</type>
+        <type>	 com.sun.star.io.XObjectOutputStream	   			</type>
+        <type>	 com.sun.star.io.XActiveDataSource					</type>
+        <type>	 com.sun.star.io.XActiveDataSink					</type>
+        <type>	 com.sun.star.io.XMarkableStream					</type>
+        <type>	 com.sun.star.io.UnexpectedEOFException    			</type>
+        <type>	 com.sun.star.io.WrongFormatException      			</type>
+        <type>	 com.sun.star.lang.XComponent              			</type>
+        <type>	 com.sun.star.lang.XMultiServiceFactory            	</type>
+        <type>	 com.sun.star.lang.XSingleServiceFactory   			</type>
+        <type>	 com.sun.star.lang.XServiceInfo            			</type>
+        <type>	 com.sun.star.lang.XTypeProvider           			</type>
+        <type>	 com.sun.star.lang.IllegalArgumentException			</type>
+        <type>	 com.sun.star.registry.XRegistryKey           		</type>
+        <type>	 com.sun.star.registry.XImplementationRegistration	</type>
+        <type>	 com.sun.star.test.XSimpleTest                    	</type>
+        <type>	 com.sun.star.lang.XSingleComponentFactory         	</type>
+        <type>	 com.sun.star.uno.XComponentContext                	</type>
+        <type>	 com.sun.star.uno.TypeClass                       	</type>
+        <type>	 com.sun.star.uno.XWeak                           	</type>
+        <type>	 com.sun.star.uno.XAggregation                    	</type>
     </component-description>
 
     <component-description>
@@ -43,30 +43,30 @@
         <description>
             This component provides ...
         </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
-        <language>  c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.io.DataInputStream </supported-service>
+        <loader-name> com.sun.star.loader.SharedLibrary	</loader-name>
+        <language>	c++	</language>
+        <status	value="final"/>
+        <supported-service>	com.sun.star.io.DataInputStream	</supported-service>
         <service-dependency> ... </service-dependency>
-        <type>   com.sun.star.io.XObjectInputStream                 </type>
-        <type>   com.sun.star.io.XObjectOutputStream                </type>
-        <type>   com.sun.star.io.XActiveDataSource                  </type>
-        <type>   com.sun.star.io.XActiveDataSink                    </type>
-        <type>   com.sun.star.io.XMarkableStream                    </type>
-        <type>   com.sun.star.io.UnexpectedEOFException             </type>
-        <type>   com.sun.star.io.WrongFormatException               </type>
-        <type>   com.sun.star.lang.XComponent                       </type>
-        <type>   com.sun.star.lang.XMultiServiceFactory             </type>
-        <type>   com.sun.star.lang.XSingleServiceFactory            </type>
-        <type>   com.sun.star.lang.XServiceInfo                     </type>
-        <type>   com.sun.star.lang.XTypeProvider                    </type>
-        <type>   com.sun.star.lang.IllegalArgumentException         </type>
-        <type>   com.sun.star.registry.XRegistryKey                 </type>
-        <type>   com.sun.star.registry.XImplementationRegistration  </type>
-        <type>   com.sun.star.test.XSimpleTest                      </type>
-        <type>   com.sun.star.uno.TypeClass                         </type>
-        <type>   com.sun.star.uno.XWeak                             </type>
-        <type>   com.sun.star.uno.XAggregation                      </type>
+        <type>	 com.sun.star.io.XObjectInputStream					</type>
+        <type>	 com.sun.star.io.XObjectOutputStream				</type>
+        <type>	 com.sun.star.io.XActiveDataSource					</type>
+        <type>	 com.sun.star.io.XActiveDataSink					</type>
+        <type>	 com.sun.star.io.XMarkableStream					</type>
+        <type>	 com.sun.star.io.UnexpectedEOFException            	</type>
+        <type>	 com.sun.star.io.WrongFormatException              	</type>
+        <type>	 com.sun.star.lang.XComponent                      	</type>
+        <type>	 com.sun.star.lang.XMultiServiceFactory            	</type>
+        <type>	 com.sun.star.lang.XSingleServiceFactory           	</type>
+        <type>	 com.sun.star.lang.XServiceInfo                    	</type>
+        <type>	 com.sun.star.lang.XTypeProvider                   	</type>
+        <type>	 com.sun.star.lang.IllegalArgumentException        	</type>
+        <type>	 com.sun.star.registry.XRegistryKey                	</type>
+        <type>	 com.sun.star.registry.XImplementationRegistration	</type>
+        <type>	 com.sun.star.test.XSimpleTest                     	</type>
+        <type>	 com.sun.star.uno.TypeClass                        	</type>
+        <type>	 com.sun.star.uno.XWeak                            	</type>
+        <type>	 com.sun.star.uno.XAggregation                      </type>
     </component-description>
 
     <component-description>
@@ -75,32 +75,32 @@
         <description>
             This component provides ...
         </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <loader-name> com.sun.star.loader.SharedLibrary	</loader-name>
         <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.io.DataOutputStream </supported-service>
+        <status	value="final"/>
+        <supported-service>	com.sun.star.io.DataOutputStream </supported-service>
         <service-dependency> ... </service-dependency>
-        <type>  com.sun.star.io.XObjectInputStream                  </type>
-        <type>  com.sun.star.io.XObjectOutputStream                 </type>
-        <type>  com.sun.star.io.XActiveDataSource                   </type>
-        <type>  com.sun.star.io.XActiveDataSink                     </type>
-        <type>  com.sun.star.io.XMarkableStream                     </type>
-        <type>  com.sun.star.io.UnexpectedEOFException              </type>
-        <type>  com.sun.star.io.WrongFormatException                </type>
-        <type>  com.sun.star.lang.XComponent                        </type>
-        <type>  com.sun.star.lang.XMultiServiceFactory              </type>
-        <type>  com.sun.star.lang.XSingleServiceFactory             </type>
-        <type>  com.sun.star.lang.XServiceInfo                      </type>
-        <type>  com.sun.star.lang.XTypeProvider                     </type>
-        <type>  com.sun.star.lang.IllegalArgumentException          </type>
-        <type>  com.sun.star.registry.XRegistryKey                  </type>
-        <type>  com.sun.star.registry.XImplementationRegistration   </type>
-        <type>  com.sun.star.test.XSimpleTest                       </type>
-        <type>   com.sun.star.lang.XSingleComponentFactory          </type>
-        <type>   com.sun.star.uno.XComponentContext                 </type>
-        <type>  com.sun.star.uno.TypeClass                          </type>
-        <type>  com.sun.star.uno.XWeak                              </type>
-        <type>  com.sun.star.uno.XAggregation                       </type>
+        <type> 	com.sun.star.io.XObjectInputStream					</type>
+        <type> 	com.sun.star.io.XObjectOutputStream					</type>
+        <type> 	com.sun.star.io.XActiveDataSource					</type>
+        <type> 	com.sun.star.io.XActiveDataSink						</type>
+        <type> 	com.sun.star.io.XMarkableStream						</type>
+        <type> 	com.sun.star.io.UnexpectedEOFException            	</type>
+        <type> 	com.sun.star.io.WrongFormatException              	</type>
+        <type> 	com.sun.star.lang.XComponent                      	</type>
+        <type> 	com.sun.star.lang.XMultiServiceFactory            	</type>
+        <type> 	com.sun.star.lang.XSingleServiceFactory           	</type>
+        <type> 	com.sun.star.lang.XServiceInfo                    	</type>
+        <type> 	com.sun.star.lang.XTypeProvider                   	</type>
+        <type> 	com.sun.star.lang.IllegalArgumentException        	</type>
+        <type> 	com.sun.star.registry.XRegistryKey                	</type>
+        <type> 	com.sun.star.registry.XImplementationRegistration	</type>
+        <type> 	com.sun.star.test.XSimpleTest                     	</type>
+        <type>	 com.sun.star.lang.XSingleComponentFactory         	</type>
+        <type>	 com.sun.star.uno.XComponentContext                	</type>
+        <type> 	com.sun.star.uno.TypeClass                        	</type>
+        <type> 	com.sun.star.uno.XWeak                            	</type>
+        <type> 	com.sun.star.uno.XAggregation                      	</type>
     </component-description>
 
     <component-description>
@@ -109,32 +109,32 @@
         <description>
             This component provides ...
         </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <loader-name> com.sun.star.loader.SharedLibrary	</loader-name>
         <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.io.ObjectInputStream </supported-service>
+        <status	value="final"/>
+        <supported-service>	com.sun.star.io.ObjectInputStream </supported-service>
         <service-dependency> ... </service-dependency>
-        <type>  com.sun.star.io.XObjectInputStream                  </type>
-        <type>  com.sun.star.io.XObjectOutputStream                 </type>
-        <type>  com.sun.star.io.XActiveDataSource                   </type>
-        <type>  com.sun.star.io.XActiveDataSink                     </type>
-        <type>  com.sun.star.io.XMarkableStream                     </type>
-        <type>  com.sun.star.io.UnexpectedEOFException              </type>
-        <type>  com.sun.star.io.WrongFormatException                </type>
-        <type>  com.sun.star.lang.XComponent                        </type>
-        <type>  com.sun.star.lang.XMultiServiceFactory              </type>
-        <type>  com.sun.star.lang.XSingleServiceFactory             </type>
-        <type>  com.sun.star.lang.XServiceInfo                      </type>
-        <type>  com.sun.star.lang.XTypeProvider                     </type>
-        <type>  com.sun.star.lang.IllegalArgumentException          </type>
-        <type>  com.sun.star.registry.XRegistryKey                  </type>
-        <type>  com.sun.star.registry.XImplementationRegistration   </type>
-        <type>  com.sun.star.test.XSimpleTest                       </type>
-        <type>   com.sun.star.lang.XSingleComponentFactory          </type>
-        <type>   com.sun.star.uno.XComponentContext                 </type>
-        <type>  com.sun.star.uno.TypeClass                          </type>
-        <type>  com.sun.star.uno.XWeak                              </type>
-        <type>  com.sun.star.uno.XAggregation                       </type>
+        <type> 	com.sun.star.io.XObjectInputStream					</type>
+        <type> 	com.sun.star.io.XObjectOutputStream					</type>
+        <type> 	com.sun.star.io.XActiveDataSource					</type>
+        <type> 	com.sun.star.io.XActiveDataSink						</type>
+        <type> 	com.sun.star.io.XMarkableStream						</type>
+        <type> 	com.sun.star.io.UnexpectedEOFException            	</type>
+        <type> 	com.sun.star.io.WrongFormatException              	</type>
+        <type> 	com.sun.star.lang.XComponent                      	</type>
+        <type> 	com.sun.star.lang.XMultiServiceFactory            	</type>
+        <type> 	com.sun.star.lang.XSingleServiceFactory           	</type>
+        <type> 	com.sun.star.lang.XServiceInfo                    	</type>
+        <type> 	com.sun.star.lang.XTypeProvider                   	</type>
+        <type> 	com.sun.star.lang.IllegalArgumentException        	</type>
+        <type> 	com.sun.star.registry.XRegistryKey                	</type>
+        <type> 	com.sun.star.registry.XImplementationRegistration	</type>
+        <type> 	com.sun.star.test.XSimpleTest                     	</type>
+        <type>	 com.sun.star.lang.XSingleComponentFactory         	</type>
+        <type>	 com.sun.star.uno.XComponentContext                	</type>
+        <type> 	com.sun.star.uno.TypeClass                        	</type>
+        <type> 	com.sun.star.uno.XWeak                            	</type>
+        <type> 	com.sun.star.uno.XAggregation                      	</type>
     </component-description>
 
     <component-description>
@@ -143,32 +143,32 @@
         <description>
             This component provides ...
         </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <loader-name> com.sun.star.loader.SharedLibrary	</loader-name>
         <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.io.ObjectOutputStream </supported-service>
+        <status	value="final"/>
+        <supported-service>	com.sun.star.io.ObjectOutputStream </supported-service>
         <service-dependency> ... </service-dependency>
-        <type>   com.sun.star.io.XObjectInputStream                 </type>
-        <type>   com.sun.star.io.XObjectOutputStream                </type>
-        <type>   com.sun.star.io.XActiveDataSource                  </type>
-        <type>   com.sun.star.io.XActiveDataSink                    </type>
-        <type>   com.sun.star.io.XMarkableStream                    </type>
-        <type>   com.sun.star.io.UnexpectedEOFException             </type>
-        <type>   com.sun.star.io.WrongFormatException               </type>
-        <type>   com.sun.star.lang.XComponent                       </type>
-        <type>   com.sun.star.lang.XMultiServiceFactory             </type>
-        <type>   com.sun.star.lang.XSingleServiceFactory            </type>
-        <type>   com.sun.star.lang.XServiceInfo                     </type>
-        <type>   com.sun.star.lang.XTypeProvider                    </type>
-        <type>   com.sun.star.lang.IllegalArgumentException         </type>
-        <type>   com.sun.star.registry.XRegistryKey                 </type>
-        <type>   com.sun.star.registry.XImplementationRegistration  </type>
-        <type>   com.sun.star.test.XSimpleTest                      </type>
-        <type>   com.sun.star.lang.XSingleComponentFactory          </type>
-        <type>   com.sun.star.uno.XComponentContext                 </type>
-        <type>   com.sun.star.uno.TypeClass                         </type>
-        <type>   com.sun.star.uno.XWeak                             </type>
-        <type>   com.sun.star.uno.XAggregation                      </type>
+        <type>	 com.sun.star.io.XObjectInputStream					</type>
+        <type>	 com.sun.star.io.XObjectOutputStream				</type>
+        <type>	 com.sun.star.io.XActiveDataSource					</type>
+        <type>	 com.sun.star.io.XActiveDataSink					</type>
+        <type>	 com.sun.star.io.XMarkableStream					</type>
+        <type>	 com.sun.star.io.UnexpectedEOFException            	</type>
+        <type>	 com.sun.star.io.WrongFormatException              	</type>
+        <type>	 com.sun.star.lang.XComponent                      	</type>
+        <type>	 com.sun.star.lang.XMultiServiceFactory            	</type>
+        <type>	 com.sun.star.lang.XSingleServiceFactory           	</type>
+        <type>	 com.sun.star.lang.XServiceInfo                    	</type>
+        <type>	 com.sun.star.lang.XTypeProvider                   	</type>
+        <type>	 com.sun.star.lang.IllegalArgumentException        	</type>
+        <type>	 com.sun.star.registry.XRegistryKey                	</type>
+        <type>	 com.sun.star.registry.XImplementationRegistration	</type>
+        <type>	 com.sun.star.test.XSimpleTest                     	</type>
+        <type>	 com.sun.star.lang.XSingleComponentFactory         	</type>
+        <type>	 com.sun.star.uno.XComponentContext                	</type>
+        <type>	 com.sun.star.uno.TypeClass                        	</type>
+        <type>	 com.sun.star.uno.XWeak                            	</type>
+        <type>	 com.sun.star.uno.XAggregation                      </type>
     </component-description>
 
     <component-description>
@@ -177,32 +177,32 @@
         <description>
             This component provides ...
         </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <loader-name> com.sun.star.loader.SharedLibrary	</loader-name>
         <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.io.MarkableInputStream </supported-service>
+        <status	value="final"/>
+        <supported-service>	com.sun.star.io.MarkableInputStream	</supported-service>
         <service-dependency> ... </service-dependency>
-        <type>   com.sun.star.io.XObjectInputStream                 </type>
-        <type>   com.sun.star.io.XObjectOutputStream                </type>
-        <type>   com.sun.star.io.XActiveDataSource                  </type>
-        <type>   com.sun.star.io.XActiveDataSink                    </type>
-        <type>   com.sun.star.io.XMarkableStream                    </type>
-        <type>   com.sun.star.io.UnexpectedEOFException             </type>
-        <type>   com.sun.star.io.WrongFormatException               </type>
-        <type>   com.sun.star.lang.XComponent                       </type>
-        <type>   com.sun.star.lang.XMultiServiceFactory             </type>
-        <type>   com.sun.star.lang.XSingleServiceFactory            </type>
-        <type>   com.sun.star.lang.XServiceInfo                     </type>
-        <type>   com.sun.star.lang.XTypeProvider                    </type>
-        <type>   com.sun.star.lang.IllegalArgumentException         </type>
-        <type>   com.sun.star.registry.XRegistryKey                 </type>
-        <type>   com.sun.star.registry.XImplementationRegistration  </type>
-        <type>   com.sun.star.test.XSimpleTest                      </type>
-        <type>   com.sun.star.lang.XSingleComponentFactory          </type>
-        <type>   com.sun.star.uno.XComponentContext                 </type>
-        <type>   com.sun.star.uno.TypeClass                         </type>
-        <type>   com.sun.star.uno.XWeak                             </type>
-        <type>   com.sun.star.uno.XAggregation                      </type>
+        <type>	 com.sun.star.io.XObjectInputStream					</type>
+        <type>	 com.sun.star.io.XObjectOutputStream				</type>
+        <type>	 com.sun.star.io.XActiveDataSource					</type>
+        <type>	 com.sun.star.io.XActiveDataSink					</type>
+        <type>	 com.sun.star.io.XMarkableStream					</type>
+        <type>	 com.sun.star.io.UnexpectedEOFException            	</type>
+        <type>	 com.sun.star.io.WrongFormatException              	</type>
+        <type>	 com.sun.star.lang.XComponent                      	</type>
+        <type>	 com.sun.star.lang.XMultiServiceFactory            	</type>
+        <type>	 com.sun.star.lang.XSingleServiceFactory           	</type>
+        <type>	 com.sun.star.lang.XServiceInfo                    	</type>
+        <type>	 com.sun.star.lang.XTypeProvider                   	</type>
+        <type>	 com.sun.star.lang.IllegalArgumentException        	</type>
+        <type>	 com.sun.star.registry.XRegistryKey                	</type>
+        <type>	 com.sun.star.registry.XImplementationRegistration	</type>
+        <type>	 com.sun.star.test.XSimpleTest                     	</type>
+        <type>	 com.sun.star.lang.XSingleComponentFactory         	</type>
+        <type>	 com.sun.star.uno.XComponentContext                	</type>
+        <type>	 com.sun.star.uno.TypeClass                        	</type>
+        <type>	 com.sun.star.uno.XWeak                            	</type>
+        <type>	 com.sun.star.uno.XAggregation                      </type>
     </component-description>
 
     <component-description>
@@ -211,32 +211,32 @@
         <description>
             This component provides ...
         </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <loader-name> com.sun.star.loader.SharedLibrary	</loader-name>
         <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.io.MarkableOutputStream </supported-service>
+        <status	value="final"/>
+        <supported-service>	com.sun.star.io.MarkableOutputStream </supported-service>
         <service-dependency> ... </service-dependency>
-        <type>   com.sun.star.io.XObjectInputStream                 </type>
-        <type>   com.sun.star.io.XObjectOutputStream                </type>
-        <type>   com.sun.star.io.XActiveDataSource                  </type>
-        <type>   com.sun.star.io.XActiveDataSink                    </type>
-        <type>   com.sun.star.io.XMarkableStream                    </type>
-        <type>   com.sun.star.io.UnexpectedEOFException             </type>
-        <type>   com.sun.star.io.WrongFormatException               </type>
-        <type>   com.sun.star.lang.XComponent                       </type>
-        <type>   com.sun.star.lang.XMultiServiceFactory             </type>
-        <type>   com.sun.star.lang.XSingleServiceFactory            </type>
-        <type>   com.sun.star.lang.XServiceInfo                     </type>
-        <type>   com.sun.star.lang.XTypeProvider                    </type>
-        <type>   com.sun.star.lang.IllegalArgumentException         </type>
-        <type>   com.sun.star.registry.XRegistryKey                 </type>
-        <type>   com.sun.star.registry.XImplementationRegistration  </type>
-        <type>   com.sun.star.test.XSimpleTest                      </type>
-        <type>   com.sun.star.lang.XSingleComponentFactory          </type>
-        <type>   com.sun.star.uno.XComponentContext                 </type>
-        <type>   com.sun.star.uno.TypeClass                         </type>
-        <type>   com.sun.star.uno.XWeak                             </type>
-        <type>   com.sun.star.uno.XAggregation                      </type>
+        <type>	 com.sun.star.io.XObjectInputStream					</type>
+        <type>	 com.sun.star.io.XObjectOutputStream				</type>
+        <type>	 com.sun.star.io.XActiveDataSource					</type>
+        <type>	 com.sun.star.io.XActiveDataSink					</type>
+        <type>	 com.sun.star.io.XMarkableStream					</type>
+        <type>	 com.sun.star.io.UnexpectedEOFException            	</type>
+        <type>	 com.sun.star.io.WrongFormatException              	</type>
+        <type>	 com.sun.star.lang.XComponent                      	</type>
+        <type>	 com.sun.star.lang.XMultiServiceFactory            	</type>
+        <type>	 com.sun.star.lang.XSingleServiceFactory           	</type>
+        <type>	 com.sun.star.lang.XServiceInfo                    	</type>
+        <type>	 com.sun.star.lang.XTypeProvider                   	</type>
+        <type>	 com.sun.star.lang.IllegalArgumentException        	</type>
+        <type>	 com.sun.star.registry.XRegistryKey                	</type>
+        <type>	 com.sun.star.registry.XImplementationRegistration	</type>
+        <type>	 com.sun.star.test.XSimpleTest                     	</type>
+        <type>	 com.sun.star.lang.XSingleComponentFactory         	</type>
+        <type>	 com.sun.star.uno.XComponentContext                	</type>
+        <type>	 com.sun.star.uno.TypeClass                        	</type>
+        <type>	 com.sun.star.uno.XWeak                            	</type>
+        <type>	 com.sun.star.uno.XAggregation                      </type>
     </component-description>
 
     <component-description>
@@ -245,34 +245,34 @@
         <description>
             This component provides ...
         </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <loader-name> com.sun.star.loader.SharedLibrary	</loader-name>
         <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.io.Pump </supported-service>
+        <status	value="final"/>
+        <supported-service>	com.sun.star.io.Pump </supported-service>
         <service-dependency> ... </service-dependency>
-        <type>  com.sun.star.io.XConnectable                </type>
-        <type>  com.sun.star.io.XActiveDataSource           </type>
-        <type>  com.sun.star.io.XActiveDataSink             </type>
-        <type>  com.sun.star.io.XActiveDataControl          </type>
-        <type>  com.sun.star.lang.DisposedException         </type>
-        <type>  com.sun.star.lang.XTypeProvider             </type>
-        <type>  com.sun.star.lang.XServiceInfo              </type>
-        <type>  com.sun.star.lang.XSingleServiceFactory     </type>
-        <type>  com.sun.star.lang.XMultiServiceFactory      </type>
-        <type>  com.sun.star.registry.XRegistryKey          </type>
-        <type>   com.sun.star.lang.XSingleComponentFactory          </type>
-        <type>   com.sun.star.uno.XComponentContext                 </type>
-        <type>  com.sun.star.uno.XAggregation               </type>
-        <type>  com.sun.star.uno.XWeak                      </type>
-        <type>  com.sun.star.uno.TypeClass                  </type>
+        <type>	com.sun.star.io.XConnectable				</type>
+        <type>	com.sun.star.io.XActiveDataSource			</type>
+        <type>	com.sun.star.io.XActiveDataSink				</type>
+        <type>	com.sun.star.io.XActiveDataControl			</type>
+        <type>	com.sun.star.lang.DisposedException 		</type>
+        <type>	com.sun.star.lang.XTypeProvider				</type>
+        <type>	com.sun.star.lang.XServiceInfo				</type>
+        <type>	com.sun.star.lang.XSingleServiceFactory		</type>
+        <type>	com.sun.star.lang.XMultiServiceFactory		</type>
+        <type>	com.sun.star.registry.XRegistryKey			</type>
+        <type>	 com.sun.star.lang.XSingleComponentFactory         	</type>
+        <type>	 com.sun.star.uno.XComponentContext                	</type>
+        <type>	com.sun.star.uno.XAggregation				</type>
+        <type>	com.sun.star.uno.XWeak						</type>
+        <type>	com.sun.star.uno.TypeClass					</type>
     </component-description>
 
-    <project-build-dependency>  cppuhelper  </project-build-dependency>
-    <project-build-dependency>  cppu        </project-build-dependency>
-    <project-build-dependency>  sal         </project-build-dependency>
+    <project-build-dependency>	cppuhelper	</project-build-dependency>
+    <project-build-dependency>	cppu		</project-build-dependency>
+    <project-build-dependency>	sal			</project-build-dependency>
 
-    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
-    <runtime-module-dependency> cppu2       </runtime-module-dependency>
-    <runtime-module-dependency> sal2        </runtime-module-dependency>
+    <runtime-module-dependency>	cppuhelper	</runtime-module-dependency>
+    <runtime-module-dependency>	cppu2		</runtime-module-dependency>
+    <runtime-module-dependency>	sal2		</runtime-module-dependency>
 </module-description>
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@ class FeDeclarator
 {
 public:
     // Enum to denote types of declarators
-    enum DeclaratorType
+    enum DeclaratorType 
     {
-        FD_simple,      // Simple declarator
-        FD_complex      // Complex declarator (complex_part field used)
+        FD_simple,		// Simple declarator
+        FD_complex		// Complex declarator (complex_part field used)
     };
 
     FeDeclarator(const ::rtl::OString& name, DeclaratorType declType, AstDeclaration* pComplPart);
@@ -50,7 +50,7 @@ public:
         { return m_pComplexPart; }
     const ::rtl::OString& getName()
         { return m_name; }
-    DeclaratorType  getDeclType()
+    DeclaratorType	getDeclType()
         { return m_declType; }
 
     sal_Bool checkType(AstDeclaration const * pType);
@@ -58,7 +58,7 @@ public:
 private:
     AstDeclaration* m_pComplexPart;
     ::rtl::OString  m_name;
-    DeclaratorType  m_declType;
+    DeclaratorType	m_declType;
 };
 
 typedef ::std::list< FeDeclarator* > FeDeclList;
@@ -69,7 +69,7 @@ public:
     FeInheritanceHeader(
         NodeType nodeType, ::rtl::OString* pName, ::rtl::OString* pInherits,
         std::vector< rtl::OString > * typeParameters);
-
+    
     virtual ~FeInheritanceHeader()
     {
         if ( m_pName )
@@ -89,8 +89,8 @@ public:
 private:
     void initializeInherits(::rtl::OString* pinherits);
 
-    NodeType        m_nodeType;
-    ::rtl::OString* m_pName;
+    NodeType		m_nodeType;
+    ::rtl::OString*	m_pName;
     AstDeclaration* m_pInherits;
     std::vector< rtl::OString > m_typeParameters;
 };

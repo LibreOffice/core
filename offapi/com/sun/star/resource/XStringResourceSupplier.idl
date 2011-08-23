@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,29 +24,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef __com_sun_star_resource_XStringResourceSupplier_idl__
 #define __com_sun_star_resource_XStringResourceSupplier_idl__
 
-#ifndef __com_sun_star_resource_XStringResourceResolver_idl__
-#include <com/sun/star/resource/XStringResourceResolver.idl>
+#ifndef __com_sun_star_resource_XStringResourceResolver_idl__ 
+#include <com/sun/star/resource/XStringResourceResolver.idl> 
 #endif
 
 
-//=============================================================================
-
-module com {  module sun {  module star {  module resource {
-
-//=============================================================================
-
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module resource {  
+ 
+//============================================================================= 
+ 
 /**
     Provides access to a string resource represented by a
     <type scope="com::sun::star::resource">XStringResourceResolver</type>.
  */
 interface XStringResourceSupplier: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /**
         Provides access to a string resource.
         Depending on the context the returned object may also support
@@ -57,14 +57,14 @@ interface XStringResourceSupplier: com::sun::star::uno::XInterface
         @returns an interface
         <type scope="com::sun::star::resource">XStringResourceResolver</type>
      */
-    com::sun::star::resource::XStringResourceResolver getStringResource();
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    com::sun::star::resource::XStringResourceResolver getStringResource(); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

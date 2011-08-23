@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,39 +24,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_frame_status_ItemState_idl__
-#define __com_sun_star_frame_status_ItemState_idl__
-
-//=============================================================================
-
+#ifndef __com_sun_star_frame_status_ItemState_idl__ 
+#define __com_sun_star_frame_status_ItemState_idl__ 
+ 
+//============================================================================= 
+ 
 module com {  module sun {  module star {  module frame { module status {
-
-//=============================================================================
-
+ 
+//============================================================================= 
+ 
 /** describes a state of a property.
-
+    
     @since OOo 2.0
  */
 struct ItemStatus
 {
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+     
     /** numerical value which describes the current state of an item.
 
         @see <type>ItemState</type>
      */
     short State;
 
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** optional data which can be used by an implementation to send additional
         information. The content is dependent on the specific implementation.
      */
     any aStateData;
-};
-
-//=============================================================================
-
+}; 
+ 
+//============================================================================= 
+ 
 }; }; }; }; };
-
-#endif
+ 
+#endif 

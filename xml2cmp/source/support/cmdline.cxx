@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ char C_sUseText[] = "Use: xml2cmp.exe \n"
                     "        tagname [tagname ...]";
 
 
-char C_sCmdFunc[]       = "-func";
+char C_sCmdFunc[] 		= "-func";
 char C_sCmdHtml[]       = "-html";
 char C_sCmdType[]       = "-types";
 char C_sCmdIndex[]      = "-ix";
@@ -59,9 +59,9 @@ char C_sCmdIdlPath[]    = "-idlpath";
 bool GetParameter( Simstr & o_rMemory, int & io_nCountArg, int argc, char * argv[] );
 
 
-CommandLine::CommandLine( int           argc,
-                          char *        argv[] )
-    :   bIsOk(true)
+CommandLine::CommandLine( int			argc,
+                          char *		argv[] )
+    :	bIsOk(true)
 {
     bool bDisplayUse = false;
 
@@ -125,7 +125,7 @@ CommandLine::ErrorText() const
 
 bool
 GetParameter( Simstr &      o_pMemory,
-              int &         io_pCountArg,
+              int & 	    io_pCountArg,
               int           argc,
               char *        argv[] )
 {
@@ -140,8 +140,8 @@ GetParameter( Simstr &      o_pMemory,
 
 
 void
-CommandLine::ParseIndexCommand( int                 argc,
-                                char *              argv[] )
+CommandLine::ParseIndexCommand( int					argc,
+                                char *				argv[] )
 {
     int nCountArg = 1;
     bIsOk = GetParameter(
@@ -178,8 +178,8 @@ CommandLine::ParseIndexCommand( int                 argc,
 
 
 void
-CommandLine::ParseSingleFileCommand( int                argc,
-                                     char *             argv[] )
+CommandLine::ParseSingleFileCommand( int				argc,
+                                     char *				argv[] )
 {
     for ( int nCountArg = 1; nCountArg < argc && bIsOk; ++nCountArg )
     {
@@ -219,7 +219,7 @@ CommandLine::ParseSingleFileCommand( int                argc,
         {
             sXmlSourceFile = argv[nCountArg];
         }
-    }   /* end for */
+    }  	/* end for */
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

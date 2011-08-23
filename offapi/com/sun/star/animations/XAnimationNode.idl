@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_animations_XAnimationNode_idl__
-#define __com_sun_star_animations_XAnimationNode_idl__
+#ifndef __com_sun_star_animations_XAnimationNode_idl__ 
+#define __com_sun_star_animations_XAnimationNode_idl__ 
 
 #ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
@@ -35,11 +35,11 @@
 #include <com/sun/star/beans/NamedValue.idl>
 #endif
 
-//=============================================================================
-
- module com {  module sun {  module star {  module animations {
-
-//=============================================================================
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module animations {  
+ 
+//============================================================================= 
 
 /**
 */
@@ -118,7 +118,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
             either a <atom>short</atom> constant from <const>EndSync</const>,
             an interface reference to a child <type>XTimeContainer</type>
             or <void/>.
-
+            
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-endsync
     */
     [attribute] any EndSync;
@@ -162,7 +162,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
 
     /** the attribute that specify the behavior how an element
         should be extended beyond the active duration by freezing the final
-        state of the element.
+        state of the element. 
         <br>
         <member>Fill</member> is
             a value from <const>AnimationFill</const>.
@@ -173,7 +173,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     [attribute] short Fill;
 
     /** the default value for the fill behavior for this element and all
-        descendants.
+        descendants. 
         <br>
         <member>FillDefault</member> is
             <ul>
@@ -190,21 +190,21 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     */
     [attribute] short FillDefault;
 
-    /** defines the restart behavior of this element.
+    /**	defines the restart behavior of this element.
         <br>
         <member>Restart</member> is
             a <atom>short</atom> value from <const>AnimationRestart</const>.
-
+        
         @see <const>AnimationRestart</const>
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-restart
     */
     [attribute] short Restart;
 
-    /** defines the default restart behavior for this element and all descendants.
+    /**	defines the default restart behavior for this element and all descendants.
 
         @returns
             a value from <const>Restart</const>.
-
+        
         @see <const>AnimationRestart</const>
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-restartDefault
     */
@@ -244,7 +244,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
             <li><false/> if the animation is played normal.</li>
             <li><true/> if the animation is played forwards and then backwards. This doubles the duration</li>
             </ul>
-
+        
         @see http://www.w3.org/TR/smil20/smil-timemanip.html#adef-autoReverse
     */
     [attribute] boolean AutoReverse;
@@ -254,8 +254,8 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     [attribute] sequence< ::com::sun::star::beans::NamedValue > UserData;
 };
 
-//=============================================================================
-
-}; }; }; };
+//============================================================================= 
+ 
+}; }; }; };  
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@ public class ComponentContextEntry
     /** set entry value
     */
     public Object m_value;
-
+    
     /** Creating a late-init singleton entry component context entry.
         The second parameter will be ignored and overwritten during
         instanciation of the singleton instance.
-
+        
         @param lateInit
                object factory or service string
         @param value
@@ -61,7 +61,7 @@ public class ComponentContextEntry
         this.m_value = value;
     }
     /** Creating a direct value component context entry.
-
+        
         @param value
                pass null
     */

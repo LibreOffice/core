@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ static FILE* APIENTRY _oslExceptOpenLogFile(VOID)
    file = fopen( szOOoExe, "a");
    if (!file) { // e.g. readonly drive
       // try again, usually C exist and is writable
-      file = fopen( "c:\\OOo.log", "a");
+      file = fopen( "c:\\OOo.log", "a"); 
    }
    if (file) {
         DosGetDateTime(&DT);
@@ -85,20 +85,20 @@ static FILE* APIENTRY _oslExceptOpenLogFile(VOID)
 
 /*----------------------------------------------------------------------------*/
 
-static EXCEPTSTRUCT     g_excptstruct = {0};
+static EXCEPTSTRUCT 	g_excptstruct = {0};
 
-void SAL_CALL sal_detail_initialize(int argc, char ** argv)
+void SAL_CALL sal_detail_initialize(int argc, char ** argv) 
 {
     APIRET rc = -1;
 
 #if OSL_DEBUG_LEVEL == 0
-    excRegisterHooks(_oslExceptOpenLogFile, NULL, NULL, FALSE);
+    excRegisterHooks(_oslExceptOpenLogFile, NULL, NULL, FALSE); 
 
     g_excptstruct.RegRec2.pfnHandler = (PFN)excHandlerLoud;
-    g_excptstruct.arc = DosSetExceptionHandler(
+    g_excptstruct.arc = DosSetExceptionHandler( 
                (PEXCEPTIONREGISTRATIONRECORD)&(g_excptstruct.RegRec2));
 
-    if (g_excptstruct.arc)
+    if (g_excptstruct.arc) 
         if (G_pfnExcHookError)
             G_pfnExcHookError(__FILE__, __LINE__, __FUNCTION__, g_excptstruct.arc);
         else

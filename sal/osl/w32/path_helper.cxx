@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 /*******************************************************************
  Includes
  ******************************************************************/
-
+ 
 #include "path_helper.hxx"
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
@@ -43,28 +43,28 @@
 /*******************************************************************
  Constants
  ******************************************************************/
-
+ 
 const rtl::OUString BACKSLASH = rtl::OUString::createFromAscii("\\");
 const rtl::OUString SLASH     = rtl::OUString::createFromAscii("/");
 
 /*******************************************************************
  osl_systemPathEnsureSeparator
  ******************************************************************/
-
+ 
 void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
 {
     OSL_PRECOND(ppustrPath && (NULL != *ppustrPath), \
                 "osl_systemPathEnsureSeparator: Invalid parameter");
-
-     rtl::OUString path(*ppustrPath);
+    
+     rtl::OUString path(*ppustrPath);	
     sal_Int32     i = std::max<sal_Int32>(path.lastIndexOf(BACKSLASH), path.lastIndexOf(SLASH));
-
+    
     if (i < (path.getLength()-1))
     {
-        path += BACKSLASH;
-        rtl_uString_assign(ppustrPath, path.pData);
+        path += BACKSLASH; 
+        rtl_uString_assign(ppustrPath, path.pData);			
     }
-
+    
     OSL_POSTCOND(path.lastIndexOf(BACKSLASH) == (path.getLength() - 1), \
                  "osl_systemPathEnsureSeparator: Post condition failed");
 }
@@ -72,18 +72,18 @@ void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
 /*******************************************************************
  osl_systemPathRemoveSeparator
  ******************************************************************/
-
+ 
 void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
 {
     rtl::OUString path(*ppustrPath);
-
+    
     if (!osl::systemPathIsLogicalDrivePattern(path))
-    {
+    {        
         sal_Int32 i = std::max<sal_Int32>(path.lastIndexOf(BACKSLASH), path.lastIndexOf(SLASH));
-
-        if (i > -1 && (i == (path.getLength() - 1)))
+        
+        if (i > -1 && (i == (path.getLength() - 1)))        
         {
-            path = rtl::OUString(path.getStr(), path.getLength() - 1);
+            path = rtl::OUString(path.getStr(), path.getLength() - 1);                    
             rtl_uString_assign(ppustrPath, path.pData);
         }
     }
@@ -97,22 +97,22 @@ void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
 const sal_Char* LDP                    = ":";
 const sal_Char* LDP_WITH_BACKSLASH     = ":\\";
 const sal_Char* LDP_WITH_SLASH         = ":/";
-
-// degenerated case returned by the Windows FileOpen dialog
+   
+// degenerated case returned by the Windows FileOpen dialog 
 // when someone enters for instance "x:filename", the Win32
 // API accepts this case
 const sal_Char* LDP_WITH_DOT_BACKSLASH = ":.\\";
-
+     
 sal_Int32 osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPath)
 {
     const sal_Unicode* p = rtl_uString_getStr(const_cast<rtl_uString*>(pustrPath));
     if (iswalpha(*p++))
-    {
-        return ((0 == rtl_ustr_ascii_compare(p, LDP)) ||
-                (0 == rtl_ustr_ascii_compare(p, LDP_WITH_BACKSLASH)) ||
+    {                           
+        return ((0 == rtl_ustr_ascii_compare(p, LDP)) || 
+                (0 == rtl_ustr_ascii_compare(p, LDP_WITH_BACKSLASH)) || 
                 (0 == rtl_ustr_ascii_compare(p, LDP_WITH_SLASH)) ||
                 (0 == rtl_ustr_ascii_compare(p, LDP_WITH_DOT_BACKSLASH)));
-    }
+    }   
     return 0;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
 {
     //get java.vendor, java.version, java.home,
     //javax.accessibility.assistive_technologies from system properties
-
+    
     OUString sVendor;
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
     OUString sVendorProperty(
@@ -114,7 +114,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     bool bVendor = false;
     bool bHome = false;
     bool bAccess = false;
-
+    
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
     for (it_prop i = props.begin(); i != props.end(); i++)
     {
@@ -158,15 +158,15 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     }
     if (!bVersion || !bVendor || !bHome)
         return false;
-
+    
     // init m_sRuntimeLibrary
     OSL_ASSERT(m_sHome.getLength());
     //call virtual function to get the possible paths to the runtime library.
-
+    
     int size = 0;
     char const* const* arRtPaths = getRuntimePaths( & size);
     vector<OUString> libpaths = getVectorFromCharArray(arRtPaths, size);
-
+    
     bool bRt = false;
     typedef vector<OUString>::const_iterator i_path;
     for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
@@ -215,7 +215,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     }
     if (bLdPath == false)
         return false;
-
+    
     return true;
 }
 
@@ -272,7 +272,7 @@ int VendorBase::compareVersions(const rtl::OUString& /*sSecond*/) const
 }
 
 
-
+        
 
 }
 

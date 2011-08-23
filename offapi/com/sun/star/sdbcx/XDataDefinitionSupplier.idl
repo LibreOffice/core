@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,69 +24,69 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_XDataDefinitionSupplier_idl__
-#define __com_sun_star_sdbcx_XDataDefinitionSupplier_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
-#include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbc {
- published interface XConnection;
-};};};};
-
- module com {  module sun {  module star {  module sdbcx {
-
- published interface XTablesSupplier;
-
-
+#ifndef __com_sun_star_sdbcx_XDataDefinitionSupplier_idl__ 
+#define __com_sun_star_sdbcx_XDataDefinitionSupplier_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_PropertyValue_idl__ 
+#include <com/sun/star/beans/PropertyValue.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ published interface XConnection; 
+};};};}; 
+ 
+ module com {  module sun {  module star {  module sdbcx { 
+ 
+ published interface XTablesSupplier; 
+ 
+ 
 /** provides the access to data definition beans from a connected database.
  */
 published interface XDataDefinitionSupplier: com::sun::star::uno::XInterface
-{
-
+{ 
+     
     /** returns at least the container of tables related to the given connection.
         @param connection
-            the related connection
+            the related connection 
         @returns
             the container
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    XTablesSupplier getDataDefinitionByConnection(
-                [in]com::sun::star::sdbc::XConnection connection)
-        raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    XTablesSupplier getDataDefinitionByConnection( 
+                [in]com::sun::star::sdbc::XConnection connection) 
+        raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** returns at least the container of tables related to the given Database URL.
         @param url
             a database url of the form  sdbc:subprotocol:subname
         @param info
-            a list of arbitrary string tag/value pairs as connection arguments;
+            a list of arbitrary string tag/value pairs as connection arguments; 
             normally at least a "user" and "password" property should be included
         @returns
             the container
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    XTablesSupplier getDataDefinitionByURL(
-                [in]string url,
-                [in]sequence<com::sun::star::beans::PropertyValue> info)
-        raises (com::sun::star::sdbc::SQLException);
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    XTablesSupplier getDataDefinitionByURL( 
+                [in]string url, 
+                [in]sequence<com::sun::star::beans::PropertyValue> info) 
+        raises (com::sun::star::sdbc::SQLException); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

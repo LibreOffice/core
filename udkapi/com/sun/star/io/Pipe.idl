@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,28 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_Pipe_idl__
-#define __com_sun_star_io_Pipe_idl__
-
-#ifndef __com_sun_star_io_XOutputStream_idl__
-#include <com/sun/star/io/XOutputStream.idl>
-#endif
-
-#ifndef __com_sun_star_io_XInputStream_idl__
-#include <com/sun/star/io/XInputStream.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module io {
-
-//=============================================================================
-
+#ifndef __com_sun_star_io_Pipe_idl__ 
+#define __com_sun_star_io_Pipe_idl__ 
+ 
+#ifndef __com_sun_star_io_XOutputStream_idl__ 
+#include <com/sun/star/io/XOutputStream.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XInputStream_idl__ 
+#include <com/sun/star/io/XInputStream.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module io {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: service com::sun::star::io::Pipe
-/** the implementation of an output stream and an input stream.
+/** the implementation of an output stream and an input stream. 
     <p>
-    All data written through the outputstream is buffered until it is
+    All data written through the outputstream is buffered until it is 
     read again from the input stream. Often two different threads access
     input and outputstream.
 
@@ -53,20 +53,20 @@ module com {  module sun {  module star {  module io {
     input stream at the cost of an additional buffer.
  */
 published service Pipe
-{
+{ 
     // DocMerge: empty anyway
-    interface com::sun::star::io::XOutputStream;
-
+    interface com::sun::star::io::XOutputStream; 
+    
     // DocMerge: empty anyway
-    interface com::sun::star::io::XInputStream;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    interface com::sun::star::io::XInputStream; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,33 +24,33 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_Statement_idl__
-#define __com_sun_star_sdbc_Statement_idl__
-
-#ifndef __com_sun_star_lang_XComponent_idl__
-#include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_util_XCancellable_idl__
-#include <com/sun/star/util/XCancellable.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbc {
-
- published interface XWarningsSupplier;
- published interface XStatement;
- published interface XBatchExecution;
- published interface XMultipleResults;
- published interface XCloseable;
-
-
+#ifndef __com_sun_star_sdbc_Statement_idl__ 
+#define __com_sun_star_sdbc_Statement_idl__ 
+ 
+#ifndef __com_sun_star_lang_XComponent_idl__ 
+#include <com/sun/star/lang/XComponent.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_XCancellable_idl__ 
+#include <com/sun/star/util/XCancellable.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ 
+ published interface XWarningsSupplier; 
+ published interface XStatement; 
+ published interface XBatchExecution; 
+ published interface XMultipleResults; 
+ published interface XCloseable; 
+ 
+ 
 /** is used for executing a static SQL statement and obtaining the results
     produced by it.
-
+    
     <p>
     Only one ResultSet per Statement can be open at any point in
     time. Therefore, if the reading of one ResultSet is interleaved
@@ -60,67 +60,67 @@
     </p>
  */
 published service Statement
-{
-
-    /** optional for implementation, controls the releasing of resources
+{ 
+     
+    /** optional for implementation, controls the releasing of resources 
              and the notification of registered listeners.
      */
-    [optional] interface com::sun::star::lang::XComponent;
-
-
-    /** freeing all resources of a statement. A related resultset will be
+    [optional] interface com::sun::star::lang::XComponent; 
+ 
+     
+    /** freeing all resources of a statement. A related resultset will be 
              freed as well.
      */
-    interface XCloseable;
-
+    interface XCloseable; 
+ 
     // gives access to the properties.
-    interface com::sun::star::beans::XPropertySet;
-
-    /** could be used for cancelling the execution of SQL statements if both
-             the DBMS and the driver support aborting an SQL statement.
+    interface com::sun::star::beans::XPropertySet; 
+     
+    /** could be used for cancelling the execution of SQL statements if both 
+             the DBMS and the driver support aborting an SQL statement. 
              The implementation is optional.
      */
-    [optional] interface com::sun::star::util::XCancellable;
-
+    [optional] interface com::sun::star::util::XCancellable; 
+     
     /** is the interface for executing SQL commands.
      */
-    interface XStatement;
-
-
-    /** provides the ability of batch execution. This interface is optional
-             for execution.
+    interface XStatement; 
+ 
+     
+    /** provides the ability of batch execution. This interface is optional 
+             for execution. 
              <p>
              A driver implementing batch execution must return
              <TRUE/>
-             for
+             for 
              <member scope= "com::sun::star::sdbc"> XDatabaseMetaData::supportsBatchUpdates()</member>
              </p>
      */
-    [optional] interface XBatchExecution;
-
-
-    /** controls the chaining of warnings, which may occur on every call
-             to the connected database. Chained warnings from previous calls will be
+    [optional] interface XBatchExecution; 
+ 
+     
+    /** controls the chaining of warnings, which may occur on every call 
+             to the connected database. Chained warnings from previous calls will be 
              cleared before processing a new call.
      */
-    interface XWarningsSupplier;
-
-
-    /** covers the handling of multiple results after executing an SQL command.
+    interface XWarningsSupplier; 
+ 
+     
+    /** covers the handling of multiple results after executing an SQL command. 
                 The implementation is optional.
      */
-    [optional] interface XMultipleResults;
-
-
+    [optional] interface XMultipleResults; 
+ 
+     
     /** retrieves the number of seconds the driver will wait for a Statement
         to execute. If the limit is exceeded, a SQLException is thrown.
         There is no limitation, if set to zero.
      */
-    [property] long QueryTimeOut;
-
-
-    /**  returns the maximum number of bytes allowed for any column value.
-
+    [property] long QueryTimeOut; 
+ 
+     
+    /**	 returns the maximum number of bytes allowed for any column value.
+        
         <p>
         This limit is the maximum number of bytes that can be returned
         for any column value. The limit applies only to
@@ -142,21 +142,21 @@ published service Statement
         There is no limitation, if set to zero.
         </p>
      */
-    [property] long MaxFieldSize;
-
-
+    [property] long MaxFieldSize; 
+ 
+     
     /** retrieves the maximum number of rows that a ResultSet can contain.
         If the limit is exceeded, the excess rows are silently dropped.
         <br/>
         There is no limitation, if set to zero.
      */
-    [property] long MaxRows;
-
-
+    [property] long MaxRows; 
+ 
+     
     /** defines the SQL cursor name that will be used by subsequent Statement
         <code>execute</code>
-        methods.
-
+        methods.		
+        
         <p>
         This name can then be used in SQL positioned update/delete statements to
         identify the current row in the ResultSet generated by this statement. If
@@ -176,23 +176,23 @@ published service Statement
         cursor names must be unique within a connection.
         </p>
      */
-    [property] string CursorName;
-
-
+    [property] string CursorName; 
+ 
+     
     /** retrieves the result set concurrency.
 
         @see com::sun::star::sdbc::ResultSetConcurrency
      */
-    [property] long ResultSetConcurrency;
-
-
+    [property] long ResultSetConcurrency; 
+ 
+     
     /** determine the result set type.
 
         @see com::sun::star::sdbc::ResultSetType
      */
-    [property] long ResultSetType;
-
-
+    [property] long ResultSetType; 
+ 
+     
     /** retrieves the direction for fetching rows from database tables
         that is the default for result sets generated from this
         <code>Statement</code>
@@ -203,31 +203,31 @@ published service Statement
         object has not set a fetch direction,
         the return value is implementation-specific.
      */
-    [property] long FetchDirection;
-
-
+    [property] long FetchDirection; 
+ 
+     
     /** retrieves the number of result set rows that is the default fetch size
         for result sets generated from this
         <code>Statement</code>
         object.
         <br/>
-        If this
+        If this 
         <code>Statement</code>
         object has not set a fetch size,
         the return value is implementation-specific.
      */
-    [property] long FetchSize;
-
-
+    [property] long FetchSize; 
+ 
+     
     /** returns if escape processing is on or off.
         If escape scanning is on (the default), the driver will do
         escape substitution before sending the SQL to the database.
      */
-    [property] boolean EscapeProcessing;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [property] boolean EscapeProcessing; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+#endif 

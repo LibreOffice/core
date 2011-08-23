@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,37 +40,37 @@ sal_Bool isGlobal(const OString& scopedName)
 {
     if ((scopedName.getLength() == 0) || (scopedName.indexOf(':') == 0))
     {
-        return sal_True;
+        return sal_True;	
     }
     return sal_False;
-}
+}	
 
 AstScope::AstScope(NodeType nodeType)
     : m_nodeType(nodeType)
 {
-
-}
+    
+}	
 
 AstScope::~AstScope()
 {
-
-}
+    
+}	
 
 AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
 {
     AstDeclaration* pDeclaration = NULL;
 
-    if ((pDeclaration = lookupForAdd(pDecl)) != NULL)
+    if ((pDeclaration = lookupForAdd(pDecl)) != NULL) 
     {
         if (pDecl->getNodeType() == NT_union_branch )
         {
             m_declarations.push_back(pDecl);
-            return pDecl;
+            return pDecl;			
         }
         if ( pDecl->hasAncestor(pDeclaration) )
         {
             idlc()->error()->error2(EIDL_REDEF_SCOPE, pDecl, pDeclaration);
-            return NULL;
+            return NULL;			
         }
         if ( (pDecl->getNodeType() == pDeclaration->getNodeType()) &&
              (pDecl->getNodeType() == NT_sequence
@@ -87,23 +87,23 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
             return pDecl;
         }
         if ( (NT_service == m_nodeType) &&
-             ( ((pDecl->getNodeType() == NT_interface_member)
+             ( ((pDecl->getNodeType() == NT_interface_member) 
                 && (pDeclaration->getNodeType() == NT_interface)) ||
-               ((pDecl->getNodeType() == NT_service_member)
+               ((pDecl->getNodeType() == NT_service_member)  
                 && (pDeclaration->getNodeType() == NT_service)) )
             )
         {
             m_declarations.push_back(pDecl);
             return pDecl;
         }
-
+        
         idlc()->error()->error2(EIDL_REDEF_SCOPE, scopeAsDecl(this), pDecl);
-        return NULL;
+        return NULL;						
     }
-
+    
     m_declarations.push_back(pDecl);
     return pDecl;
-}
+}	
 
 sal_uInt16 AstScope::getNodeCount(NodeType nodeType)
 {
@@ -111,7 +111,7 @@ sal_uInt16 AstScope::getNodeCount(NodeType nodeType)
     DeclList::const_iterator end = getIteratorEnd();
     AstDeclaration* pDecl = NULL;
     sal_uInt16 count = 0;
-
+    
     while ( iter != end )
     {
         pDecl = *iter;
@@ -119,23 +119,23 @@ sal_uInt16 AstScope::getNodeCount(NodeType nodeType)
             count++;
         ++iter;
     }
-    return count;
-}
+    return count;			
+}	
 
 AstDeclaration* AstScope::lookupByName(const OString& scopedName)
 {
     AstDeclaration* pDecl = NULL;
-    AstScope*       pScope = NULL;
+    AstScope*		pScope = NULL;
     if (scopedName.getLength() == 0)
         return NULL;
-
+        
     // If name starts with "::" start look up in global scope
     if ( isGlobal(scopedName) )
     {
         pDecl = scopeAsDecl(this);
         if ( !pDecl )
             return NULL;
-
+            
         pScope = pDecl->getScope();
         // If this is the global scope ...
         if ( !pScope )
@@ -146,7 +146,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
             return pDecl;
             //return pScope->lookupByName();
         }
-        // OK, not global scope yet, so simply iterate with parent scope
+        // OK, not global scope yet, so simply iterate with parent scope 
         pDecl = pScope->lookupByName(scopedName);
         return pDecl;
     }
@@ -155,7 +155,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
     // Look up in the local scope and start with the first scope
     sal_Int32 nIndex = scopedName.indexOf(':');
     OString firstScope =  nIndex > 0 ? scopedName.copy(0, nIndex) : scopedName;
-    sal_Bool    bFindFirstScope = sal_True;
+    sal_Bool	bFindFirstScope = sal_True;
     pDecl = lookupByNameLocal(firstScope);
     if ( !pDecl )
     {
@@ -170,10 +170,10 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
                    pDecl = pScope->lookupByName(scopedName);
             else
                 pDecl = NULL;
-
+            
              // Special case for scope which is an interface. We
              // have to look in the inherited interfaces as well.
-            if ( !pDecl )
+            if ( !pDecl ) 
             {
                 if (m_nodeType == NT_interface)
                     pDecl = lookupInInherited(scopedName);
@@ -209,20 +209,20 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
             } else
             {
                 pDecl = NULL;
-            }
+            }            
         }
 
     }
 
     return pDecl;
-}
+}	
 
 AstDeclaration* AstScope::lookupByNameLocal(const OString& name) const
 {
     DeclList::const_iterator iter(m_declarations.begin());
     DeclList::const_iterator end(m_declarations.end());
     AstDeclaration* pDecl = NULL;
-
+    
     while ( iter != end )
     {
         pDecl = *iter;
@@ -230,13 +230,13 @@ AstDeclaration* AstScope::lookupByNameLocal(const OString& name) const
             return pDecl;
         ++iter;
     }
-    return NULL;
-}
+    return NULL;			
+}	
 
 AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
 {
-    AstInterface* pInterface = (AstInterface*)this;
-
+    AstInterface* pInterface = (AstInterface*)this;	
+    
     if ( !pInterface )
         return NULL;
 
@@ -269,9 +269,9 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
 AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
 {
     AstDeclaration* pDecl = NULL;
-    AstScope*       pScope = NULL;
-    AstBaseType*    pBaseType = NULL;
-    OString         typeName;
+    AstScope*		pScope = NULL;
+    AstBaseType*	pBaseType = NULL;
+    OString			typeName;
     pDecl = scopeAsDecl(this);
     if ( !pDecl )
         return NULL;
@@ -279,7 +279,7 @@ AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
     if ( pScope)
         return pScope->lookupPrimitiveType(type);
 
-    switch (type)
+    switch (type) 
     {
         case ET_none:
             OSL_ASSERT(false);
@@ -331,19 +331,19 @@ AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
             break;
     }
 
-    pDecl = lookupByNameLocal(typeName);
+    pDecl = lookupByNameLocal(typeName);	
 
     if ( pDecl && (pDecl->getNodeType() == NT_predefined) )
     {
         pBaseType = (AstBaseType*)pDecl;
-
+        
         if ( pBaseType->getExprType() == type )
             return pDecl;
     }
 
     return NULL;
 }
-
+    
 AstDeclaration* AstScope::lookupForAdd(AstDeclaration* pDecl)
 {
     if ( !pDecl )
@@ -351,7 +351,7 @@ AstDeclaration* AstScope::lookupForAdd(AstDeclaration* pDecl)
 
     AstDeclaration* pRetDecl = lookupByNameLocal(pDecl->getLocalName());
 
-   return pRetDecl;
-}
+   return pRetDecl;	
+}	
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

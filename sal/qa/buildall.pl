@@ -1,9 +1,9 @@
 eval 'exec perl -wS $0 ${1+"$@"}'
     if 0;
 #*************************************************************************
-#
+# 
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -85,12 +85,12 @@ else
     {
         # always run test, but envelope the other in 'TESTOPT="..."'
         $params = "test TESTOPT=\"";
-
+        
         foreach $param (@ARGV)
         {
             $params = $params . " " . $param;
         }
-        $params = $params . "\"";
+        $params = $params . "\"";    
     }
     print "User defined ";
 }
@@ -144,12 +144,12 @@ sub initEnvironment()
           $FS             = "\\";
           $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
           last SWITCH;
-      }
+      } 
       if ( $gui eq "WIN" ) {
           $FS             = "\\";
           $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
           last SWITCH;
-      }
+      }    
       if ( $gui eq "OS2" ) {
           $FS             = "\\";
           $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
@@ -247,7 +247,7 @@ sub giveOutFailures($$)
         while ($line = <IN>)
         {
             chomp($line);
-
+            
             # handling of the states
             if ( $line =~ /^\# -- BEGIN:/)
             {
@@ -268,14 +268,14 @@ sub giveOutFailures($$)
         }
         close(IN);
     }
-
+        
     if ($nFailures > 0)
     {
         # extra return for a better output
         print "\nFailures occured: $nFailures\n";
         print "The whole output can be found in $sFailureFile\n";
         print "\n";
-
+        
         # Statistics
         $nGlobalFailures += $nFailures;
     }
@@ -339,7 +339,7 @@ sub runASingleTest($$)
         print "ERROR: can't open logfile: $sLogFile\n";
         return;
     }
-
+    
     my $line;
     local *DMAKEOUTPUT;
     if (! open( DMAKEOUTPUT, "$dmake 2>&1 |"))
@@ -403,7 +403,7 @@ sub runTestsOnPath($$$)
         # DBG: print "empty file '$file'\n";
         return;
     }
-
+    
 #   print "File: '$file', Path: '$path'\n";
     print "Work in directory: $path\n";
     my $newpath = $cwd . $FS . $path;
@@ -428,17 +428,17 @@ sub runTestsOnPath($$$)
     while($line = <MAKEFILE_MK>)
     {
         chomp($line);
-
+        
         if ($line =~ /SHL(\d)TARGET=(.*)/)
         {
             $nNumber = $1;
             $sTarget = trim($2);
-
+            
             # DBG: print "test$number is lib: $target\n";
             $sLocalParams = $params . " ";                  # append a whitespace, so we can check if 'test' exist without additional digits
             $sLocalParams =~ s/test\s/test$nNumber/;
             # DBG: print "$sLocalParams\n";
-            if ($bBuildAll == 1 ||
+            if ($bBuildAll == 1 || 
                 $file eq $sTarget)
             {
                 # print "runASingleTest on Target: $sTarget 'dmake $sLocalParams'\n";
@@ -475,7 +475,7 @@ $/)
         {
             $line = substr($line, 0, -1);
         }
-
+        
         # print "$line\n";
         my $path;
         my $file;
@@ -483,7 +483,7 @@ $/)
         runTestsOnPath($path, $file, $params);
     }
     close(LIBS2TEST);
-
+    
     print "\nComplete logging information will be found in dir: ".$g_sTempDir."dmake_out_$$/\n";
 
     if ($nGlobalFailures > 0)

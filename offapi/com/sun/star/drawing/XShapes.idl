@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,57 +24,57 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XShapes_idl__
-#define __com_sun_star_drawing_XShapes_idl__
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
-#include <com/sun/star/container/XIndexAccess.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShape_idl__
-#include <com/sun/star/drawing/XShape.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_XShapes_idl__ 
+#define __com_sun_star_drawing_XShapes_idl__ 
+ 
+#ifndef __com_sun_star_container_XIndexAccess_idl__ 
+#include <com/sun/star/container/XIndexAccess.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_XShape_idl__ 
+#include <com/sun/star/drawing/XShape.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to access, add, and remove the
     <type>Shape</type>s in a collection.
-
-    @see DrawPage
+    
+    @see DrawPage 
     @see MasterPage
     @see DrawingDocumentDrawView
  */
 published interface XShapes: com::sun::star::container::XIndexAccess
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** inserts a <type>Shape</type> into this collection.
 
         @param xShape
             a <type>Shape</type> that will be inserted.
      */
-    void add( [in] com::sun::star::drawing::XShape xShape );
-
-    //-------------------------------------------------------------------------
-
+    void add( [in] com::sun::star::drawing::XShape xShape ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** removes a <type>Shape</type> from this collection.
 
         @param xShape
             the <type>Shape</type> will be removed from the
             collection and disposed.
      */
-    void remove( [in] com::sun::star::drawing::XShape xShape );
+    void remove( [in] com::sun::star::drawing::XShape xShape ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
 
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+#endif 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ using namespace rtl;
 using namespace osl;
 
 #define SERVICENAME "com.sun.star.script.Converter"
-#define IMPLNAME    "com.sun.star.comp.stoc.TypeConverter"
+#define IMPLNAME	"com.sun.star.comp.stoc.TypeConverter"
 
 
 extern rtl_StandardModuleCount g_moduleCount;
@@ -133,11 +133,11 @@ static inline double unsigned_int64_to_double( sal_uInt64 n ) SAL_THROW( () )
 //--------------------------------------------------------------------------------------------------
 static inline double round( double aVal )
 {
-    sal_Bool bPos   = (aVal >= 0.0);    //
-    aVal            = ::fabs( aVal );
-    double aUpper   = ::ceil( aVal );
-
-    aVal            = ((aUpper-aVal) <= 0.5) ? aUpper : (aUpper - 1.0);
+    sal_Bool bPos	= (aVal >= 0.0);	//
+    aVal			= ::fabs( aVal );
+    double aUpper	= ::ceil( aVal );
+    
+    aVal			= ((aUpper-aVal) <= 0.5) ? aUpper : (aUpper - 1.0);
     return (bPos ? aVal : -aVal);
 }
 
@@ -153,14 +153,14 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
             rfVal = 0.0;
             return sal_True;
         }
-
+        
         OUString trim( rStr.trim() );
-
+        
         // try hex
         sal_Int32 nX = trim.indexOf( 'x' );
         if (nX < 0)
             nX = trim.indexOf( 'X' );
-
+        
         if (nX > 0 && trim[nX-1] == '0') // 0x
         {
             sal_Bool bNeg = sal_False;
@@ -176,10 +176,10 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
             default:
                 return sal_False;
             }
-
+            
             OUString aHexRest( trim.copy( nX+1 ) );
             sal_Int64 nRet = aHexRest.toInt64( 16 );
-
+            
             if (nRet == 0)
             {
                 for ( sal_Int32 nPos = aHexRest.getLength(); nPos--; )
@@ -188,18 +188,18 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
                         return sal_False;
                 }
             }
-
+            
             rfVal = (bNeg ? -(double)nRet : (double)nRet);
             return sal_True;
         }
 
         nLen = trim.getLength();
         sal_Int32 nPos = 0;
-
+        
         // skip +/-
         if (nLen && (trim[0] == '-' || trim[0] == '+'))
             ++nPos;
-
+        
         while (nPos < nLen) // skip leading zeros
         {
             if (trim[nPos] != '0')
@@ -231,9 +231,9 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
         rnVal = 0;
         return sal_True;
     }
-
+    
     OUString trim( rStr.trim() );
-
+    
     // try hex
     sal_Int32 nX = trim.indexOf( 'x' );
     if (nX < 0)
@@ -256,10 +256,10 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
             default:
                 return sal_False;
             }
-
+            
             OUString aHexRest( trim.copy( nX+1 ) );
             sal_Int64 nRet = aHexRest.toInt64( 16 );
-
+            
             if (nRet == 0)
             {
                 for ( sal_Int32 nPos = aHexRest.getLength(); nPos--; )
@@ -268,13 +268,13 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
                         return sal_False;
                 }
             }
-
+            
             rnVal = (bNeg ? -nRet : nRet);
             return sal_True;
         }
         return sal_False;
     }
-
+    
     double fVal;
     if (getNumericValue( fVal, rStr ) &&
         fVal >= (double)SAL_INT64_MIN &&
@@ -295,18 +295,18 @@ class TypeConverter_Impl : public WeakImplHelper2< XTypeConverter, XServiceInfo 
         throw( CannotConvertException );
     double toDouble( const Any& rAny, double min = -DBL_MAX, double max = DBL_MAX ) const
         throw( CannotConvertException );
-
+    
 public:
     TypeConverter_Impl();
     virtual ~TypeConverter_Impl();
-
+    
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( RuntimeException );
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
         throw( RuntimeException );
     virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
         throw( RuntimeException );
-
+    
     // XTypeConverter
     virtual Any SAL_CALL convertTo( const Any& aFrom, const Type& DestinationType )
         throw( IllegalArgumentException, CannotConvertException, RuntimeException);
@@ -327,7 +327,7 @@ TypeConverter_Impl::~TypeConverter_Impl()
 // XServiceInfo
 OUString TypeConverter_Impl::getImplementationName() throw( RuntimeException )
 {
-    return stoc_services::tcv_getImplementationName();
+    return stoc_services::tcv_getImplementationName();	
 }
 
 // XServiceInfo
@@ -396,7 +396,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     {
         nRet = *(sal_Int64 *)rAny.getValue();
         if ((min < 0 || (sal_uInt64)nRet >= (sal_uInt64)min) && // lower bound
-            (sal_uInt64)nRet <= max)                            // upper bound
+            (sal_uInt64)nRet <= max)							// upper bound
         {
             return nRet;
         }
@@ -404,7 +404,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             OUString( RTL_CONSTASCII_USTRINGPARAM("UNSIGNED HYPER out of range!") ),
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
-
+    
     // FLOAT, DOUBLE
     case TypeClass_FLOAT:
     {
@@ -430,7 +430,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             OUString( RTL_CONSTASCII_USTRINGPARAM("DOUBLE out of range!") ),
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
-
+    
     // STRING
     case TypeClass_STRING:
     {
@@ -448,13 +448,13 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             OUString( RTL_CONSTASCII_USTRINGPARAM("STRING value out of range!") ),
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
-
+    
     default:
         throw CannotConvertException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("TYPE is not supported!") ),
             Reference<XInterface>(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
-
+    
     if (nRet >= min && (nRet < 0 || (sal_uInt64)nRet <= max))
         return nRet;
     throw CannotConvertException(
@@ -468,7 +468,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
 {
     double fRet;
     TypeClass aDestinationClass = rAny.getValueTypeClass();
-
+    
     switch (aDestinationClass)
     {
     // ENUM
@@ -517,7 +517,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
     case TypeClass_DOUBLE:
         fRet = *(double *)rAny.getValue();
         break;
-
+        
     // STRING
     case TypeClass_STRING:
     {
@@ -529,13 +529,13 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
         }
         break;
     }
-
+    
     default:
         throw CannotConvertException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("TYPE is not supported!") ),
             Reference< XInterface >(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
-
+    
     if (fRet >= min && fRet <= max)
         return fRet;
     throw CannotConvertException(
@@ -544,7 +544,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
 }
 
 //--------------------------------------------------------------------------------------------------
-Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestType )
+Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestType ) 
     throw( IllegalArgumentException, CannotConvertException, RuntimeException)
 {
     Type aSourceType = rVal.getValueType();
@@ -553,9 +553,9 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
 
     TypeClass aSourceClass = aSourceType.getTypeClass();
     TypeClass aDestinationClass = aDestType.getTypeClass();
-
+    
     Any aRet;
-
+    
     // convert to...
     switch (aDestinationClass)
     {
@@ -565,10 +565,10 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
     // --- to ANY -------------------------------------------------------------------------------
     case TypeClass_ANY:
         return rVal;
-
+        
     // --- to STRUCT, UNION, EXCEPTION ----------------------------------------------------------
     case TypeClass_STRUCT:
-//      case TypeClass_UNION: // xxx todo
+//  	case TypeClass_UNION: // xxx todo
     case TypeClass_EXCEPTION:
     {
         // same types or destination type is derived source type?
@@ -597,7 +597,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             aRet.setValue( &null_ref, aDestType );
             break;
         }
-
+        
         if (rVal.getValueTypeClass() != TypeClass_INTERFACE ||
             !*(XInterface * const *)rVal.getValue())
         {
@@ -621,7 +621,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         {
             if( aSourceType == aDestType )
                 return rVal;
-
+            
             TypeDescription aSourceTD( aSourceType );
             TypeDescription aDestTD( aDestType );
             typelib_TypeDescription * pSourceElementTD = 0;
@@ -632,7 +632,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             TYPELIB_DANGER_GET(
                 &pDestElementTD,
                 ((typelib_IndirectTypeDescription *)aDestTD.get())->pType );
-
+            
             sal_uInt32 nPos = (*(const uno_Sequence * const *)rVal.getValue())->nElements;
             uno_Sequence * pRet = 0;
             uno_sequence_construct(
@@ -643,19 +643,19 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
                 &pRet, aDestTD.get(),
                 reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
                 // decr ref count
-
+            
             char * pDestElements = (*(uno_Sequence * const *)aRet.getValue())->elements;
             const char * pSourceElements =
                 (*(const uno_Sequence * const *)rVal.getValue())->elements;
-
+            
             while (nPos--)
             {
                 char * pDestPos = pDestElements + (nPos * pDestElementTD->nSize);
                 const char * pSourcePos = pSourceElements + (nPos * pSourceElementTD->nSize);
-
+                
                 Any aElement(
                     convertTo( Any( pSourcePos, pSourceElementTD ), pDestElementTD->pWeakRef ) );
-
+                
                 if (!uno_assignData(
                         pDestPos, pDestElementTD,
                         (pDestElementTD->eTypeClass == typelib_TypeClass_ANY
@@ -681,7 +681,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         TypeDescription aEnumTD( aDestType );
         aEnumTD.makeComplete();
         sal_Int32 nPos = -1;
-
+        
         if (aSourceClass==TypeClass_STRING)
         {
             for ( nPos = ((typelib_EnumTypeDescription *)aEnumTD.get())->nEnumValues; nPos--; )
@@ -702,7 +702,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
                     break;
             }
         }
-
+        
         if (nPos >= 0)
         {
             aRet.setValue(
@@ -718,7 +718,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         }
         break;
     }
-
+    
     default:
         // else simple type conversion possible?
         try
@@ -730,10 +730,10 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             // ...FailReason::INVALID is thrown
         }
     }
-
+    
     if (aRet.hasValue())
         return aRet;
-
+    
     throw CannotConvertException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("conversion not possible!") ),
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
@@ -763,7 +763,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     default:
         break;
     }
-
+    
     Type aSourceType = rVal.getValueType();
     TypeClass aSourceClass = aSourceType.getTypeClass();
     if (aDestinationClass == aSourceClass)
@@ -777,11 +777,11 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     // --- to VOID ------------------------------------------------------------------------------
     case TypeClass_VOID:
         return Any();
-
+        
     // --- to ANY -------------------------------------------------------------------------------
     case TypeClass_ANY:
         return rVal;
-
+        
     // --- to BOOL ------------------------------------------------------------------------------
     case TypeClass_BOOLEAN:
         switch (aSourceClass)
@@ -793,7 +793,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         }
         case TypeClass_ENUM:  // exclude enums
             break;
-
+            
         case TypeClass_STRING:
         {
             const OUString & aStr = *(const OUString *)rVal.getValue();
@@ -818,19 +818,19 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         }
         }
         break;
-
+        
     // --- to CHAR, BYTE ------------------------------------------------------------------------
     case TypeClass_CHAR:
     {
         if (aSourceClass==TypeClass_STRING)
         {
-            if ((*(const OUString *)rVal.getValue()).getLength() == 1)      // single char
+            if ((*(const OUString *)rVal.getValue()).getLength() == 1)		// single char
                 aRet.setValue( (*(const OUString *)rVal.getValue()).getStr(), ::getCharCppuType() );
         }
-        else if (aSourceClass!=TypeClass_ENUM &&        // exclude enums, chars
+        else if (aSourceClass!=TypeClass_ENUM &&		// exclude enums, chars
                  aSourceClass!=TypeClass_CHAR)
         {
-             sal_Unicode cRet = (sal_Unicode)toHyper( rVal, 0, 0xffff );    // range
+             sal_Unicode cRet = (sal_Unicode)toHyper( rVal, 0, 0xffff );	// range
             aRet.setValue( &cRet, ::getCharCppuType() );
         }
         break;
@@ -838,7 +838,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     case TypeClass_BYTE:
         aRet <<= (sal_Int8)( toHyper( rVal, -(sal_Int64)0x80, 0x7f ) );
         break;
-
+        
     // --- to SHORT, UNSIGNED SHORT -------------------------------------------------------------
     case TypeClass_SHORT:
         aRet <<= (sal_Int16)( toHyper( rVal, -(sal_Int64)0x8000, 0x7fff ) );
@@ -846,7 +846,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     case TypeClass_UNSIGNED_SHORT:
         aRet <<= (sal_uInt16)( toHyper( rVal, 0, 0xffff ) );
         break;
-
+        
     // --- to LONG, UNSIGNED LONG ---------------------------------------------------------------
     case TypeClass_LONG:
         aRet <<= (sal_Int32)( toHyper( rVal, -(sal_Int64)0x80000000, 0x7fffffff ) );
@@ -854,7 +854,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     case TypeClass_UNSIGNED_LONG:
         aRet <<= (sal_uInt32)( toHyper( rVal, 0, 0xffffffff ) );
         break;
-
+        
     // --- to HYPER, UNSIGNED HYPER--------------------------------------------
     case TypeClass_HYPER:
         aRet <<= toHyper( rVal, SAL_INT64_MIN, SAL_INT64_MAX );
@@ -862,7 +862,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     case TypeClass_UNSIGNED_HYPER:
         aRet <<= (sal_uInt64)( toHyper( rVal, 0, SAL_UINT64_MAX ) );
         break;
-
+        
     // --- to FLOAT, DOUBLE ---------------------------------------------------------------------
     case TypeClass_FLOAT:
         aRet <<= (float)( toDouble( rVal, -FLT_MAX, FLT_MAX ) );
@@ -870,7 +870,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     case TypeClass_DOUBLE:
         aRet <<= (double)( toDouble( rVal, -DBL_MAX, DBL_MAX ) );
         break;
-
+        
     // --- to STRING ----------------------------------------------------------------------------
     case TypeClass_STRING:
         switch (aSourceClass)
@@ -900,14 +900,14 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             }
             break;
         }
-
+        
         case TypeClass_BOOLEAN:
             aRet <<= OUString::createFromAscii( (*(sal_Bool *)rVal.getValue() ? "true" : "false") );
             break;
         case TypeClass_CHAR:
             aRet <<= OUString( (sal_Unicode *)rVal.getValue(), 1 );
             break;
-
+            
         case TypeClass_BYTE:
             aRet <<= OUString::valueOf( (sal_Int32)*(sal_Int8 const *)rVal.getValue() );
             break;
@@ -926,11 +926,11 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         case TypeClass_HYPER:
             aRet <<= OUString::valueOf( *(sal_Int64 const *)rVal.getValue() );
             break;
-//      case TypeClass_UNSIGNED_HYPER:
+// 		case TypeClass_UNSIGNED_HYPER:
 //             aRet <<= OUString::valueOf( (sal_Int64)*(sal_uInt64 const *)rVal.getValue() );
-//          break;
+// 			break;
             // handle unsigned hyper like double
-
+            
         default:
             aRet <<= OUString::valueOf( toDouble( rVal ) );
         }
@@ -940,10 +940,10 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         OSL_ASSERT(false);
         break;
     }
-
+    
     if (aRet.hasValue())
         return aRet;
-
+    
     throw CannotConvertException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("conversion not possible!") ),
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
@@ -954,7 +954,7 @@ namespace stoc_services
 {
 //*************************************************************************
 Reference< XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
-    const Reference< XComponentContext > & )
+    const Reference< XComponentContext > & ) 
     throw( RuntimeException )
 {
     static Reference< XInterface > s_ref( (OWeakObject *) new stoc_tcv::TypeConverter_Impl() );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,10 @@
 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_rendering_FloatingPointBitmapLayout_idl__
 #include <com/sun/star/rendering/FloatingPointBitmapLayout.idl>
 #endif
@@ -66,7 +66,7 @@ interface XIeeeDoubleBitmap : XIeeeDoubleReadOnlyBitmap
         bitmap can be changed. When setting subsets of the bitmap, the
         same scanline padding takes place as when the whole bitmap is
         changed.<p>
-
+        
         When setting data on volatile bitmaps, always call isValid()
         before, and retrieve a new memory layout via
         getMemoryLayout(). At least under Windows, the memory layout
@@ -77,7 +77,7 @@ interface XIeeeDoubleBitmap : XIeeeDoubleReadOnlyBitmap
 
         @param data
         Data to set
-
+        
         @param bitmapLayout
         Layout of the data to set. Must match this bitmap's current
         layout.
@@ -95,9 +95,9 @@ interface XIeeeDoubleBitmap : XIeeeDoubleReadOnlyBitmap
         layout, or if the given data sequence has too few or too much
         elements.
      */
-    void                        setData( [in] sequence<double> data, [in] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerRectangle2D rect )
+    void						setData( [in] sequence<double> data, [in] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerRectangle2D rect )
         raises (com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::lang::IndexOutOfBoundsException);
+                com::sun::star::lang::IndexOutOfBoundsException); 
 
     //-------------------------------------------------------------------------
 
@@ -130,9 +130,9 @@ interface XIeeeDoubleBitmap : XIeeeDoubleReadOnlyBitmap
         layout, or if the given data sequence has too few or too much
         elements.
      */
-    void                        setPixel( [in] sequence<double> color, [in] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
+    void						setPixel( [in] sequence<double> color, [in] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
         raises (com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::lang::IndexOutOfBoundsException);
+                com::sun::star::lang::IndexOutOfBoundsException); 
 
 };
 

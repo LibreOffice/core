@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,118 +24,118 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XTimeField_idl__
-#define __com_sun_star_awt_XTimeField_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_XTimeField_idl__ 
+#define __com_sun_star_awt_XTimeField_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** gives access to the value and settings of a time field.
  */
 published interface XTimeField: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+        
     /** sets the time value which is displayed in the time field.
 
         <p>The time value must be specified in the format HHMMSShh,
         where HH are hours, MM are minutes, SS are seconds and hh are
-        hundredth seconds.</p>
+        hundredth seconds.</p>    
      */
-    [oneway] void setTime( [in] long Time );
-
+    [oneway] void setTime( [in] long Time ); 
+ 
     //-------------------------------------------------------------------------
-
+    
     /** returns the time value which is currently displayed in the time field.
      */
-    long getTime();
-
-    //-------------------------------------------------------------------------
+    long getTime(); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** sets the minimum time value that can be entered by the user.
-     */
-    [oneway] void setMin( [in] long Time );
-
-    //-------------------------------------------------------------------------
+     */    
+    [oneway] void setMin( [in] long Time ); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** returns the currently set minimum time value that can be entered by
         the user.
-     */
-    long getMin();
-
-    //-------------------------------------------------------------------------
+     */    
+    long getMin(); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** sets the maximum time value that can be entered by the user.
-     */
-    [oneway] void setMax( [in] long Time );
-
-    //-------------------------------------------------------------------------
+     */    
+    [oneway] void setMax( [in] long Time ); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** returns the currently set maximum time value that can be entered by
         the user.
-     */
-    long getMax();
-
-    //-------------------------------------------------------------------------
+     */    
+    long getMax(); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** sets the first value to be set on POS1 key.
-     */
-    [oneway] void setFirst( [in] long Time );
-
-    //-------------------------------------------------------------------------
+     */	
+    [oneway] void setFirst( [in] long Time ); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** returns the currently set first value which is set on POS1 key.
-     */
-    long getFirst();
-
+     */    
+    long getFirst(); 
+ 
     //-------------------------------------------------------------------------
-
+    
     /** sets the last value to be set on END key.
-     */
-    [oneway] void setLast( [in] long Time );
-
-    //-------------------------------------------------------------------------
+     */    
+    [oneway] void setLast( [in] long Time ); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** returns the currently set last value which is set on END key.
-     */
-    long getLast();
-
-    //-------------------------------------------------------------------------
+     */    
+    long getLast(); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** sets an empty value for the time.
-     */
-    void setEmpty();
-
-    //-------------------------------------------------------------------------
+     */    
+    void setEmpty(); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** returns whether currently an empty value is set for the time.
-     */
-    boolean isEmpty();
-
+     */    
+    boolean isEmpty(); 
+ 
     //-------------------------------------------------------------------------
-
+    
     /** determines if the format is checked during user input.
-     */
-    [oneway] void setStrictFormat( [in] boolean bStrict );
-
-    //-------------------------------------------------------------------------
+     */    
+    [oneway] void setStrictFormat( [in] boolean bStrict ); 
+ 
+    //------------------------------------------------------------------------- 
 
     /** returns whether the format is currently checked during user input.
-     */
-    boolean isStrictFormat();
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+     */    
+    boolean isStrictFormat(); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

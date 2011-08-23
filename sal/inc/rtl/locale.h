@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@ extern "C" {
 #endif
 
 #ifdef SAL_W32
-#   pragma pack(push, 8)
+#	pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#   pragma pack(push, 4)
+#	pragma pack(push, 4)
 #endif
 
 /**
@@ -52,19 +52,19 @@ typedef struct _rtl_Locale
     /**
          Lowercase two-letter ISO 639-1 or three-letter ISO 639-3 code.
      */
-    rtl_uString *   Language;
+    rtl_uString *	Language;
     /**
          uppercase two-letter ISO-3166 code.
      */
-    rtl_uString *   Country;
+    rtl_uString *	Country;
     /**
          Lowercase vendor and browser specific code.
      */
-    rtl_uString *   Variant;
+    rtl_uString *	Variant;
     /**
          The merged hash value of the Language, Country and Variant strings.
      */
-    sal_Int32       HashCode;
+    sal_Int32		HashCode;
 } rtl_Locale;
 
 #if defined( SAL_W32) ||  defined(SAL_OS2)

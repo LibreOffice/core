@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,12 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** represents a dictionary for Hangul/Hanja text conversion.
 
-    <p>A dictionary implementing this service will be used for
+    <p>A dictionary implementing this service will be used for 
     Hangul/Hanja conversion. Therefore the locale of the
     dictionary has to be Korean, and the conversion type
     <member scope="com::sun::star::linguistic2">ConversionDictionaryType::HANGUL_HANJA</member>.</p>
 
-    <p>Also for a pair (entry) to be added the
+    <p>Also for a pair (entry) to be added the 
     left part has to be in Hangul and the right in Hanja,
     and the number of characters for the left part has to be the
     same as for the right part.</p>

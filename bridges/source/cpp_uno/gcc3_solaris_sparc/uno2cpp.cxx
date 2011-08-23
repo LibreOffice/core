@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ void callVirtualMethod( void * pAdjustedThisPtr,
         "mov %%l1, %%l7\n\t"
 
         // increase our own stackframe if necessary
-        "mov %%sp, %%l3\n\t"        // save stack ptr for readjustment
+        "mov %%sp, %%l3\n\t"		// save stack ptr for readjustment
 
         "subcc %%i5, 7, %%l0\n\t"
         "ble .LmoveOn\n\t"
@@ -112,14 +112,14 @@ void callVirtualMethod( void * pAdjustedThisPtr,
 
         "sll %%l0, 2, %%l0\n\t"
         "add %%l0, 96, %%l0\n\t"
-        "mov %%sp, %%l1\n\t"        // old stack ptr
-        "sub %%sp, %%l0, %%l0\n\t"  // future stack ptr
-        "andcc %%l0, 7, %%g0\n\t"   // align stack to 8
+        "mov %%sp, %%l1\n\t"		// old stack ptr
+        "sub %%sp, %%l0, %%l0\n\t"	// future stack ptr
+        "andcc %%l0, 7, %%g0\n\t"	// align stack to 8
         "be .LisAligned\n\t"
         "nop\n\t"
         "sub %%l0, 4, %%l0\n"
     ".LisAligned:\n\t"
-        "mov %%l0, %%o5\n\t"            // save newly computed stack ptr
+        "mov %%l0, %%o5\n\t"			// save newly computed stack ptr
         "add %%g0, 16, %%o4\n"
 
         // now copy longs down to save register window
@@ -132,11 +132,11 @@ void callVirtualMethod( void * pAdjustedThisPtr,
         "subcc %%o4, 1, %%o4\n\t"
         "bne .LcopyDown\n\t"
 
-        "mov %%o5, %%sp\n\t"        // move new stack ptr (hopefully) atomically
+        "mov %%o5, %%sp\n\t"		// move new stack ptr (hopefully) atomically
         // while register window is valid in both spaces
         // (scheduling might hit in copyDown loop)
 
-        "sub %%i5, 7, %%l0\n\t"     // copy parameters past the sixth to stack
+        "sub %%i5, 7, %%l0\n\t"		// copy parameters past the sixth to stack
         "add %%i4, 28, %%l1\n\t"
         "add %%sp, 92, %%l2\n"
     ".LcopyLong:\n\t"
@@ -149,10 +149,10 @@ void callVirtualMethod( void * pAdjustedThisPtr,
         "nop\n"
 
     ".LmoveOn:\n\t"
-        "mov %%i5, %%l0\n\t"        // prepare out registers
+        "mov %%i5, %%l0\n\t"		// prepare out registers
         "mov %%i4, %%l1\n\t"
 
-        "ld [%%l1], %%o0\n\t"       // prepare complex return ptr
+        "ld [%%l1], %%o0\n\t"		// prepare complex return ptr
         "st %%o0, [%%sp+64]\n\t"
         "sub %%l0, 1, %%l0\n\t"
         "add %%l1, 4, %%l1\n\t"
@@ -190,20 +190,20 @@ void callVirtualMethod( void * pAdjustedThisPtr,
         "ld [%%l1], %%o5\n"
 
     ".LdoCall:\n\t"
-        "ld [%%i0], %%l0\n\t"       // get vtable ptr
+        "ld [%%i0], %%l0\n\t"		// get vtable ptr
 
 "sll %%i1, 2, %%l6\n\t"
 //        "add %%l6, 8, %%l6\n\t"
         "add %%l6, %%l0, %%l0\n\t"
-//      // vtable has 8byte wide entries,
-//      // upper half contains 2 half words, of which the first
-//      // is the this ptr patch !
-//      // first entry is (or __tf)
+// 		// vtable has 8byte wide entries,
+// 		// upper half contains 2 half words, of which the first
+// 		// is the this ptr patch !
+// 		// first entry is (or __tf)
 
-//      "ldsh [%%l0], %%l6\n\t"     // load this ptr patch
-//      "add %%l6, %%o0, %%o0\n\t"  // patch this ptr
+// 		"ldsh [%%l0], %%l6\n\t"		// load this ptr patch
+// 		"add %%l6, %%o0, %%o0\n\t"	// patch this ptr
 
-//      "add %%l0, 4, %%l0\n\t"     // get virtual function ptr
+// 		"add %%l0, 4, %%l0\n\t"		// get virtual function ptr
         "ld [%%l0], %%l0\n\t"
 
         "ld [%%i4], %%l2\n\t"
@@ -220,8 +220,8 @@ void callVirtualMethod( void * pAdjustedThisPtr,
         "unimp\n"
 
     ".LcallReturned:\n\t"
-        "mov %%l3, %%sp\n\t"        // readjust stack so that our locals are where they belong
-        "st %%o0, %0\n\t"           // save possible return registers into our locals
+        "mov %%l3, %%sp\n\t"		// readjust stack so that our locals are where they belong
+        "st %%o0, %0\n\t"			// save possible return registers into our locals
         "st %%o1, %1\n\t"
         "std %%f0, %2\n\t"
         "st %%f0, %3\n\t"
@@ -284,17 +284,17 @@ static void cpp_call(
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
 {
       // max space for: complex ret ptr, this, values|ptr ...
-      char * pCppStack  =
+      char * pCppStack	=
           (char *)alloca( (nParams+2) * sizeof(sal_Int64) );
-      char * pCppStackStart = pCppStack;
-
+      char * pCppStackStart	= pCppStack;
+    
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
-
+    
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
-
+    
     if (pReturnTypeDescr)
     {
         if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
@@ -325,9 +325,9 @@ static void cpp_call(
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pCppArgs + nParams);
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
-
+    
     sal_Int32 nTempIndizes   = 0;
-
+    
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
@@ -336,7 +336,7 @@ static void cpp_call(
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
             pCppArgs[ nPos ] = CPPU_CURRENT_NAMESPACE::adjustPointer(pCppStack, pParamTypeDescr );
-
+            
             switch (pParamTypeDescr->eTypeClass)
             {
             case typelib_TypeClass_HYPER:
@@ -378,7 +378,7 @@ static void cpp_call(
                     *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                                     pUnoArgs[nPos], pParamTypeDescr,
                     pThis->getBridge()->getUno2Cpp() );
-
+                
                 pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
                 // will be released at reconversion
                 ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
@@ -397,7 +397,7 @@ static void cpp_call(
     {
         int nStackLongs = (pCppStack - pCppStackStart)/sizeof(sal_Int32);
         OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 3), "UNALIGNED STACK !!! (Please DO panic" );
-
+        
         if( nStackLongs & 1 )
             // stack has to be 8 byte aligned
             nStackLongs++;
@@ -416,7 +416,7 @@ static void cpp_call(
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
             typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
-
+            
             if (pParams[nIndex].bIn)
             {
                 if (pParams[nIndex].bOut) // inout
@@ -433,7 +433,7 @@ static void cpp_call(
             }
             // destroy temp cpp param => cpp: every param was constructed
             uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
-
+            
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
         // return value
@@ -447,7 +447,7 @@ static void cpp_call(
      catch( ... )
      {
          // get exception
-           fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions,
+           fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions, 
                                 *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
 
         // temporary params
@@ -476,12 +476,12 @@ void unoInterfaceProxyDispatch(
     OString cstr( OUStringToOString( pMemberDescr->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
     fprintf( stderr, "received dispatch( %s )\n", cstr.getStr() );
 #endif
-
+    
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
        = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
     typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
-
+    
     switch (pMemberDescr->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -506,14 +506,14 @@ void unoInterfaceProxyDispatch(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
+            aParam.bIn		= sal_True;
+            aParam.bOut		= sal_False;
 
             typelib_TypeDescriptionReference * pReturnTypeRef = 0;
             OUString aVoidName( RTL_CONSTASCII_USTRINGPARAM("void") );
             typelib_typedescriptionreference_new(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
-
+            
             // dependent dispatch
             aVtableSlot.index += 1; // get, then set method
             cpp_call(
@@ -524,7 +524,7 @@ void unoInterfaceProxyDispatch(
 
             typelib_typedescriptionreference_release( pReturnTypeRef );
         }
-
+        
         break;
     }
     case typelib_TypeClass_INTERFACE_METHOD:
@@ -555,7 +555,7 @@ void unoInterfaceProxyDispatch(
          (*pThis->pBridge->getUnoEnv()->getRegisteredInterface)(
            pThis->pBridge->getUnoEnv(),
                    (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
-
+            
                 if (pInterface)
                 {
                     ::uno_any_construct(
@@ -585,7 +585,7 @@ void unoInterfaceProxyDispatch(
         ::com::sun::star::uno::RuntimeException aExc(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal member type description!") ),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
-
+        
         Type const & rExcType = ::getCppuType( &aExc );
         // binary identical null reference
         ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );

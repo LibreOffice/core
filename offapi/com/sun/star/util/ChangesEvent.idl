@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,54 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_ChangesEvent_idl__
-#define __com_sun_star_util_ChangesEvent_idl__
-
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
-
-#ifndef __com_sun_star_util_ElementChange_idl__
-#include <com/sun/star/util/ElementChange.idl>
-#endif
-
-#ifndef __com_sun_star_util_ChangesSet_idl__
-#include <com/sun/star/util/ChangesSet.idl>
-#endif
-
-//=============================================================================
-
-module com {  module sun {  module star {  module util {
-
-//=============================================================================
-
+#ifndef __com_sun_star_util_ChangesEvent_idl__ 
+#define __com_sun_star_util_ChangesEvent_idl__ 
+ 
+#ifndef __com_sun_star_lang_EventObject_idl__ 
+#include <com/sun/star/lang/EventObject.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_ElementChange_idl__ 
+#include <com/sun/star/util/ElementChange.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_ChangesSet_idl__ 
+#include <com/sun/star/util/ChangesSet.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module util {  
+ 
+//============================================================================= 
+ 
 /** This event is fired when a set of changes becomes effective on the source of the event.
 
-    @see XChangesSet
-    @see XChangesBatch
-    @see XChangesListener
-    @see XChangesNotifier
-    @see com::sun::star::container::ContainerEvent
+    @see XChangesSet 
+    @see XChangesBatch 
+    @see XChangesListener 
+    @see XChangesNotifier 
+    @see com::sun::star::container::ContainerEvent 
     @see ElementChange
  */
 published struct ChangesEvent: com::sun::star::lang::EventObject
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** contains the accessor to the common root of the changed elements.
-
+        
         <p>Type and value of the accessor depend on the service.</p>
      */
-    any Base;
-
-    //-------------------------------------------------------------------------
+    any Base; 
+ 
+    //------------------------------------------------------------------------- 
     /** contains the changes which occurred.
      */
-    ChangesSet Changes;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    ChangesSet Changes; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

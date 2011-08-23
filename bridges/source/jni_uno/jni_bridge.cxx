@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ void SAL_CALL Mapping_map_to_uno(
 {
     uno_Interface ** ppUnoI = (uno_Interface **)ppOut;
     jobject javaI = (jobject) pIn;
-
+    
     OSL_ASSERT( sizeof (void *) == sizeof (jobject) );
     OSL_ENSURE( ppUnoI && td, "### null ptr!" );
 
@@ -95,7 +95,7 @@ void SAL_CALL Mapping_map_to_uno(
                 bridge->m_jni_info,
                 reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
                     bridge->m_java_env->pContext ) );
-
+            
             JNI_interface_type_info const * info =
                 static_cast< JNI_interface_type_info const * >(
                     bridge->m_jni_info->get_type_info(
@@ -166,7 +166,7 @@ void SAL_CALL Mapping_map_to_java(
                 bridge->m_jni_info,
                 reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
                     bridge->m_java_env->pContext ) );
-
+            
             JNI_interface_type_info const * info =
                 static_cast< JNI_interface_type_info const * >(
                     bridge->m_jni_info->get_type_info(
@@ -337,7 +337,7 @@ void JNI_context::java_exc_occured() const
             OUSTR("error examining java exception object!") +
             get_stack_trace() );
     }
-
+    
     jsize len = m_env->GetStringLength( (jstring) jo_descr.get() );
     auto_ptr< rtl_mem > ustr_mem(
         rtl_mem::allocate(
@@ -507,7 +507,7 @@ void SAL_CALL uno_ext_getMapping(
             OUString::unacquired( &pFrom->pTypeName );
         OUString const & to_env_typename =
             OUString::unacquired( &pTo->pTypeName );
-
+        
         uno_Mapping * mapping = 0;
 
         try

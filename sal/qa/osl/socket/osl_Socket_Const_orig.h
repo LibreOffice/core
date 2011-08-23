@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
-//define read count
+//define read count 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 
@@ -68,39 +68,39 @@ extern "C"
 {
 #endif
 
-#   include <stdio.h>
+#	include <stdio.h> 
 //------------------------------------------------------------------------
 // OS dependent declaration and includes
 //------------------------------------------------------------------------
 #if ( defined UNX ) || ( defined OS2 )  //Unix
-#   include <unistd.h>
-#   include <limits.h>
-#   include <string.h>
-#   include <math.h>
-#   include <errno.h>
-#   include <fcntl.h>
-#   include <sys/stat.h>
-#   include <sys/statfs.h>
-#   include <sys/statvfs.h>
-#   include <sys/types.h>
-#   include <sys/socket.h>
-#   include <netdb.h>
-#   include <netinet/in.h>
+#	include <unistd.h>
+#	include <limits.h>
+#	include <string.h>
+#	include <math.h>
+#	include <errno.h>
+#	include <fcntl.h>
+#	include <sys/stat.h>
+#	include <sys/statfs.h>
+#	include <sys/statvfs.h>
+#	include <sys/types.h>
+#	include <sys/socket.h>
+#	include <netdb.h>
+#	include <netinet/in.h>           
 #       include <arpa/inet.h>
 #endif
 #if ( defined WNT )                     // Windows
 #include <tools/prewin.h>
-// #    include <windows.h>
-#   include <winsock.h>
-#   include <string.h>
+// #	include <windows.h> 
+#	include <winsock.h> 
+#	include <string.h>
 #include <tools/postwin.h>
 #endif
 
 
 //------------------------------------------------------------------------
-// macro definition for the ASCII array/OUString declarations,
-// we use p### for the ASCII array,
-//        a### for the OUString,
+// macro definition for the ASCII array/OUString declarations, 
+// we use p### for the ASCII array, 
+//        a### for the OUString, 
 //        n###Len for its length
 //------------------------------------------------------------------------
 
@@ -131,13 +131,13 @@ extern "C"
 #define IP_PORT_HTTPS  443
 #define IP_PORT_HTTP2  8080
 /**reference: http://www.iana.org/assignments/port-numbers */
-#define IP_PORT_MYPORT  8881    //8888
-#define IP_PORT_MYPORT1  8882   //8889
-#define IP_PORT_MYPORT2  8883   //8890
-#define IP_PORT_MYPORT3  8884   //8891
-#define IP_PORT_MYPORT4  8885   //8892
-#define IP_PORT_MYPORT5  8886   //8893
-#define IP_PORT_MYPORT6  8887   //8894
+#define IP_PORT_MYPORT  8881 	//8888
+#define IP_PORT_MYPORT1  8882	//8889
+#define IP_PORT_MYPORT2  8883	//8890
+#define IP_PORT_MYPORT3  8884	//8891
+#define IP_PORT_MYPORT4  8885	//8892
+#define IP_PORT_MYPORT5  8886	//8893
+#define IP_PORT_MYPORT6  8887	//8894
 #define IP_PORT_MYPORT7  8895
 #define IP_PORT_MYPORT8  8896
 #define IP_PORT_MYPORT9  8897
@@ -177,8 +177,8 @@ OSLTEST_DECLARE( HostName5,  "koori.SFBay.Sun.COM" );  //"grande.Germany.Sun.COM
 OSLTEST_DECLARE( HostIp5,  "10.5.32.20" );
 OSLTEST_DECLARE( HostName6,  "crumple.SFBay.Sun.COM" );  //sfbay
 OSLTEST_DECLARE( HostIp6,  "10.6.103.83" );
-OSLTEST_DECLARE( HostIpInval,  "123.45.67.89" );    //this is valid ip number,but can not arrive --mindy
-OSLTEST_DECLARE( HostIpInval1,  "123.345.67.89" );  //this is real invalid ip number --mindy
+OSLTEST_DECLARE( HostIpInval,  "123.45.67.89" );	//this is valid ip number,but can not arrive --mindy
+OSLTEST_DECLARE( HostIpInval1,  "123.345.67.89" );	//this is real invalid ip number --mindy
 OSLTEST_DECLARE( HostNameInval,  "www.the_hostname_that_can_not_resolvable_to_an_IP_Address.com" );
 OSLTEST_DECLARE( HostIpZero,  "0.0.0.0" );
 

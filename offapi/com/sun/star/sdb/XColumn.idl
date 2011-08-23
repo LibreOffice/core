@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,281 +24,281 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_XColumn_idl__
-#define __com_sun_star_sdb_XColumn_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
-#ifndef __com_sun_star_util_Date_idl__
-#include <com/sun/star/util/Date.idl>
-#endif
-
-#ifndef __com_sun_star_util_DateTime_idl__
-#include <com/sun/star/util/DateTime.idl>
-#endif
-
-#ifndef __com_sun_star_util_Time_idl__
-#include <com/sun/star/util/Time.idl>
-#endif
-
- module com {  module sun {  module star {  module io {
- published interface XInputStream;
-};};};};
-
- module com {  module sun {  module star {  module container {
- published interface XNameAccess;
-};};};};
-
- module com {  module sun {  module star {  module sdbc {
- published interface XRef;
- published interface XArray;
- published interface XBlob;
- published interface XClob;
-};};};};
-
- module com {  module sun {  module star {  module sdb {
-
-
+#ifndef __com_sun_star_sdb_XColumn_idl__ 
+#define __com_sun_star_sdb_XColumn_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_Date_idl__ 
+#include <com/sun/star/util/Date.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_DateTime_idl__ 
+#include <com/sun/star/util/DateTime.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_Time_idl__ 
+#include <com/sun/star/util/Time.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module io { 
+ published interface XInputStream; 
+};};};}; 
+ 
+ module com {  module sun {  module star {  module container { 
+ published interface XNameAccess; 
+};};};}; 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ published interface XRef; 
+ published interface XArray; 
+ published interface XBlob; 
+ published interface XClob; 
+};};};}; 
+ 
+ module com {  module sun {  module star {  module sdb { 
+ 
+ 
 /** is used to access data which is collected in a row.
  */
 published interface XColumn: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** reports whether the last column read had a value of SQL NULL.
         Note that you must first call getXXX on a column to try to read
-        its value and then call
+        its value and then call 
         <code>wasNull()</code>
         to see if the value read was SQL NULL.
-        @returns
+        @returns 
             <TRUE/> if so
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    boolean wasNull() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    boolean wasNull() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a String.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    string getString() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    string getString() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as boolean.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    boolean getBoolean() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    boolean getBoolean() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a byte.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    byte getByte() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    byte getByte() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a short.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    short getShort() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    short getShort() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a long.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    long getInt() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    long getInt() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a hyper.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    hyper getLong() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    hyper getLong() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a float.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    float getFloat() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    float getFloat() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a double.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    double getDouble() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
-    /** gets the value of a column in the current row as a byte array.
-             The bytes represent the raw values returned by the driver.
-             @returns  the column value;
-                if the value is SQL NULL, the result is empty.
-             @throws com::sun::star::sdbc::SQLException
+    double getDouble() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
+    /** gets the value of a column in the current row as a byte array. 
+             The bytes represent the raw values returned by the driver. 
+             @returns  the column value; 
+                if the value is SQL NULL, the result is empty. 
+             @throws com::sun::star::sdbc::SQLException 
                 if a database access error occurs.
     */
-    sequence<byte> getBytes() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    sequence<byte> getBytes() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a date object.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    com::sun::star::util::Date getDate()
-        raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    com::sun::star::util::Date getDate() 
+        raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a time object.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    com::sun::star::util::Time getTime()
-        raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    com::sun::star::util::Time getTime() 
+        raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a datetime object.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    com::sun::star::util::DateTime getTimestamp()
-        raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    com::sun::star::util::DateTime getTimestamp() 
+        raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a stream of
         uninterpreted bytes. The value can then be read in chunks from the
         stream. This method is particularly suitable for retrieving large
         LONGVARBINARY or LONGVARCHAR values.
-
-
+        
+        
         <p>
         <b>Note:</b> All the data in the returned stream must be
         read prior to getting the value of any other column. The next
         call to a get method implicitly closes the stream. Also, a
-        stream may return 0 when the method
+        stream may return 0 when the method 
         <member scope="com::sun::star::io">XInputStream::available()</member>
         is called whether there is data available or not.
         </p>
-            @returns
+            @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    com::sun::star::io::XInputStream getBinaryStream()
-        raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    com::sun::star::io::XInputStream getBinaryStream() 
+        raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the value of a column in the current row as a stream of
         uninterpreted bytes. The value can then be read in chunks from the
         stream. This method is particularly suitable for retrieving large
-        LONGVARCHAR values.
-
+        LONGVARCHAR values.		
+        
         <p>
         <b>Note:</b> All the data in the returned stream must be
         read prior to getting the value of any other column. The next
         call to a get method implicitly closes the stream. Also, a
-        stream may return 0 when the method
+        stream may return 0 when the method 
         <member scope="com::sun::star::io">XInputStream::available()</member>
         is called whether there is data available or not.
         </p>
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    com::sun::star::io::XInputStream getCharacterStream()
-        raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    com::sun::star::io::XInputStream getCharacterStream() 
+        raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** @returns the value of a column in the current row as an object.
-        This method uses the given
+        This method uses the given 
         <code>Map</code>
         object
         for the custom mapping of the SQL structure or distinct type
         that is being retrieved.
         @param typeMap
             the type map is used to fetch the correct type
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    any getObject([in]com::sun::star::container::XNameAccess typeMap)
-        raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    any getObject([in]com::sun::star::container::XNameAccess typeMap) 
+        raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets a REF(&lt;structured-type&gt) column value from the current row.
 
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
     */
-    com::sun::star::sdbc::XRef getRef() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    com::sun::star::sdbc::XRef getRef() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets a BLOB (Binary Large OBject) value in the current row.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    com::sun::star::sdbc::XBlob getBlob() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    com::sun::star::sdbc::XBlob getBlob() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets a CLOB value in the current row of this <code>ResultSet</code> object.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    com::sun::star::sdbc::XClob getClob() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    com::sun::star::sdbc::XClob getClob() raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** gets a SQL ARRAY value from the current row.
-        @returns
+        @returns 
             the column value
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    com::sun::star::sdbc::XArray getArray() raises (com::sun::star::sdbc::SQLException);
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    com::sun::star::sdbc::XArray getArray() raises (com::sun::star::sdbc::SQLException); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

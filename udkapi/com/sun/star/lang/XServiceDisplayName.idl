@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,37 +24,37 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_lang_XServiceDisplayName_idl__
-#define __com_sun_star_lang_XServiceDisplayName_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
-#include <com/sun/star/lang/Locale.idl>
-#endif
-
-//=============================================================================
-
-module com {  module sun {  module star {  module lang {
-
-//=============================================================================
+#ifndef __com_sun_star_lang_XServiceDisplayName_idl__ 
+#define __com_sun_star_lang_XServiceDisplayName_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_Locale_idl__ 
+#include <com/sun/star/lang/Locale.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module lang {  
+ 
+//============================================================================= 
 /** provides a name for the service to be used in displays.
 
      <p>This name can be used in displays (dialogs, menus, etc.) to provide
-     a more memorable / meaningful name than the service name or its
-     implementation name. It should not be used to identify / select a
+     a more memorable / meaningful name than the service name or its 
+     implementation name. It should not be used to identify / select a 
      specific service / implementation.</p>
  */
 published interface XServiceDisplayName : ::com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** returns the display name of the service for a given language.
 
-         <p>The caller may specify a
+         <p>The caller may specify a 
          <type scope="com::sun::star::lang">Locale</type> for the preferred
-         language of the resulting string.
+         language of the resulting string. 
          However, if that locale is not supported the resulting string may
          be given in a different language. Usually this should be English.</p>
 
@@ -64,13 +64,13 @@ published interface XServiceDisplayName : ::com::sun::star::uno::XInterface
          @returns
              the string to be used for the service in displays.
      */
-    string  getServiceDisplayName(
-            [in] ::com::sun::star::lang::Locale aLocale );
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    string	getServiceDisplayName( 
+            [in] ::com::sun::star::lang::Locale aLocale ); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

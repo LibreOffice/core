@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@ public class SmoketestCommandEnvironment extends WeakBase
 
     static private final String __serviceName =
     "com.sun.star.deployment.test.SmoketestCommandEnvironment";
-
+    
     private XComponentContext m_cmpCtx;
     private XMultiComponentFactory m_xMCF;
-
+    
 
     public SmoketestCommandEnvironment(XComponentContext xCompContext) {
         try {
             m_cmpCtx = xCompContext;
-            m_xMCF = m_cmpCtx.getServiceManager();
+            m_xMCF = m_cmpCtx.getServiceManager();                
         }
         catch( Exception e ) {
             e.printStackTrace();
@@ -67,24 +67,24 @@ public class SmoketestCommandEnvironment extends WeakBase
         return getServiceNames();
     }
 
-
+    
     public boolean supportsService( String sServiceName ) {
         boolean bSupported = false;
         if (sServiceName.equals(__serviceName))
             bSupported = true;
         return bSupported;
     }
-
+    
     public String getImplementationName() {
         return  SmoketestCommandEnvironment.class.getName();
     }
-
+    
     //XCommandEnvironment ================================================
     public com.sun.star.task.XInteractionHandler getInteractionHandler()
     {
         return new InteractionImpl();
     }
-
+    
     public com.sun.star.ucb.XProgressHandler getProgressHandler()
     {
         return new ProgressImpl();
@@ -131,7 +131,7 @@ class InteractionImpl implements com.sun.star.task.XInteractionHandler
                 //don't query again for ongoing extensions
                 abort = false;
             }
-        }
+        }   
     }
 }
 

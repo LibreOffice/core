@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ class TestBridge implements IBridge {
     static public final boolean DEBUG = false;
 
     Hashtable _hashtable = new Hashtable();
-
+    
     IEnvironment _source ;//= new com.sun.star.lib.uno.environments.java.java_environment(null);
-
+    
 
     class MyEnv implements IEnvironment {
         public Object getContext() {
@@ -75,7 +75,7 @@ class TestBridge implements IBridge {
         public void list() {
         }
     }
-
+    
     TestBridge() {
         _source = new MyEnv();
     }
@@ -92,24 +92,24 @@ class TestBridge implements IBridge {
 
     public Object mapInterfaceFrom(Object object, Type type) {
         String oid = (String)object;
-
+        
         return _hashtable.get(oid);
     }
-
+    
     public IEnvironment getSourceEnvironment() {
         return _source;
     }
-
+    
     public IEnvironment getTargetEnvironment() {
         return null;
     }
-
+    
     public void acquire() {}
 
     public void release() {}
-
+    
     public void reset() throws IOException {}
-
+    
     public void dispose() throws InterruptedException, IOException {}
 }
 

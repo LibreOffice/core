@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 namespace io_stm {
 
 extern rtl_StandardModuleCount g_moduleCount;
-
-// OPipeImpl
+    
+// OPipeImpl 
 Reference< XInterface > SAL_CALL OPipeImpl_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);
-OUString    OPipeImpl_getImplementationName();
+OUString 	OPipeImpl_getImplementationName();
 Sequence<OUString> OPipeImpl_getSupportedServiceNames(void);
 
 Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);
-OUString    ODataInputStream_getImplementationName();
+OUString 	ODataInputStream_getImplementationName();
 Sequence<OUString> ODataInputStream_getSupportedServiceNames(void);
 
 Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);
@@ -49,7 +49,7 @@ OUString OMarkableOutputStream_getImplementationName();
 Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames(void);
 
 Reference< XInterface > SAL_CALL OMarkableInputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);
-OUString    OMarkableInputStream_getImplementationName() ;
+OUString 	OMarkableInputStream_getImplementationName() ;
 Sequence<OUString> OMarkableInputStream_getSupportedServiceNames(void);
 
 Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw(Exception);
@@ -57,7 +57,7 @@ OUString OObjectOutputStream_getImplementationName();
 Sequence<OUString> OObjectOutputStream_getSupportedServiceNames(void);
 
 Reference< XInterface > SAL_CALL OObjectInputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw(Exception);
-OUString    OObjectInputStream_getImplementationName() ;
+OUString 	OObjectInputStream_getImplementationName() ;
 Sequence<OUString> OObjectInputStream_getSupportedServiceNames(void);
 
 Reference< XInterface > SAL_CALL OPumpImpl_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);

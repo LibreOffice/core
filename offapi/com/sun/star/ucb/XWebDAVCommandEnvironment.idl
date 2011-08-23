@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,20 +40,20 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** A command environment that can be used to deal with WebDAV/HTTP specific
-    commands.
+    commands. 
 
     <p>Supply an implementation of this interface together with an
     <type>XCommandEnvironment</type> implementation, when executing a command
     using <type>XCommandProcessor</type>.
 */
-/* published */
+/* published */ 
 interface XWebDAVCommandEnvironment : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** This method gets called while assembling an WebDAV/HTTP request.
         The returned headername-headervalue pairs will be appended to
         the list of request headers before the request is dispatched.
-
+          
     @param aURI
     The request URI.
 
@@ -61,8 +61,8 @@ interface XWebDAVCommandEnvironment : com::sun::star::uno::XInterface
     The WebDAV/HTTP method ("GET","PUT","MKCOL",...).
 
     @return
-        A sequence of header name, header value pairs. The header
-        names must be the plain names and contain no trailing ":".
+        A sequence of header name, header value pairs. The header 
+        names must be the plain names and contain no trailing ":". 
         The header value must be an Any containing a string.
     */
     sequence<com::sun::star::beans::NamedValue> getUserRequestHeaders(

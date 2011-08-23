@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -230,13 +230,13 @@ public:
     {
         rtl_uString_release( pData );
     }
-
+    
     /** Provides an OUString const & passing a storage pointer of an
         rtl_uString * handle.
         It is more convenient to use C++ OUString member functions when dealing
         with rtl_uString * handles.  Using this function avoids unnecessary
         acquire()/release() calls for a temporary OUString object.
-
+        
         @param ppHandle
                pointer to storage
         @return
@@ -244,7 +244,7 @@ public:
     */
     static inline OUString const & unacquired( rtl_uString * const * ppHandle )
         { return * reinterpret_cast< OUString const * >( ppHandle ); }
-
+    
     /**
       Assign a new string.
 
@@ -553,7 +553,7 @@ public:
         if ( pData->length != asciiStrLength )
             return sal_False;
 
-        return rtl_ustr_asciil_reverseEquals_WithLength(
+        return rtl_ustr_asciil_reverseEquals_WithLength( 
                     pData->buffer, asciiStr, asciiStrLength );
     }
 

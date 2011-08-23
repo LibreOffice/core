@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,25 +152,25 @@ struct Entry
  *======================================================================*/
 namespace
 {
-
+ 
 class EntryCache
 {
     rtl_cache_type * m_entry_cache;
-
+ 
 public:
     static EntryCache & get();
-
+ 
     Entry * create (PageHolder const & rxPage, sal_uInt32 nOffset);
-
+ 
     void destroy (Entry * entry);
-
+ 
 protected:
     EntryCache();
     ~EntryCache();
 };
-
+ 
 } // namespace
-
+ 
 /*========================================================================
  *
  * EntryCache implementation.
@@ -220,7 +220,7 @@ void EntryCache::destroy (Entry * entry)
     {
         // destruct.
         entry->~Entry();
-
+    
         // return to cache.
         rtl_cache_free (m_entry_cache, entry);
     }

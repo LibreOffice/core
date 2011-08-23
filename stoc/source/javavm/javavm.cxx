@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,7 +105,7 @@
 #endif
 #define TIMEZONE "MEZ"
 #else
-#define INI_FILE "java.ini"
+#define	INI_FILE "java.ini"
 #define DEF_JAVALIB "jvm.dll"
 #define TIMEZONE "MET"
 #endif
@@ -317,7 +317,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
     xConfRegistry_simple->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")), sal_True, sal_False);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
-//  if ooInetProxyType is not 0 then read the settings
+//	if ooInetProxyType is not 0 then read the settings
     css::uno::Reference<css::registry::XRegistryKey> proxyEnable= xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetProxyType")));
     if( proxyEnable.is() && 0 != proxyEnable->getLongValue())
     {
@@ -389,7 +389,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
 
         // read socks settings
-/*      Reference<XRegistryKey> socksProxy_name = xRegistryRootKey->openKey(OUSTR("Settings/ooInetSOCKSProxyName"));
+/*		Reference<XRegistryKey> socksProxy_name = xRegistryRootKey->openKey(OUSTR("Settings/ooInetSOCKSProxyName"));
         if (socksProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
             OUString socksHost = OUSTR("socksProxyHost=");
             socksHost += socksProxy_name->getStringValue();
@@ -404,7 +404,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
                 pjvm->pushProp(socksPort);
             }
         }
-*/  }
+*/	}
     xConfRegistry_simple->close();
 }
 
@@ -575,7 +575,7 @@ void initVMConfiguration(
         (void) exception; // unused
 #endif
     }
-
+    
     try
     {
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
@@ -810,7 +810,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         {
             rtl::OString sOption = rtl::OUStringToOString(
                 *i, osl_getThreadTextEncoding());
-
+            
             if (!sOption.matchIgnoreAsciiCase(sJavaOption, 0))
                 arPropStrings[index]= rtl::OString("-D") + sOption;
             else
@@ -841,8 +841,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             }
             else if (errFind == JFW_E_NO_JAVA_FOUND)
             {
-
-                //Warning MessageBox:
+                
+                //Warning MessageBox: 
                 //%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task.
                 //Please install a JRE and restart %PRODUCTNAME.
                 css::java::JavaNotFoundException exc(
@@ -865,7 +865,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         }
         case JFW_E_INVALID_SETTINGS:
         {
-            //Warning MessageBox:
+            //Warning MessageBox: 
             // The %PRODUCTNAME configuration has been changed. Under Tools
             // - Options - %PRODUCTNAME - Java, select the Java runtime environment
             // you want to have used by %PRODUCTNAME.
@@ -976,7 +976,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             // TODO this is done too late; changes to the configuration done
             // after the above call to initVMConfiguration are lost
             registerConfigChangesListener();
-
+            
             break;
         }
     }

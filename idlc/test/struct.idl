@@ -13,7 +13,7 @@ module test
 typedef sequence< long > Id;
 //struct Bla
 //{
-//  long bla;
+//	long bla;
 //};
 
 /** bla
@@ -24,46 +24,46 @@ struct BaseStruct
     Id Id;
 
     /// a short  member
-    short   m1;
+    short  	m1;
 
     /// a unsigned short  member
-    unsigned short  m2;
+    unsigned short 	m2;
 
     /// a long member
-    long    m3;
+    long 	m3;
 
     /// a unsigned long  member
-    unsigned long   m4;
+    unsigned long 	m4;
 
     /// a hyper member
-    hyper   m5;
+    hyper 	m5;
 
     /// a unsigned hyper  member
-    unsigned hyper  m6;
+    unsigned hyper 	m6;
 
     /// a string member
-    string  m7;
+    string 	m7;
 
     /// a byte member
-    byte    m8;
+    byte	m8;
 
     /// a type member
-    type    m9;
+    type 	m9;
 
     /// a float member
-    float   m10;
+    float 	m10;
 
     /// a double member
-    double  m11;
+    double 	m11;
 
     /// a char member
-    char    m12;
+    char 	m12;
 
     /// a boolean member
-    boolean m13;
+    boolean	m13;
 
     /// a any member
-    any     m14;
+    any 	m14;
 };
 
 interface XTestBaseTypes;
@@ -72,22 +72,22 @@ typedef sequence< long > LongSeq;
 
 typedef sequence< LongSeq > LongSeqSeq;
 
-/** TestStruct deinfes a struct which inherits
-    from the base strcut type BaseStruct.
+/** TestStruct deinfes a struct which inherits 
+    from the base strcut type BaseStruct. 
 */
 struct TestStruct : BaseStruct
 {
     /// a sequence< long > member
-    sequence< long >    ms1;
+    sequence< long > 	ms1;
 
     /// a sequence< sequence< long > > member
-    sequence< sequence< long > >    ms2;
+    sequence< sequence< long > > 	ms2;
 
     /// a long array member with dimesion 5,10
-//  long            ms3[5][10];
+//	long			ms3[5][10];
 
     /// a string array member with dimension 4,8
-//  long[5][10]     ms4;
+//	long[5][10]		ms4;
 
     /// an interface member
     XTestBaseTypes ms5;

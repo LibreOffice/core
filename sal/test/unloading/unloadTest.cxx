@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,52 +106,52 @@ int main(int argc, char* argv[])
 //    if( !serviceManager.is())
 //    {
 //      printf("\n ####################################################\n"
-//         "Error: could not create service manager. \n"
-//         "Is the executable in the office program directory?\n");
+//  	   "Error: could not create service manager. \n"
+//  	   "Is the executable in the office program directory?\n");
 //      return -1;
 //    }
-
-//    Reference<XInterface> xint1=  serviceManager->createInstance( OUString(
-//                  RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
+  
+//    Reference<XInterface> xint1=	serviceManager->createInstance( OUString(
+//  				RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
 
 //    if( !xint1.is())
 //    {
 //        printf("\n ###################################################\n"
-//           "Error: could not create service from samplelib1\n"
-//           "Is samplelib1 in the office program directory and is it "
-//           "registered?\n");
+//  	     "Error: could not create service from samplelib1\n"
+//  	     "Is samplelib1 in the office program directory and is it "
+//  	     "registered?\n");
 //        return -1;
 //    }
-//    Reference<XInterface> xint2=  serviceManager->createInstance( OUString(
-//                  RTL_CONSTASCII_USTRINGPARAM(SERVICENAME21)));
+//    Reference<XInterface> xint2=	serviceManager->createInstance( OUString(
+//  				RTL_CONSTASCII_USTRINGPARAM(SERVICENAME21)));
 //    if( !xint2.is())
 //      {
 //        printf("\n ###################################################"
-//           "Error: could not create service from samplelib2\n"
-//           "Is samplelib2 in the office program directory and is it "
-//           "registered?\n");
+//  	     "Error: could not create service from samplelib2\n"
+//  	     "Is samplelib2 in the office program directory and is it "
+//  	     "registered?\n");
 //        return -1;
 //      }
 //        //destroy servicemanager
 //        Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-//        Any any_prop= xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+//        Any any_prop=	xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
 //        Reference<XComponentContext> xContext;
 //        any_prop >>= xContext;
 //        Reference<XComponent> xComponent( xContext, UNO_QUERY);
 //        xComponent->dispose();
 
-//        //unload samplelib1 and samplelib2. We need the handles, therefore load
-//        // the libs
-//        OUString libname1( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
-//        OUString libname2( RTL_CONSTASCII_USTRINGPARAM(LIBRARY2));
-//        oslModule m1= osl_loadModule(libname1.pData, 0);
-//        oslModule m2= osl_loadModule(libname2.pData, 0);
-//        osl_unloadModule( m1);
-//        osl_unloadModule( m1);
-//        osl_unloadModule( m2);
-//        osl_unloadModule( m2);
-
-
+//  	  //unload samplelib1 and samplelib2. We need the handles, therefore load
+//  	  // the libs
+//  	  OUString libname1( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
+//    	  OUString libname2( RTL_CONSTASCII_USTRINGPARAM(LIBRARY2));
+//  	  oslModule m1= osl_loadModule(libname1.pData, 0);
+//  	  oslModule m2= osl_loadModule(libname2.pData, 0);
+//  	  osl_unloadModule( m1);
+//  	  osl_unloadModule( m1);
+//  	  osl_unloadModule( m2);
+//  	  osl_unloadModule( m2);
+      
+  
   sal_Bool ret1= test1();
   if( ret1) printf( "\n Test 1 successful \n");
     else printf("\n !!!!!! Test 1 failed\n");
@@ -183,8 +183,8 @@ int main(int argc, char* argv[])
 /* Create an instance of SERVICENAME1, call a function and unload module.
    This tests the loader and basic functionality.
    The library will be loaded once manually and the handle will be stored.
-   Then the library will be unloaded. After rtl_unloadUnusedLibraries we try to
-   get a symbol of the unloaded lib. If this fails then the test is successful.
+   Then the library will be unloaded. After rtl_unloadUnusedLibraries we try to 
+   get a symbol of the unloaded lib. If this fails then the test is successful. 
 */
 sal_Bool test1()
 {
@@ -194,16 +194,16 @@ sal_Bool test1()
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
-    Reference<XInterface> xint= serviceManager->createInstance( OUString(
+    Reference<XInterface> xint=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
 
-    // get the handle
-    handleMod=  osl_loadModule( lib1Name.pData, 0);
+    // get the handle 
+    handleMod=	osl_loadModule( lib1Name.pData, 0);
     osl_unloadModule( handleMod);
     xint=0;
 
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=	xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -214,7 +214,7 @@ sal_Bool test1()
     // Try to get a symbol, must fail
     OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
-
+    
     if( !pSymbol)
         return sal_True;
     return sal_False;
@@ -232,10 +232,10 @@ sal_Bool test2()
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
          OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
 
-    Reference<XInterface> xint= serviceManager->createInstance( OUString(
+    Reference<XInterface> xint=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
 
-    handleMod=  osl_loadModule( lib1Name.pData, 0);
+    handleMod=	osl_loadModule( lib1Name.pData, 0);
     osl_unloadModule( handleMod);
     //-----------------------------------------------------------
     oslModule mod1= osl_loadModule( lib1Name.pData, 0);
@@ -247,7 +247,7 @@ sal_Bool test2()
     rtl_registerModuleForUnloading(mod3);
     // ----------------------------------------------------------
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=	xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -258,7 +258,7 @@ sal_Bool test2()
     // Try to get a symbol, must fail
     OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
-
+    
     if( !pSymbol)
         return sal_True;
     return sal_False;
@@ -277,10 +277,10 @@ sal_Bool test3()
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
          OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
 
-    Reference<XInterface> xint= serviceManager->createInstance( OUString(
+    Reference<XInterface> xint=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
 
-    handleMod=  osl_loadModule( lib1Name.pData, 0);
+    handleMod=	osl_loadModule( lib1Name.pData, 0);
     osl_unloadModule( handleMod);
     //-----------------------------------------------------------
     oslModule mod1= osl_loadModule( lib1Name.pData, 0);
@@ -291,7 +291,7 @@ sal_Bool test3()
     rtl_registerModuleForUnloading(mod2);
     // ----------------------------------------------------------
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=	xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -302,7 +302,7 @@ sal_Bool test3()
     // Try to get a symbol, must succeed
     OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
-
+    
     if( pSymbol)
     {
         retval= sal_True;
@@ -325,21 +325,21 @@ sal_Bool test4()
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
          OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
 
-    Reference<XInterface> xint= serviceManager->createInstance( OUString(
+    Reference<XInterface> xint=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
 
-    handleMod1= osl_loadModule( lib1Name.pData, 0);
+    handleMod1=	osl_loadModule( lib1Name.pData, 0);
     osl_unloadModule( handleMod1);
-    Reference<XInterface> xint2=    serviceManager->createInstance( OUString(
+    Reference<XInterface> xint2=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME21)));
 
-    handleMod2= osl_loadModule( lib2Name.pData, 0);
+    handleMod2=	osl_loadModule( lib2Name.pData, 0);
     osl_unloadModule( handleMod2);
 
     //-----------------------------------------------------------
     // ----------------------------------------------------------
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=	xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -350,7 +350,7 @@ sal_Bool test4()
     // Try to get a symbol, must fail
     OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     void* pSymbol= osl_getSymbol(  handleMod1, sSymbol.pData);
-
+    
     void* pSymbol2= osl_getSymbol(  handleMod2, sSymbol.pData);
     if( ! pSymbol && !pSymbol2)
         return sal_True;
@@ -368,34 +368,34 @@ sal_Bool test5()
     sal_Bool btest1= sal_False;
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
     OUString lib2Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY2));
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));	
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
          OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
 
     //-----------------------------------------------------------
-    Reference<XInterface> xint= serviceManager->createInstance( OUString(
+    Reference<XInterface> xint=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
-    Reference<XInterface> xint2=    serviceManager->createInstance( OUString(
+    Reference<XInterface> xint2=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME2)));
-    Reference<XInterface> xint3=    serviceManager->createInstance( OUString(
+    Reference<XInterface> xint3=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME3)));
-    Reference<XInterface> xint4=    serviceManager->createInstance( OUString(
+    Reference<XInterface> xint4=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME21)));
-    Reference<XInterface> xint5=    serviceManager->createInstance( OUString(
+    Reference<XInterface> xint5=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME22)));
-    Reference<XInterface> xint6=    serviceManager->createInstance( OUString(
+    Reference<XInterface> xint6=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME23)));
 
     // ----------------------------------------------------------
-    handleMod1= osl_loadModule( lib1Name.pData, 0);
+    handleMod1=	osl_loadModule( lib1Name.pData, 0);
     osl_unloadModule( handleMod1);
-    handleMod2= osl_loadModule( lib2Name.pData, 0);
+    handleMod2=	osl_loadModule( lib2Name.pData, 0);
     osl_unloadModule( handleMod2);
 
     // get rid of the service manager
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=	xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -404,7 +404,7 @@ sal_Bool test5()
     // try unloading, must fail
     rtl_unloadUnusedModules( NULL);
     void* pSymbol= osl_getSymbol(  handleMod1, sSymbol.pData);
-
+    
     void* pSymbol2= osl_getSymbol(  handleMod2, sSymbol.pData);
     if(  pSymbol && pSymbol2)
         btest1= sal_True;
@@ -421,7 +421,7 @@ sal_Bool test5()
     return sal_False;
 }
 
-/*
+/* 
 TimeValue Test
 rtl_unloadUnusedModules takes a TimeValue which determines a timespan
 a module must have been constantly unused in order to be unloaded.
@@ -437,20 +437,20 @@ sal_Bool test6()
     oslModule handleMod2=0;
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
     OUString lib2Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY2));
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));	
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
          OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
-    Reference<XInterface> xint= serviceManager->createInstance( OUString(
+    Reference<XInterface> xint=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
 
     // ----------------------------------------------------------
-    handleMod1= osl_loadModule( lib1Name.pData, 0);
+    handleMod1=	osl_loadModule( lib1Name.pData, 0);
     osl_unloadModule( handleMod1);
 
     // get rid of the service manager
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=	xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -466,7 +466,7 @@ sal_Bool test6()
     osl_getSystemTime( &beforeTime);
     for(;;)
     {
-
+        
         rtl_unloadUnusedModules( &time);
         void* pSymbol= osl_getSymbol(  handleMod1, sSymbol.pData);
         if( ! pSymbol)
@@ -482,7 +482,7 @@ sal_Bool test6()
     return sal_True;
 }
 
-/*
+/* 
 */
 sal_Bool test7()
 {
@@ -494,7 +494,7 @@ sal_Bool test7()
     sal_Int32 cookie1= rtl_addUnloadingListener( listenerCallback, &id1);
     sal_Int32 cookie2= rtl_addUnloadingListener( listenerCallback, &id2);
     sal_Int32 cookie3= rtl_addUnloadingListener( listenerCallback, &id3);
-
+    
     printf("\nTest 7 \nThe listener should be called 3 times\n");
     rtl_unloadUnusedModules( NULL);
 
@@ -505,7 +505,7 @@ sal_Bool test7()
     sal_Int32 cookie4= rtl_addUnloadingListener( listenerCallback, &id1);
     sal_Int32 cookie5= rtl_addUnloadingListener( listenerCallback, &id2);
     sal_Int32 cookie6= rtl_addUnloadingListener( listenerCallback, &id3);
-
+    
     if( cookie1 == cookie4 &&
         cookie2 == cookie5 )
     {
@@ -534,7 +534,7 @@ sal_Bool test8()
     printf("Test 8 ####################################################\n");
     oslModule handleMod1=0;
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));	
 
     sal_Bool b_ifaceSupported=sal_False;
     sal_Bool b_instances_identical= sal_False;
@@ -546,9 +546,9 @@ sal_Bool test8()
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
          OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
     Reference<XContentEnumerationAccess> xContent( serviceManager, UNO_QUERY);
-    Reference<XEnumeration> xenum=  xContent->createContentEnumeration(
+    Reference<XEnumeration> xenum=	xContent->createContentEnumeration(
         OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME4)));
-
+    
     Any any_elem;
     if( xenum->hasMoreElements())
         any_elem= xenum->nextElement();
@@ -566,19 +566,19 @@ sal_Bool test8()
             b_ifaceSupported= sal_True;
     }
 
-    // XUnloadingPreference::releaseOnNotification should return true now because we haven't
+    // XUnloadingPreference::releaseOnNotification should return true now because we haven't 
     // created an instance yet
     Reference<XUnloadingPreference> xreject( xinterfaceFact, UNO_QUERY);
     b_releaseBeforeLoading= xreject->releaseOnNotification();
 
     // Create instance. Afterwards releaseOnNotification should return false.
-    Reference<XInterface> xint= serviceManager->createInstance( OUString(
+    Reference<XInterface> xint=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME4)));
     b_releaseAfterLoading= xreject->releaseOnNotification();
     b_releaseAfterLoading= b_releaseAfterLoading? sal_False : sal_True;
-
+    
     // safe the handle of the module
-    handleMod1= osl_loadModule( lib1Name.pData, 0);
+    handleMod1=	osl_loadModule( lib1Name.pData, 0);
     osl_unloadModule( handleMod1);
 
     // ----------------------------------------------------------
@@ -587,14 +587,14 @@ sal_Bool test8()
     OUString s= info->getImplementationName();
 
     // get another instance which must be the same
-    Reference<XInterface> xint2=    serviceManager->createInstance( OUString(
+    Reference<XInterface> xint2=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME4)));
 
     b_instances_identical= xint == xint2;
 
     // get rid of the service manager
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=	xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -608,7 +608,7 @@ sal_Bool test8()
     if( ! pSymbol )
         b_unloaded= sal_True;
 
-    if( b_ifaceSupported && b_instances_identical && b_releaseBeforeLoading &&
+    if( b_ifaceSupported && b_instances_identical && b_releaseBeforeLoading && 
         b_releaseAfterLoading && b_unloaded)
         return sal_True;
     return sal_False;
@@ -628,16 +628,16 @@ sal_Bool test9()
     oslModule handleMod=0;
     sal_Bool retval=sal_False;
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
-
+    
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
          OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
 
-    Reference<XInterface> xint= serviceManager->createInstance( OUString(
+    Reference<XInterface> xint=	serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
     // Release the service. The library refcount should be 1
     xint=0;
 
-    handleMod=  osl_loadModule( lib1Name.pData, 0);
+    handleMod=	osl_loadModule( lib1Name.pData, 0);
     osl_unloadModule( handleMod);
     //-----------------------------------------------------------
 
@@ -646,7 +646,7 @@ sal_Bool test9()
     // Try to get a symbol, must fail
     OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
-
+    
     if( pSymbol)
     {
         retval= sal_False;

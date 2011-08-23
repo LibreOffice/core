@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,30 +24,30 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_frame_status_Visibility_idl__
-#define __com_sun_star_frame_status_Visiblilty_idl__
-
-//=============================================================================
-
+#ifndef __com_sun_star_frame_status_Visibility_idl__ 
+#define __com_sun_star_frame_status_Visiblilty_idl__ 
+ 
+//============================================================================= 
+ 
 module com {  module sun {  module star {  module frame { module status {
-
-//=============================================================================
-
+ 
+//============================================================================= 
+ 
 /** describes the visibility state of a property.
 
     @since OOo 2.0
  */
 struct Visibility
 {
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+     
     /** <TRUE/> if the property is visible otherwise <FALSE/>.
      */
     boolean bVisible;
-};
-
-//=============================================================================
-
+}; 
+ 
+//============================================================================= 
+ 
 }; }; }; }; };
-
-#endif
+ 
+#endif 

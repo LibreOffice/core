@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -168,7 +168,7 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "two constructors have identical lists of parameter types";
     }
     return "unknown errror";
-}
+}	
 
 static const sal_Char* warningCodeToMessage(WarningCode wCode)
 {
@@ -186,7 +186,7 @@ static const sal_Char* warningCodeToMessage(WarningCode wCode)
         return "type or identifier doesn't fulfill the UNO naming convention: ";
     }
     return "unkown warning";
-}
+}	
 
 static const sal_Char* parseStateToMessage(ParseState state)
 {
@@ -456,7 +456,7 @@ static const sal_Char* parseStateToMessage(ParseState state)
     default:
         return "no wider described syntax error";
     }
-}
+}	
 
 static OString flagToString(sal_uInt32 flag)
 {
@@ -487,7 +487,7 @@ static OString flagToString(sal_uInt32 flag)
         flagStr += "'unknown'";
 
     return flagStr;
-}
+}	
 
 static void errorHeader(ErrorCode eCode, sal_Int32 lineNumber, sal_uInt32 start, sal_uInt32 end)
 {
@@ -496,12 +496,12 @@ static void errorHeader(ErrorCode eCode, sal_Int32 lineNumber, sal_uInt32 start,
         file = idlc()->getMainFileName();
     else
         file = idlc()->getFileName();
-
+    
     fprintf(stderr, "%s:%lu [%lu:%lu] : %s", file.getStr(),
             sal::static_int_cast< unsigned long >(lineNumber),
             sal::static_int_cast< unsigned long >(start),
             sal::static_int_cast< unsigned long >(end),
-            errorCodeToMessage(eCode));
+            errorCodeToMessage(eCode));		
 }
 
 static void errorHeader(ErrorCode eCode, sal_uInt32 lineNumber)
@@ -509,12 +509,12 @@ static void errorHeader(ErrorCode eCode, sal_uInt32 lineNumber)
     errorHeader(eCode, lineNumber,
             idlc()->getOffsetStart(), idlc()->getOffsetEnd());
 }
-
+    
 static void errorHeader(ErrorCode eCode)
 {
     errorHeader(eCode, idlc()->getLineNumber(),
             idlc()->getOffsetStart(), idlc()->getOffsetEnd());
-}
+}	
 
 static void warningHeader(WarningCode wCode)
 {
@@ -523,42 +523,42 @@ static void warningHeader(WarningCode wCode)
         file = idlc()->getMainFileName();
     else
         file = idlc()->getFileName();
-
+    
     fprintf(stderr, "%s(%lu) : WARNING, %s", file.getStr(),
             sal::static_int_cast< unsigned long >(idlc()->getLineNumber()),
-            warningCodeToMessage(wCode));
-}
+            warningCodeToMessage(wCode));	
+}	
 
 void ErrorHandler::error0(ErrorCode e)
 {
-    errorHeader(e);
+    errorHeader(e);	
     fprintf(stderr, "\n");
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::error1(ErrorCode e, AstDeclaration const * d)
 {
     errorHeader(e);
-    fprintf(stderr, "'%s'\n", d->getScopedName().getStr());
-    idlc()->incErrorCount();
-}
+    fprintf(stderr, "'%s'\n", d->getScopedName().getStr());	
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::error2(
     ErrorCode e, AstDeclaration const * d1, AstDeclaration const * d2)
 {
-    errorHeader(e);
-    fprintf(stderr, "'%s', '%s'\n", d1->getScopedName().getStr(),
-            d2->getScopedName().getStr());
-    idlc()->incErrorCount();
-}
+    errorHeader(e);	
+    fprintf(stderr, "'%s', '%s'\n", d1->getScopedName().getStr(), 
+            d2->getScopedName().getStr());	
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::error3(ErrorCode e, AstDeclaration* d1, AstDeclaration* d2, AstDeclaration* d3)
 {
-    errorHeader(e);
-    fprintf(stderr, "'%s', '%s', '%s'\n", d1->getScopedName().getStr(),
-            d2->getScopedName().getStr(), d3->getScopedName().getStr());
-    idlc()->incErrorCount();
-}
+    errorHeader(e);	
+    fprintf(stderr, "'%s', '%s', '%s'\n", d1->getScopedName().getStr(), 
+            d2->getScopedName().getStr(), d3->getScopedName().getStr());	
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::warning0(WarningCode w, const sal_Char* warningmsg)
 {
@@ -568,53 +568,53 @@ void ErrorHandler::warning0(WarningCode w, const sal_Char* warningmsg)
     }
 
     if ( idlc()->getOptions()->isValid("-we") )
-        idlc()->incErrorCount();
+        idlc()->incErrorCount();	
     else
-        idlc()->incWarningCount();
-}
+        idlc()->incWarningCount();	
+}	
 
 void ErrorHandler::syntaxError(ParseState ps, sal_Int32 lineNumber, const sal_Char* errmsg)
 {
-    errorHeader(EIDL_SYNTAX_ERROR, lineNumber);
-    fprintf(stderr, "%s: %s\n", parseStateToMessage(ps), errmsg);
-    idlc()->incErrorCount();
-}
+    errorHeader(EIDL_SYNTAX_ERROR, lineNumber);	
+    fprintf(stderr, "%s: %s\n", parseStateToMessage(ps), errmsg); 
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::coercionError(AstExpression *pExpr, ExprType et)
 {
-    errorHeader(EIDL_COERCION_FAILURE);
-    fprintf(stderr, "'%s' to '%s'\n", pExpr->toString().getStr(),
+    errorHeader(EIDL_COERCION_FAILURE);	
+    fprintf(stderr, "'%s' to '%s'\n", pExpr->toString().getStr(), 
             exprTypeToString(et));
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::lookupError(const ::rtl::OString& n)
 {
     errorHeader(EIDL_LOOKUP_ERROR);
     fprintf(stderr, "'%s'\n", n.getStr());
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::lookupError(ErrorCode e, const ::rtl::OString& n, AstDeclaration* pScope)
 {
     errorHeader(e);
     fprintf(stderr, "'%s' in '%s'\n", n.getStr(), pScope->getFullName().getStr());
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::flagError(ErrorCode e, sal_uInt32 flag)
 {
     errorHeader(e);
     fprintf(stderr, "'%s'\n", flagToString(flag).getStr());
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::noTypeError(AstDeclaration const * pDecl)
 {
     errorHeader(EIDL_NOT_A_TYPE);
     fprintf(stderr, "'%s'\n", pDecl->getScopedName().getStr());
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
 namespace {
 
@@ -639,7 +639,7 @@ char const * nodeTypeName(NodeType nodeType) {
 void ErrorHandler::inheritanceError(NodeType nodeType, const OString* name, AstDeclaration* pDecl)
 {
     if ( nodeType == NT_interface &&
-         (pDecl->getNodeType() == NT_interface) &&
+         (pDecl->getNodeType() == NT_interface) && 
          !((AstInterface*)pDecl)->isDefined() )
     {
         errorHeader(EIDL_INHERIT_FWD_ERROR);
@@ -652,48 +652,48 @@ void ErrorHandler::inheritanceError(NodeType nodeType, const OString* name, AstD
                 nodeTypeName(nodeType), name->getStr(),
                 pDecl->getScopedName().getStr());
     }
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
-void ErrorHandler::forwardLookupError(AstDeclaration* pForward,
+void ErrorHandler::forwardLookupError(AstDeclaration* pForward, 
                                       const ::rtl::OString& name)
 {
     errorHeader(EIDL_FWD_DECL_LOOKUP);
     fprintf(stderr, "trying to look up '%s' in undefined forward declared interface '%s'\n",
             pForward->getScopedName().getStr(), name.getStr());
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
-void ErrorHandler::constantExpected(AstDeclaration* pDecl,
+void ErrorHandler::constantExpected(AstDeclaration* pDecl, 
                                     const ::rtl::OString& name)
 {
     errorHeader(EIDL_CONSTANT_EXPECTED);
     fprintf(stderr, "'%s' is bound to '%s'\n", name.getStr(), pDecl->getScopedName().getStr());
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::evalError(AstExpression* pExpr)
 {
     errorHeader(EIDL_EVAL_ERROR);
     fprintf(stderr, "'%s'\n", pExpr->toString().getStr());
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::enumValExpected(AstUnion* pUnion)
 {
     errorHeader(EIDL_ENUM_VAL_EXPECTED);
     fprintf(stderr, " union %s\n", pUnion->getLocalName().getStr());
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
 void ErrorHandler::enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const ::rtl::OString& name)
 {
     errorHeader(EIDL_ENUM_VAL_NOT_FOUND);
-    fprintf(stderr, " union %s, enum %s, enumerator %s\n",
-            pUnion->getLocalName().getStr(),
+    fprintf(stderr, " union %s, enum %s, enumerator %s\n", 
+            pUnion->getLocalName().getStr(), 
             pEnum->getLocalName().getStr(), name.getStr());
-    idlc()->incErrorCount();
-}
+    idlc()->incErrorCount();	
+}	
 
 bool ErrorHandler::checkPublished(AstDeclaration const * decl, bool bOptional) {
     if (idlc()->isPublished() && !decl->isPublished() && !bOptional) {

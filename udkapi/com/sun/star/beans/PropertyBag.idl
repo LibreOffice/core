@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,47 +24,47 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_beans_PropertyBag_idl__
-#define __com_sun_star_beans_PropertyBag_idl__
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyContainer_idl__
-#include <com/sun/star/beans/XPropertyContainer.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyAccess_idl__
-#include <com/sun/star/beans/XPropertyAccess.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module beans {
-
-//=============================================================================
-
+#ifndef __com_sun_star_beans_PropertyBag_idl__ 
+#define __com_sun_star_beans_PropertyBag_idl__ 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_XPropertyContainer_idl__ 
+#include <com/sun/star/beans/XPropertyContainer.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_XPropertyAccess_idl__ 
+#include <com/sun/star/beans/XPropertyAccess.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module beans {  
+ 
+//============================================================================= 
+ 
 /** Implementation of this service can keep any properties and is useful
     when an <type>XPropertySet</type> is to be used, for example, as parameters for a method call.
 
     <p>Scripting engines might not be able to use such objects as normal
-    property sets, giving direct access to the properties.  In this case,
+    property sets, giving direct access to the properties.  In this case, 
     use the methods like <member>XPropertySet::getPropertyValue</member>.
  */
 published service PropertyBag
-{
-    interface com::sun::star::beans::XPropertySet;
-
-    interface com::sun::star::beans::XPropertyContainer;
-
-    interface com::sun::star::beans::XPropertyAccess;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+{ 
+    interface com::sun::star::beans::XPropertySet; 
+    
+    interface com::sun::star::beans::XPropertyContainer; 
+    
+    interface com::sun::star::beans::XPropertyAccess; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

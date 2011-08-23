@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public class DemoServer {
     }
 
     static public void main(String args[]) throws Exception {
-        if(args.length != 1)    {
+        if(args.length != 1)	{
             System.err.println("usage : SCalc uno:connection;protocol;objectName");
             System.exit(-1);
         }
@@ -64,7 +64,7 @@ public class DemoServer {
         String rootOid = null;
 
         String dcp = args[0];
-
+        
         if(dcp.indexOf(';') == -1) {// use old style
             conDcp = dcp;
             protDcp = "iiop";

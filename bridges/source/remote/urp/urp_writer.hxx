@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace bridges_urp
         ::rtl::OUString sOid;
         ::com::sun::star::uno::Type typeInterface;
     };
-
+    
     struct urp_BridgeImpl;
     class OWriterThread :
         public ::osl::Thread
@@ -55,18 +55,18 @@ namespace bridges_urp
                        urp_BridgeImpl *m_pBridgeImpl,
                        uno_Environment *pEnvRemote);
         ~OWriterThread(  );
-
+        
         virtual void SAL_CALL run();
-
+        
         void touch( sal_Bool bImmediately );
         void sendEmptyMessage();
-
+        
         void abortThread();
 
         void SAL_CALL insertReleaseRemoteCall (
             rtl_uString *pOid,typelib_TypeDescriptionReference *pTypeRef);
         void SAL_CALL executeReleaseRemoteCalls();
-
+        
     private:
         void write();
         oslCondition m_oslCondition;

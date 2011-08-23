@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,25 +56,25 @@ struct Mapping : public uno_Mapping
 struct Bridge
 {
     mutable oslInterlockedCount m_ref;
-
+    
     uno_ExtEnvironment *        m_uno_env;
     uno_Environment *           m_java_env;
-
+    
     Mapping                     m_java2uno;
     Mapping                     m_uno2java;
     bool                        m_registered_java2uno;
-
+    
     JNI_info const *            m_jni_info;
-
+    
     //
     ~Bridge() SAL_THROW( () );
     explicit Bridge(
         uno_Environment * java_env, uno_ExtEnvironment * uno_env,
         bool registered_java2uno );
-
+    
     void acquire() const;
     void release() const;
-
+    
     // jni_data.cxx
     void map_to_uno(
         JNI_context const & jni,
@@ -90,7 +90,7 @@ struct Bridge
         JNI_type_info const * info /* maybe 0 */,
         bool in_param, bool out_param,
         bool special_wrapped_integral_types = false ) const;
-
+    
     // jni_uno2java.cxx
     void handle_uno_exc(
         JNI_context const & jni, uno_Any * uno_exc ) const;
@@ -104,7 +104,7 @@ struct Bridge
     jobject map_to_java(
         JNI_context const & jni,
         uno_Interface * pUnoI, JNI_interface_type_info const * info ) const;
-
+    
     // jni_java2uno.cxx
     void handle_java_exc(
         JNI_context const & jni,

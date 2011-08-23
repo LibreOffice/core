@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ module com { module sun { module star { module ucb {
 published interface XAnyCompare: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** allows comparision of two <atom>any</atom>s.
+    /**	allows comparision of two <atom>any</atom>s.
 
         @param Any1
         is the first compare value
@@ -64,7 +64,7 @@ published interface XAnyCompare: com::sun::star::uno::XInterface
         </ul>
     */
 
-    short   compare( [in] any Any1, [in] any Any2 );
+    short	compare( [in] any Any1, [in] any Any2 );
 };
 
 //=============================================================================

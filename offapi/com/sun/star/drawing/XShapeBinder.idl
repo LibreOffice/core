@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,34 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XShapeBinder_idl__
-#define __com_sun_star_drawing_XShapeBinder_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShape_idl__
-#include <com/sun/star/drawing/XShape.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShapes_idl__
-#include <com/sun/star/drawing/XShapes.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_XShapeBinder_idl__ 
+#define __com_sun_star_drawing_XShapeBinder_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_XShape_idl__ 
+#include <com/sun/star/drawing/XShape.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_XShapes_idl__ 
+#include <com/sun/star/drawing/XShapes.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 /** connects or breaks the lines of <type>Shape</type>s
  */
 published interface XShapeBinder: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** binds <type>Shape</type>s together.
 
         @param xShapes
@@ -65,10 +65,10 @@ published interface XShapeBinder: com::sun::star::uno::XInterface
             line segment from the supplied <type>Shape</type>s. It is also added
             to the <type>GenericDrawPage</type> of the source <type>Shape</type>s.
      */
-    com::sun::star::drawing::XShape bind( [in] com::sun::star::drawing::XShapes xShapes );
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::drawing::XShape bind( [in] com::sun::star::drawing::XShapes xShapes ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** breaks a <type>Shape</type> into its line segments
 
         @param xShape
@@ -77,13 +77,13 @@ published interface XShapeBinder: com::sun::star::uno::XInterface
             new <type>PolyPolygonBezierShape</type> shapes. The original <type>Shape</type>
             will be removed from its <type>GenericDrawPage</type> and disposed.
      */
-    void unbind( [in] com::sun::star::drawing::XShape xShape );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void unbind( [in] com::sun::star::drawing::XShape xShape ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

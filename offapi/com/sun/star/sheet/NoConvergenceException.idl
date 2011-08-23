@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ module com { module sun { module star { module sheet {
 
 //=============================================================================
 
-/** Thrown by a Calc Add-In function this exception indicates the
+/** Thrown by a Calc Add-In function this exception indicates the 
     function's algorithm did not converge to a meaningful result.
 
     @since OOo 3.3

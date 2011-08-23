@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,46 +24,46 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XDriverManager_idl__
-#define __com_sun_star_sdbc_XDriverManager_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
-#include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbc {
-
- published interface XConnection;
- published interface XDriver;
-
-
+#ifndef __com_sun_star_sdbc_XDriverManager_idl__ 
+#define __com_sun_star_sdbc_XDriverManager_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_PropertyValue_idl__ 
+#include <com/sun/star/beans/PropertyValue.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ 
+ published interface XConnection; 
+ published interface XDriver; 
+ 
+ 
 /** is the basic interface for managing a set of SDBC drivers.
-
-
-
+    
+    
+    
     <p>
-    When the method
+    When the method 
     <member scope="com::sun::star::sdbc">XDriverManager::getConnection()</member>
     is called,
     the DriverManager will attempt to
     locate a suitable driver.
-
+    
     </p>
-    @see com::sun::star::sdbc::XDriver
+    @see com::sun::star::sdbc::XDriver 
      @see com::sun::star::sdbc::XConnection
  */
 published interface XDriverManager: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** attempts to establish a connection to the given database URL.
         The DriverManager attempts to select an appropriate driver from
         the set of registered JDBC/SDBC drivers.
@@ -71,56 +71,56 @@ published interface XDriverManager: com::sun::star::uno::XInterface
             a database url of the form  sdbc:subprotocol:subname
         @returns
             the Connection object
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    XConnection getConnection([in]string url)
-        raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    XConnection getConnection([in]string url) 
+        raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** attempts to establish a connection to the given database URL.
         The DriverManager attempts to select an appropriate driver from
         the set of registered JDBC/SDBC drivers.
         @param url
             a database url of the form  sdbc:subprotocol:subname
         @param info
-            a list of arbitrary string tag/value pairs as connection arguments;
+            a list of arbitrary string tag/value pairs as connection arguments; 
             normally at least a "user" and "password" property should be included
             @see com::sun::star::sdbc::ConnectionProperties
         @returns
             the Connection object
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    XConnection getConnectionWithInfo([in]string url,
-            [in]sequence<com::sun::star::beans::PropertyValue> info)
-        raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    XConnection getConnectionWithInfo([in]string url, 
+            [in]sequence<com::sun::star::beans::PropertyValue> info) 
+        raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** sets the maximum time in seconds that a driver will wait
         while attempting to connect to a database.
         @param seconds
             the login time limit in seconds
 
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    void setLoginTimeout([in]long seconds);
-    //-------------------------------------------------------------------------
-
+    void setLoginTimeout([in]long seconds); 
+    //------------------------------------------------------------------------- 
+     
     /** gets the maximum time in seconds that a driver can wait
         when attempting to login to a database.
-        @returns
+        @returns 
             the driver login time limit in seconds
 
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    long getLoginTimeout();
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    long getLoginTimeout(); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+#endif 

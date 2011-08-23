@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ extern "C"
     @attention
     Don't spread the returned interface around to other threads.  Every thread has its own
     current context.
-
+    
     @param ppCurrentContext  inout param current context of type com.sun.star.uno.XCurrentContext
     @param pEnvDcp           descriptor of returned interface's environment
     @param pEnvContext       context of returned interface's environment (commonly 0)
@@ -51,7 +51,7 @@ sal_Bool SAL_CALL uno_getCurrentContext(
     SAL_THROW_EXTERN_C();
 
 /** Sets the current task's context.
-
+    
     @param pCurrentContext  in param current context of type com.sun.star.uno.XCurrentContext
     @param pEnvDcp          descriptor of interface's environment
     @param pEnvContext      context of interface's environment (commonly 0)

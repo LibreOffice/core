@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,23 +29,23 @@
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_XUpdateHandler_idl__
 #include <com/sun/star/configuration/backend/XUpdateHandler.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_XLayer_idl__
 #include <com/sun/star/configuration/backend/XLayer.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_XSchema_idl__
 #include <com/sun/star/configuration/backend/XSchema.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_BackendAccessException_idl__
 #include <com/sun/star/configuration/backend/BackendAccessException.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
@@ -53,13 +53,13 @@
 
 #ifndef __com_sun_star_lang_NoSupportException_idl__
 #include <com/sun/star/lang/NoSupportException.idl>
-#endif
+#endif 
 
-//=============================================================================
+//============================================================================= 
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
+//============================================================================= 
 
 /**
   Handles access to layered data stored in a repository.
@@ -67,28 +67,28 @@ module com { module sun { module star { module configuration { module backend {
   <p> Data can be retrieved on behalf of one or more entities.</p>
 
   <p> There is an implied owner entity associated to the object
-     when it is created. This entity should be used for normal data access.
-     For administrative operations data of other entities can be accessed.
+     when it is created. This entity should be used for normal data access. 
+     For administrative operations data of other entities can be accessed. 
   </p>
 
   @see com::sun::star::configuration::backend::XBackendEntities
   @see com::sun::star::configuration::backend::XSchemaSupplier
-
+    
   @since OOo 1.1.2
 */
-published interface XBackend : ::com::sun::star::uno::XInterface
+published interface XBackend : ::com::sun::star::uno::XInterface 
 {
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /**
-      retrieves the layers associated to the owner
+    /** 
+      retrieves the layers associated to the owner 
       entity for a component.
 
-      @param aComponent
+      @param aComponent 
                 component whose data will be accessed
 
-      @returns
-                a list of objects allowing access to the
+      @returns   
+                a list of objects allowing access to the 
                 component data for each layer associated to
                 the current entity
 
@@ -97,24 +97,24 @@ published interface XBackend : ::com::sun::star::uno::XInterface
 
       @throws   com::sun::star::configuration::backend::BackendAccessException
                 if an error occurs while accessing the data.
-
+  
       @see com::sun::star::configuration::backend::XBackendEntities::getOwnerEntity()
     */
     sequence<XLayer> listOwnLayers([in] string aComponent)
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /**
-      creates an update handler for the owner entity
+    /** 
+      creates an update handler for the owner entity 
       layer for a component.
 
-      @param aComponent
+      @param aComponent 
                 component whose data will be updated
 
-      @returns
-                an object allowing manipulation of the
+      @returns   
+                an object allowing manipulation of the 
                 component data for the current entity
 
       @throws   com::sun::star::lang::IllegalArgumentException
@@ -133,20 +133,20 @@ published interface XBackend : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NoSupportException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /**
+    /** 
       retrieves the layers associated to an entity for a component.
 
-      @param aComponent
+      @param aComponent 
                 component whose data will be accessed
 
-      @param aEntity
+      @param aEntity    
                 entity whose data will be accessed
 
-      @returns
-                a list of objects allowing access to the
-                component data for each layer associated
+      @returns   
+                a list of objects allowing access to the 
+                component data for each layer associated 
                 with the entity.
 
       @throws   com::sun::star::lang::IllegalArgumentException
@@ -163,19 +163,19 @@ published interface XBackend : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /**
       creates an update handler on an entity's layer for a component.
 
-      @param aComponent
+      @param aComponent 
                 component whose data will be updated
 
-      @param aEntity
+      @param aEntity    
                 entity whose data will be updated
 
-      @returns
-                an object allowing manipulation of the
+      @returns   
+                an object allowing manipulation of the 
                 component data for the entity
 
       @throws   com::sun::star::lang::IllegalArgumentException
@@ -190,17 +190,17 @@ published interface XBackend : ::com::sun::star::uno::XInterface
 
       @see com::sun::star::configuration::backend::XBackendEntities::supportsEntity()
     */
-    XUpdateHandler getUpdateHandler([in] string aComponent,
+    XUpdateHandler getUpdateHandler([in] string aComponent, 
                                     [in] string aEntity)
         raises (BackendAccessException,
                 com::sun::star::lang::NoSupportException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 } ;
 
-//=============================================================================
+//============================================================================= 
 
-} ; } ; } ; } ; } ;
+} ; } ; } ; } ; } ; 
 
-#endif
+#endif 

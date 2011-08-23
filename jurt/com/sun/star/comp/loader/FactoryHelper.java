@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ import com.sun.star.uno.Type;
  * This class has default implementations for <code>getServiceFactory</code>
  * and <code>writeRegistryServiceInfo</code>.
  * <p>
- * @version     $Revision: 1.9 $ $ $Date: 2008-04-11 11:10:09 $
- * @author      Kay Ramme
+ * @version 	$Revision: 1.9 $ $ $Date: 2008-04-11 11:10:09 $
+ * @author 	    Kay Ramme
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
  * @see         com.sun.star.lang.XSingleServiceFactory
@@ -80,19 +80,19 @@ public class FactoryHelper {
 //        private static final boolean DEBUG = false;
 
         protected XMultiServiceFactory _xMultiServiceFactory;
-        protected XRegistryKey         _xRegistryKey;
+        protected XRegistryKey		   _xRegistryKey;
         protected int                  _nCode;
-        protected Constructor          _constructor;
+        protected Constructor		   _constructor;
         protected String               _implName;
         protected String               _serviceName;
         // keeps the Id for XTypeProvider
         protected static Object _mutex= new Object();
         private static byte[] _implementationId;
 
-        protected Factory(Class implClass,
-                          String serviceName,
-                          XMultiServiceFactory xMultiServiceFactory,
-                          XRegistryKey xRegistryKey)
+        protected Factory(Class implClass, 
+                          String serviceName, 
+                          XMultiServiceFactory xMultiServiceFactory, 
+                          XRegistryKey xRegistryKey) 
         {
             _xMultiServiceFactory = xMultiServiceFactory;
             _xRegistryKey         = xRegistryKey;
@@ -109,7 +109,7 @@ public class FactoryHelper {
                      && parameters[2].equals(__objectArray)) {
                     _nCode = 0;
                     _constructor = constructors[i];
-                }
+                } 
                 else if(parameters.length == 2
                      && parameters[0].equals(XComponentContext.class)
                      && parameters[1].equals(XRegistryKey.class)) {
@@ -122,7 +122,7 @@ public class FactoryHelper {
                     _nCode = 2;
                     _constructor = constructors[i];
                 }
-                else if(parameters.length == 1
+                else if(parameters.length == 1 
                      && parameters[0].equals(XComponentContext.class)) {
                     _nCode = 3;
                     _constructor = constructors[i];
@@ -134,7 +134,7 @@ public class FactoryHelper {
                      && parameters[2].equals(__objectArray)) {
                     _nCode = 4;
                     _constructor = constructors[i];
-                }
+                } 
                 else if(parameters.length == 2
                      && parameters[0].equals(XMultiServiceFactory.class)
                      && parameters[1].equals(XRegistryKey.class)) {
@@ -147,7 +147,7 @@ public class FactoryHelper {
                     _nCode = 6;
                     _constructor = constructors[i];
                 }
-                else if(parameters.length == 1
+                else if(parameters.length == 1 
                      && parameters[0].equals(XMultiServiceFactory.class)) {
                     _nCode = 7;
                     _constructor = constructors[i];
@@ -179,7 +179,7 @@ public class FactoryHelper {
                 return _xMultiServiceFactory;
             }
         }
-
+        
         // XComponentContext impl
         //______________________________________________________________________________________________
         public Object createInstanceWithContext(
@@ -220,7 +220,7 @@ public class FactoryHelper {
                 args = new Object [ 0 ];
                 break;
             }
-
+            
             try
             {
                 return _constructor.newInstance( args );
@@ -228,7 +228,7 @@ public class FactoryHelper {
             catch (InvocationTargetException invocationTargetException)
             {
                 Throwable targetException = invocationTargetException.getTargetException();
-
+                
                 if (targetException instanceof java.lang.RuntimeException)
                     throw (java.lang.RuntimeException)targetException;
                 else if (targetException instanceof com.sun.star.uno.Exception)
@@ -293,7 +293,7 @@ public class FactoryHelper {
                 args = new Object [ 0 ];
                 break;
             }
-
+            
             try
             {
                 Object instance = _constructor.newInstance( args );
@@ -311,7 +311,7 @@ public class FactoryHelper {
             catch (InvocationTargetException invocationTargetException)
             {
                 Throwable targetException = invocationTargetException.getTargetException();
-
+                
                 if (targetException instanceof java.lang.RuntimeException)
                     throw (java.lang.RuntimeException)targetException;
                 else if (targetException instanceof com.sun.star.uno.Exception)
@@ -330,15 +330,15 @@ public class FactoryHelper {
                 throw new com.sun.star.uno.Exception( instantiationException.toString() );
             }
         }
-
+        
         /**
          * Creates an instance of the desired service.
          * <p>
          * @return  returns an instance of the desired service
          * @see                  com.sun.star.lang.XSingleServiceFactory
          */
-        public Object createInstance()
-            throws com.sun.star.uno.Exception,
+        public Object createInstance() 
+            throws com.sun.star.uno.Exception, 
                    com.sun.star.uno.RuntimeException
         {
             return createInstanceWithContext( null );
@@ -348,16 +348,16 @@ public class FactoryHelper {
          * Creates an instance of the desired service.
          * <p>
          * @return  returns an instance of the desired service
-         * @param   args     the args given to the constructor of the service
+         * @param   args     the args given to the constructor of the service   
          * @see              com.sun.star.lang.XSingleServiceFactory
          */
-        public Object createInstanceWithArguments(Object[] args)
-            throws com.sun.star.uno.Exception,
-                   com.sun.star.uno.RuntimeException
+        public Object createInstanceWithArguments(Object[] args) 
+            throws com.sun.star.uno.Exception, 
+                   com.sun.star.uno.RuntimeException 
         {
             return createInstanceWithArgumentsAndContext( args, null );
         }
-
+        
          /**
          * Gives the supported services
          * <p>
@@ -394,7 +394,7 @@ public class FactoryHelper {
 
             return found;
         }
-
+        
         //XTypeProvider
         public byte[] getImplementationId()
         {
@@ -416,7 +416,7 @@ public class FactoryHelper {
                     for (int i= 0; i < nNameLength; i++)
                     {
                         _implementationId[4 + i]= arName[i];
-                    }
+                    }                   
                 }
             }
             return _implementationId;
@@ -432,7 +432,7 @@ public class FactoryHelper {
             };
             return t;
         }
-
+        
     }
 
     /**
@@ -441,13 +441,13 @@ public class FactoryHelper {
      * @deprecated as of UDK 1.0
      * <p>
      * @return  returns a factory
-     * @param   implClass     the implementing class
+     * @param   implClass     the implementing class 
      * @param   multiFactory  the given multi service factory (service manager)
      * @param   regKey        the given registry key
      * @see              com.sun.star.lang.XServiceInfo
      */
-    static public XSingleServiceFactory getServiceFactory(Class implClass,
-                                                          XMultiServiceFactory multiFactory,
+    static public XSingleServiceFactory getServiceFactory(Class implClass, 
+                                                          XMultiServiceFactory multiFactory, 
                                                           XRegistryKey regKey)
     {
         XSingleServiceFactory xSingleServiceFactory = null;
@@ -461,7 +461,7 @@ public class FactoryHelper {
             catch(NoSuchFieldException noSuchFieldExceptio) {
                 serviceName = implClass.getField("serviceName");  // old style
             }
-
+            
             xSingleServiceFactory =  new Factory(implClass, (String)serviceName.get(null), multiFactory, regKey);
         }
         catch(NoSuchFieldException noSuchFieldException) {
@@ -470,67 +470,67 @@ public class FactoryHelper {
         catch(IllegalAccessException illegalAccessException) {
             System.err.println("##### FactoryHelper.getServiceFactory - exception:" + illegalAccessException);
         }
-
+        
         return xSingleServiceFactory;
     }
-
+    
     /**
      * Creates a factory for the given class.
      * <p>
      * @return  returns a factory
-     * @param   implClass     the implementing class
+     * @param   implClass     the implementing class 
      * @param   serviceName   the service name of the implementing class
      * @param   multiFactory  the given multi service factory (service manager)
      * @param   regKey        the given registry key
      * @see              com.sun.star.lang.XServiceInfo
      */
-    static public XSingleServiceFactory getServiceFactory(Class implClass,
+    static public XSingleServiceFactory getServiceFactory(Class implClass, 
                                                           String serviceName,
-                                                          XMultiServiceFactory multiFactory,
+                                                          XMultiServiceFactory multiFactory, 
                                                           XRegistryKey regKey)
     {
         return new Factory(implClass, serviceName, multiFactory, regKey);
     }
-
+    
     /** Creates a factory for the given class.
-
+        
         @return returns a factory object
-        @param   implClass     the implementing class
+        @param   implClass     the implementing class 
     */
     static public Object createComponentFactory( Class implClass, String serviceName )
     {
         return new Factory( implClass, serviceName, null, null );
     }
-
+    
     /**
      * Writes the registration data into the registry key
      * <p>
      * @return  success
-     * @param   implName      the name of the implementing class
+     * @param   implName      the name of the implementing class 
      * @param   serviceName   the service name
      * @param   regKey        the given registry key
      * @see                    com.sun.star.lang.XServiceInfo
      */
     static public boolean writeRegistryServiceInfo(String implName, String serviceName, XRegistryKey regKey) {
         boolean result = false;
-
+        
           try {
             XRegistryKey newKey = regKey.createKey("/" + implName + "/UNO/SERVICES");
-
+           
             newKey.createKey(serviceName);
-
+            
             result = true;
           }
           catch (Exception ex) {
               System.err.println(">>>Connection_Impl.writeRegistryServiceInfo " + ex);
           }
-
+        
         return result;
     }
 
     /** Writes the registration data into the registry key.
      * Several services are supported.
-     *
+     *   
      * @param impl_name name of implementation
      * @param supported_services supported services of implementation
      * @param xKey registry key to write to

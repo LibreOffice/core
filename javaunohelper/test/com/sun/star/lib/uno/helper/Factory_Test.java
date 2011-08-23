@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public class Factory_Test
     static final String m_impl_name = Factory_Test.class.getName();
     static final String m_supported_services [] = {
         "Factory_Test.Service0", "Factory_Test.Service1" };
-
+    
     //______________________________________________________________________________________________
     public Factory_Test()
     {
@@ -74,7 +74,7 @@ public class Factory_Test
     {
         return new Factory_Test( xContext );
     }
-
+    
     // XServiceInfo impl
     //______________________________________________________________________________________________
     public final String getImplementationName()
@@ -96,7 +96,7 @@ public class Factory_Test
     {
         return m_supported_services;
     }
-
+    
     //==============================================================================================
     public static XSingleComponentFactory __getComponentFactory( String implName )
     {
@@ -113,12 +113,12 @@ public class Factory_Test
         return Factory.writeRegistryServiceInfo(
             m_impl_name, Factory_Test.m_supported_services, xKey );
     }
-
+    
     //==============================================================================================
     static void service_info_test( Object inst )
     {
         XServiceInfo xInfo = UnoRuntime.queryInterface( XServiceInfo.class, inst );
-
+        
         if (! xInfo.getImplementationName().equals( m_impl_name ))
         {
             System.err.println( "Factory_Test: err -- 1" );
@@ -153,7 +153,7 @@ public class Factory_Test
             String rdb = "file://" + new java.io.File( args[ 1 ] ).toURL().getPath();
             System.out.println( "jar file = " + jar );
             System.out.println( "rdb file = " + rdb );
-
+        
             // bootstrap service manager
             XMultiServiceFactory xMgr = RegistryServiceFactory.create( rdb );
             XPropertySet xProps = UnoRuntime.queryInterface(
@@ -174,7 +174,7 @@ public class Factory_Test
                     xContext.getServiceManager().createInstanceWithContext(
                         "com.sun.star.registry.ImplementationRegistration", xContext ) );
             xImpReg.registerImplementation( "com.sun.star.loader.Java2", jar, xRDB );
-
+            
             // tests
             System.out.println( "testing instance" );
             service_info_test( new Factory_Test() );

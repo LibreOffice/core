@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,100 +24,100 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_XEventAttacher_idl__
-#define __com_sun_star_script_XEventAttacher_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_script_XAllListener_idl__
-#include <com/sun/star/script/XAllListener.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_IntrospectionException_idl__
-#include <com/sun/star/beans/IntrospectionException.idl>
-#endif
-
-#ifndef __com_sun_star_script_CannotCreateAdapterException_idl__
-#include <com/sun/star/script/CannotCreateAdapterException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_ServiceNotRegisteredException_idl__
-#include <com/sun/star/lang/ServiceNotRegisteredException.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module script {
-
-//=============================================================================
+#ifndef __com_sun_star_script_XEventAttacher_idl__ 
+#define __com_sun_star_script_XEventAttacher_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_script_XAllListener_idl__ 
+#include <com/sun/star/script/XAllListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_IntrospectionException_idl__ 
+#include <com/sun/star/beans/IntrospectionException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_script_CannotCreateAdapterException_idl__ 
+#include <com/sun/star/script/CannotCreateAdapterException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_ServiceNotRegisteredException_idl__ 
+#include <com/sun/star/lang/ServiceNotRegisteredException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module script {  
+ 
+//============================================================================= 
 /** makes it possible to attach script events given by a sequence of
     <type>ScriptEventDescriptor</type> structures to a given interface.
  */
 published interface XEventAttacher: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** registers the given "AllListener" object as a listener at the
         given interface by creating a suitable listener adapter and
         calling the "addListener" method corresponding to the
         "ListenerType".
      */
-    com::sun::star::lang::XEventListener attachListener( [in] com::sun::star::uno::XInterface xTarget,
-             [in] com::sun::star::script::XAllListener xAllListener,
-             [in] any aHelper,
-             [in] string aListenerType,
-             [in] string aAddListenerParam )
-            raises( com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::beans::IntrospectionException,
-                    com::sun::star::script::CannotCreateAdapterException,
-                    com::sun::star::lang::ServiceNotRegisteredException );
-
-    //-------------------------------------------------------------------------
+    com::sun::star::lang::XEventListener attachListener( [in] com::sun::star::uno::XInterface xTarget, 
+             [in] com::sun::star::script::XAllListener xAllListener, 
+             [in] any aHelper, 
+             [in] string aListenerType, 
+             [in] string aAddListenerParam ) 
+            raises( com::sun::star::lang::IllegalArgumentException, 
+                    com::sun::star::beans::IntrospectionException, 
+                    com::sun::star::script::CannotCreateAdapterException, 
+                    com::sun::star::lang::ServiceNotRegisteredException ); 
+ 
+    //------------------------------------------------------------------------- 
     /** registers an object as a listener at the given interface by
         creating a suitable listener adapter and calling the method
-        which corresponds to the listener type.
-
+        which corresponds to the listener type. 
+        
         <p>Only the event corresponding to the given event method
         will be delegated to <var>xAllListener</var>.</p>
      */
-    com::sun::star::lang::XEventListener attachSingleEventListener( [in] com::sun::star::uno::XInterface xTarget,
-             [in] com::sun::star::script::XAllListener xAllListener,
-             [in] any aHelper,
-             [in] string aListenerType,
-             [in] string aAddListenerParam,
-             [in] string aEventMethod )
-            raises( com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::beans::IntrospectionException,
-                    com::sun::star::script::CannotCreateAdapterException,
-                    com::sun::star::lang::ServiceNotRegisteredException );
-
-    //-------------------------------------------------------------------------
+    com::sun::star::lang::XEventListener attachSingleEventListener( [in] com::sun::star::uno::XInterface xTarget, 
+             [in] com::sun::star::script::XAllListener xAllListener, 
+             [in] any aHelper, 
+             [in] string aListenerType, 
+             [in] string aAddListenerParam, 
+             [in] string aEventMethod ) 
+            raises( com::sun::star::lang::IllegalArgumentException, 
+                    com::sun::star::beans::IntrospectionException, 
+                    com::sun::star::script::CannotCreateAdapterException, 
+                    com::sun::star::lang::ServiceNotRegisteredException ); 
+ 
+    //------------------------------------------------------------------------- 
     /** removes a listener object as a listener from the given interface.
-
+        
         <p> This method can and should be used as a contrary method
         to the two attach methods.</p>
      */
-    void removeListener( [in] com::sun::star::uno::XInterface xTarget,
-             [in] string aListenerType,
-             [in] string aRemoveListenerParam,
-             [in] com::sun::star::lang::XEventListener xToRemoveListener )
-            raises( com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::beans::IntrospectionException );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void removeListener( [in] com::sun::star::uno::XInterface xTarget, 
+             [in] string aListenerType, 
+             [in] string aRemoveListenerParam, 
+             [in] com::sun::star::lang::XEventListener xToRemoveListener ) 
+            raises( com::sun::star::lang::IllegalArgumentException, 
+                    com::sun::star::beans::IntrospectionException ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@
 // #i71984
 extern "C" sal_Bool SAL_CALL hasInternetConnection()
 {
-    DWORD   dwFlags;
-    TCHAR   szConnectionName[1024];
+    DWORD	dwFlags;
+    TCHAR	szConnectionName[1024];
 
 #ifdef __MINGW32__
         jmp_buf jmpbuf;
@@ -75,7 +75,7 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
         else return sal_False;
         han.Reset();
 #else
-    } __except( EXCEPTION_EXECUTE_HANDLER ) {
+    } __except( EXCEPTION_EXECUTE_HANDLER )	{
         return sal_False;
     }
 #endif

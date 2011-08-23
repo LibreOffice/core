@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_image_ImageMapCircleObject_idl__
-#define __com_sun_star_image_ImageMapCircleObject_idl__
+#ifndef __com_sun_star_image_ImageMapCircleObject_idl__ 
+#define __com_sun_star_image_ImageMapCircleObject_idl__ 
+ 
+#ifndef __com_sun_star_image_ImageMapObject_idl__ 
+#include <com/sun/star/image/ImageMapObject.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_Point_idl__ 
+#include <com/sun/star/awt/Point.idl> 
+#endif 
 
-#ifndef __com_sun_star_image_ImageMapObject_idl__
-#include <com/sun/star/image/ImageMapObject.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
-#include <com/sun/star/awt/Point.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module image {
-
-//=============================================================================
-
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module image {  
+ 
+//============================================================================= 
+ 
 /** this service describes a circular-shaped region inside
     a html image map.
     @see ImageMap
@@ -57,9 +57,9 @@ published service ImageMapCircleObject
     /** This is the radius of the circle in pixels */
     [property] long Radius;
 };
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

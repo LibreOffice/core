@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,77 +24,77 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_beans_XPropertyAccess_idl__
-#define __com_sun_star_beans_XPropertyAccess_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
-#include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
-#include <com/sun/star/beans/UnknownPropertyException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyVetoException_idl__
-#include <com/sun/star/beans/PropertyVetoException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module beans {
-
-//=============================================================================
-
+#ifndef __com_sun_star_beans_XPropertyAccess_idl__ 
+#define __com_sun_star_beans_XPropertyAccess_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_PropertyValue_idl__ 
+#include <com/sun/star/beans/PropertyValue.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_UnknownPropertyException_idl__ 
+#include <com/sun/star/beans/UnknownPropertyException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_PropertyVetoException_idl__ 
+#include <com/sun/star/beans/PropertyVetoException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__ 
+#include <com/sun/star/lang/WrappedTargetException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module beans {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to access all property values and to set them at once.
-
+    
     <p>In most cases this interface will be in addition to
-    <type>XPropertySet</type>. It is especially useful for remote
+    <type>XPropertySet</type>. It is especially useful for remote 
     communication because it lessens the number of calls for getting
-    property values; that is especially important because these calls
+    property values; that is especially important because these calls 
     are necessarily synchronous.  </p>
 
-    <p>Another advantage of this method is that conflicts are avoided
+    <p>Another advantage of this method is that conflicts are avoided 
     if property value restrictions depend on the value of other properties.</p>
  */
 published interface XPropertyAccess: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
-    /** @returns
+{ 
+    //------------------------------------------------------------------------- 
+     
+    /** @returns 
             a sequence of all property values within the object in a single call.
      */
-    sequence<com::sun::star::beans::PropertyValue> getPropertyValues();
-
-    //-------------------------------------------------------------------------
-
+    sequence<com::sun::star::beans::PropertyValue> getPropertyValues(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** sets the values of given properties.
-
-        <p>All properties which are not contained in the sequence
+        
+        <p>All properties which are not contained in the sequence 
         <var>aProps</var> will be left unchanged.</p>
      */
-    void setPropertyValues( [in] sequence<com::sun::star::beans::PropertyValue> aProps )
-            raises( com::sun::star::beans::UnknownPropertyException,
-                    com::sun::star::beans::PropertyVetoException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::lang::WrappedTargetException );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void setPropertyValues( [in] sequence<com::sun::star::beans::PropertyValue> aProps ) 
+            raises( com::sun::star::beans::UnknownPropertyException, 
+                    com::sun::star::beans::PropertyVetoException, 
+                    com::sun::star::lang::IllegalArgumentException, 
+                    com::sun::star::lang::WrappedTargetException ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

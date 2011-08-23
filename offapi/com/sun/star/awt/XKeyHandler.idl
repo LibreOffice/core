@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,19 +25,19 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_awt_XKeyHandler_idl__
-#define __com_sun_star_awt_XKeyHandler_idl__
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_KeyEvent_idl__
-#include <com/sun/star/awt/KeyEvent.idl>
-#endif
-
-
-module com {  module sun {  module star {  module awt {
+#ifndef __com_sun_star_awt_XKeyHandler_idl__ 
+#define __com_sun_star_awt_XKeyHandler_idl__ 
+ 
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_KeyEvent_idl__ 
+#include <com/sun/star/awt/KeyEvent.idl> 
+#endif 
+ 
+ 
+module com {  module sun {  module star {  module awt {  
 
 /** This key handler is similar to <type
     scope="::com::sun::star::awt">XKeyListener</type> but allows the
@@ -73,7 +73,7 @@ published interface XKeyHandler : ::com::sun::star::lang::XEventListener
             regarding the event.
     */
     boolean keyPressed ([in] com::sun::star::awt::KeyEvent aEvent);
-
+ 
     /** This function is called by the broadcaster, an <type
         scope="::com::sun::star::awt">XExtendedToolkit</type> for
         instance, after a key has been pressed and released.  The return
@@ -93,9 +93,9 @@ published interface XKeyHandler : ::com::sun::star::lang::XEventListener
             called and the broadcaster will take no further actions
             regarding the event.
     */
-    boolean keyReleased ([in] com::sun::star::awt::KeyEvent aEvent);
-};
-
+    boolean keyReleased ([in] com::sun::star::awt::KeyEvent aEvent); 
+}; 
+ 
 }; }; }; };
-
-#endif
+ 
+#endif 

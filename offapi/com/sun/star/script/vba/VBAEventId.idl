@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef __com_sun_star_script_vba_VBAEventId_idl__
 #define __com_sun_star_script_vba_VBAEventId_idl__
 
@@ -41,7 +41,7 @@ module com {  module sun {  module star { module script { module vba {
 
     <p>Each event expects some specific arguments to be passed to
     <member>XVBAEventProcessor::processVbaEvent</member>.</p>
-
+    
     @see XVBAEventProcessor
  */
 constants VBAEventId
@@ -50,7 +50,7 @@ constants VBAEventId
 
     /** An identifier not corresponding to any VBA document event. */
     const long NO_EVENT                             = -1;
-
+    
     //=========================================================================
     // Global events (identifiers from 1 to 999)
 

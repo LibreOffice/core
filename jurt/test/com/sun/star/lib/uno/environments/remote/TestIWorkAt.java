@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@ import com.sun.star.uno.XInterface;
 public interface TestIWorkAt extends XInterface {
     void syncCall() throws Throwable ;
     void asyncCall() throws Throwable ;
-
+    
     void increment() throws Throwable;
-
+    
     void notifyme();
 
-    public static final TypeInfo UNOTYPEINFO[] = {
+    public static final TypeInfo UNOTYPEINFO[] = { 
         new MethodTypeInfo("increment", 0, 0),
         new MethodTypeInfo("notifyme", 1, 0),
         new MethodTypeInfo("syncCall", 2, 0),

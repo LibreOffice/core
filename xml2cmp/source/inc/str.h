@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,40 +31,40 @@
 
 
 #ifdef UNX
-#define stricmp(str1,str2)      strcasecmp(str1, str2)
-#define strnicmp(str1,str2,n)   strncasecmp(str1, str2, n)
+#define stricmp(str1,str2)   	strcasecmp(str1, str2)
+#define strnicmp(str1,str2,n)  	strncasecmp(str1, str2, n)
 #endif
 
 
 typedef struct Cstring
 {
-    char *              dpText;
-    intt                nLength;
+    char *				dpText;
+    intt				nLength;
 
 } Cstring;
 
-#define Cstring_THIS        Cstring * pThis
+#define Cstring_THIS		Cstring * pThis			
 
 
-void                Cstring_CTOR( Cstring_THIS,
-                        char *              pText );
-void                Cstring_DTOR( Cstring * pThis );
+void			   	Cstring_CTOR( Cstring_THIS,
+                        char *				pText );
+void				Cstring_DTOR( Cstring * pThis );
 
-void                Cs_Assign( Cstring_THIS,
-                        char *              i_pNewText );
-void                Cs_AssignPart( Cstring_THIS,
-                        char *              i_pNewText,
+void				Cs_Assign( Cstring_THIS,
+                        char * 				i_pNewText );
+void				Cs_AssignPart( Cstring_THIS,
+                        char * 				i_pNewText,
                         intt                i_nLength );
 
-void                Cs_AddCs( Cstring_THIS,
-                        Cstring *           i_pAddedText );
-void                Cs_Add( Cstring_THIS,
-                        char *              i_pAddedText );
+void				Cs_AddCs( Cstring_THIS,
+                        Cstring * 			i_pAddedText );
+void				Cs_Add( Cstring_THIS,
+                        char * 				i_pAddedText );
 
-char *              Cs_Str( Cstring_THIS );
-intt                Cs_Length( Cstring_THIS );
+char *				Cs_Str( Cstring_THIS );
+intt				Cs_Length( Cstring_THIS );
 
-void                Cs_ToUpper( Cstring_THIS );
+void				Cs_ToUpper( Cstring_THIS );
 
 
 

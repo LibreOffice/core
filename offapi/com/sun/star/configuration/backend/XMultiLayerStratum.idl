@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,11 @@
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_XLayer_idl__
 #include <com/sun/star/configuration/backend/XLayer.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_XUpdatableLayer_idl__
 #include <com/sun/star/configuration/backend/XUpdatableLayer.idl>
@@ -45,23 +45,23 @@
 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_lang_NoSupportException_idl__
 #include <com/sun/star/lang/NoSupportException.idl>
-#endif
+#endif 
 
-//=============================================================================
+//============================================================================= 
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
+//============================================================================= 
 
-/**
-  Handles access to a stratum consisting of multiple layers
+/** 
+  Handles access to a stratum consisting of multiple layers 
   in a single configuration data repository
-
-  <p> The interface provides access to data for multiple entities and
+ 
+  <p> The interface provides access to data for multiple entities and 
      timestamp-checking capabilities for efficient caching.
   </p>
 
@@ -72,33 +72,33 @@ module com { module sun { module star { module configuration { module backend {
 
   @since OOo 1.1.2
 */
-published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
+published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface 
 {
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /**
+    /** 
       identifies the layers within this stratum which should be read and
       merged to determine data of a component for an entity
+     
 
-
-      @param aComponent
+      @param aComponent 
                 The name of the component to access.
 
-      @param aEntity
-                The name of an entity on behalf of which data will be accessed.
+      @param aEntity    
+                The name of an entity on behalf of which data will be accessed. 
 
-      @return
+      @return   
                 a list of layer identifiers that can be used to
                 retrieve <type>Layer</type> objects.
-                <p> The list ist ordered by priority. Typically
-                   the most general layers (global defaults,
-                   entire organization) are first, more specific layers
-                   (associated to specific groups or roles) are next
+                <p> The list ist ordered by priority. Typically 
+                   the most general layers (global defaults, 
+                   entire organization) are first, more specific layers 
+                   (associated to specific groups or roles) are next 
                    and the entity's own data is last.
                 </p>
 
       @throws   com::sun::star::lang::IllegalArgumentException
-                if the component identifier is invalid or
+                if the component identifier is invalid or 
                 if the entity doesn't exist.
 
       @throws   com::sun::star::configuration::backend::BackendAccessException
@@ -109,29 +109,29 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
       @see com::sun::star::configuration::backend::XMultiLayerStratum::getMultipleLayers()
       @see com::sun::star::configuration::backend::XBackendEntities
     */
-    sequence<string> listLayerIds([in] string aComponent,
-                                  [in] string aEntity)
+    sequence<string> listLayerIds([in] string aComponent, 
+                                  [in] string aEntity) 
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /**
-      identifies the layer which should be modified
+    /** 
+      identifies the layer which should be modified 
       to update data of a component on behalf of an entity.
 
-      <p> The layer id returned is one of the layer ids obtained from
-         <member>XMultiLayerStratum::listLayerIds()</member> for the same
-         component and entity.
+      <p> The layer id returned is one of the layer ids obtained from 
+         <member>XMultiLayerStratum::listLayerIds()</member> for the same 
+         component and entity. 
       </p>
 
-      @param aComponent
+      @param aComponent 
                 The name of the component to access.
 
-      @param aEntity
-                The name of an entity on behalf of which data will be accessed.
+      @param aEntity    
+                The name of an entity on behalf of which data will be accessed.  
 
-      @returns
+      @returns   
                 a layer identifier that can be used to obtain
                 an <type>UpdatableLayer</type> object.
 
@@ -154,92 +154,92 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NoSupportException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /**
-      retrieves a layer associated to a layer id, if newer than indicated.
-
-      <p> A timestamp can be provided, which is used to indicate
-         a point in time. The layer should be returned only if is modified
-         since that time.
+    /** 
+      retrieves a layer associated to a layer id, if newer than indicated. 
+      
+      <p> A timestamp can be provided, which is used to indicate 
+         a point in time. The layer should be returned only if is modified 
+         since that time. 
       </p>
 
-      @param aLayerId
+      @param aLayerId      
                 identifier of the layers to be accessed.
-                <p>Layer ids can be obtained from
-                <member>XMultiLayerStratum::listLayerIds()</member> or
-                <member>XMultiLayerStratum::getUpdateLayerId()</member>.
+                <p>Layer ids can be obtained from 
+                <member>XMultiLayerStratum::listLayerIds()</member> or  
+                <member>XMultiLayerStratum::getUpdateLayerId()</member>. 
                 </p>
 
-      @param aTimestamp
+      @param aTimestamp    
                 a timestamp for the layer.
-
-                <p> An empty timestamp indicates, that the layer should be
-                   retrieved irrespective of its modification time.
+                
+                <p> An empty timestamp indicates, that the layer should be 
+                   retrieved irrespective of its modification time. 
                 </p>
-                <p> The format and meaning of a timestamp depends on
-                    the implementation. Timestamps can be obtained using
+                <p> The format and meaning of a timestamp depends on 
+                    the implementation. Timestamps can be obtained using 
                     <member scope="com::sun::star::util">XTimeStamped::getTimestamp()</member>.
                 </p>
 
-      @returns
-                a <type>Layer</type> object providing access to the layer data,
-                <NULL/> if the layer is newer than indicated by the timestamp.
+      @returns   
+                a <type>Layer</type> object providing access to the layer data, 
+                <NULL/> if the layer is newer than indicated by the timestamp. 
 
       @throws   com::sun::star::lang::IllegalArgumentException
-                if the layer id is invalid or
-                if the timestamp is invalid
+                if the layer id is invalid or 
+                if the timestamp is invalid 
 
       @throws   com::sun::star::configuration::backend::BackendAccessException
                 if an error occurs while accessing the data.
 
       @see com::sun::star::util::XTimeStamped
     */
-    XLayer getLayer([in] string aLayerId,
+    XLayer getLayer([in] string aLayerId, 
                     [in] string aTimestamp)
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /**
-      retrieves the layers associated to a series of layer ids,
-      if newer than indicated.
-      <p> A timestamp can be provided, which is used to indicate
-         a point in time. Only layers that are modified since that time
-         should be returned. The same timestamp is used for all layers.
+    /** 
+      retrieves the layers associated to a series of layer ids, 
+      if newer than indicated.   
+      <p> A timestamp can be provided, which is used to indicate 
+         a point in time. Only layers that are modified since that time 
+         should be returned. The same timestamp is used for all layers. 
       </p>
 
-      @param aLayerIds
+      @param aLayerIds      
                 identifiers of the layers to be accessed.
-                <p>Layer ids can be obtained from
-                <member>XMultiLayerStratum::listLayerIds()</member>.
+                <p>Layer ids can be obtained from 
+                <member>XMultiLayerStratum::listLayerIds()</member>. 
                 </p>
 
-      @param aTimestamp
-                a timestamp for all of the layers.
-                <p> An empty timestamp indicates, that the layers should be
-                   retrieved irrespective of their modification time.
+      @param aTimestamp    
+                a timestamp for all of the layers.               
+                <p> An empty timestamp indicates, that the layers should be 
+                   retrieved irrespective of their modification time. 
                 </p>
-                <p> The format and meaning of a timestamp depends on
-                    the implementation. Timestamps can be obtained using
+                <p> The format and meaning of a timestamp depends on 
+                    the implementation. Timestamps can be obtained using 
                     <member scope="com::sun::star::util">XTimeStamped::getTimestamp()</member>.
                 </p>
 
-      @returns
-                a list of <type>Layer</type> objects
-                providing access to the layer data.
-                <p> The list has the same length as aLayerIds. Each layer
-                   object is associated to the layer id in the corresponding
+      @returns   
+                a list of <type>Layer</type> objects 
+                providing access to the layer data.                
+                <p> The list has the same length as aLayerIds. Each layer 
+                   object is associated to the layer id in the corresponding 
                    position.
                 </p>
-                <p> For layers that are newer than indicated by the
+                <p> For layers that are newer than indicated by the 
                    timestamp, the list contains a <NULL/> element.
                 </p>
 
       @throws   com::sun::star::lang::IllegalArgumentException
-                if one of the layer ids is invalid or
-                if the timestamp is invalid
+                if one of the layer ids is invalid or 
+                if the timestamp is invalid 
 
       @throws   com::sun::star::configuration::backend::BackendAccessException
                 if an error occurs while accessing the data.
@@ -251,41 +251,41 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /**
-      retrieves the layers associated to a series of layer ids,
-      if newer than indicated for each layer.
-      <p> For each layer an individual timestamp can be provided,
-         which is used to indicate the last known version of the layer.
+      retrieves the layers associated to a series of layer ids, 
+      if newer than indicated for each layer.      
+      <p> For each layer an individual timestamp can be provided, 
+         which is used to indicate the last known version of the layer. 
          Only layers that are modified since that time should be returned.
       </p>
 
-      @param aLayerIds
-                identifiers of the layers to be accessed.
-                <p>Layer ids can be obtained from
-                <member>XMultiLayerStratum::listLayerIds()</member>.
+      @param aLayerIds      
+                identifiers of the layers to be accessed.               
+                <p>Layer ids can be obtained from 
+                <member>XMultiLayerStratum::listLayerIds()</member>. 
                 </p>
 
-      @param aTimestamps
+      @param aTimestamps    
                 timestamps for each of the layers.
-
-                <p> This list must have the same length as aLayerIds.
-                    Timestamps are matched to layer ids by their position.
+                
+                <p> This list must have the same length as aLayerIds. 
+                    Timestamps are matched to layer ids by their position. 
                 </p>
-                <p> An empty timestamp indicates, that the associated layer
+                <p> An empty timestamp indicates, that the associated layer 
                    should be retrieved irrespective of its modification time.
                 </p>
-                <p> The format and meaning of a timestamp depends on
-                    the implementation. Timestamps can be obtained using
+                <p> The format and meaning of a timestamp depends on 
+                    the implementation. Timestamps can be obtained using 
                     <member scope="com::sun::star::util">XTimeStamped::getTimestamp()</member>.
                 </p>
 
-      @returns
-                a list of <type>Layer</type> objects
-                providing access to the layer data.
-                <p> The list has the same length as aLayerIds. Each layer
-                   object is associated to the layer id in the corresponding
+      @returns   
+                a list of <type>Layer</type> objects 
+                providing access to the layer data.                
+                <p> The list has the same length as aLayerIds. Each layer 
+                   object is associated to the layer id in the corresponding 
                    position.
                 </p>
                 <p> For layers that are newer than indicated by the corresponding
@@ -293,8 +293,8 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 </p>
 
       @throws   com::sun::star::lang::IllegalArgumentException
-                if one of the layer ids is invalid or
-                if one of the timestamps is invalid or
+                if one of the layer ids is invalid or 
+                if one of the timestamps is invalid or 
                 if the lengths of the arguments don't match.
 
       @throws   com::sun::star::configuration::backend::BackendAccessException
@@ -307,20 +307,20 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /**
-      retrieves a writable representation of the layer
-      associated to a layer id.
+      retrieves a writable representation of the layer 
+      associated to a layer id. 
 
-      @param aLayerId
-                identifier of the layer to be accessed for writing.
-                <p>A layer id for writing can be obtained from
-                <member>XMultiLayerStratum::getUpdateLayerId()</member>.
+      @param aLayerId   
+                identifier of the layer to be accessed for writing.             
+                <p>A layer id for writing can be obtained from 
+                <member>XMultiLayerStratum::getUpdateLayerId()</member>. 
                 </p>
 
-      @return
-                an <type>UpdatableLayer</type> object providing
+      @return   
+                an <type>UpdatableLayer</type> object providing 
                 write access to the layer
 
       @throws   com::sun::star::lang::IllegalArgumentException
@@ -336,12 +336,12 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::NoSupportException,
                 com::sun::star::lang::IllegalArgumentException) ;
-
-    //-------------------------------------------------------------------------
+    
+    //------------------------------------------------------------------------- 
 } ;
 
-//=============================================================================
+//============================================================================= 
 
 } ; } ; } ; } ; } ;
 
-#endif
+#endif 

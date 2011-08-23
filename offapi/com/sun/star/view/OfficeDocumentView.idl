@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,57 +24,57 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_view_OfficeDocumentView_idl__
-#define __com_sun_star_view_OfficeDocumentView_idl__
-
-#ifndef __com_sun_star_view_XSelectionSupplier_idl__
-#include <com/sun/star/view/XSelectionSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_view_XViewSettingsSupplier_idl__
-#include <com/sun/star/view/XViewSettingsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_view_XControlAccess_idl__
-#include <com/sun/star/view/XControlAccess.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module view {
-
-//=============================================================================
-
+#ifndef __com_sun_star_view_OfficeDocumentView_idl__ 
+#define __com_sun_star_view_OfficeDocumentView_idl__ 
+ 
+#ifndef __com_sun_star_view_XSelectionSupplier_idl__ 
+#include <com/sun/star/view/XSelectionSupplier.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_view_XViewSettingsSupplier_idl__ 
+#include <com/sun/star/view/XViewSettingsSupplier.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_view_XControlAccess_idl__ 
+#include <com/sun/star/view/XControlAccess.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module view {  
+ 
+//============================================================================= 
+ 
 /** specifies a view of a standard office document.
  */
 published service OfficeDocumentView
-{
-    /** This mandatory interface gives access to the current user selection
+{ 
+    /** This mandatory interface gives access to the current user selection 
                 within this office document view.
 
         <p>The type of the selection depends on the actual document type.</p>
      */
-    interface com::sun::star::view::XSelectionSupplier;
-
-
-    /** This optional interface gives access to the view properties within this
+    interface com::sun::star::view::XSelectionSupplier; 
+ 
+     
+    /** This optional interface gives access to the view properties within this 
         control for an office document.
 
         @see ViewSettings
      */
-    [optional] interface com::sun::star::view::XViewSettingsSupplier;
-
-
-    /** Within this office document view, this optional interface gives
+    [optional] interface com::sun::star::view::XViewSettingsSupplier; 
+ 
+     
+    /** Within this office document view, this optional interface gives 
         access to the controls which belong to specified control models.
      */
-    [optional] interface com::sun::star::view::XControlAccess;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [optional] interface com::sun::star::view::XControlAccess; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

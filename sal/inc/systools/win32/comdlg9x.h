@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#pragma once
+#pragma once 
 
 #ifndef _WINDOWS_
 #include <windows.h>
@@ -42,7 +42,7 @@ extern "C"{
 
 //------------------------------------------------------------------------
 // undefine the macros defined in the shlobj.h file in order to avoid
-// warnings because of multiple defines
+// warnings because of multiple defines 
 //------------------------------------------------------------------------
 
 #ifdef GetOpenFileNameW
@@ -73,8 +73,8 @@ COMDLG9X_API BOOL ( WINAPI * lpfnGetSaveFileNameW ) ( LPOPENFILENAMEW lpofn );
 // all occurrences of this macros with our function pointer
 //------------------------------------------------------------------------
 
-#define GetOpenFileNameW    lpfnGetOpenFileNameW
-#define GetSaveFileNameW    lpfnGetSaveFileNameW
+#define GetOpenFileNameW	lpfnGetOpenFileNameW
+#define GetSaveFileNameW	lpfnGetSaveFileNameW
 
 #ifdef __cplusplus
 }

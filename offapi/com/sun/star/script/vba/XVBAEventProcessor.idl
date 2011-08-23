@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef __com_sun_star_script_vba_XVBAEventProcessor_idl__
 #define __com_sun_star_script_vba_XVBAEventProcessor_idl__
 
@@ -65,16 +65,16 @@ interface XVBAEventProcessor
         raises (::com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------
-
+    
     /** Executes a VBA event handler.
-
+    
         @param nEventId
             The identifier of the event. Must be a constant from <type>VBAEventId</type>.
-
+            
         @param aArgs
             The input arguments needed to create the argument list of the VBA
             event handler.
-
+            
         @throws <type scope="::com::sun::star::lang">IllegalArgumentException</type>
             if the passed event identifier is not supported, or if the passed
             arguments do not conform to the arguments expected by the specified

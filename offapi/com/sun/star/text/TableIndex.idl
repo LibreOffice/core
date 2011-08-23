@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,48 +24,48 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
-#ifndef __com_sun_star_text_TableIndex_idl__
-#define __com_sun_star_text_TableIndex_idl__
-
-#include <com/sun/star/text/BaseIndex.idl>
-
-//=============================================================================
-
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+ 
+ 
+#ifndef __com_sun_star_text_TableIndex_idl__ 
+#define __com_sun_star_text_TableIndex_idl__ 
+ 
+#include <com/sun/star/text/BaseIndex.idl> 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module text { 
+ 
+//============================================================================= 
+ 
 /** specifies service of table indexes within a document.
     @see com::sun::star::text::BaseIndex
  */
 published service TableIndex
-{
-    service  com::sun::star::text::BaseIndex;
-
+{ 
+    service  com::sun::star::text::BaseIndex; 
+ 
     //-------------------------------------------------------------------------
-    /** determines if the name or the label of an object is used to create the index.
-     */
-    [optional, property] boolean CreateFromLabels; //tables, illustrations
-
+    /** determines if the name or the label of an object is used to create the index. 
+     */ 
+    [optional, property] boolean CreateFromLabels; //tables, illustrations 
+    
     //-------------------------------------------------------------------------
-    /** determines the name of the sequence field that is evaluated to create the index.
-     */
-    [optional, property] string LabelCategory; //tables, illustrations
-
+    /** determines the name of the sequence field that is evaluated to create the index. 
+     */ 
+    [optional, property] string LabelCategory; //tables, illustrations 
+    
     //-------------------------------------------------------------------------
-    /** determines the way the paragraph containing a label is included in the index.
+    /** determines the way the paragraph containing a label is included in the index. 
         @see ReferenceFieldPart allowed constant values: only TEXT, CATEGORY_AND_NUMBER and
         ONLY_CAPTION
-     */
-    [optional, property] short LabelDisplayType;//tables, illustrations
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
-
-
+     */ 
+    [optional, property] short LabelDisplayType;//tables, illustrations 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+#endif 
+ 
+ 

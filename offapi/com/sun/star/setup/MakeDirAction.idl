@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,24 +24,24 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_setup_MakeDirAction_idl__
-#define __com_sun_star_setup_MakeDirAction_idl__
-
-#ifndef __com_sun_star_setup_BaseAction_idl__
-#include <com/sun/star/setup/BaseAction.idl>
-#endif
-
-module com {  module sun {  module star {  module setup {
-
+#ifndef __com_sun_star_setup_MakeDirAction_idl__ 
+#define __com_sun_star_setup_MakeDirAction_idl__ 
+ 
+#ifndef __com_sun_star_setup_BaseAction_idl__ 
+#include <com/sun/star/setup/BaseAction.idl> 
+#endif 
+ 
+module com {  module sun {  module star {  module setup { 
+     
 /// @deprecated
 published struct MakeDirAction: BaseAction
-{
+{ 
     // DocMerge: empty anyway
-    string          strDirname;
-
+    string			strDirname; 
+        
     // DocMerge: empty anyway
-    long            nRights;
-    };
-}; }; }; };
-
-#endif
+    long			nRights; 
+    }; 
+}; }; }; }; 
+ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,23 +48,23 @@ void MAIN (void)
     sal_uInt32 index;
     rtl_uString* ustrExeFile=0;
     rtl_uString* ustrArg=0;
-
+  
     nArgCount=osl_getCommandArgCount();
-
+    
     fprintf(stderr,"Arg Count == %i\n\n",nArgCount);
 
     for ( index = 0 ; index <= nArgCount+1 ; index++ )
     {
         fprintf(stderr,"Getting Arg No . %i\n",index);
-
+        
         osl_getCommandArg(index,&ustrArg);
-
+        
         fprintf(stderr,"done ...\n\n",index);
     }
 
     ProcessError = osl_getExecutableFile(&ustrExeFile);
-
-/*
+    
+/*    
     osl_executeProcess( "e:\\test\\os2de202.exe",
                         NULL,
                         osl_Process_NORMAL,

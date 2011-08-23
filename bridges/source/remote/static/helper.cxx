@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 
 namespace bridges_remote
 {
-
+    
 void SAL_CALL remote_createStub (
     remote_Interface **ppRemoteI,
     rtl_uString *pOid ,
@@ -53,7 +53,7 @@ void SAL_CALL remote_createStub (
     ReleaseRemoteCallbackFunc releaseRemoteCallback )
 {
     typelib_TypeDescription *pType = 0;
-    typelib_typedescriptionreference_getDescription( &pType, pTypeRef );
+    typelib_typedescriptionreference_getDescription( &pType, pTypeRef );	
 
     (void) pEnvRemote->pExtEnv->getRegisteredInterface(
         pEnvRemote->pExtEnv,
@@ -90,7 +90,7 @@ void SAL_CALL remote_createStub (
                 (typelib_InterfaceTypeDescription * ) pType,
                 pEnvRemote,
                 pImpl->m_sendRequest);
-
+        
         // ppRemoteI may change during registration
         pEnvRemote->pExtEnv->registerProxyInterface(
             pEnvRemote->pExtEnv,
@@ -115,17 +115,17 @@ void SAL_CALL remote_sendQueryInterface(
 
     typelib_InterfaceTypeDescription *pType = 0;
     typelib_typedescriptionreference_getDescription( (typelib_TypeDescription ** )&pType, pTypeRef );
-
+    
     if( *ppRemoteI )
     {
         (*ppRemoteI)->release( *ppRemoteI );
         (*ppRemoteI) = 0;
     }
-
+    
     remote_BridgeImpl *pImpl = ((remote_Context *)pEnvRemote->pContext)->m_pBridgeImpl;
-
+    
     Type type  = ::getCppuType( (Reference < XInterface > *)0 );
-
+    
     // get type for queryInterface
     OUString sCompleteMethodName = type.getTypeName();
     sCompleteMethodName += OUString(RTL_CONSTASCII_USTRINGPARAM("::queryInterface"));
@@ -134,13 +134,13 @@ void SAL_CALL remote_sendQueryInterface(
     typelib_typedescription_getByName(
         (typelib_TypeDescription **) &pMemberType,
         sCompleteMethodName.pData );
-
+    
     OSL_ASSERT( pMemberType );
-
+    
     uno_Any anyInterface;
     anyInterface.pType = 0;
     anyInterface.pData = 0;
-
+    
     void *pReturn = &anyInterface;
     void *ppArgs[1];
 
@@ -151,9 +151,9 @@ void SAL_CALL remote_sendQueryInterface(
                                           pType->aBase.pTypeName);
 
     ppArgs[0] = &pRef;
-
-//      uno_Any anyException;
-//      uno_Any *pAnyException = &anyException;
+    
+//  	uno_Any anyException;
+//  	uno_Any *pAnyException = &anyException;
 
     // do the queryInterface
     pImpl->m_sendRequest(
@@ -165,11 +165,11 @@ void SAL_CALL remote_sendQueryInterface(
         ppArgs,
         ppException );
 
-
+    
     // now release everything
     typelib_typedescriptionreference_release( pRef );
     typelib_typedescription_release( (typelib_TypeDescription * ) pMemberType );
-
+    
     if( *ppException )
     {
         *ppRemoteI = 0;

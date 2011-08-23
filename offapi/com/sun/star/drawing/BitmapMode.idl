@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,43 +24,43 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_BitmapMode_idl__
-#define __com_sun_star_drawing_BitmapMode_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_BitmapMode_idl__ 
+#define __com_sun_star_drawing_BitmapMode_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 /** The <type>BitmapMode</type> selects an algorithm for filling an area with
     a bitmap.
  */
 published enum BitmapMode
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** the bitmap is repeated over the fill area.
      */
-    REPEAT,
-
-    //-------------------------------------------------------------------------
-
+    REPEAT, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** the bitmap is stretched to fill the area.
      */
-    STRETCH,
-
-    //-------------------------------------------------------------------------
-
+    STRETCH, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** the bitmap is painted in its original or selected size.
      */
-    NO_REPEAT
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    NO_REPEAT 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 
